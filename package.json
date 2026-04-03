@@ -1,0 +1,21 @@
+{
+  "name": "ecommerce-platform",
+  "private": true,
+  "workspaces": [
+    "FRONTEND/apps/*",
+    "FRONTEND/packages/*",
+    "BACKEND"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "turbo": "latest",
+    "typescript": "^5.3.0"
+  },
+  "packageManager": "npm@11.6.2"
+}

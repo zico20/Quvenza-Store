@@ -1,0 +1,20 @@
+import 'dotenv/config';
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import { config } from './config/env';
+import router from './routes/index';
+import { errorHandler } from './middlewares/error.middleware';
+
+const app = express();
+app.use(helmet());
+app.use(cors({ origin: config.FRONTEND_URL, credentials: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(morgan('dev'));
+app.use('/api/', rateLimit({ windowMs: 15 * 60 * 1000, max: 100, message: { success: false, message: 'Too many requests.' } }));
+app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.use('/api/v1', router);
+app.use(errorHandler);
+export default app;
