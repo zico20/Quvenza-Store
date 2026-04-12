@@ -4,5 +4,8 @@ export const createOrderSchema = z.object({
   shippingAddress: z.object({ fullName: z.string().min(1), phone: z.string().min(1), city: z.string().min(1), address: z.string().min(1), country: z.string().min(1) }),
   paymentMethod: z.string().min(1),
 });
-export const updateOrderStatusSchema = z.object({ status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']) });
+export const updateOrderStatusSchema = z.object({
+  status: z.enum(['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']),
+  note: z.string().optional(),
+});
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
