@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'customer' | 'admin';
+  role: 'USER' | 'ADMIN';
   createdAt: string;
 }
 
@@ -21,6 +21,11 @@ export interface Product {
   stock: number;
   images: string[];
   categoryId: string;
+  category?: {
+    id: string;
+    name: string;
+    slug: string;
+  };
   isActive: boolean;
   createdAt: string;
 }
@@ -43,7 +48,15 @@ export interface Cart {
   total: number;
 }
 
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
+export type OrderStatus =
+  | 'PENDING'
+  | 'PROCESSING'
+  | 'SHIPPED'
+  | 'DELIVERED'
+  | 'CANCELLED'
+  | 'REFUNDED';
+
+export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
 
 export interface OrderItem {
   id: string;
@@ -53,23 +66,50 @@ export interface OrderItem {
   price: number;
 }
 
+export interface OrderStatusHistory {
+  id: string;
+  orderId: string;
+  fromStatus: OrderStatus | null;
+  toStatus: OrderStatus;
+  note?: string;
+  changedBy?: string;
+  createdAt: string;
+}
+
+export interface OrderExportRow {
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  total: number;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  paymentMethod: string;
+  itemsCount: number;
+  createdAt: string;
+}
+
 export interface Order {
   id: string;
   userId: string;
   items: OrderItem[];
   status: OrderStatus;
+  paymentStatus: PaymentStatus;
   total: number;
   shippingAddress: Address;
   paymentMethod: string;
   createdAt: string;
+  statusHistory?: OrderStatusHistory[];
+  user?: { id?: string; name: string; email: string };
 }
 
 export interface Address {
   id?: string;
   fullName: string;
   phone: string;
+  governorate: string;
   city: string;
   address: string;
+  nearestLandmark?: string;
   country: string;
   isDefault?: boolean;
 }
@@ -89,12 +129,65 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   };
 }
 
-export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
-
 export interface PaymentIntent {
   id: string;
   amount: number;
   currency: string;
   status: PaymentStatus;
   provider: string;
+}
+
+// Notifications
+export type NotificationType = 'NEW_ORDER' | 'LOW_STOCK' | 'NEW_CUSTOMER' | 'ORDER_STATUS_CHANGED';
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  data?: Record<string, any>;
+  isRead: boolean;
+  createdAt: string;
+}
+
+// Enhanced customer (from admin API)
+export interface CustomerSummary {
+  id: string;
+  name: string;
+  email: string;
+  isActive: boolean;
+  createdAt: string;
+  totalOrders: number;
+  lastOrderDate: string | null;
+  lastOrderTotal: number | null;
+}
+
+export interface CustomerDetail extends CustomerSummary {
+  role: 'USER' | 'ADMIN';
+  orders: Order[];
+  addresses: Address[];
+  totalSpent: number;
+}
+
+// Dashboard stats
+export interface DashboardStats {
+  overview: {
+    totalOrders: number;
+    totalRevenue: number;
+    totalProducts: number;
+    totalUsers: number;
+    lowStockCount: number;
+  };
+  today: { orders: number; revenue: number };
+  yesterday: { orders: number; revenue: number };
+  recentOrders: Array<Order & { user: { name: string; email: string } }>;
+  topProducts: Array<{
+    productId: string;
+    name: string;
+    price: number;
+    image: string | null;
+    totalSold: number;
+  }>;
+  ordersByStatus: Array<{ status: OrderStatus; count: number }>;
+  salesByCategory: Array<{ name: string; total: number }>;
 }
