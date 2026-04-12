@@ -1,6 +1,7 @@
 import { prisma } from '../../config/database';
 import { AppError } from '../../middlewares/error.middleware';
 import { PaginationQuery, buildPaginationMeta } from '../../utils/pagination';
+import { notificationTriggers } from '../notifications/notification.triggers';
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   PENDING:    ['PROCESSING', 'CANCELLED'],
@@ -17,14 +18,13 @@ export async function createOrder(data: {
   shippingAddress: object;
   paymentMethod: string;
 }) {
+  // Fetch products to validate existence and get prices.
+  // Stock is NOT checked here — the atomic guard inside the transaction is the real protection.
   const products = await prisma.product.findMany({
     where: { id: { in: data.items.map((i) => i.productId) }, isActive: true },
   });
   if (products.length !== data.items.length) throw new AppError('One or more products unavailable.', 400);
-  for (const item of data.items) {
-    const prod = products.find((pr) => pr.id === item.productId)!;
-    if (prod.stock < item.quantity) throw new AppError(`Insufficient stock for: ${prod.name}`, 400);
-  }
+
   const orderItems = data.items.map((item) => ({
     productId: item.productId,
     quantity: item.quantity,
@@ -32,11 +32,27 @@ export async function createOrder(data: {
   }));
   const total = orderItems.reduce((s, i) => s + Number(i.price) * i.quantity, 0);
 
-  return prisma.$transaction(async (tx) => {
+  const lowStockProducts: Array<{ id: string; name: string; stock: number }> = [];
+
+  const order = await prisma.$transaction(async (tx) => {
+    // Atomic stock decrement: the WHERE clause acts as an optimistic lock.
+    // If stock drops below the required quantity concurrently, updateMany returns 0 and we abort.
     for (const item of data.items) {
-      await tx.product.update({ where: { id: item.productId }, data: { stock: { decrement: item.quantity } } });
+      const updated = await tx.product.updateMany({
+        where: { id: item.productId, stock: { gte: item.quantity }, isActive: true },
+        data: { stock: { decrement: item.quantity } },
+      });
+      if (updated.count === 0) {
+        const prod = products.find((p) => p.id === item.productId)!;
+        throw new AppError(`"${prod.name}" is out of stock or has insufficient quantity.`, 409);
+      }
+      const updatedProduct = await tx.product.findUnique({ where: { id: item.productId } });
+      if (updatedProduct && updatedProduct.stock <= 5) {
+        lowStockProducts.push({ id: updatedProduct.id, name: updatedProduct.name, stock: updatedProduct.stock });
+      }
     }
-    const order = await tx.order.create({
+
+    const created = await tx.order.create({
       data: {
         userId: data.userId,
         total,
@@ -49,16 +65,25 @@ export async function createOrder(data: {
         user: { select: { id: true, name: true, email: true } },
       },
     });
+
     await tx.orderStatusHistory.create({
       data: {
-        orderId: order.id,
+        orderId: created.id,
         fromStatus: null,
         toStatus: 'PENDING',
         note: 'تم إنشاء الطلب',
       },
     });
-    return order;
+
+    return created;
   });
+
+  // Fire notifications after successful transaction (non-blocking)
+  notificationTriggers.onNewOrder(order.id, total).catch(console.error);
+  for (const p of lowStockProducts) {
+    notificationTriggers.onLowStock(p.id, p.name, p.stock).catch(console.error);
+  }
+  return order;
 }
 
 export async function getUserOrders(userId: string, pagination: PaginationQuery) {
@@ -151,6 +176,9 @@ export async function updateOrderStatus(
     }
   }
 
+  // Fire notification (non-blocking)
+  notificationTriggers.onOrderStatusChanged(id, oldStatus as any, newStatus as any).catch(console.error);
+
   return {
     ...updatedOrder,
     total: Number(updatedOrder.total),
@@ -235,7 +263,7 @@ export async function getAdminOrders(params: {
   };
 }
 
-// Keep legacy function for user-facing routes
+// Legacy function kept for compatibility
 export async function getAllOrders(pagination: PaginationQuery, statusFilter?: string) {
   const where: any = {};
   if (statusFilter) where.status = statusFilter;
