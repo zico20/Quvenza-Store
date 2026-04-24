@@ -23,7 +23,14 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(morgan('dev'));
-app.use('/api/', rateLimit({ windowMs: 15 * 60 * 1000, max: 100, message: { success: false, message: 'Too many requests.' } }));
+// Rate limiting: relaxed in development to avoid blocking the admin panel
+const isDev = process.env.NODE_ENV !== 'production';
+app.use('/api/', rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isDev ? 2000 : 200,
+  message: { success: false, message: 'Too many requests.' },
+  skip: () => isDev, // completely skip in dev
+}));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 app.use('/api/v1', router);
