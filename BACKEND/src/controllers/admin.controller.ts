@@ -120,7 +120,7 @@ export const getCustomers = async (req: Request, res: Response, next: NextFuncti
           orders: {
             select: { total: true, createdAt: true },
             orderBy: { createdAt: 'desc' },
-            take: 1,
+            // Remove take: 1 — get all orders
           },
         },
         orderBy: { createdAt: 'desc' },
@@ -138,6 +138,7 @@ export const getCustomers = async (req: Request, res: Response, next: NextFuncti
       totalOrders: u._count.orders,
       lastOrderDate: u.orders[0]?.createdAt || null,
       lastOrderTotal: u.orders[0] ? Number(u.orders[0].total) : null,
+      totalSpent: u.orders.reduce((sum, o) => sum + Number(o.total), 0),
     }));
     sendPaginated(res, mapped, buildPaginationMeta(total, p.page, p.limit));
   } catch (error) { next(error); }

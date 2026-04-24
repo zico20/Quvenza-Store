@@ -160,6 +160,7 @@ export interface CustomerSummary {
   totalOrders: number;
   lastOrderDate: string | null;
   lastOrderTotal: number | null;
+  totalSpent: number;
 }
 
 export interface CustomerDetail extends CustomerSummary {
