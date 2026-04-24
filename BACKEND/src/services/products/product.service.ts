@@ -1,6 +1,7 @@
 import { prisma } from '../../config/database';
 import { AppError } from '../../middlewares/error.middleware';
 import { slugify } from '../../utils/slugify';
+import { sanitizeString } from '../../utils/sanitize';
 import { PaginationQuery, buildPaginationMeta } from '../../utils/pagination';
 
 export async function getProducts(pagination: PaginationQuery, filters: { categoryId?: string; search?: string; sort?: string }) {
@@ -34,17 +35,20 @@ export async function getProductById(id: string) {
 }
 
 export async function createProduct(data: { name: string; description: string; price: number; comparePrice?: number; stock: number; categoryId: string; images?: string[] }) {
-  const slug = slugify(data.name);
+  const name = sanitizeString(data.name);
+  const description = sanitizeString(data.description);
+  const slug = slugify(name);
   const existing = await prisma.product.findUnique({ where: { slug } });
   const finalSlug = existing ? `${slug}-${Date.now()}` : slug;
-  return prisma.product.create({ data: { ...data, slug: finalSlug, images: data.images ?? [] }, include: { category: true } });
+  return prisma.product.create({ data: { ...data, name, description, slug: finalSlug, images: data.images ?? [] }, include: { category: true } });
 }
 
 export async function updateProduct(id: string, data: Partial<{ name: string; description: string; price: number; comparePrice: number; stock: number; categoryId: string; images: string[]; isActive: boolean }>) {
   const product = await prisma.product.findUnique({ where: { id } });
   if (!product) throw new AppError('Product not found.', 404);
   const updateData: any = { ...data };
-  if (data.name) updateData.slug = slugify(data.name);
+  if (data.name) { updateData.name = sanitizeString(data.name); updateData.slug = slugify(updateData.name); }
+  if (data.description) updateData.description = sanitizeString(data.description);
   return prisma.product.update({ where: { id }, data: updateData, include: { category: true } });
 }
 
@@ -52,4 +56,12 @@ export async function softDeleteProduct(id: string) {
   const product = await prisma.product.findUnique({ where: { id } });
   if (!product) throw new AppError('Product not found.', 404);
   return prisma.product.update({ where: { id }, data: { isActive: false } });
+}
+
+export async function getLowStockProducts(threshold: number = 5) {
+  return prisma.product.findMany({
+    where: { isActive: true, stock: { lte: threshold } },
+    include: { category: true },
+    orderBy: { stock: 'asc' },
+  });
 }

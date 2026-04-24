@@ -3,6 +3,7 @@ import { prisma } from '../../config/database';
 import { AppError } from '../../middlewares/error.middleware';
 import { generateTokens, verifyRefreshToken } from './token.service';
 import { BCRYPT_ROUNDS } from '../../config/constants';
+import { notificationTriggers } from '../notifications/notification.triggers';
 
 export async function register(name: string, email: string, password: string) {
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -14,15 +15,18 @@ export async function register(name: string, email: string, password: string) {
   });
   const tokens = generateTokens({ id: user.id, email: user.email, role: user.role });
   await prisma.user.update({ where: { id: user.id }, data: { refreshToken: tokens.refreshToken } });
+  notificationTriggers.onNewCustomer(user.id, user.name).catch(console.error);
   return { user, tokens };
 }
 
 export async function login(email: string, password: string) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user || !(await bcrypt.compare(password, user.password))) throw new AppError('Invalid email or password.', 401);
+  if (!user.isActive) throw new AppError('Account is disabled. Contact support.', 403);
   const tokens = generateTokens({ id: user.id, email: user.email, role: user.role });
   await prisma.user.update({ where: { id: user.id }, data: { refreshToken: tokens.refreshToken } });
-  const { password: _, ...safeUser } = user;
+  // Explicitly select safe fields — never expose password or refreshToken
+  const { password: _p, refreshToken: _r, updatedAt: _u, ...safeUser } = user;
   return { user: safeUser, tokens };
 }
 

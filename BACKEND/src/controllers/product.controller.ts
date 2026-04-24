@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as productService from '../services/products/product.service';
+import { getLowStockProducts } from '../services/products/product.service';
+import { config } from '../config/env';
 import { parsePaginationQuery } from '../utils/pagination';
 import { sendSuccess, sendPaginated } from '../utils/response';
 
@@ -27,7 +29,15 @@ export async function uploadProductImages(req: Request, res: Response, next: Nex
   try {
     const files = req.files as Express.Multer.File[];
     if (!files?.length) { res.status(400).json({ success: false, message: 'No files uploaded' }); return; }
-    const imageUrls = files.map((f) => `/uploads/${f.originalname}`);
+    const imageUrls = files.map((f) => `${config.BACKEND_URL}/uploads/${f.filename}`);
     sendSuccess(res, await productService.updateProduct(req.params.id, { images: imageUrls }), 'Images uploaded');
   } catch (e) { next(e); }
 }
+
+export const getLowStock = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const threshold = parseInt(req.query.threshold as string) || 5;
+    const products = await getLowStockProducts(threshold);
+    sendSuccess(res, products);
+  } catch (error) { next(error); }
+};

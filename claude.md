@@ -28,7 +28,7 @@ I understand the full project."
 | Domain           | softodeviq.com                             |
 | Location         | Baghdad, Iraq                              |
 | Primary market   | Iraq → regional → international            |
-| Business model   | SaaS: one backend, many client frontends   |
+| Business model   | Template product: per-client full deployment |
 | Project root     | `ecommerce-platform/`                      |
 | Status           | Scaffold 100% complete, locally runnable   |
 | Started          | April 2026                                 |
@@ -37,13 +37,14 @@ I understand the full project."
 
 ## 2. FINAL VISION & BUSINESS GOAL
 
-This is NOT a one-off store. It is a **multi-tenant SaaS e-commerce engine**:
+This is a **template product**, not a SaaS platform:
 
-- SoftoDev builds ONE backend (Node.js/Express/PostgreSQL).
-- Every client gets their OWN frontend (`FRONTEND/apps/<client-name>/`).
-- The backend is shared, scalable, and never duplicated per client.
-- When a client wants a mobile app, React Native connects to the SAME API.
-- When a client wants a different payment gateway, ONE file changes.
+- SoftoDev builds one polished template (this codebase).
+- Each client purchases and receives their own full deployment.
+- There is no shared backend between clients.
+- Each client has their own server, database, and domain.
+- Customization per client is branding-focused (colors, logo, name).
+- Backend logic stays identical across all deployments.
 
 ### Target client types:
 1. General merchandise stores (clothing, electronics, etc.)
@@ -52,7 +53,7 @@ This is NOT a one-off store. It is a **multi-tenant SaaS e-commerce engine**:
 4. Any B2C business in Iraq/MENA region
 
 ### Revenue model for SoftoDev:
-- Monthly SaaS fee per client
+- One-time template deployment fee
 - Setup + customization fee
 - Optional hosting management fee
 
@@ -215,34 +216,44 @@ ecommerce-platform/                          ← Monorepo root
 │           │   │   ├── login/page.tsx       ← Admin-only login
 │           │   │   └── dashboard/
 │           │   │       ├── layout.tsx       ← Sidebar + topbar shell
-│           │   │       ├── page.tsx         ← Stats: revenue, orders, products
+│           │   │       ├── page.tsx         ← Enhanced: stats, charts, recent orders, top products
 │           │   │       ├── products/
 │           │   │       │   ├── page.tsx     ← TanStack Table, all products
 │           │   │       │   ├── new/page.tsx ← Create product form
 │           │   │       │   └── [id]/page.tsx← Edit form + image manager + delete
 │           │   │       ├── orders/
-│           │   │       │   ├── page.tsx     ← Orders table, status filter, search
-│           │   │       │   └── [id]/page.tsx← Detail: items, info, status update
+│           │   │       │   ├── page.tsx     ← Orders table, status filter, search, export
+│           │   │       │   └── [id]/page.tsx← Detail: items, info, status update, timeline
 │           │   │       ├── categories/
 │           │   │       │   └── page.tsx     ← CRUD with modal dialog
-│           │   │       └── customers/
-│           │   │           └── page.tsx     ← Read-only customer list
+│           │   │       ├── customers/
+│           │   │       │   ├── page.tsx     ← Server-side search/pagination, toggle status
+│           │   │       │   └── [id]/page.tsx← Detail: stats, order history, addresses
+│           │   │       └── notifications/
+│           │   │           └── page.tsx     ← TanStack Table, filter tabs, mark-all-read
 │           │   ├── components/
 │           │   │   ├── ui/                  ← shadcn/ui components
 │           │   │   ├── layout/
-│           │   │   │   ├── Sidebar.tsx      ← Nav links with active state
-│           │   │   │   └── Topbar.tsx       ← Page title + user menu
+│           │   │   │   ├── Sidebar.tsx      ← Nav links with active state (+ Notifications)
+│           │   │   │   └── Topbar.tsx       ← Page title + bell dropdown + user menu
 │           │   │   ├── dashboard/
 │           │   │   │   ├── StatsCard.tsx    ← Revenue, orders, products, users
-│           │   │   │   └── RevenueChart.tsx ← Recharts AreaChart, 30-day data
+│           │   │   │   ├── RevenueChart.tsx ← Recharts AreaChart, 30-day data
+│           │   │   │   ├── RecentOrders.tsx ← Last 5 orders with status badges
+│           │   │   │   ├── TopProducts.tsx  ← Top 5 by units sold with progress bars
+│           │   │   │   ├── OrderStatusChart.tsx ← Recharts PieChart donut by status
+│           │   │   │   ├── SalesByCategoryChart.tsx ← Recharts BarChart by category
+│           │   │   │   └── LowStockAlert.tsx← Fetches + lists products at/near 0 stock
 │           │   │   ├── orders/
-│           │   │   │   └── StatusBadge.tsx  ← Color-coded status pill
+│           │   │   │   ├── StatusBadge.tsx  ← Color-coded status pill
+│           │   │   │   ├── OrderTimeline.tsx← Status history timeline (Agent B)
+│           │   │   │   └── StatusChangeModal.tsx ← Confirm status update (Agent B)
 │           │   │   └── products/
 │           │   │       ├── ProductForm.tsx  ← Shared create/edit form
 │           │   │       └── ImageUpload.tsx  ← Drag-drop image upload
 │           │   ├── middleware.ts            ← Protects /dashboard/* → /login
 │           │   ├── lib/
-│           │   │   ├── api.ts               ← Admin Axios instance
+│           │   │   ├── api.ts               ← Admin Axios instance (+ adminStats, adminNotifications, adminCustomers)
 │           │   │   └── utils.ts
 │           │   └── store/
 │           │       └── auth.store.ts        ← Admin auth Zustand store
@@ -273,23 +284,31 @@ ecommerce-platform/                          ← Monorepo root
     │   │   ├── order.routes.ts
     │   │   ├── payment.routes.ts
     │   │   ├── user.routes.ts
-    │   │   └── admin.routes.ts
+    │   │   ├── admin.routes.ts
+    │   │   └── notification.routes.ts       ← Admin-only notification endpoints
     │   ├── controllers/
     │   │   ├── auth.controller.ts
-    │   │   ├── product.controller.ts
+    │   │   ├── product.controller.ts        ← + getLowStock handler
     │   │   ├── category.controller.ts
     │   │   ├── cart.controller.ts
-    │   │   ├── order.controller.ts
+    │   │   ├── order.controller.ts          ← + getAdminOrders, exportOrders, downloadInvoice
     │   │   ├── payment.controller.ts
-    │   │   └── user.controller.ts
+    │   │   ├── user.controller.ts
+    │   │   ├── admin.controller.ts          ← getAdminStats, getCustomers, getCustomerDetail, toggleCustomerStatus
+    │   │   └── notification.controller.ts   ← getNotifications, getUnreadCount, markAsRead, markAllAsRead, delete
     │   ├── services/
     │   │   ├── auth/
-    │   │   │   ├── auth.service.ts          ← register, login, refresh, logout
+    │   │   │   ├── auth.service.ts          ← register (+ onNewCustomer trigger), login (+ isActive check), refresh, logout
     │   │   │   └── token.service.ts         ← generateTokens, verifyToken
     │   │   ├── products/
-    │   │   │   └── product.service.ts       ← CRUD, search, filter, pagination
+    │   │   │   └── product.service.ts       ← CRUD, search, filter, pagination, + getLowStockProducts
     │   │   ├── orders/
-    │   │   │   └── order.service.ts         ← createOrder, updateStatus
+    │   │   │   ├── order.service.ts         ← createOrder (+ notifications), updateStatus (+ history + notifications), getAdminOrders
+    │   │   │   ├── order-export.service.ts  ← ExcelJS export (Agent B)
+    │   │   │   └── invoice.service.ts       ← PDFKit invoice (Agent B)
+    │   │   ├── notifications/
+    │   │   │   ├── notification.service.ts  ← create, getAll, getUnreadCount, markAsRead, markAllAsRead, delete
+    │   │   │   └── notification.triggers.ts ← onNewOrder, onLowStock, onNewCustomer, onOrderStatusChanged
     │   │   └── payments/
     │   │       ├── payment.gateway.ts       ← IPaymentGateway interface
     │   │       ├── stripe.gateway.ts        ← Stub (ready for real keys)
@@ -303,7 +322,7 @@ ecommerce-platform/                          ← Monorepo root
     │       ├── pagination.ts                ← parsePaginationQuery
     │       └── slugify.ts
     ├── prisma/
-    │   ├── schema.prisma                    ← Full DB schema (8 models)
+    │   ├── schema.prisma                    ← Full DB schema (10 models + NotificationType enum)
     │   └── seed.ts                          ← 2 users, 6 categories, 12 products
     ├── .env                                 ← Local dev (never commit)
     ├── .env.example                         ← Template (safe to commit)
@@ -329,7 +348,10 @@ Product ───────────┬── CartItem (1:many)
 
 Cart ──────────────── CartItem (1:many)
 
-Order ─────────────── OrderItem (1:many)
+Order ─────────────┬── OrderItem (1:many)
+                   └── OrderStatusHistory (1:many)
+
+Notification ─── (standalone admin notifications log)
 ```
 
 ### Model Details
@@ -342,6 +364,7 @@ model User {
   password     String
   role         Role      @default(USER)      // USER | ADMIN
   refreshToken String?
+  isActive     Boolean   @default(true)      // ← added: disabled accounts cannot login
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   orders       Order[]
@@ -364,8 +387,8 @@ model Product {
   name         String
   slug         String      @unique
   description  String
-  price        Float
-  comparePrice Float?
+  price        Decimal     @db.Decimal(10, 2)   // ← was Float, changed for precision
+  comparePrice Decimal?    @db.Decimal(10, 2)   // ← was Float?
   stock        Int         @default(0)
   images       String[]
   isActive     Boolean     @default(true)
@@ -396,17 +419,29 @@ model CartItem {
 }
 
 model Order {
-  id              String        @id @default(cuid())
+  id              String               @id @default(cuid())
   userId          String
-  user            User          @relation(...)
-  status          OrderStatus   @default(PENDING)
-  total           Float
+  user            User                 @relation(...)
+  status          OrderStatus          @default(PENDING)
+  total           Decimal              @db.Decimal(10, 2)   // ← was Float
   paymentMethod   String
-  paymentStatus   PaymentStatus @default(PENDING)
+  paymentStatus   PaymentStatus        @default(PENDING)
   shippingAddress Json
   items           OrderItem[]
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  statusHistory   OrderStatusHistory[]  // ← added: audit trail
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+}
+
+model OrderStatusHistory {
+  id         String      @id @default(cuid())
+  orderId    String
+  order      Order       @relation(...)
+  fromStatus OrderStatus?
+  toStatus   OrderStatus
+  note       String?
+  changedBy  String?     // adminId who made the change
+  createdAt  DateTime    @default(now())
 }
 
 model OrderItem {
@@ -416,7 +451,7 @@ model OrderItem {
   productId String
   product   Product @relation(...)
   quantity  Int
-  price     Float
+  price     Decimal @db.Decimal(10, 2)   // ← was Float
 }
 
 model Address {
@@ -432,9 +467,20 @@ model Address {
   createdAt DateTime @default(now())
 }
 
-enum Role          { USER ADMIN }
-enum OrderStatus   { PENDING PROCESSING SHIPPED DELIVERED CANCELLED REFUNDED }
-enum PaymentStatus { PENDING PAID FAILED REFUNDED }
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
+
+enum Role             { USER ADMIN }
+enum OrderStatus      { PENDING PROCESSING SHIPPED DELIVERED CANCELLED REFUNDED }
+enum PaymentStatus    { PENDING PAID FAILED REFUNDED }
+enum NotificationType { NEW_ORDER LOW_STOCK NEW_CUSTOMER ORDER_STATUS_CHANGED }
 ```
 
 ---
@@ -522,11 +568,27 @@ enum PaymentStatus { PENDING PAID FAILED REFUNDED }
 | DELETE | /users/addresses/:id | Bearer | Delete address        |
 
 ### Admin Routes (`/admin`)
-| Method | Path              | Auth  | Description              |
-|--------|-------------------|-------|--------------------------|
-| GET    | /admin/users      | Admin | List all users           |
-| GET    | /admin/stats      | Admin | Dashboard statistics     |
-| GET    | /admin/orders     | Admin | All orders               |
+| Method | Path                              | Auth  | Description                                       |
+|--------|-----------------------------------|-------|---------------------------------------------------|
+| GET    | /admin/stats                      | Admin | Enhanced dashboard: today/yesterday, charts data  |
+| GET    | /admin/orders                     | Admin | All orders (search, status, date, sort, paginate) |
+| GET    | /admin/orders/export              | Admin | Export orders to Excel (.xlsx)                    |
+| GET    | /admin/orders/:id                 | Admin | Single order with status history                  |
+| PATCH  | /admin/orders/:id/status          | Admin | Update status (validated transitions)             |
+| GET    | /admin/orders/:id/invoice         | Admin | Download PDF invoice                              |
+| GET    | /admin/products/low-stock         | Admin | Products at/near 0 stock (threshold query param)  |
+| GET    | /admin/customers                  | Admin | Customer list (search, pagination)                |
+| GET    | /admin/customers/:id              | Admin | Customer detail: stats, orders, addresses         |
+| PATCH  | /admin/customers/:id/toggle-status| Admin | Activate / deactivate customer account            |
+
+### Notification Routes (`/notifications`) — Admin only
+| Method | Path                    | Auth  | Description                        |
+|--------|-------------------------|-------|------------------------------------|
+| GET    | /notifications          | Admin | List notifications (paginated, unreadOnly param) |
+| GET    | /notifications/unread-count | Admin | Count of unread notifications   |
+| PATCH  | /notifications/read-all | Admin | Mark all as read                   |
+| PATCH  | /notifications/:id/read | Admin | Mark single notification as read   |
+| DELETE | /notifications/:id      | Admin | Delete notification                |
 
 ---
 
@@ -536,7 +598,7 @@ enum PaymentStatus { PENDING PAID FAILED REFUNDED }
 // User & Auth
 interface User {
   id: string; name: string; email: string;
-  role: 'customer' | 'admin'; createdAt: string;
+  role: 'USER' | 'ADMIN'; createdAt: string;   // UPPERCASE — matches Prisma Role enum
 }
 interface AuthTokens { accessToken: string; refreshToken: string; }
 
@@ -552,19 +614,21 @@ interface Category { id: string; name: string; slug: string; image?: string; }
 interface CartItem { productId: string; product: Product; quantity: number; }
 interface Cart { items: CartItem[]; total: number; }
 
-// Orders
-type OrderStatus = 'pending'|'processing'|'shipped'|'delivered'|'cancelled'|'refunded';
-type PaymentStatus = 'pending'|'paid'|'failed'|'refunded';
+// Orders — all statuses UPPERCASE, matching Prisma enums exactly
+type OrderStatus = 'PENDING'|'PROCESSING'|'SHIPPED'|'DELIVERED'|'CANCELLED'|'REFUNDED';
+type PaymentStatus = 'PENDING'|'PAID'|'FAILED'|'REFUNDED';
 interface OrderItem { id: string; productId: string; product: Product; quantity: number; price: number; }
 interface Order {
   id: string; userId: string; items: OrderItem[]; status: OrderStatus;
+  paymentStatus: PaymentStatus;   // added — was missing from original type
   total: number; shippingAddress: Address; paymentMethod: string; createdAt: string;
 }
 
-// Address
+// Address — Iraq-specific fields added
 interface Address {
   id?: string; fullName: string; phone: string;
-  city: string; address: string; country: string; isDefault?: boolean;
+  governorate: string; city: string; address: string;
+  nearestLandmark?: string; country: string; isDefault?: boolean;
 }
 
 // API Wrappers
@@ -577,6 +641,43 @@ interface PaginatedResponse<T> extends ApiResponse<T[]> {
 interface PaymentIntent {
   id: string; amount: number; currency: string;
   status: PaymentStatus; provider: string;
+}
+
+// Order Status History (Agent B)
+interface OrderStatusHistory {
+  id: string; orderId: string;
+  fromStatus: OrderStatus | null; toStatus: OrderStatus;
+  note?: string; changedBy?: string; createdAt: string;
+}
+
+// Notifications (Admin only)
+type NotificationType = 'NEW_ORDER' | 'LOW_STOCK' | 'NEW_CUSTOMER' | 'ORDER_STATUS_CHANGED';
+interface Notification {
+  id: string; type: NotificationType; title: string; message: string;
+  data?: Record<string, unknown>; isRead: boolean; createdAt: string;
+}
+
+// Customer Management
+interface CustomerSummary {
+  id: string; name: string; email: string; isActive: boolean; createdAt: string;
+  totalOrders: number; lastOrderDate: string | null; lastOrderTotal: number | null;
+}
+interface CustomerDetail extends CustomerSummary {
+  role: string;
+  orders: Order[];
+  addresses: Address[];
+  totalSpent: number;
+}
+
+// Dashboard Stats
+interface DashboardStats {
+  overview: { totalOrders: number; totalRevenue: number; totalProducts: number; totalUsers: number; lowStockCount: number; };
+  today: { orders: number; revenue: number; };
+  yesterday: { orders: number; revenue: number; };
+  recentOrders: Array<{ id: string; total: number; status: OrderStatus; createdAt: string; user: { name: string; email: string; }; }>;
+  topProducts: Array<{ productId: string; name: string; price: number; images: string[]; totalSold: number; }>;
+  ordersByStatus: Array<{ status: OrderStatus; count: number; }>;
+  salesByCategory: Array<{ name: string; total: number; }>;
 }
 ```
 
@@ -616,24 +717,147 @@ Both store and admin have identical interceptor logic:
 Products are never hard-deleted. `isActive = false` hides them from public
 listings while preserving order history integrity (OrderItems still reference them).
 
-### 8.5 SaaS Multi-tenancy Architecture
+### 8.5 Template Deployment Architecture
 ```
-BACKEND/          ← Shared by ALL clients (never duplicated)
-FRONTEND/apps/
-  ├── store/      ← Client A's storefront
-  ├── admin/      ← Shared admin (or per-client if needed)
-  └── client-b/   ← Client B's storefront (future)
+Template Repo (this project)
+  ├── BACKEND/
+  └── FRONTEND/apps/{store, admin}
+
+Client A deployment
+  ├── backend-a
+  ├── store-a
+  └── admin-a
+
+Client B deployment
+  ├── backend-b
+  ├── store-b
+  └── admin-b
 ```
 To onboard a new client:
-1. `cp -r FRONTEND/apps/store FRONTEND/apps/client-b`
-2. Customize branding, colors, layout
-3. Point to same BACKEND API URL
-4. Deploy to Vercel as separate project
+1. Clone template repo into a new client project
+2. Set up a dedicated backend and database for that client
+3. Customize branding (name, colors, logo, content)
+4. Deploy client frontend/admin/backend on client-specific infrastructure
 
 ### 8.6 Monorepo with Turborepo
 - Shared `@repo/types` package eliminates type drift between frontend and backend
 - `turbo run dev` starts all apps in parallel with caching
 - Each app has its own `.env` — no shared secrets between apps
+
+### 8.7 Branding Config Layer
+Each app has a single config file as the source of truth for all
+client-specific strings. To customize for a new client, edit ONE file:
+- Store: `FRONTEND/apps/store/src/config/store.config.ts`
+- Admin: `FRONTEND/apps/admin/src/config/admin.config.ts`
+
+Fields: name, tagline, support email/hours, legal URLs, currency, locale, copyright.
+`formatPrice()` in both apps reads `currency` and `locale` from config.
+Never hardcode brand strings in components — always reference the config.
+
+### 8.8 Admin Auth Strategy (Cookie-Based Persist)
+Admin route protection uses Next.js middleware (`middleware.ts`) reading a
+cookie set by Zustand persist. The store writes to `document.cookie` via a
+custom `cookieStorage` adapter (not `localStorage`) so the middleware
+(which runs server-side/edge) can read the value.
+
+The middleware checks:
+1. Cookie `admin-auth-storage` exists
+2. `state.accessToken` is present
+3. `state.user.role === 'ADMIN'`
+
+All three must pass to enter `/dashboard`. This eliminates the former
+redirect-loop bug where a non-admin token granted dashboard access.
+
+Auth store: `FRONTEND/apps/admin/src/store/auth.store.ts`
+Middleware: `FRONTEND/apps/admin/src/middleware.ts`
+
+### 8.9 Atomic Stock Protection
+Order creation uses a conditional atomic decrement inside a Prisma transaction
+to prevent overselling under concurrent load:
+
+```typescript
+const updated = await tx.product.updateMany({
+  where: { id: productId, stock: { gte: quantity }, isActive: true },
+  data: { stock: { decrement: quantity } },
+});
+if (updated.count === 0) throw new AppError('"Product" is out of stock.', 409);
+```
+
+If stock drops below the required quantity between the pre-fetch and the
+transaction (concurrent request), `updateMany` matches 0 rows → the whole
+transaction rolls back automatically → 409 returned to client.
+Pre-transaction stock checks were removed (redundant and race-prone).
+
+### 8.10 Money Precision
+All financial fields use `Decimal @db.Decimal(10,2)` in Prisma (was `Float`).
+Prisma serializes `Decimal` as a **string** in JSON responses.
+- Backend: wrap in `Number()` before any arithmetic (e.g. `Number(order.total) * 100`)
+- Frontend: `formatPrice(value: number | string)` passes through `Number(value)`
+- Never use raw float arithmetic on price/total fields.
+
+### 8.11 Enum Casing Convention
+All enums are **UPPERCASE** everywhere — Prisma schema, `@repo/types`, and
+all frontend comparisons. Never use lowercase enum values.
+
+```
+OrderStatus:   PENDING | PROCESSING | SHIPPED | DELIVERED | CANCELLED | REFUNDED
+PaymentStatus: PENDING | PAID | FAILED | REFUNDED
+User.role:     USER | ADMIN
+```
+
+If you see a lowercase comparison like `status === 'pending'` or
+`role === 'admin'`, it is a bug — fix it to uppercase immediately.
+
+### 8.12 Notification System Architecture
+Notifications are a **fire-and-forget** admin logging mechanism — never block main operations.
+
+Four trigger points:
+- `createOrder` → `onNewOrder(orderId, total)` — fires after transaction commits
+- `createOrder` → `onLowStock(productId, name, stock)` — collected during tx, fired after commit
+- `auth.register` → `onNewCustomer(userId, name)` — fires after token storage
+- `updateOrderStatus` → `onOrderStatusChanged(orderId, oldStatus, newStatus)` — fires after tx
+
+**Critical rule**: notification triggers MUST be called OUTSIDE Prisma `$transaction` callbacks.
+If fired inside a transaction that rolls back, the notification would be created but the business
+operation would be reverted — a false alert. The low-stock pattern collects `lowStockProducts[]`
+inside the tx (read only), then fires triggers after the tx resolves.
+
+All triggers use `.catch(console.error)` — a failure to create a notification must never
+prevent an order from being placed or a user from registering.
+
+### 8.13 Order Status Transition Validation
+Status changes are constrained by a `VALID_TRANSITIONS` map in `order.service.ts`:
+```
+PENDING    → PROCESSING | CANCELLED
+PROCESSING → SHIPPED    | CANCELLED
+SHIPPED    → DELIVERED  | CANCELLED
+DELIVERED  → REFUNDED
+CANCELLED  → (terminal)
+REFUNDED   → (terminal)
+```
+Attempting an invalid transition throws `AppError(..., 400)`.
+When status changes to `CANCELLED`, stock is restored for all order items (outside the transaction).
+Status changes are logged to `OrderStatusHistory` with `fromStatus`, `toStatus`, `note`, and `changedBy` (adminId).
+
+### 8.14 Order Export and Invoice
+Two separate services handle bulk export and per-order PDF:
+- `order-export.service.ts` (Agent B): Uses **ExcelJS** to generate `.xlsx` from filtered orders.
+  Returns a `Buffer`; controller sets `Content-Disposition: attachment; filename=orders-{ts}.xlsx`.
+- `invoice.service.ts` (Agent B): Uses **PDFKit** to generate a per-order PDF invoice.
+  Returns a `Buffer`; controller sets `Content-Disposition: attachment; filename=invoice-{id8}.pdf`.
+
+The export route (`GET /admin/orders/export`) must be registered BEFORE `GET /admin/orders/:id`
+in `admin.routes.ts` — Express path matching is first-match, and `/export` would otherwise be
+treated as an `:id` parameter.
+
+### 8.15 Customer Management
+Admin customer management is separate from the general user system:
+- `getCustomers`: filters `role: 'USER'` only; includes computed `totalOrders`, `lastOrderDate`,
+  `lastOrderTotal` via aggregation; supports `search` (name/email) and pagination.
+- `getCustomerDetail`: returns full order history with items+products; computes `totalSpent`.
+- `toggleCustomerStatus`: checks that the target user is not an ADMIN before toggling `isActive`.
+  A disabled customer receives a 403 on login (`Account is disabled. Contact support.`).
+- ADMIN accounts can never be toggled via this endpoint (returns 403 if attempted).
 
 ---
 
@@ -642,6 +866,7 @@ To onboard a new client:
 ### BACKEND (`BACKEND/.env`)
 ```env
 # Database
+# Note: local dev on this machine uses sami:sami123 — change before production
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/ecommerce_db"
 
 # JWT — generate with: openssl rand -base64 64
@@ -819,21 +1044,45 @@ npx prisma generate        # Regenerate client after schema change
 - [x] Seed data (2 users, 6 categories, 12 products, 1 order)
 - [x] All environment files and examples
 - [x] README with full setup guide
+- [x] Admin auth fixed (cookie-based Zustand persist + role guard in middleware)
+- [x] Payment/refund authorization (ownership check on initiate/confirm + requireAdmin on refund)
+- [x] Admin order detail endpoint (GET /admin/orders/:id — admin-scoped, no userId filter)
+- [x] Enum casing normalized (UPPERCASE throughout Prisma, @repo/types, and all frontend comparisons)
+- [x] Money precision (Float → Decimal @db.Decimal(10,2) for price, comparePrice, total, OrderItem.price)
+- [x] Stock race condition fixed (atomic updateMany with stock: { gte: quantity } guard inside transaction)
+- [x] Branding config layer (store.config.ts + admin.config.ts — single file per-client customization)
+- [x] Category page working (fetches real products by categoryId, renders ProductGrid)
+- [x] Privacy and Terms pages created (dark-styled, use storeConfig values)
+- [x] Dead links and placeholder interactions removed (forgot password link, customer row console.log)
+- [x] UI consistency pass (store StatusBadge component, account orders page, dark tokens unified)
+- [x] Iraq address system (18 governorates + cities, AddressForm component with proper fields)
+- [x] Wishlist system (heart button on ProductCard, Zustand wishlist store, wishlist page)
+- [x] Product detail page fixed (correct slug-based navigation, no more 404)
+- [x] Notification system (Prisma model, service, triggers, controller, routes — admin-only)
+- [x] Notification triggers wired into order creation, status changes, new customer registration, low-stock detection
+- [x] Enhanced dashboard stats (today/yesterday comparison, topProducts, ordersByStatus, salesByCategory)
+- [x] Dashboard rebuilt with 4-row layout: StatsCards, RevenueChart+OrderStatusChart, RecentOrders+TopProducts, SalesByCategoryChart+LowStockAlert
+- [x] Topbar bell: real-time unread count badge (30s polling), dropdown with last 5 notifications, mark-as-read on click
+- [x] Notifications page: TanStack Table, filter tabs (ALL/UNREAD/by type), mark-all-read, delete
+- [x] Order export to Excel (.xlsx via ExcelJS) and PDF invoice generation (PDFKit) — Agent B
+- [x] Order status history audit trail (OrderStatusHistory model + OrderTimeline component) — Agent B
+- [x] Advanced order management: server-side search, date range, payment status filter, sort — Agent B
+- [x] Customer management: server-side search/pagination, toggle isActive, detail page with stats+orders+addresses
+- [x] Low-stock alert widget on dashboard + GET /admin/products/low-stock endpoint
+- [x] User.isActive field (disabled accounts receive 403 on login)
 
 ### 🔲 Not Yet Done (Next Priorities)
-- [ ] Real Stripe/payment gateway integration
-- [ ] Cloudinary image upload (currently local storage)
+- [ ] Cloudinary image hosting (currently local disk — won't persist on Vercel/Railway)
+- [ ] Real payment gateway (Stripe stub ready, needs live keys)
 - [ ] Email notifications (order confirmation, shipping updates)
 - [ ] Production deployment (Vercel + Railway)
+- [ ] Prisma migration history (currently using db push — needs proper migrate dev before production)
 - [ ] Redis cache for sessions and rate limiting
 - [ ] Product reviews and ratings system
 - [ ] Coupon/discount code system
-- [ ] Inventory alerts (low stock notifications)
-- [ ] Multi-language support (Arabic/English)
+- [ ] Multi-language support (Arabic RTL)
 - [ ] React Native mobile app (iOS + Android)
-- [ ] Analytics dashboard (real data from DB)
-- [ ] Webhook support for payment providers
-- [ ] Customer-facing order tracking page
+- [ ] Search page completion
 
 ---
 
@@ -914,6 +1163,15 @@ cd FRONTEND/apps/new-client
 3. In `payment.service.ts`, change which gateway is instantiated
 4. Add required env vars to `.env`
 
+### Customize for a new client
+1. Edit `FRONTEND/apps/store/src/config/store.config.ts`
+   - Change `name`, `tagline`, `support.email`, `currency`, `legal.privacyUrl`, `legal.termsUrl`
+2. Edit `FRONTEND/apps/admin/src/config/admin.config.ts`
+   - Change `storeName`, `adminTitle`, `support.email`
+3. Update Tailwind theme colors in both `tailwind.config.ts` files if needed
+4. Replace logo/brand mark in `Header.tsx` if the client has one
+5. Deploy as a new Vercel project pointing to the client's dedicated backend
+
 ---
 
 ## 15. TROUBLESHOOTING
@@ -982,14 +1240,14 @@ backend is running. The middleware checks for a valid token via the auth store.
 
 ### Phase 5 — Mobile
 - React Native app (Expo)
-- Connects to same BACKEND API — zero changes needed
+- Connects to the same client BACKEND API — zero logic changes needed
 - iOS + Android deployment
 
-### Phase 6 — SaaS Expansion
-- Client #2 frontend (new Vercel project, same backend)
-- Client #3 frontend
-- Admin becomes multi-tenant (each admin sees only their data)
-- Tenant isolation at DB level (schema per tenant or row-level security)
+### Phase 6 — Template Business Expansion
+- Package vertical starter variants (fashion, electronics, food)
+- Build guided branding/config onboarding for faster client launches
+- Standardize deployment playbooks per client infrastructure
+- Add optional premium modules without changing core backend logic
 
 ---
 
@@ -1026,7 +1284,56 @@ backend is running. The middleware checks for a valid token via the auth store.
 10. **Security first** — never log JWT secrets, passwords, or tokens.
     Never expose admin routes without `requireAdmin` middleware.
 
+11. **Enum values are UPPERCASE everywhere** — never write lowercase comparisons
+    like `status === 'pending'`. Always `status === 'PENDING'`. Same for
+    `role === 'ADMIN'` (not `'admin'`). See section 8.11.
+
+12. **Price/total fields are Decimal in Prisma** — always wrap in `Number()`
+    before arithmetic. `formatPrice()` accepts `number | string` and handles
+    Prisma's JSON string serialization transparently. See section 8.10.
+
+13. **Admin auth uses cookie-based Zustand persist + Next.js middleware** —
+    the middleware reads the `admin-auth-storage` cookie and checks both token
+    presence AND `user.role === 'ADMIN'`. Do not revert to localStorage for
+    admin auth — the middleware cannot read it. See section 8.8.
+
+14. **To customize for a new client, edit config files only** —
+    `FRONTEND/apps/store/src/config/store.config.ts` and
+    `FRONTEND/apps/admin/src/config/admin.config.ts`.
+    Never hardcode brand strings (store name, email, tagline) in components.
+
+15. **The Iraq address system must not be replaced with a generic form** —
+    it uses 18 Iraqi governorates with dependent city dropdowns.
+    Key files:
+    - `FRONTEND/apps/store/src/lib/iraq-locations.ts`
+    - `FRONTEND/apps/store/src/components/checkout/AddressForm.tsx`
+
+16. **Notification triggers must never fire inside a Prisma `$transaction` callback** —
+    the callback may be retried or rolled back. Collect data during the transaction,
+    then fire triggers after it resolves. All triggers use `.catch(console.error)` to
+    remain non-blocking. See section 8.12.
+
+17. **Order status changes are validated against VALID_TRANSITIONS** — arbitrary status
+    updates are rejected with 400. Do not bypass this map. When an order is CANCELLED,
+    stock is restored automatically outside the transaction. See section 8.13.
+
+18. **The export route must stay BEFORE the `:id` route in admin.routes.ts** —
+    `GET /admin/orders/export` must be declared before `GET /admin/orders/:id`.
+    Express does first-match routing; reversing the order makes `/export` match as an
+    order ID and returns 404. Same applies to any future fixed sub-routes on orders.
+
+19. **Never toggle ADMIN account status via the customer toggle endpoint** —
+    `toggleCustomerStatus` explicitly checks `user.role !== 'ADMIN'` and returns 403.
+    Admin accounts can only be managed directly in the database.
+
+20. **Recharts Tooltip `formatter` receives `ValueType | undefined`** — when writing
+    custom formatter callbacks for Recharts charts, do not annotate `v` as `number`.
+    Use `Number(v ?? 0)` to safely convert to number. Explicit type annotations that
+    conflict with `Formatter<ValueType, NameType>` cause TypeScript compilation errors
+    in the admin app. See `SalesByCategoryChart.tsx` and `OrderStatusChart.tsx`.
+
 ---
 
-*End of CLAUDE.md — Version 1.0 — SoftoDev E-Commerce Platform*
+*End of CLAUDE.md — Version 1.4 — SoftoDev E-Commerce Platform*
+*Last updated: April 2026 — Post Agent A+B parallel development session: notifications, enhanced dashboard, order export/invoice/timeline, customer management*
 *This file should be updated whenever major architectural changes are made.*

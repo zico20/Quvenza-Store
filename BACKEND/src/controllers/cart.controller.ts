@@ -15,7 +15,7 @@ async function getOrCreateCart(userId: string) {
 export async function getCart(req: Request, res: Response, next: NextFunction) {
   try {
     const cart = await getOrCreateCart(req.user!.id);
-    const total = cart.items.reduce((s: number, i) => s + i.product.price * i.quantity, 0);
+    const total = cart.items.reduce((s: number, i) => s + Number(i.product.price) * i.quantity, 0);
     sendSuccess(res, { ...cart, total });
   } catch (e) { next(e); }
 }
@@ -30,7 +30,7 @@ export async function addToCart(req: Request, res: Response, next: NextFunction)
     if (existing) await prisma.cartItem.update({ where: { id: existing.id }, data: { quantity: existing.quantity + quantity } });
     else await prisma.cartItem.create({ data: { cartId: cart.id, productId, quantity } });
     const updated = await getOrCreateCart(req.user!.id);
-    sendSuccess(res, { ...updated, total: updated.items.reduce((s: number, i) => s + i.product.price * i.quantity, 0) }, 'Added to cart');
+    sendSuccess(res, { ...updated, total: updated.items.reduce((s: number, i) => s + Number(i.product.price) * i.quantity, 0) }, 'Added to cart');
   } catch (e) { next(e); }
 }
 export async function updateCartItem(req: Request, res: Response, next: NextFunction) {
@@ -42,7 +42,7 @@ export async function updateCartItem(req: Request, res: Response, next: NextFunc
     if (quantity <= 0) await prisma.cartItem.delete({ where: { id: item.id } });
     else await prisma.cartItem.update({ where: { id: item.id }, data: { quantity } });
     const updated = await getOrCreateCart(req.user!.id);
-    sendSuccess(res, { ...updated, total: updated.items.reduce((s: number, i) => s + i.product.price * i.quantity, 0) }, 'Cart updated');
+    sendSuccess(res, { ...updated, total: updated.items.reduce((s: number, i) => s + Number(i.product.price) * i.quantity, 0) }, 'Cart updated');
   } catch (e) { next(e); }
 }
 export async function removeFromCart(req: Request, res: Response, next: NextFunction) {

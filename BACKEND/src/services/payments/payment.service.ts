@@ -6,13 +6,17 @@ import { AppError } from '../../middlewares/error.middleware';
 
 function getGateway(): IPaymentGateway { return new StripeGateway(); }
 
-export async function initiatePayment(orderId: string, currency = 'usd') {
+export async function initiatePayment(orderId: string, userId: string, currency = 'usd') {
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order) throw new AppError('Order not found.', 404);
-  return getGateway().createPaymentIntent(order.total * 100, currency, { orderId });
+  if (order.userId !== userId) throw new AppError('Access denied.', 403);
+  return getGateway().createPaymentIntent(Number(order.total) * 100, currency, { orderId });
 }
 
-export async function confirmOrderPayment(orderId: string, paymentIntentId: string) {
+export async function confirmOrderPayment(orderId: string, userId: string, paymentIntentId: string) {
+  const order = await prisma.order.findUnique({ where: { id: orderId } });
+  if (!order) throw new AppError('Order not found.', 404);
+  if (order.userId !== userId) throw new AppError('Access denied.', 403);
   const result = await getGateway().confirmPayment(paymentIntentId);
   if (result.status === 'succeeded') await prisma.order.update({ where: { id: orderId }, data: { paymentStatus: 'PAID', status: 'PROCESSING' } });
   return result;
