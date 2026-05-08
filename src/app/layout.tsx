@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/cart/CartDrawer';
 import LangInitializer from '@/components/layout/LangInitializer';
+import StoreChrome from '@/components/layout/StoreChrome';
 
 // ── Fonts via next/font (no external CSS request, zero CLS) ──────
 const cairo = Cairo({
@@ -133,10 +134,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className="flex flex-col min-h-screen" style={{ background: '#0e0e10', color: '#f5f5f4' }}>
         <LangInitializer />
-        <Header navCategories={navCategories} />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <CartDrawer />
+        <StoreChrome
+          header={<Header navCategories={navCategories} />}
+          footer={<Footer />}
+          cartDrawer={<CartDrawer />}
+        >
+          {children}
+        </StoreChrome>
       </body>
     </html>
   );

@@ -53,7 +53,7 @@ export default function RecentOrders({ orders }: { orders: RecentOrder[] }) {
                     </span>
                   </td>
                   <td className="py-3">
-                    <span className="text-text-muted text-xs">{formatDate(order.createdAt)}</span>
+                    <span className="text-text-muted text-xs">{formatDate(String(order.createdAt))}</span>
                   </td>
                 </tr>
               ))}
