@@ -1,0 +1,164 @@
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Plus, Edit, Trash2, Search, Package } from 'lucide-react';
+import type { Product } from '@/types';
+import { adminProducts } from '@/lib/admin/api';
+import Topbar from '@/components/admin/layout/Topbar';
+import { useLang } from '@/hooks/useLang';
+import { formatPrice } from '@/lib/utils';
+
+export default function ProductsPage() {
+  const { t } = useLang();
+  const [data, setData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    adminProducts.getAll({ limit: 50 })
+      .then(r => { if (r.success) setData(r.data); })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = search.trim()
+    ? data.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
+    : data;
+
+  async function handleDelete(id: string) {
+    if (!confirm(t('products.deleteConfirmTitle'))) return;
+    try { await adminProducts.delete(id); setData(d => d.filter(x => x.id !== id)); }
+    catch (e) { console.error(e); }
+  }
+
+  // Tone hue for placeholder
+  const hues = [18, 220, 280, 140, 40, 320];
+
+  return (
+    <div className="flex flex-col">
+      <Topbar title={t('products.title')} />
+      <div style={{ padding: 32 }}>
+        {/* Toolbar */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 24, alignItems: 'center' }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }}>
+            <Search size={15} style={{ color: '#6b6b70', flexShrink: 0 }} strokeWidth={1.6} />
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={t('products.search')}
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f5f5f4', fontSize: 13, fontFamily: 'inherit' }}
+            />
+          </div>
+          <Link
+            href="/dashboard/products/new"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: '10px 18px', background: '#ff6a2b', color: '#fff',
+              borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none',
+            }}
+          >
+            <Plus size={14} strokeWidth={2} />
+            {t('products.new')}
+          </Link>
+        </div>
+
+        {/* Table */}
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {[...Array(6)].map((_, i) => (
+              <div key={i} style={{ height: 60, background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }} />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
+            <Package size={40} strokeWidth={1.2} style={{ color: '#6b6b70', marginBottom: 16 }} />
+            <p style={{ color: '#f5f5f4', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('products.noProducts')}</p>
+          </div>
+        ) : (
+          <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, overflow: 'hidden' }}>
+            {/* Header */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: '2.5fr 1fr 100px 80px 100px 80px',
+              padding: '10px 20px', background: '#1f1f23', borderBottom: '1px solid #2a2a30', gap: 12,
+            }}>
+              {[t('products.columns.product'), t('products.columns.category'), t('products.columns.price'), t('products.columns.stock'), t('products.columns.status'), t('products.columns.actions')].map((h, i) => (
+                <div key={i} className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{h}</div>
+              ))}
+            </div>
+            {/* Rows */}
+            {filtered.map((p, idx) => {
+              const hue = hues[idx % hues.length];
+              const placeholderBg = `repeating-linear-gradient(135deg, oklch(0.78 0.04 ${hue}) 0 2px, transparent 2px 14px), linear-gradient(160deg, oklch(0.88 0.03 ${hue}), oklch(0.72 0.05 ${hue}))`;
+              return (
+                <div key={p.id} style={{
+                  display: 'grid', gridTemplateColumns: '2.5fr 1fr 100px 80px 100px 80px',
+                  padding: '12px 20px', borderBottom: '1px solid #1f1f23',
+                  alignItems: 'center', gap: 12, transition: 'background 0.15s',
+                }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#1f1f23')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
+                  {/* Product */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 4, overflow: 'hidden', flexShrink: 0, background: p.images?.[0] ? '#1f1f23' : placeholderBg }}>
+                      {p.images?.[0] && (
+                        <Image src={p.images[0]} alt={p.name} width={40} height={40} className="object-cover w-full h-full"
+                          unoptimized={p.images[0].startsWith('http://localhost')} />
+                      )}
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>{p.name}</div>
+                      <div className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{p.slug}</div>
+                    </div>
+                  </div>
+                  {/* Category */}
+                  <div style={{ fontSize: 12, color: '#a1a1a6' }}>{(p as any).category?.name ?? '—'}</div>
+                  {/* Price */}
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>{formatPrice(p.price)}</div>
+                  {/* Stock */}
+                  <div style={{ fontSize: 13, fontWeight: 600, color: p.stock === 0 ? '#f87171' : p.stock <= 10 ? '#fbbf24' : '#4ade80' }}>
+                    {p.stock}
+                  </div>
+                  {/* Status */}
+                  <div>
+                    <span style={{
+                      display: 'inline-flex', padding: '3px 10px', borderRadius: 3, fontSize: 10, fontWeight: 600,
+                      fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em', textTransform: 'uppercase',
+                      background: p.isActive ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)',
+                      color: p.isActive ? '#4ade80' : '#f87171',
+                      border: `1px solid ${p.isActive ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)'}`,
+                    }}>
+                      {p.isActive ? t('common.active') : t('common.inactive')}
+                    </span>
+                  </div>
+                  {/* Actions */}
+                  <div style={{ display: 'flex', gap: 4 }}>
+                    <Link href={`/dashboard/products/${p.id}`} style={{
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      width: 30, height: 30, borderRadius: 4,
+                      background: 'transparent', color: '#a1a1a6', border: 'none', cursor: 'pointer', textDecoration: 'none',
+                    }}>
+                      <Edit size={14} strokeWidth={1.6} />
+                    </Link>
+                    <button onClick={() => handleDelete(p.id)} style={{
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      width: 30, height: 30, borderRadius: 4,
+                      background: 'transparent', color: '#a1a1a6', border: 'none', cursor: 'pointer',
+                    }}>
+                      <Trash2 size={14} strokeWidth={1.6} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {/* Count */}
+        <p className="mono" style={{ fontSize: 10, color: '#6b6b70', marginTop: 12 }}>
+          {filtered.length} {t('products.columns.product')}
+        </p>
+      </div>
+    </div>
+  );
+}

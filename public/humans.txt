@@ -1,0 +1,15 @@
+/* TEAM */
+Founder: Ghaith
+Company: SoftoDev
+Location: Baghdad, Iraq
+Contact: support [at] softodeviqstore.com
+Telegram: @softodeviq
+
+/* SITE */
+Last update: 2026/04/27
+Standards: HTML5, CSS3, JSON-LD, Schema.org
+Components: Next.js, TypeScript, Tailwind CSS
+Hosting: Vercel
+
+/* THANKS */
+To our 500+ Iraqi customers who trusted us first.

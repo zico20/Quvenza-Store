@@ -1,5 +1,5 @@
 # CLAUDE.md — Complete Project Intelligence File
-# E-Commerce Platform by SoftoDev (softodeviq.com)
+# E-Commerce Platform by SoftoDev (softodeviqstore.com)
 # Last Updated: April 2026
 # Read this entire file before touching any code.
 
@@ -25,7 +25,7 @@ I understand the full project."
 |------------------|--------------------------------------------|
 | Project name     | E-Commerce Platform                        |
 | Company          | SoftoDev                                   |
-| Domain           | softodeviq.com                             |
+| Domain           | softodeviqstore.com                             |
 | Location         | Baghdad, Iraq                              |
 | Primary market   | Iraq → regional → international            |
 | Business model   | Template product: per-client full deployment |
