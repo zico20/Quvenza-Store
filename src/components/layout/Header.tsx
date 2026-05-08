@@ -8,6 +8,7 @@ import { useWishlistStore } from '@/store/wishlist.store';
 import { storeConfig } from '@/config/store.config';
 import { useLang } from '@/hooks/useLang';
 import { useCurrency } from '@/hooks/useCurrency';
+import { getCategoryName } from '@/lib/i18n';
 
 interface NavCategory {
   id: string;
@@ -206,7 +207,7 @@ export default function Header({ navCategories }: HeaderProps) {
                 className="nav-cat-link"
                 style={{ color: active ? '#f5f5f4' : '#a1a1a6', fontWeight: active ? 600 : 400 }}
               >
-                {cat.name}
+                {getCategoryName(cat.slug, cat.name, lang)}
               </Link>
             );
           })}
@@ -250,7 +251,7 @@ export default function Header({ navCategories }: HeaderProps) {
             {visibleCats.map(cat => (
               <Link key={cat.id} href={`/category/${cat.slug}`} onClick={() => setMobileOpen(false)}
                 style={{ display: 'block', padding: '12px 0', color: '#a1a1a6', textDecoration: 'none', fontSize: 15, borderBottom: '1px solid #1f1f23' }}>
-                {cat.name}
+                {getCategoryName(cat.slug, cat.name, lang)}
               </Link>
             ))}
             {visibleCats.length > 0 && (

@@ -57,6 +57,14 @@ const STRINGS = {
     noAccount:         { en: "Don't have an account?", ar: 'ليس لديك حساب؟' },
     haveAccount:       { en: 'Already have an account?', ar: 'لديك حساب؟' },
     register:          { en: 'Register',            ar: 'إنشاء حساب' },
+    // Admin common
+    active:            { en: 'Active',              ar: 'مفعّل' },
+    inactive:          { en: 'Inactive',            ar: 'معطّل' },
+    delete:            { en: 'Delete',              ar: 'حذف' },
+    edit:              { en: 'Edit',                ar: 'تعديل' },
+    confirm:           { en: 'Confirm',             ar: 'تأكيد' },
+    yes:               { en: 'Yes',                 ar: 'نعم' },
+    no:                { en: 'No',                  ar: 'لا' },
   },
   home: {
     valueProps: {
@@ -307,6 +315,66 @@ const STRINGS = {
       CANCELLED:  { en: 'Cancelled',  ar: 'ملغي' },
       REFUNDED:   { en: 'Refunded',   ar: 'مسترد' },
     },
+    // Admin orders keys
+    title:           { en: 'Orders',                ar: 'الطلبات' },
+    search:          { en: 'Search orders…',        ar: 'ابحث في الطلبات…' },
+    export:          { en: 'Export',                ar: 'تصدير' },
+    today:           { en: 'Today',                 ar: 'اليوم' },
+    processing:      { en: 'Processing',            ar: 'قيد التجهيز' },
+    delivered:       { en: 'Delivered',             ar: 'تم التسليم' },
+    avgValue:        { en: 'Avg. order value',      ar: 'متوسط قيمة الطلب' },
+    ordersFound:     { en: 'orders found',          ar: 'طلب' },
+    page:            { en: 'Page',                  ar: 'صفحة' },
+    of:              { en: 'of',                    ar: 'من' },
+    orderId:         { en: 'Order ID',              ar: 'رقم الطلب' },
+    orderInfo:       { en: 'Order Information',     ar: 'معلومات الطلب' },
+    orderItems:      { en: 'Order Items',           ar: 'عناصر الطلب' },
+    orderStatus:     { en: 'Order Status',          ar: 'حالة الطلب' },
+    orderTimeline:   { en: 'Status Timeline',       ar: 'سجل الحالات' },
+    orderNotFound:   { en: 'Order not found',       ar: 'الطلب غير موجود' },
+    customer:        { en: 'Customer',              ar: 'العميل' },
+    datePlaced:      { en: 'Date Placed',           ar: 'تاريخ الطلب' },
+    payment:         { en: 'Payment',               ar: 'الدفع' },
+    paymentMethod:   { en: 'Payment Method',        ar: 'طريقة الدفع' },
+    shipping:        { en: 'Shipping',              ar: 'الشحن' },
+    shippingAddress: { en: 'Shipping Address',      ar: 'عنوان الشحن' },
+    subtotal:        { en: 'Subtotal',              ar: 'المجموع الجزئي' },
+    total:           { en: 'Total',                 ar: 'الإجمالي' },
+    product:         { en: 'Product',              ar: 'المنتج' },
+    qty:             { en: 'Qty',                   ar: 'الكمية' },
+    unitPrice:       { en: 'Unit Price',            ar: 'سعر الوحدة' },
+    free:            { en: 'Free',                  ar: 'مجاني' },
+    noCustomer:      { en: 'No customer info',      ar: 'لا معلومات عميل' },
+    noAddress:       { en: 'No address',            ar: 'لا عنوان' },
+    changeStatus:    { en: 'Change Status',         ar: 'تغيير الحالة' },
+    statusUpdated:   { en: 'Status updated',        ar: 'تم تحديث الحالة' },
+    printInvoice:    { en: 'Print Invoice',         ar: 'طباعة الفاتورة' },
+    failedInvoice:   { en: 'Failed to generate invoice', ar: 'فشل إنشاء الفاتورة' },
+    generating:      { en: 'Generating…',           ar: 'جارٍ الإنشاء…' },
+    noOrdersAdmin:   { en: 'No orders found',       ar: 'لا توجد طلبات' },
+    adjustFilters:   { en: 'Try adjusting your filters', ar: 'جرّب تغيير الفلاتر' },
+    backToOrders:    { en: 'Back to Orders',        ar: 'العودة للطلبات' },
+    backToOrdersLink:{ en: '← Orders',             ar: '← الطلبات' },
+    failedToLoad:    { en: 'Failed to load order',  ar: 'فشل تحميل الطلب' },
+    needsFollowup:   { en: 'Needs follow-up',       ar: 'يحتاج متابعة' },
+    columns: {
+      order:    { en: 'Order',    ar: 'الطلب' },
+      customer: { en: 'Customer', ar: 'العميل' },
+      date:     { en: 'Date',     ar: 'التاريخ' },
+      items:    { en: 'Items',    ar: 'العناصر' },
+      total:    { en: 'Total',    ar: 'المبلغ' },
+      status:   { en: 'Status',   ar: 'الحالة' },
+      actions:  { en: 'Actions',  ar: 'إجراءات' },
+    },
+    statuses: {
+      ALL:        { en: 'All',        ar: 'الكل' },
+      PENDING:    { en: 'Pending',    ar: 'قيد الانتظار' },
+      PROCESSING: { en: 'Processing', ar: 'قيد التجهيز' },
+      SHIPPED:    { en: 'Shipped',    ar: 'تم الشحن' },
+      DELIVERED:  { en: 'Delivered',  ar: 'تم التسليم' },
+      CANCELLED:  { en: 'Cancelled',  ar: 'ملغي' },
+      REFUNDED:   { en: 'Refunded',   ar: 'مسترد' },
+    },
   },
   footer: {
     tagline: { en: 'Tech store for pros — curated products, local warranty, and fast delivery across Iraq.', ar: 'متجر تقني للمحترفين — منتجات مختارة، ضمان محلي، وتوصيل سريع في العراق.' },
@@ -345,6 +413,132 @@ const STRINGS = {
     addressRemoved: { en: 'Address removed',         ar: 'تم حذف العنوان' },
     changesSaved:   { en: 'Changes saved',           ar: 'تم حفظ التغييرات' },
   },
+  // ============================================================
+  // ADMIN PANEL TRANSLATIONS
+  // ============================================================
+
+  topbar: {
+    notifications:   { en: 'Notifications',        ar: 'الإشعارات' },
+    noNotifications: { en: 'No new notifications',  ar: 'لا توجد إشعارات جديدة' },
+    viewAll:         { en: 'View all',              ar: 'عرض الكل' },
+    unread:          { en: 'unread',                ar: 'غير مقروء' },
+  },
+
+  dashboard: {
+    title:         { en: 'Dashboard',       ar: 'لوحة التحكم' },
+    revenueToday:  { en: "Today's Revenue", ar: 'إيرادات اليوم' },
+    todayOrders:   { en: "Today's Orders",  ar: 'طلبات اليوم' },
+    recentOrders:  { en: 'Recent Orders',   ar: 'أحدث الطلبات' },
+    topProducts:   { en: 'Top Products',    ar: 'الأكثر مبيعاً' },
+    lowStock:      { en: 'Low Stock Alert', ar: 'تنبيه: مخزون منخفض' },
+    viewDetails:   { en: 'View details',    ar: 'عرض التفاصيل' },
+  },
+
+  products: {
+    title:              { en: 'Products',            ar: 'المنتجات' },
+    new:                { en: 'New Product',         ar: 'منتج جديد' },
+    search:             { en: 'Search products…',   ar: 'ابحث في المنتجات…' },
+    noProducts:         { en: 'No products found',  ar: 'لا توجد منتجات' },
+    notFound:           { en: 'Product not found',  ar: 'المنتج غير موجود' },
+    editTitle:          { en: 'Edit Product',        ar: 'تعديل المنتج' },
+    deleteProduct:      { en: 'Delete Product',      ar: 'حذف المنتج' },
+    deleteConfirmTitle: { en: 'Delete product?',     ar: 'حذف المنتج؟' },
+    deleteConfirmBody:  { en: 'This action cannot be undone.', ar: 'لا يمكن التراجع عن هذا الإجراء.' },
+    save:               { en: 'Save',               ar: 'حفظ' },
+    saving:             { en: 'Saving…',             ar: 'جارٍ الحفظ…' },
+    deleting:           { en: 'Deleting…',           ar: 'جارٍ الحذف…' },
+    updated:            { en: 'Product updated',     ar: 'تم تحديث المنتج' },
+    failedLoad:         { en: 'Failed to load',      ar: 'فشل التحميل' },
+    failedUpdate:       { en: 'Failed to update',    ar: 'فشل التحديث' },
+    backToProducts:     { en: '← Products',          ar: '← المنتجات' },
+    saveChanges:        { en: 'Save changes',        ar: 'حفظ التغييرات' },
+    basicInfo:          { en: 'Basic Information',   ar: 'المعلومات الأساسية' },
+    pricing:            { en: 'Pricing & Stock',     ar: 'التسعير والمخزون' },
+    images:             { en: 'Product Images',      ar: 'صور المنتج' },
+    uploadImages:       { en: 'Upload Images',       ar: 'رفع صور' },
+    nameLabel:          { en: 'Product Name',        ar: 'اسم المنتج' },
+    slugLabel:          { en: 'Slug',                ar: 'المعرف' },
+    descLabel:          { en: 'Description',         ar: 'الوصف' },
+    priceLabel:         { en: 'Price ($)',            ar: 'السعر ($)' },
+    comparePriceLabel:  { en: 'Compare Price ($)',   ar: 'سعر المقارنة ($)' },
+    stockLabel:         { en: 'Stock',               ar: 'المخزون' },
+    categoryLabel:      { en: 'Category',            ar: 'الفئة' },
+    selectCategory:     { en: 'Select category…',   ar: 'اختر الفئة…' },
+    activeLabel:        { en: 'Active (visible in store)', ar: 'مفعّل (ظاهر في المتجر)' },
+    columns: {
+      product:  { en: 'Product',  ar: 'المنتج' },
+      category: { en: 'Category', ar: 'الفئة' },
+      price:    { en: 'Price',    ar: 'السعر' },
+      stock:    { en: 'Stock',    ar: 'المخزون' },
+      status:   { en: 'Status',   ar: 'الحالة' },
+      actions:  { en: 'Actions',  ar: 'إجراءات' },
+    },
+  },
+
+  categories: {
+    title: { en: 'Categories', ar: 'الفئات' },
+    new:   { en: 'New Category', ar: 'فئة جديدة' },
+    columns: {
+      name:    { en: 'Name',     ar: 'الاسم' },
+      slug:    { en: 'Slug',     ar: 'المعرف' },
+      status:  { en: 'Status',   ar: 'الحالة' },
+      actions: { en: 'Actions',  ar: 'إجراءات' },
+    },
+  },
+
+  customers: {
+    title:  { en: 'Customers',          ar: 'العملاء' },
+    search: { en: 'Search customers…', ar: 'ابحث في العملاء…' },
+    columns: {
+      customer: { en: 'Customer', ar: 'العميل' },
+      joined:   { en: 'Joined',   ar: 'تاريخ الانضمام' },
+      orders:   { en: 'Orders',   ar: 'الطلبات' },
+      spent:    { en: 'Spent',    ar: 'الإنفاق' },
+      level:    { en: 'Level',    ar: 'المستوى' },
+      status:   { en: 'Status',   ar: 'الحالة' },
+      actions:  { en: 'Actions',  ar: 'إجراءات' },
+    },
+  },
+
+  settings: {
+    title:         { en: 'Settings',           ar: 'الإعدادات' },
+    myAccount:     { en: 'My Account',         ar: 'حسابي' },
+    adminUsers:    { en: 'Admin Users',        ar: 'مستخدمو الإدارة' },
+    profile:       { en: 'Profile',            ar: 'الملف الشخصي' },
+    fullName:      { en: 'Full Name',          ar: 'الاسم الكامل' },
+    email:         { en: 'Email',              ar: 'البريد الإلكتروني' },
+    saveProfile:   { en: 'Save Profile',       ar: 'حفظ الملف' },
+    saved:         { en: 'Saved!',             ar: 'تم الحفظ!' },
+    changePwd:     { en: 'Change Password',    ar: 'تغيير كلمة المرور' },
+    currentPwd:    { en: 'Current Password',   ar: 'كلمة المرور الحالية' },
+    newPwd:        { en: 'New Password',       ar: 'كلمة المرور الجديدة' },
+    confirmPwd:    { en: 'Confirm Password',   ar: 'تأكيد كلمة المرور' },
+    updatePwd:     { en: 'Update Password',    ar: 'تحديث كلمة المرور' },
+    addAdmin:      { en: 'Add Admin',          ar: 'إضافة مسؤول' },
+    deleteAdmin:   { en: 'Delete Admin',       ar: 'حذف مسؤول' },
+    confirmDelete: { en: 'Confirm delete?',    ar: 'تأكيد الحذف؟' },
+    resetPwd:      { en: 'Reset Password',     ar: 'إعادة تعيين كلمة المرور' },
+    noAdmins:      { en: 'No admin users',     ar: 'لا يوجد مسؤولون' },
+    joinedLabel:   { en: 'Joined',             ar: 'تاريخ الانضمام' },
+    youBadge:      { en: 'You',                ar: 'أنت' },
+    pwdMismatch:   { en: 'Passwords do not match', ar: 'كلمتا المرور غير متطابقتين' },
+    pwdWeak:       { en: 'Password too weak',  ar: 'كلمة المرور ضعيفة جداً' },
+    pwdReset:      { en: 'Password reset',     ar: 'تم إعادة تعيين كلمة المرور' },
+    adminCreated:  { en: 'Admin created',      ar: 'تم إنشاء المسؤول' },
+    adminDeleted:  { en: 'Admin deleted',      ar: 'تم حذف المسؤول' },
+  },
+
+  // Category names keyed by slug — DB stores Arabic only, translations live here
+  categoryNames: {
+    'ai-tools':       { en: 'AI Tools',                    ar: 'أدوات الذكاء الاصطناعي' },
+    'design':         { en: 'Design & Creative',           ar: 'التصميم والإبداع' },
+    'education':      { en: 'Education & Certificates',    ar: 'التعليم والشهادات' },
+    'video-editing':  { en: 'Video Editing',               ar: 'المونتاج والفيديو' },
+    'entertainment':  { en: 'Entertainment & Music',       ar: 'الترفيه والموسيقى' },
+    'productivity':   { en: 'Productivity & Work',         ar: 'الإنتاجية والعمل' },
+    'gaming-accounts':{ en: 'Gaming Accounts',             ar: 'حسابات الألعاب' },
+    'gaming-coins':   { en: 'Gaming Coins',                ar: 'عملات الألعاب' },
+  },
 } as const;
 
 export function t(path: string, lang: Lang): string {
@@ -358,6 +552,19 @@ export function t(path: string, lang: Lang): string {
     return (cur as Record<string, string>)[lang];
   }
   return path;
+}
+
+const CATEGORY_NAMES = (STRINGS as unknown as {
+  categoryNames: Record<string, { en: string; ar: string }>;
+}).categoryNames;
+
+/**
+ * Returns the translated category name for the given slug + language.
+ * Falls back to the original DB name when slug not in map.
+ */
+export function getCategoryName(slug: string, fallback: string, lang: Lang): string {
+  const entry = CATEGORY_NAMES?.[slug];
+  return entry?.[lang] ?? fallback;
 }
 
 // Server-side only — reads lang cookie from next/headers
