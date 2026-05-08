@@ -14,11 +14,11 @@ export default function TopProducts({ products }: { products: TopProduct[] }) {
       ) : (
         <div className="space-y-4">
           {products.map((p, index) => (
-            <div key={p.productId} className="flex items-center gap-3">
+            <div key={p.id ?? index} className="flex items-center gap-3">
               <span className="text-text-muted text-xs w-4 text-right">{index + 1}</span>
               <div className="h-9 w-9 rounded-md bg-bg-elevated flex items-center justify-center overflow-hidden flex-shrink-0">
-                {p.image ? (
-                  <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                {p.images?.[0] ? (
+                  <img src={p.images[0]} alt={p.name} className="h-full w-full object-cover" />
                 ) : (
                   <span className="text-xs text-text-muted">N/A</span>
                 )}

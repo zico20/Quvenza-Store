@@ -170,25 +170,33 @@ export interface CustomerDetail extends CustomerSummary {
   totalSpent: number;
 }
 
-// Dashboard stats
+// Dashboard stats — shape matches getDashboardStats() in admin.service.ts
 export interface DashboardStats {
-  overview: {
-    totalOrders: number;
-    totalRevenue: number;
-    totalProducts: number;
-    totalUsers: number;
-    lowStockCount: number;
-  };
   today: { orders: number; revenue: number };
   yesterday: { orders: number; revenue: number };
-  recentOrders: Array<Order & { user: { name: string; email: string } }>;
+  totals: {
+    products: number;
+    users: number;
+    orders: number;
+    revenue: number;
+  };
+  recentOrders: Array<{
+    id: string;
+    total: number | string;
+    status: string;
+    paymentStatus: string;
+    createdAt: string | Date;
+    user: { id: string; name: string; email: string };
+  }>;
   topProducts: Array<{
-    productId: string;
-    name: string;
-    price: number;
-    image: string | null;
+    id?: string;
+    name?: string;
+    slug?: string;
+    images?: string[];
+    price?: number | string;
     totalSold: number;
   }>;
-  ordersByStatus: Array<{ status: OrderStatus; count: number }>;
+  ordersByStatus: Array<{ status: string; count: number }>;
+  lowStockCount: number;
   salesByCategory: Array<{ name: string; total: number }>;
 }

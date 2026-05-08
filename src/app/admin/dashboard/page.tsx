@@ -33,7 +33,7 @@ export default function DashboardPage() {
     const byDay: Record<string, number> = {};
     data.recentOrders.forEach((ord) => {
       const d = new Date(ord.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      byDay[d] = (byDay[d] ?? 0) + ord.total;
+      byDay[d] = (byDay[d] ?? 0) + Number(ord.total);
     });
     return Object.entries(byDay).map(([date, revenue]) => ({ date, revenue }));
   })();
@@ -54,8 +54,8 @@ export default function DashboardPage() {
       value: data && data.today.orders > 0 ? formatPrice(data.today.revenue / data.today.orders) : '—',
     },
     {
-      title: 'Visitors',
-      value: data?.overview.totalUsers?.toLocaleString() ?? '—',
+      title: 'Total Users',
+      value: data?.totals.users?.toLocaleString() ?? '—',
     },
   ];
 

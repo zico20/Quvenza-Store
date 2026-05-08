@@ -8,7 +8,7 @@ import { formatDate } from '@/lib/utils';
 import type { Notification } from '@/types';
 import { useLang } from '@/hooks/useLang';
 
-export default function Topbar({ title }: { title: string }) {
+export default function Topbar({ title = '' }: { title?: string }) {
   const { user } = useAdminAuthStore();
   const { t, lang, isRTL, toggleLang } = useLang();
   const [open, setOpen] = useState(false);
