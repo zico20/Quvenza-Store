@@ -116,10 +116,8 @@ export const viewport: Viewport = {
 
 async function getNavCategories(): Promise<{ id: string; name: string; slug: string }[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, { next: { revalidate: 300 } });
-    if (!res.ok) return [];
-    const cats = (await res.json()).data ?? [];
-    return cats.filter((c: { isActive?: boolean }) => c.isActive !== false);
+    const { getCategories } = await import('@/services/categories/category.service');
+    return await getCategories();
   } catch {
     return [];
   }

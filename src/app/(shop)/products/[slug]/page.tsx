@@ -5,24 +5,20 @@ import JsonLd from '@/components/seo/JsonLd';
 import { productSchema, breadcrumbSchema, faqSchema, getDefaultFAQs } from '@/lib/schema';
 import ProductDetailClient, { ProductNotFound } from './ProductDetailClient';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api/v1';
 const BASE = 'https://softodeviqstore.com';
 
 async function fetchProduct(slug: string): Promise<Product | null> {
   try {
-    const res = await fetch(`${API}/products/${slug}`, { next: { revalidate: 3600 } });
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.success ? json.data : null;
+    const { getProductBySlug } = await import('@/services/products/product.service');
+    return await getProductBySlug(slug) as unknown as Product;
   } catch { return null; }
 }
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${API}/products?limit=500`, { next: { revalidate: 86400 } });
-    if (!res.ok) return [];
-    const products: { slug: string }[] = (await res.json()).data ?? [];
-    return products.map((p) => ({ slug: p.slug }));
+    const { getProducts } = await import('@/services/products/product.service');
+    const result = await getProducts({ page: 1, limit: 500, skip: 0 }, {});
+    return result.products.map((p) => ({ slug: p.slug }));
   } catch { return []; }
 }
 

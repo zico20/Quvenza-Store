@@ -24,7 +24,7 @@ export default function Sidebar() {
   ];
 
   async function handleLogout() {
-    try { await adminAuth.logout(); } finally { logout(); router.push('/login'); }
+    try { await adminAuth.logout(); } finally { logout(); router.push('/admin/login'); }
   }
 
   return (

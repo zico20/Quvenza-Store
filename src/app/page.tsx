@@ -22,25 +22,24 @@ export const metadata: Metadata = {
 
 async function getCategories(): Promise<Category[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories?limit=8`, { next: { revalidate: 300 } });
-    if (!res.ok) return [];
-    return (await res.json()).data ?? [];
+    const { getCategories: fetchCategories } = await import('@/services/categories/category.service');
+    return (await fetchCategories()) as unknown as Category[];
   } catch { return []; }
 }
 
 async function getFeaturedProducts(): Promise<Product[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?limit=4`, { next: { revalidate: 60 } });
-    if (!res.ok) return [];
-    return (await res.json()).data ?? [];
+    const { getProducts } = await import('@/services/products/product.service');
+    const result = await getProducts({ page: 1, limit: 4, skip: 0 }, {});
+    return result.products as unknown as Product[];
   } catch { return []; }
 }
 
 async function getBestsellers(): Promise<Product[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?limit=8&sort=sales`, { next: { revalidate: 60 } });
-    if (!res.ok) return [];
-    return (await res.json()).data ?? [];
+    const { getProducts } = await import('@/services/products/product.service');
+    const result = await getProducts({ page: 1, limit: 8, skip: 0 }, { sort: 'name' });
+    return result.products as unknown as Product[];
   } catch { return []; }
 }
 
