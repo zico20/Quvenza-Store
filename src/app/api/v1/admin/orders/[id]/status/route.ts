@@ -15,7 +15,7 @@ export async function PATCH(
     const body = await request.json();
     const validated = updateOrderStatusSchema.parse(body);
     const order = await updateOrderStatus(id, validated.status, admin.id, validated.note);
-    return sendSuccess({ order }, 'Order status updated');
+    return sendSuccess(order, 'Order status updated');
   } catch (error) {
     return handleApiError(error);
   }

@@ -14,7 +14,7 @@ export async function GET(
     const { id } = await context.params;
     const order = await getOrderById(id);
     if (!order) throw new AppError('Order not found.', 404);
-    return sendSuccess({ order });
+    return sendSuccess(order);
   } catch (error) {
     return handleApiError(error);
   }
@@ -30,7 +30,7 @@ export async function PATCH(
     const body = await request.json();
     const validated = updateOrderStatusSchema.parse(body);
     const order = await updateOrderStatus(id, validated.status, admin.id, validated.note);
-    return sendSuccess({ order }, 'Order status updated');
+    return sendSuccess(order, 'Order status updated');
   } catch (error) {
     return handleApiError(error);
   }

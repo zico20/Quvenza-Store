@@ -66,7 +66,7 @@ export default function DashboardPage() {
       <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
 
         {/* KPI Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {STATS.map(s => <StatsCard key={s.title} {...s} />)}
         </div>
 

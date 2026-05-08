@@ -1,13 +1,18 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, ShoppingBag, Tag, Users, Bell, LogOut, Settings2 } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Tag, Users, Bell, LogOut, Settings2, X } from 'lucide-react';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { adminAuth } from '@/lib/admin/api';
 import { adminConfig } from '@/config/admin.config';
 import { useLang } from '@/hooks/admin/useLang';
 
-export default function Sidebar() {
+interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ open = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
   const { logout, user } = useAdminAuthStore();
@@ -28,7 +33,21 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="w-60 bg-bg-surface border-r border-border min-h-screen flex flex-col shrink-0">
+    <aside className={`
+      fixed lg:sticky top-0 left-0 z-40 w-60 h-screen lg:h-auto lg:min-h-screen
+      bg-bg-surface border-r border-border flex flex-col shrink-0
+      transition-transform duration-300 ease-in-out lg:translate-x-0
+      ${open ? 'translate-x-0' : '-translate-x-full'}
+    `}>
+      {/* Mobile close button */}
+      <button
+        onClick={onClose}
+        className="lg:hidden absolute top-4 right-4 p-1 text-text-muted hover:text-text-primary"
+        aria-label="Close menu"
+      >
+        <X className="h-5 w-5" />
+      </button>
+
       {/* Brand header */}
       <div className="px-5 py-6 border-b border-border">
         <div className="mono" style={{ fontSize: 10, color: '#6b6b70', marginBottom: 6 }}>
@@ -47,6 +66,7 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={onClose}
               style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '10px 12px', borderRadius: 5,

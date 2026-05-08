@@ -184,7 +184,8 @@ export default function OrderDetailPage() {
               <div className="px-6 py-4 border-b border-border">
                 <h2 className="text-base font-semibold text-text-primary">{t('orders.orderItems')}</h2>
               </div>
-              <table className="w-full">
+              <div className="overflow-x-auto">
+              <table className="w-full" style={{ minWidth: 480 }}>
                 <thead>
                   <tr className="bg-bg-elevated border-b border-border">
                     <th className="text-left px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider">{t('orders.product')}</th>
@@ -220,6 +221,7 @@ export default function OrderDetailPage() {
                   ))}
                 </tbody>
               </table>
+              </div>{/* /overflow-x-auto */}
               <div className="px-6 py-4 border-t border-border bg-bg-elevated space-y-2">
                 <div className="flex justify-between text-sm text-text-secondary">
                   <span>{t('orders.subtotal')}</span>
