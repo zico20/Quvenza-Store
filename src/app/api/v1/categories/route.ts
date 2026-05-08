@@ -8,7 +8,7 @@ import { handleApiError } from '@/lib/errors';
 export async function GET() {
   try {
     const categories = await getCategories();
-    return sendSuccess({ categories });
+    return sendSuccess(categories);
   } catch (error) {
     return handleApiError(error);
   }

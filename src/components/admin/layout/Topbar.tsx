@@ -6,7 +6,7 @@ import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { adminNotifications } from '@/lib/admin/api';
 import { formatDate } from '@/lib/utils';
 import type { Notification } from '@/types';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 
 export default function Topbar({ title = '' }: { title?: string }) {
   const { user } = useAdminAuthStore();

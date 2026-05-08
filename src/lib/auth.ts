@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify, type JWTPayload as JoseJWTPayload } from 'jose';
 import bcrypt from 'bcryptjs';
 import { AppError } from './errors';
 
-const BCRYPT_ROUNDS = 12;
+const BCRYPT_ROUNDS = 10;
 
 const ACCESS_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET ?? 'dev-only-fallback-secret-min-32-chars-aaaaaaaaa'

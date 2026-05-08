@@ -9,7 +9,7 @@ import StatusBadge from '@/components/admin/orders/StatusBadge';
 import OrderTimeline from '@/components/admin/orders/OrderTimeline';
 import StatusChangeModal from '@/components/admin/orders/StatusChangeModal';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 
 function formatPrice(price: number | string): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(price));

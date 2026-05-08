@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Shield, User, Key, Plus, Trash2, RotateCcw, Eye, EyeOff, X, Check } from 'lucide-react';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { adminUsers } from '@/lib/admin/api';
 

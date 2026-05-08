@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { adminAuth } from '@/lib/admin/api';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 
 const schema = z.object({ email: z.string().email(), password: z.string().min(1) });
 type LoginInput = z.infer<typeof schema>;

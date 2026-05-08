@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const threshold = Number(searchParams.get('threshold') ?? 5);
     const products = await getLowStockProducts(threshold);
-    return sendSuccess({ products });
+    return sendSuccess(products);
   } catch (error) {
     return handleApiError(error);
   }

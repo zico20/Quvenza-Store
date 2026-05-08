@@ -6,7 +6,7 @@ import { Plus, Edit, Trash2, Search, Package } from 'lucide-react';
 import type { Product } from '@/types';
 import { adminProducts } from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 import { formatPrice } from '@/lib/utils';
 
 export default function ProductsPage() {

@@ -5,7 +5,7 @@ import { LayoutDashboard, Package, ShoppingBag, Tag, Users, Bell, LogOut, Settin
 import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { adminAuth } from '@/lib/admin/api';
 import { adminConfig } from '@/config/admin.config';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 
 export default function Sidebar() {
   const pathname = usePathname();

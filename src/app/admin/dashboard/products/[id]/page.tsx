@@ -10,7 +10,7 @@ import type { Product, Category, ApiResponse } from '@/types';
 import { adminProducts, adminOrders } from '@/lib/admin/api';
 import adminApiClient from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
