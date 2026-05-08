@@ -14,6 +14,13 @@ const STRINGS = {
     orders:     { en: 'Orders',     ar: 'طلباتي' },
     categories: { en: 'CATEGORIES', ar: 'الفئات' },
     all:        { en: 'All →',      ar: '→ الكل' },
+    // Admin navigation keys
+    overview:      { en: 'Overview',       ar: 'نظرة عامة' },
+    products:      { en: 'Products',       ar: 'المنتجات' },
+    customers:     { en: 'Customers',      ar: 'العملاء' },
+    notifications: { en: 'Notifications',  ar: 'الإشعارات' },
+    settings:      { en: 'Settings',       ar: 'الإعدادات' },
+    logout:        { en: 'Sign out',       ar: 'تسجيل الخروج' },
   },
   announce: {
     bar: {

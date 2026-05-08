@@ -1,4 +1,4 @@
-export const BCRYPT_ROUNDS = 12;
+export const BCRYPT_ROUNDS = 10;
 export const JWT_EXPIRES_IN = '15m';
 export const JWT_REFRESH_EXPIRES_IN = '7d';
 export const UPLOAD_MAX_SIZE = 5 * 1024 * 1024;
