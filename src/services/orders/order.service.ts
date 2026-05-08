@@ -75,6 +75,11 @@ export async function createOrder(data: {
       },
     });
 
+    // RISK-05 fix: Clear user's cart inside the same transaction
+    await tx.cartItem.deleteMany({
+      where: { cart: { userId: data.userId } },
+    });
+
     return created;
   });
 
@@ -164,17 +169,25 @@ export async function updateOrderStatus(
         changedBy: adminId,
       },
     });
+
+    // RISK-01 fix: Atomic stock restoration if CANCELLED (inside same transaction)
+    if (newStatus === 'CANCELLED') {
+      const orderWithItems = await tx.order.findUnique({
+        where: { id },
+        include: { items: true },
+      });
+      if (orderWithItems) {
+        for (const item of orderWithItems.items) {
+          await tx.product.update({
+            where: { id: item.productId },
+            data: { stock: { increment: item.quantity } },
+          });
+        }
+      }
+    }
+
     return updated;
   });
-
-  if (newStatus === 'CANCELLED') {
-    for (const item of updatedOrder.items) {
-      await prisma.product.update({
-        where: { id: item.productId },
-        data: { stock: { increment: item.quantity } },
-      });
-    }
-  }
 
   // Fire notification (non-blocking)
   notificationTriggers.onOrderStatusChanged(id, oldStatus as any, newStatus as any).catch(console.error);
