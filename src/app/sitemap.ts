@@ -1,21 +1,19 @@
 import type { MetadataRoute } from 'next';
 
 const BASE = 'https://softodeviqstore.com';
-const API  = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api/v1';
 
 async function fetchProducts(): Promise<{ slug: string; updatedAt: string }[]> {
   try {
-    const res = await fetch(`${API}/products?limit=500&isActive=true`, { next: { revalidate: 3600 } });
-    if (!res.ok) return [];
-    return (await res.json()).data ?? [];
+    const { getProducts } = await import('@/services/products/product.service');
+    const result = await getProducts({ page: 1, limit: 500, skip: 0 }, {});
+    return result.products as unknown as { slug: string; updatedAt: string }[];
   } catch { return []; }
 }
 
 async function fetchCategories(): Promise<{ slug: string }[]> {
   try {
-    const res = await fetch(`${API}/categories?limit=100`, { next: { revalidate: 86400 } });
-    if (!res.ok) return [];
-    return (await res.json()).data ?? [];
+    const { getCategories } = await import('@/services/categories/category.service');
+    return await getCategories();
   } catch { return []; }
 }
 

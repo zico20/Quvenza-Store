@@ -6,22 +6,17 @@ import { getServerLang, t } from '@/lib/i18n';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, productListSchema } from '@/lib/schema';
 
-const API  = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000/api/v1';
 const BASE = 'https://softodeviqstore.com';
 
-// ISR — rebuild category pages every hour
 export const revalidate = 3600;
 
 async function getCategoryWithProducts(slug: string): Promise<{ name: string; products: Product[] } | null> {
   try {
-    const catRes = await fetch(`${API}/categories/${slug}`, { next: { revalidate: 3600 } });
-    if (!catRes.ok) return null;
-    const category = (await catRes.json()).data as { id: string; name: string };
-
-    const prodRes = await fetch(`${API}/products?categoryId=${category.id}&limit=50`, { next: { revalidate: 3600 } });
-    const products: Product[] = prodRes.ok ? (await prodRes.json()).data ?? [] : [];
-
-    return { name: category.name, products };
+    const { getCategoryBySlug } = await import('@/services/categories/category.service');
+    const { getProducts } = await import('@/services/products/product.service');
+    const category = await getCategoryBySlug(slug);
+    const result = await getProducts({ page: 1, limit: 50, skip: 0 }, { categoryId: category.id });
+    return { name: category.name, products: result.products as unknown as Product[] };
   } catch {
     return null;
   }
@@ -29,9 +24,8 @@ async function getCategoryWithProducts(slug: string): Promise<{ name: string; pr
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${API}/categories?limit=100`, { next: { revalidate: 86400 } });
-    if (!res.ok) return [];
-    const cats: { slug: string }[] = (await res.json()).data ?? [];
+    const { getCategories } = await import('@/services/categories/category.service');
+    const cats = await getCategories();
     return cats.map((c) => ({ slug: c.slug }));
   } catch { return []; }
 }
