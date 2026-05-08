@@ -141,7 +141,7 @@ export default function EditProductPage() {
     setSaving(true);
     try {
       await adminProducts.delete(id);
-      router.push('/dashboard/products');
+      router.push('/admin/dashboard/products');
     } catch (err: any) {
       showToast(err.response?.data?.message ?? t('products.failedUpdate'), 'error');
       setSaving(false);
@@ -167,7 +167,7 @@ export default function EditProductPage() {
         <Topbar title={t('products.editTitle')} />
         <div className="p-6 text-center">
           <p className="text-text-muted">{t('products.notFound')}</p>
-          <button onClick={() => router.push('/dashboard/products')} className="mt-4 text-sm text-accent hover:underline">
+          <button onClick={() => router.push('/admin/dashboard/products')} className="mt-4 text-sm text-accent hover:underline">
             {t('products.backToProducts')}
           </button>
         </div>
@@ -205,7 +205,7 @@ export default function EditProductPage() {
       )}
 
       <div className="p-6 max-w-3xl">
-        <button onClick={() => router.push('/dashboard/products')} className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary mb-6 transition-colors">
+        <button onClick={() => router.push('/admin/dashboard/products')} className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary mb-6 transition-colors">
           <ArrowLeft className="h-4 w-4" /> {t('products.backToProducts')}
         </button>
 

@@ -104,7 +104,7 @@ export default function OrderDetailPage() {
         <Topbar title={t('orders.title')} />
         <div className="p-6 text-center">
           <p className="text-text-muted">{t('orders.orderNotFound')}</p>
-          <button onClick={() => router.push('/dashboard/orders')} className="mt-4 text-sm text-accent hover:underline">
+          <button onClick={() => router.push('/admin/dashboard/orders')} className="mt-4 text-sm text-accent hover:underline">
             {t('orders.backToOrdersLink')}
           </button>
         </div>
@@ -142,7 +142,7 @@ export default function OrderDetailPage() {
       <div className="p-6">
         {/* Back */}
         <button
-          onClick={() => router.push('/dashboard/orders')}
+          onClick={() => router.push('/admin/dashboard/orders')}
           className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary mb-6 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" /> {t('orders.backToOrders')}
