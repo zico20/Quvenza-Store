@@ -51,7 +51,7 @@ export default function ProductsPage() {
             />
           </div>
           <Link
-            href="/dashboard/products/new"
+            href="/admin/dashboard/products/new"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '10px 18px', background: '#ff6a2b', color: '#fff',
@@ -134,7 +134,7 @@ export default function ProductsPage() {
                   </div>
                   {/* Actions */}
                   <div style={{ display: 'flex', gap: 4 }}>
-                    <Link href={`/dashboard/products/${p.id}`} style={{
+                    <Link href={`/admin/dashboard/products/${p.id}`} style={{
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       width: 30, height: 30, borderRadius: 4,
                       background: 'transparent', color: '#a1a1a6', border: 'none', cursor: 'pointer', textDecoration: 'none',
