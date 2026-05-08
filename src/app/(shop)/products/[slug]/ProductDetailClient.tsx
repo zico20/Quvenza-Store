@@ -8,6 +8,7 @@ import { Heart, ShoppingCart, ArrowLeft } from 'lucide-react';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { showToast } from '@/lib/toast';
+import { useCategoryName } from '@/hooks/useCategoryName';
 import { useLang } from '@/hooks/useLang';
 import { useCurrency } from '@/hooks/useCurrency';
 
@@ -57,6 +58,7 @@ export default function ProductDetailClient({ product }: Props) {
   const [selectedImage, setSelectedImage] = useState(0);
   const { addItem } = useCartStore();
   const { toggleItem, isInWishlist } = useWishlistStore();
+  const categoryName = useCategoryName(product.category?.slug ?? '', product.category?.name ?? '');
 
   const inWishlist = isInWishlist(product.id);
   const savingsAmount = product.comparePrice
@@ -135,7 +137,7 @@ export default function ProductDetailClient({ product }: Props) {
           <div className="flex flex-col gap-5">
             <div>
               {product.category?.name && (
-                <span className="badge mb-3 inline-block">{product.category.name}</span>
+                <span className="badge mb-3 inline-block">{categoryName}</span>
               )}
               <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-3">{product.name}</h1>
               <div className="flex flex-wrap items-baseline gap-3">

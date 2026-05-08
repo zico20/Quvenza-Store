@@ -4,7 +4,7 @@ import { ArrowRight, Truck, Shield, RefreshCw, Zap } from 'lucide-react';
 import type { Product, Category } from '@/types';
 import ProductCard from '@/components/product/ProductCard';
 import HeroSlider from '@/components/home/HeroSlider';
-import { getServerLang, t } from '@/lib/i18n';
+import { getServerLang, t, getCategoryName } from '@/lib/i18n';
 import JsonLd from '@/components/seo/JsonLd';
 import { organizationSchema, websiteSchema, localBusinessSchema } from '@/lib/schema';
 
@@ -141,7 +141,7 @@ export default async function HomePage() {
                 >
                   <div className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>0{i + 1}</div>
                   <div>
-                    <div style={{ fontSize: 'clamp(16px, 3vw, 22px)', fontWeight: 600, color: '#f5f5f4', letterSpacing: '-0.01em' }}>{cat.name}</div>
+                    <div style={{ fontSize: 'clamp(16px, 3vw, 22px)', fontWeight: 600, color: '#f5f5f4', letterSpacing: '-0.01em' }}>{getCategoryName(cat.slug, cat.name, lang)}</div>
                     <div style={{ fontSize: 12, color: '#a1a1a6', marginTop: 4 }}>{t('home.categories.explore', lang)}</div>
                   </div>
                   <div style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#ff6a2b', fontSize: 12, fontWeight: 600 }}>

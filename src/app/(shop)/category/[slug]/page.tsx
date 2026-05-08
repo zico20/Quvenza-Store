@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { Product } from '@/types';
 import ProductGrid from '@/components/product/ProductGrid';
-import { getServerLang, t } from '@/lib/i18n';
+import { getServerLang, t, getCategoryName } from '@/lib/i18n';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, productListSchema } from '@/lib/schema';
 
@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <JsonLd data={productListSchema(result.products, result.name, `${BASE}/category/${slug}`)} />
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
-        <h1 className="text-xl sm:text-2xl font-bold text-text-primary mb-2">{result.name}</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-text-primary mb-2">{getCategoryName(slug, result.name, lang)}</h1>
         <p className="text-text-muted text-sm mb-8">{result.products.length} منتج متاح في العراق</p>
         {result.products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">

@@ -527,6 +527,18 @@ const STRINGS = {
     adminCreated:  { en: 'Admin created',      ar: 'تم إنشاء المسؤول' },
     adminDeleted:  { en: 'Admin deleted',      ar: 'تم حذف المسؤول' },
   },
+
+  // Category names keyed by slug — DB stores Arabic only, translations live here
+  categoryNames: {
+    'ai-tools':       { en: 'AI Tools',                    ar: 'أدوات الذكاء الاصطناعي' },
+    'design':         { en: 'Design & Creative',           ar: 'التصميم والإبداع' },
+    'education':      { en: 'Education & Certificates',    ar: 'التعليم والشهادات' },
+    'video-editing':  { en: 'Video Editing',               ar: 'المونتاج والفيديو' },
+    'entertainment':  { en: 'Entertainment & Music',       ar: 'الترفيه والموسيقى' },
+    'productivity':   { en: 'Productivity & Work',         ar: 'الإنتاجية والعمل' },
+    'gaming-accounts':{ en: 'Gaming Accounts',             ar: 'حسابات الألعاب' },
+    'gaming-coins':   { en: 'Gaming Coins',                ar: 'عملات الألعاب' },
+  },
 } as const;
 
 export function t(path: string, lang: Lang): string {
@@ -540,6 +552,19 @@ export function t(path: string, lang: Lang): string {
     return (cur as Record<string, string>)[lang];
   }
   return path;
+}
+
+const CATEGORY_NAMES = (STRINGS as unknown as {
+  categoryNames: Record<string, { en: string; ar: string }>;
+}).categoryNames;
+
+/**
+ * Returns the translated category name for the given slug + language.
+ * Falls back to the original DB name when slug not in map.
+ */
+export function getCategoryName(slug: string, fallback: string, lang: Lang): string {
+  const entry = CATEGORY_NAMES?.[slug];
+  return entry?.[lang] ?? fallback;
 }
 
 // Server-side only — reads lang cookie from next/headers
