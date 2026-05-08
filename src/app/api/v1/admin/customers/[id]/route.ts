@@ -13,7 +13,7 @@ export async function GET(
     const { id } = await context.params;
     const customer = await getCustomerDetail(id);
     if (!customer) throw new AppError('Customer not found.', 404);
-    return sendSuccess({ customer });
+    return sendSuccess(customer);
   } catch (error) {
     return handleApiError(error);
   }
