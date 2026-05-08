@@ -16,7 +16,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
   const { logout, user } = useAdminAuthStore();
-  const { t } = useLang();
+  const { t, isRTL } = useLang();
 
   const navItems = [
     { href: '/admin/dashboard',               label: t('nav.overview'),      icon: LayoutDashboard },
@@ -34,15 +34,16 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
 
   return (
     <aside className={`
-      fixed lg:sticky top-0 left-0 z-40 w-60 h-screen lg:h-auto lg:min-h-screen
-      bg-bg-surface border-r border-border flex flex-col shrink-0
+      fixed lg:sticky top-0 z-40 w-60 h-screen lg:h-auto lg:min-h-screen
+      bg-bg-surface flex flex-col shrink-0
       transition-transform duration-300 ease-in-out lg:translate-x-0
-      ${open ? 'translate-x-0' : '-translate-x-full'}
+      ${isRTL ? 'right-0 border-l border-border' : 'left-0 border-r border-border'}
+      ${open ? 'translate-x-0' : isRTL ? 'translate-x-full' : '-translate-x-full'}
     `}>
       {/* Mobile close button */}
       <button
         onClick={onClose}
-        className="lg:hidden absolute top-4 right-4 p-1 text-text-muted hover:text-text-primary"
+        className={`lg:hidden absolute top-4 p-1 text-text-muted hover:text-text-primary ${isRTL ? 'left-4' : 'right-4'}`}
         aria-label="Close menu"
       >
         <X className="h-5 w-5" />
@@ -72,7 +73,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
                 padding: '10px 12px', borderRadius: 5,
                 background: active ? '#1f1f23' : 'transparent',
                 color: active ? '#f5f5f4' : '#a1a1a6',
-                borderLeft: `2px solid ${active ? '#ff6a2b' : 'transparent'}`,
+                borderInlineStart: `2px solid ${active ? '#ff6a2b' : 'transparent'}`,
                 textDecoration: 'none', fontSize: 13,
                 fontWeight: active ? 600 : 500,
                 transition: 'all 0.15s',
