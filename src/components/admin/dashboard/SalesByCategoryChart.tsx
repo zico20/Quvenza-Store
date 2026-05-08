@@ -1,26 +1,27 @@
 'use client';
 import { formatPrice } from '@/lib/utils';
 import type { DashboardStats } from '@/types';
+import { useLang } from '@/hooks/admin/useLang';
 
 type CategoryData = DashboardStats['salesByCategory'][number];
 
-// Fallback demo data matching the prototype
 const DEMO: CategoryData[] = [
-  { name: 'Phones',    total: 34 },
-  { name: 'Laptops',   total: 28 },
-  { name: 'Audio',     total: 18 },
-  { name: 'Gaming',    total: 12 },
-  { name: 'Other',     total: 8 },
+  { name: 'Phones',  total: 34 },
+  { name: 'Laptops', total: 28 },
+  { name: 'Audio',   total: 18 },
+  { name: 'Gaming',  total: 12 },
+  { name: 'Other',   total: 8 },
 ];
 
 export default function SalesByCategoryChart({ data }: { data: CategoryData[] }) {
+  const { t } = useLang();
   const rows = data.length > 0 ? data : DEMO;
   const max = Math.max(...rows.map(r => Number(r.total)), 1);
 
   return (
     <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 24 }}>
       <div style={{ fontSize: 14, fontWeight: 600, color: '#f5f5f4', marginBottom: 20 }}>
-        Top categories
+        {t('dashboard.topCategories')}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {rows.map(c => {

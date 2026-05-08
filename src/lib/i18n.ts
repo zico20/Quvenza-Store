@@ -425,13 +425,21 @@ const STRINGS = {
   },
 
   dashboard: {
-    title:         { en: 'Dashboard',       ar: 'لوحة التحكم' },
-    revenueToday:  { en: "Today's Revenue", ar: 'إيرادات اليوم' },
-    todayOrders:   { en: "Today's Orders",  ar: 'طلبات اليوم' },
-    recentOrders:  { en: 'Recent Orders',   ar: 'أحدث الطلبات' },
-    topProducts:   { en: 'Top Products',    ar: 'الأكثر مبيعاً' },
-    lowStock:      { en: 'Low Stock Alert', ar: 'تنبيه: مخزون منخفض' },
-    viewDetails:   { en: 'View details',    ar: 'عرض التفاصيل' },
+    title:          { en: 'Dashboard',               ar: 'لوحة التحكم' },
+    revenueToday:   { en: "Today's Revenue",         ar: 'إيرادات اليوم' },
+    todayOrders:    { en: "Today's Orders",          ar: 'طلبات اليوم' },
+    avgOrder:       { en: 'Avg. order',              ar: 'متوسط الطلب' },
+    totalUsers:     { en: 'Total Users',             ar: 'إجمالي المستخدمين' },
+    recentOrders:   { en: 'Recent Orders',           ar: 'أحدث الطلبات' },
+    topProducts:    { en: 'Top Products',            ar: 'الأكثر مبيعاً' },
+    topCategories:  { en: 'Top Categories',          ar: 'أفضل الفئات' },
+    lowStock:       { en: 'Low Stock Alert',         ar: 'تنبيه: مخزون منخفض' },
+    viewDetails:    { en: 'View details',            ar: 'عرض التفاصيل' },
+    revenueChart:   { en: 'Revenue · last 30 days',  ar: 'الإيرادات · آخر 30 يوم' },
+    noOrders:       { en: 'No orders yet',           ar: 'لا طلبات بعد' },
+    noSalesData:    { en: 'No sales data yet',       ar: 'لا بيانات مبيعات بعد' },
+    totalLabel:     { en: 'TOTAL',                   ar: 'الإجمالي' },
+    sold:           { en: 'sold',                    ar: 'مباع' },
   },
 
   products: {

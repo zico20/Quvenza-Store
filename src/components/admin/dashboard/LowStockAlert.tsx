@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { AlertTriangle } from 'lucide-react';
 import { adminProducts } from '@/lib/admin/api';
 import type { Product } from '@/types';
+import { useLang } from '@/hooks/admin/useLang';
 
 export default function LowStockAlert() {
+  const { t } = useLang();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +22,7 @@ export default function LowStockAlert() {
     <div className="bg-bg-surface border border-border rounded-lg p-5 shadow-md">
       <div className="flex items-center gap-2 mb-4">
         <AlertTriangle className="h-4 w-4 text-warning" />
-        <h3 className="text-base font-semibold text-text-primary">Low Stock Products</h3>
+        <h3 className="text-base font-semibold text-text-primary">{t('dashboard.lowStock')}</h3>
       </div>
       {loading ? (
         <div className="space-y-2">
@@ -29,7 +31,7 @@ export default function LowStockAlert() {
           ))}
         </div>
       ) : products.length === 0 ? (
-        <p className="text-success text-sm py-4 text-center">✓ All products have sufficient stock</p>
+        <p className="text-success text-sm py-4 text-center">✓ {t('dashboard.viewDetails')}</p>
       ) : (
         <div className="space-y-2">
           {products.map((p) => (
@@ -40,13 +42,10 @@ export default function LowStockAlert() {
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
                 <span className={`text-sm font-bold ${p.stock === 0 ? 'text-error' : 'text-warning'}`}>
-                  {p.stock} left
+                  {p.stock}
                 </span>
-                <Link
-                  href={`/admin/dashboard/products?edit=${p.id}`}
-                  className="text-xs text-accent hover:underline"
-                >
-                  Edit
+                <Link href={`/admin/dashboard/products/${p.id}`} className="text-xs text-accent hover:underline">
+                  {t('common.edit')}
                 </Link>
               </div>
             </div>

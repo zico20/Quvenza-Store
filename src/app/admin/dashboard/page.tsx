@@ -12,6 +12,7 @@ import Topbar from '@/components/admin/layout/Topbar';
 import { adminStats } from '@/lib/admin/api';
 import { formatPrice } from '@/lib/utils';
 import type { DashboardStats } from '@/types';
+import { useLang } from '@/hooks/admin/useLang';
 
 function calcTrend(today: number, yesterday: number) {
   if (yesterday === 0) return undefined;
@@ -20,6 +21,7 @@ function calcTrend(today: number, yesterday: number) {
 }
 
 export default function DashboardPage() {
+  const { t } = useLang();
   const [data, setData] = useState<DashboardStats | null>(null);
 
   useEffect(() => {
@@ -40,28 +42,28 @@ export default function DashboardPage() {
 
   const STATS = [
     {
-      title: 'Revenue today',
+      title: t('dashboard.revenueToday'),
       value: formatPrice(data?.today.revenue ?? 0),
       trend: data ? calcTrend(data.today.revenue, data.yesterday.revenue) : undefined,
     },
     {
-      title: 'Orders',
+      title: t('dashboard.todayOrders'),
       value: data?.today.orders ?? '—',
       trend: data ? calcTrend(data.today.orders, data.yesterday.orders) : undefined,
     },
     {
-      title: 'Avg. order',
+      title: t('dashboard.avgOrder'),
       value: data && data.today.orders > 0 ? formatPrice(data.today.revenue / data.today.orders) : '—',
     },
     {
-      title: 'Total Users',
+      title: t('dashboard.totalUsers'),
       value: data?.totals.users?.toLocaleString() ?? '—',
     },
   ];
 
   return (
     <div className="flex flex-col">
-      <Topbar title="Dashboard" />
+      <Topbar title={t('dashboard.title')} />
 
       <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
 

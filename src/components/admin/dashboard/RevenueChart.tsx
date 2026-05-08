@@ -1,15 +1,17 @@
 'use client';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useLang } from '@/hooks/admin/useLang';
 
 export default function RevenueChart({ data }: { data: { date: string; revenue: number }[] }) {
+  const { t } = useLang();
   return (
     <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#f5f5f4' }}>Revenue · last 30 days</div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#f5f5f4' }}>{t('dashboard.revenueChart')}</div>
           {data.length > 0 && (
             <div className="mono" style={{ fontSize: 11, color: '#6b6b70', marginTop: 4 }}>
-              ${data.reduce((s, d) => s + d.revenue, 0).toLocaleString()} TOTAL
+              ${data.reduce((s, d) => s + d.revenue, 0).toLocaleString()} {t('dashboard.totalLabel')}
             </div>
           )}
         </div>
