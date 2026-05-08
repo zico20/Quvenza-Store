@@ -75,7 +75,7 @@ export default function CustomerDetailPage() {
       <div className="p-6 space-y-6 max-w-5xl">
         {/* Back + Header */}
         <div className="flex items-center justify-between">
-          <Link href="/dashboard/customers" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors">
+          <Link href="/admin/dashboard/customers" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors">
             <ArrowLeft className="h-4 w-4" />
             Back to Customers
           </Link>

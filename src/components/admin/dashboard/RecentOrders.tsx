@@ -19,7 +19,7 @@ export default function RecentOrders({ orders }: { orders: RecentOrder[] }) {
     <div className="bg-bg-surface border border-border rounded-lg p-5 shadow-md">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-text-primary">Recent Orders</h3>
-        <Link href="/dashboard/orders" className="text-xs text-accent hover:underline">View all</Link>
+        <Link href="/admin/dashboard/orders" className="text-xs text-accent hover:underline">View all</Link>
       </div>
       {orders.length === 0 ? (
         <p className="text-text-muted text-sm text-center py-6">No orders yet</p>

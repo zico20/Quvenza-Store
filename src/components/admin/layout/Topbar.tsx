@@ -134,7 +134,7 @@ export default function Topbar({ title }: { title: string }) {
               </div>
               <div className="px-4 py-2.5 border-t border-border">
                 <Link
-                  href="/dashboard/notifications"
+                  href="/admin/dashboard/notifications"
                   className="text-xs text-accent hover:underline"
                   onClick={() => setOpen(false)}
                 >

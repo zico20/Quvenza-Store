@@ -216,7 +216,7 @@ export default function OrdersPage() {
               {orders.map(o => (
                 <div
                   key={o.id}
-                  onClick={() => router.push(`/dashboard/orders/${o.id}`)}
+                  onClick={() => router.push(`/admin/dashboard/orders/${o.id}`)}
                   style={{
                     display: 'grid', gridTemplateColumns: '160px 1.2fr 1.2fr 80px 100px 130px 40px',
                     padding: '14px 20px', gap: 12, alignItems: 'center',

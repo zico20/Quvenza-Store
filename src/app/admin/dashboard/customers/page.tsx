@@ -146,7 +146,7 @@ export default function CustomersPage() {
                 return (
                   <Link
                     key={c.id}
-                    href={`/dashboard/customers/${c.id}`}
+                    href={`/admin/dashboard/customers/${c.id}`}
                     style={{
                       display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px',
                       padding: '14px 20px', borderBottom: '1px solid #1f1f23',

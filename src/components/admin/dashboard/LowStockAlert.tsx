@@ -43,7 +43,7 @@ export default function LowStockAlert() {
                   {p.stock} left
                 </span>
                 <Link
-                  href={`/dashboard/products?edit=${p.id}`}
+                  href={`/admin/dashboard/products?edit=${p.id}`}
                   className="text-xs text-accent hover:underline"
                 >
                   Edit

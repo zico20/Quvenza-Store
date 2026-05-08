@@ -14,13 +14,13 @@ export default function Sidebar() {
   const { t } = useLang();
 
   const navItems = [
-    { href: '/dashboard',               label: t('nav.overview'),      icon: LayoutDashboard },
-    { href: '/dashboard/orders',        label: t('nav.orders'),        icon: ShoppingBag },
-    { href: '/dashboard/products',      label: t('nav.products'),      icon: Package },
-    { href: '/dashboard/categories',    label: t('nav.categories'),    icon: Tag },
-    { href: '/dashboard/customers',     label: t('nav.customers'),     icon: Users },
-    { href: '/dashboard/notifications', label: t('nav.notifications'), icon: Bell },
-    { href: '/dashboard/settings', label: t('nav.settings'), icon: Settings2 },
+    { href: '/admin/dashboard',               label: t('nav.overview'),      icon: LayoutDashboard },
+    { href: '/admin/dashboard/orders',        label: t('nav.orders'),        icon: ShoppingBag },
+    { href: '/admin/dashboard/products',      label: t('nav.products'),      icon: Package },
+    { href: '/admin/dashboard/categories',    label: t('nav.categories'),    icon: Tag },
+    { href: '/admin/dashboard/customers',     label: t('nav.customers'),     icon: Users },
+    { href: '/admin/dashboard/notifications', label: t('nav.notifications'), icon: Bell },
+    { href: '/admin/dashboard/settings', label: t('nav.settings'), icon: Settings2 },
   ];
 
   async function handleLogout() {
@@ -42,7 +42,7 @@ export default function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 p-3 flex flex-col gap-0.5">
         {navItems.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
+          const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(href));
           return (
             <Link
               key={href}

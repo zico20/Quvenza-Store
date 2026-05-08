@@ -31,7 +31,7 @@ export default function AdminLoginPage() {
         }
         setUser(r.data.user);
         setTokens(r.data.tokens);
-        router.push('/dashboard');
+        router.push('/admin/dashboard');
       } else {
         setError('Access denied.');
       }
