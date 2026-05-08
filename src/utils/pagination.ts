@@ -11,5 +11,5 @@ export function parsePaginationParams(params: URLSearchParams | Record<string, s
 }
 
 export function buildPaginationMeta(total: number, page: number, limit: number) {
-  return { page, limit, total, pages: Math.ceil(total / limit) };
+  return { page, limit, total, totalPages: Math.ceil(total / limit) };
 }
