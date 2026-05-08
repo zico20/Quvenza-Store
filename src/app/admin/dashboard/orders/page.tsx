@@ -7,7 +7,7 @@ import type { Order } from '@/types';
 import { adminOrders } from '@/lib/admin/api';
 import StatusBadge from '@/components/admin/orders/StatusBadge';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 import { formatPrice } from '@/lib/utils';
 
 const ORDER_STATUSES = ['ALL', 'PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'] as const;

@@ -8,7 +8,7 @@ import { Plus, Edit2, Trash2, Tag, X } from 'lucide-react';
 import type { Category } from '@/types';
 import adminApiClient from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),

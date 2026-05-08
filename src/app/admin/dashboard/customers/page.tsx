@@ -5,7 +5,7 @@ import { Search, ChevronLeft, ChevronRight, Users, Download } from 'lucide-react
 import type { CustomerSummary } from '@/types';
 import { adminCustomers } from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
-import { useLang } from '@/hooks/useLang';
+import { useLang } from '@/hooks/admin/useLang';
 import { formatPrice } from '@/lib/utils';
 
 function formatDate(s: string) {
