@@ -8,11 +8,11 @@ import { adminConfig } from '@/config/admin.config';
 import { useLang } from '@/hooks/admin/useLang';
 
 interface SidebarProps {
-  open?: boolean;
   onClose?: () => void;
+  showCloseButton?: boolean;
 }
 
-export default function Sidebar({ open = false, onClose }: SidebarProps) {
+export default function Sidebar({ onClose, showCloseButton = false }: SidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
   const { logout, user } = useAdminAuthStore();
@@ -25,7 +25,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
     { href: '/admin/dashboard/categories',    label: t('nav.categories'),    icon: Tag },
     { href: '/admin/dashboard/customers',     label: t('nav.customers'),     icon: Users },
     { href: '/admin/dashboard/notifications', label: t('nav.notifications'), icon: Bell },
-    { href: '/admin/dashboard/settings', label: t('nav.settings'), icon: Settings2 },
+    { href: '/admin/dashboard/settings',      label: t('nav.settings'),      icon: Settings2 },
   ];
 
   async function handleLogout() {
@@ -34,20 +34,19 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
 
   return (
     <aside className={`
-      fixed lg:sticky top-0 z-40 w-60 h-screen lg:h-auto lg:min-h-screen
-      bg-bg-surface flex flex-col shrink-0
-      transition-transform duration-300 ease-in-out lg:translate-x-0
-      ${isRTL ? 'right-0 border-l border-border' : 'left-0 border-r border-border'}
-      ${open ? 'translate-x-0' : isRTL ? 'translate-x-full' : '-translate-x-full'}
+      h-full w-60 bg-bg-surface flex flex-col relative
+      ${isRTL ? 'border-l border-border' : 'border-r border-border'}
     `}>
       {/* Mobile close button */}
-      <button
-        onClick={onClose}
-        className={`lg:hidden absolute top-4 p-1 text-text-muted hover:text-text-primary ${isRTL ? 'left-4' : 'right-4'}`}
-        aria-label="Close menu"
-      >
-        <X className="h-5 w-5" />
-      </button>
+      {showCloseButton && (
+        <button
+          onClick={onClose}
+          className={`absolute top-4 p-1 text-text-muted hover:text-text-primary ${isRTL ? 'left-4' : 'right-4'}`}
+          aria-label="Close menu"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      )}
 
       {/* Brand header */}
       <div className="px-5 py-6 border-b border-border">
@@ -60,7 +59,7 @@ export default function Sidebar({ open = false, onClose }: SidebarProps) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 p-3 flex flex-col gap-0.5">
+      <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(href));
           return (
