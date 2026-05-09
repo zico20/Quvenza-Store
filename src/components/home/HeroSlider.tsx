@@ -57,7 +57,10 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
   const next = () => setIdx((idx + 1) % SLIDES.length);
 
   return (
-    <section className="relative overflow-hidden mb-6 md:mb-16 aspect-[9/16] max-h-[680px] md:aspect-auto md:h-[calc(100vh-110px)]">
+    <section
+      className="relative overflow-hidden mb-6 md:mb-16 w-full"
+      style={{ height: 'calc(100vh - 110px)', minHeight: 380 }}
+    >
       {/* Full-coverage background */}
       <SlideBg tone={slide.tone} />
 
