@@ -27,11 +27,19 @@ async function getCategories(): Promise<Category[]> {
   } catch { return []; }
 }
 
+function serializeProduct(p: any): Product {
+  return {
+    ...p,
+    price: Number(p.price),
+    comparePrice: p.comparePrice != null ? Number(p.comparePrice) : null,
+  } as Product;
+}
+
 async function getFeaturedProducts(): Promise<Product[]> {
   try {
     const { getProducts } = await import('@/services/products/product.service');
     const result = await getProducts({ page: 1, limit: 4, skip: 0 }, {});
-    return result.products as unknown as Product[];
+    return result.products.map(serializeProduct);
   } catch { return []; }
 }
 
@@ -39,7 +47,7 @@ async function getBestsellers(): Promise<Product[]> {
   try {
     const { getProducts } = await import('@/services/products/product.service');
     const result = await getProducts({ page: 1, limit: 8, skip: 0 }, { sort: 'name' });
-    return result.products as unknown as Product[];
+    return result.products.map(serializeProduct);
   } catch { return []; }
 }
 
