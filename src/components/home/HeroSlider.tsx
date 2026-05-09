@@ -77,11 +77,7 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
 
   return (
     <section
-      className="relative overflow-hidden mb-10 md:mb-20"
-      style={{
-        height: 'calc(100vh - 120px)',
-        minHeight: 360, maxHeight: 760,
-      }}
+      className="relative overflow-hidden mb-6 md:mb-16 aspect-[9/16] max-h-[680px] md:aspect-[16/9] md:max-h-[600px]"
     >
       {/* Background */}
       <SlideBg tone={slide.tone} />
@@ -139,7 +135,7 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
           {slide.body[lang]}
         </p>
 
-        <div className="flex flex-wrap gap-3 mt-7 md:mt-9">
+        <div className="flex flex-col sm:flex-row gap-3 mt-6 md:mt-9">
           <Link
             href={slide.ctaHref}
             style={{
