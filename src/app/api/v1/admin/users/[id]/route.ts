@@ -15,7 +15,7 @@ export async function PATCH(
     const body = await request.json();
     const validated = updateAdminUserSchema.parse(body);
     const admin = await updateAdminUser(id, validated);
-    return sendSuccess({ admin }, 'Admin updated');
+    return sendSuccess(admin, 'Admin updated');
   } catch (error) {
     return handleApiError(error);
   }
