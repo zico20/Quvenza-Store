@@ -16,7 +16,12 @@ async function getCategoryWithProducts(slug: string): Promise<{ name: string; pr
     const { getProducts } = await import('@/services/products/product.service');
     const category = await getCategoryBySlug(slug);
     const result = await getProducts({ page: 1, limit: 50, skip: 0 }, { categoryId: category.id });
-    return { name: category.name, products: result.products as unknown as Product[] };
+    const products = result.products.map((p: any) => ({
+      ...p,
+      price: Number(p.price),
+      comparePrice: p.comparePrice != null ? Number(p.comparePrice) : null,
+    })) as Product[];
+    return { name: category.name, products };
   } catch {
     return null;
   }

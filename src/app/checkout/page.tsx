@@ -28,10 +28,10 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="container mx-auto px-4 py-6 max-w-xl">
       <CheckoutSteps currentStep={1} />
-      <h1 className="text-2xl font-bold text-text-primary mb-6">{t('checkout.shippingAddress')}</h1>
-      <div className="bg-bg-surface border border-border rounded-lg p-6">
+      <h1 className="text-xl font-bold text-text-primary mb-4">{t('checkout.shippingAddress')}</h1>
+      <div className="bg-bg-surface border border-border rounded-lg p-4">
         <AddressForm onSubmit={handleAddressSubmit} />
       </div>
     </div>

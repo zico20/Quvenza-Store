@@ -93,7 +93,7 @@ export default function CustomersPage() {
       <div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 24 }}>
 
         {/* KPI Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {kpis.map(k => (
             <div key={k.label} style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 20 }}>
               <div className="mono" style={{ fontSize: 11, color: '#6b6b70', marginBottom: 10 }}>{k.label}</div>

@@ -129,7 +129,7 @@ export default function EditProductPage() {
       setImages(persistedImages);
       setNewImageFiles([]);
       setNewImagePreviews([]);
-      showToast(t('products.updated'), 'success');
+      router.push('/admin/dashboard/products');
     } catch (err: any) {
       showToast(err.response?.data?.message ?? t('products.failedUpdate'), 'error');
     } finally {
@@ -204,126 +204,114 @@ export default function EditProductPage() {
         </div>
       )}
 
-      <div className="p-6 max-w-3xl">
-        <button onClick={() => router.push('/admin/dashboard/products')} className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary mb-6 transition-colors">
-          <ArrowLeft className="h-4 w-4" /> {t('products.backToProducts')}
+      <div className="p-4 max-w-2xl">
+        <button onClick={() => router.push('/admin/dashboard/products')} className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text-primary mb-4 transition-colors">
+          <ArrowLeft className="h-3.5 w-3.5" /> {t('products.backToProducts')}
         </button>
 
-        <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-3">
           {/* Basic Info */}
-          <div className="bg-bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h2 className="text-base font-semibold text-text-primary">{t('products.basicInfo')}</h2>
+          <div className="bg-bg-surface border border-border rounded-lg p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-text-primary">{t('products.basicInfo')}</h2>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.nameLabel')}</label>
-              <input {...register('name')} className="input" />
-              {errors.name && <p className="text-error text-xs mt-1">{errors.name.message}</p>}
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.nameLabel')}</label>
+              <input {...register('name')} className="input text-sm" />
+              {errors.name && <p className="text-error text-xs mt-0.5">{errors.name.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.slugLabel')}</label>
-              <input {...register('slug')} className="input font-mono" />
-              {errors.slug && <p className="text-error text-xs mt-1">{errors.slug.message}</p>}
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.slugLabel')}</label>
+              <input {...register('slug')} className="input font-mono text-sm" />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.descLabel')}</label>
-              <textarea {...register('description')} rows={4} className="input resize-none" />
-              {errors.description && <p className="text-error text-xs mt-1">{errors.description.message}</p>}
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.descLabel')}</label>
+              <textarea {...register('description')} rows={3} className="input resize-none text-sm" />
+              {errors.description && <p className="text-error text-xs mt-0.5">{errors.description.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.categoryLabel')}</label>
-              <select {...register('categoryId')} className="input">
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.categoryLabel')}</label>
+              <select {...register('categoryId')} className="input text-sm">
                 <option value="">{t('products.selectCategory')}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
-              {errors.categoryId && <p className="text-error text-xs mt-1">{errors.categoryId.message}</p>}
+              {errors.categoryId && <p className="text-error text-xs mt-0.5">{errors.categoryId.message}</p>}
             </div>
           </div>
 
           {/* Pricing & Stock */}
-          <div className="bg-bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h2 className="text-base font-semibold text-text-primary">{t('products.pricing')}</h2>
-            <div className="grid grid-cols-3 gap-4">
+          <div className="bg-bg-surface border border-border rounded-lg p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-text-primary">{t('products.pricing')}</h2>
+            <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.priceLabel')}</label>
-                <input type="number" step="0.01" min="0" {...register('price')} className="input" />
-                {errors.price && <p className="text-error text-xs mt-1">{errors.price.message}</p>}
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.priceLabel')}</label>
+                <input type="number" step="0.01" min="0" {...register('price')} className="input text-sm" />
+                {errors.price && <p className="text-error text-xs mt-0.5">{errors.price.message}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.comparePriceLabel')}</label>
-                <input type="number" step="0.01" min="0" {...register('comparePrice')} className="input" />
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.comparePriceLabel')}</label>
+                <input type="number" step="0.01" min="0" {...register('comparePrice')} className="input text-sm" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-text-secondary mb-1">{t('products.stockLabel')}</label>
-                <input type="number" min="0" {...register('stock')} className="input" />
-                {errors.stock && <p className="text-error text-xs mt-1">{errors.stock.message}</p>}
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('products.stockLabel')}</label>
+                <input type="number" min="0" {...register('stock')} className="input text-sm" />
+                {errors.stock && <p className="text-error text-xs mt-0.5">{errors.stock.message}</p>}
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <input type="checkbox" id="isActive" {...register('isActive')} className="h-4 w-4 accent-accent" />
-              <label htmlFor="isActive" className="text-sm font-medium text-text-secondary">{t('products.activeLabel')}</label>
+            <div className="flex items-center gap-2">
+              <input type="checkbox" id="isActive" {...register('isActive')} className="h-3.5 w-3.5 accent-accent" />
+              <label htmlFor="isActive" className="text-xs font-medium text-text-secondary">{t('products.activeLabel')}</label>
             </div>
           </div>
 
           {/* Images */}
-          <div className="bg-bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h2 className="text-base font-semibold text-text-primary">{t('products.images')}</h2>
+          <div className="bg-bg-surface border border-border rounded-lg p-4 space-y-3">
+            <h2 className="text-sm font-semibold text-text-primary">{t('products.images')}</h2>
             {(images.length > 0 || newImagePreviews.length > 0) && (
-              <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="grid grid-cols-5 gap-2">
                 {images.map((url) => (
                   <div key={url} className="relative aspect-square rounded-md overflow-hidden bg-bg-elevated group">
                     <img src={url} alt="Product" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => removeExistingImage(url)}
-                      className="absolute top-1 right-1 bg-error text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-3 w-3" />
+                    <button type="button" onClick={() => removeExistingImage(url)}
+                      className="absolute top-0.5 right-0.5 bg-error text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <X className="h-2.5 w-2.5" />
                     </button>
                   </div>
                 ))}
                 {newImagePreviews.map((src, i) => (
                   <div key={i} className="relative aspect-square rounded-md overflow-hidden bg-bg-elevated group">
                     <img src={src} alt={`New ${i + 1}`} className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => removeNewImage(i)}
-                      className="absolute top-1 right-1 bg-error text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-3 w-3" />
+                    <button type="button" onClick={() => removeNewImage(i)}
+                      className="absolute top-0.5 right-0.5 bg-error text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <X className="h-2.5 w-2.5" />
                     </button>
-                    <span className="absolute bottom-1 left-1 bg-accent text-white text-xs px-1 rounded">New</span>
+                    <span className="absolute bottom-0.5 left-0.5 bg-accent text-white text-[10px] px-1 rounded">New</span>
                   </div>
                 ))}
               </div>
             )}
-            <label className="flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-6 cursor-pointer hover:border-border-strong transition-colors">
-              <Upload className="h-6 w-6 text-text-muted mb-2" />
-              <span className="text-sm text-text-secondary">{t('products.uploadImages')}</span>
-              <span className="text-xs text-text-muted mt-1">PNG, JPG, WebP</span>
+            <label className="flex items-center gap-3 border border-dashed border-border rounded-lg p-3 cursor-pointer hover:border-border-strong transition-colors">
+              <Upload className="h-4 w-4 text-text-muted flex-shrink-0" />
+              <div>
+                <span className="text-xs text-text-secondary">{t('products.uploadImages')}</span>
+                <span className="text-xs text-text-muted ml-2">PNG, JPG, WebP</span>
+              </div>
               <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleImageFiles(Array.from(e.target.files ?? []))} />
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              onClick={() => setShowDeleteConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-error border border-error/20 rounded-md hover:bg-error/10 transition-colors"
-            >
-              <Trash2 className="h-4 w-4" /> {t('products.deleteProduct')}
+          <div className="flex items-center justify-between pb-2">
+            <button type="button" onClick={() => setShowDeleteConfirm(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-error border border-error/20 rounded-md hover:bg-error/10 transition-colors">
+              <Trash2 className="h-3.5 w-3.5" /> {t('products.deleteProduct')}
             </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="btn-primary disabled:opacity-50"
-            >
-              <Save className="h-4 w-4" />
+            <button type="submit" disabled={saving} className="btn-primary text-sm disabled:opacity-50">
+              <Save className="h-3.5 w-3.5" />
               {saving ? t('products.saving') : t('products.saveChanges')}
             </button>
           </div>

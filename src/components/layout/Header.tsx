@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Search, ShoppingCart, User, Heart, Menu, X } from 'lucide-react';
@@ -28,6 +28,12 @@ export default function Header({ navCategories }: HeaderProps) {
   const [search, setSearch] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
   const { t, lang, isRTL, toggleLang } = useLang();
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
   const { currency, toggleCurrency } = useCurrency();
 
   const STATIC_NAV = [
@@ -218,55 +224,116 @@ export default function Header({ navCategories }: HeaderProps) {
           )}
         </div>
 
-        {/* Mobile menu — inside header, flows naturally below */}
-        {mobileOpen && (
-          <div className="md:hidden" style={{ background: '#17171a', borderTop: '1px solid #2a2a30', padding: '8px 16px 16px' }}>
-            {/* Account / Wishlist shortcuts */}
-            <div style={{ display: 'flex', gap: 12, padding: '10px 0 12px', borderBottom: '1px solid #1f1f23' }}>
-              <Link href="/account" onClick={() => setMobileOpen(false)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#a1a1a6', textDecoration: 'none', fontSize: 14 }}>
-                <User size={14} /> {t('nav.account')}
+      </header>
+
+      {/* ── MOBILE DRAWER — fixed full-screen overlay ── */}
+      {mobileOpen && (
+        <div className="md:hidden" style={{ position: 'fixed', inset: 0, zIndex: 9999 }}>
+          {/* Backdrop */}
+          <div
+            style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.72)' }}
+            onClick={() => setMobileOpen(false)}
+          />
+
+          {/* Drawer panel */}
+          <div style={{
+            position: 'absolute', top: 0, bottom: 0, right: 0,
+            width: '100%', maxWidth: 340,
+            background: '#17171a',
+            borderLeft: '1px solid #2a2a30',
+            display: 'flex', flexDirection: 'column',
+            overflowY: 'auto',
+            zIndex: 10000,
+          }}>
+            {/* Drawer header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #2a2a30', flexShrink: 0 }}>
+              <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'baseline', gap: 5, textDecoration: 'none' }}>
+                <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.02em', color: '#f5f5f4' }}>{storeConfig.name}</span>
+                <span className="mono" style={{ fontSize: 9, color: '#ff6a2b', letterSpacing: '0.15em' }}>store</span>
               </Link>
-              <Link href="/account" onClick={() => setMobileOpen(false)}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#a1a1a6', textDecoration: 'none', fontSize: 14 }}>
-                <Heart size={14} />
-                {t('nav.wishlist')}
+              <button
+                onClick={() => setMobileOpen(false)}
+                style={{ padding: 6, color: '#6b6b70', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 4 }}
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Account shortcuts */}
+            <div style={{ display: 'flex', gap: 8, padding: '16px 20px', borderBottom: '1px solid #2a2a30' }}>
+              <Link href="/account" onClick={() => setMobileOpen(false)} style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                padding: '10px 12px', background: '#1f1f23', borderRadius: 6,
+                color: '#a1a1a6', textDecoration: 'none', fontSize: 13, fontWeight: 500,
+              }}>
+                <User size={14} strokeWidth={1.6} /> {t('nav.account')}
+              </Link>
+              <Link href="/account" onClick={() => setMobileOpen(false)} style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+                padding: '10px 12px', background: '#1f1f23', borderRadius: 6,
+                color: '#a1a1a6', textDecoration: 'none', fontSize: 13, fontWeight: 500, position: 'relative',
+              }}>
+                <Heart size={14} strokeWidth={1.6} /> {t('nav.wishlist')}
                 {wishlistCount > 0 && (
-                  <span style={{ background: '#ff6a2b', color: '#fff', borderRadius: 10, fontSize: 10, padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace' }}>
+                  <span style={{ position: 'absolute', top: 6, right: 8, background: '#ff6a2b', color: '#fff', borderRadius: 10, fontSize: 10, padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1.4 }}>
                     {wishlistCount}
                   </span>
                 )}
               </Link>
             </div>
-            {/* Nav links */}
-            {STATIC_NAV.map(item => (
-              <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '12px 0', color: '#a1a1a6', textDecoration: 'none', fontSize: 15, borderBottom: '1px solid #1f1f23' }}>
-                {item.label}
-              </Link>
-            ))}
+
+            {/* Main nav links */}
+            <div style={{ padding: '8px 0', borderBottom: '1px solid #2a2a30' }}>
+              {STATIC_NAV.map(item => (
+                <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} style={{
+                  display: 'flex', alignItems: 'center',
+                  padding: '14px 20px',
+                  color: pathname === item.href ? '#f5f5f4' : '#a1a1a6',
+                  textDecoration: 'none', fontSize: 16, fontWeight: pathname === item.href ? 600 : 400,
+                  borderBottom: '1px solid #1f1f23',
+                  transition: 'color 0.15s',
+                  borderRight: pathname === item.href ? '3px solid #ff6a2b' : '3px solid transparent',
+                }}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* Categories */}
             {visibleCats.length > 0 && (
-              <div className="mono" style={{ fontSize: 10, color: '#6b6b70', padding: '12px 0 6px', letterSpacing: '0.12em' }}>{t('nav.categories')}</div>
-            )}
-            {visibleCats.map(cat => (
-              <Link key={cat.id} href={`/category/${cat.slug}`} onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '12px 0', color: '#a1a1a6', textDecoration: 'none', fontSize: 15, borderBottom: '1px solid #1f1f23' }}>
-                {getCategoryName(cat.slug, cat.name, lang)}
-              </Link>
-            ))}
-            {visibleCats.length > 0 && (
-              <Link href="/products" onClick={() => setMobileOpen(false)}
-                style={{ display: 'block', padding: '12px 0', color: '#6b6b70', textDecoration: 'none', fontSize: 14 }}>
-                {isRTL ? '← الكل' : 'All →'}
-              </Link>
+              <div style={{ padding: '8px 0', flex: 1 }}>
+                <div className="mono" style={{ fontSize: 10, color: '#6b6b70', padding: '12px 20px 8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                  {t('nav.categories')}
+                </div>
+                {visibleCats.map(cat => {
+                  const href = `/category/${cat.slug}`;
+                  const active = pathname === href || pathname.startsWith(`${href}/`);
+                  return (
+                    <Link key={cat.id} href={href} onClick={() => setMobileOpen(false)} style={{
+                      display: 'flex', alignItems: 'center',
+                      padding: '12px 20px',
+                      color: active ? '#f5f5f4' : '#a1a1a6',
+                      textDecoration: 'none', fontSize: 14, fontWeight: active ? 600 : 400,
+                      borderBottom: '1px solid #1f1f23',
+                      borderRight: active ? '3px solid #ff6a2b' : '3px solid transparent',
+                      transition: 'color 0.15s',
+                    }}>
+                      {getCategoryName(cat.slug, cat.name, lang)}
+                    </Link>
+                  );
+                })}
+                <Link href="/products" onClick={() => setMobileOpen(false)} style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '13px 20px',
+                  color: '#ff6a2b', textDecoration: 'none', fontSize: 13, fontWeight: 600,
+                }}>
+                  {isRTL ? '← جميع المنتجات' : 'All Products →'}
+                </Link>
+              </div>
             )}
           </div>
-        )}
-      </header>
-
-      {/* Overlay backdrop */}
-      {mobileOpen && (
-        <div className="md:hidden fixed inset-0 bg-black/60 z-40" onClick={() => setMobileOpen(false)} />
+        </div>
       )}
     </>
   );

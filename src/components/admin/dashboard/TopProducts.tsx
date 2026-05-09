@@ -1,16 +1,19 @@
+'use client';
 import { formatPrice } from '@/lib/utils';
 import type { DashboardStats } from '@/types';
+import { useLang } from '@/hooks/admin/useLang';
 
 type TopProduct = DashboardStats['topProducts'][number];
 
 export default function TopProducts({ products }: { products: TopProduct[] }) {
+  const { t } = useLang();
   const max = products[0]?.totalSold || 1;
 
   return (
     <div className="bg-bg-surface border border-border rounded-lg p-5 shadow-md">
-      <h3 className="text-base font-semibold text-text-primary mb-4">Top Products</h3>
+      <h3 className="text-base font-semibold text-text-primary mb-4">{t('dashboard.topProducts')}</h3>
       {products.length === 0 ? (
-        <p className="text-text-muted text-sm text-center py-6">No sales data yet</p>
+        <p className="text-text-muted text-sm text-center py-6">{t('dashboard.noSalesData')}</p>
       ) : (
         <div className="space-y-4">
           {products.map((p, index) => (
@@ -26,7 +29,7 @@ export default function TopProducts({ products }: { products: TopProduct[] }) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-text-primary truncate">{p.name}</span>
-                  <span className="text-xs text-text-muted ml-2 flex-shrink-0">{p.totalSold} sold</span>
+                  <span className="text-xs text-text-muted ml-2 flex-shrink-0">{p.totalSold} {t('dashboard.sold')}</span>
                 </div>
                 <div className="w-full bg-bg-elevated rounded-full h-1.5">
                   <div

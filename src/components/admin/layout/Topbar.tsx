@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Bell } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
+import { useAdminUIStore } from '@/store/admin/ui.store';
 import { adminNotifications } from '@/lib/admin/api';
 import { formatDate } from '@/lib/utils';
 import type { Notification } from '@/types';
@@ -10,6 +11,7 @@ import { useLang } from '@/hooks/admin/useLang';
 
 export default function Topbar({ title = '' }: { title?: string }) {
   const { user } = useAdminAuthStore();
+  const { openSidebar } = useAdminUIStore();
   const { t, lang, isRTL, toggleLang } = useLang();
   const [open, setOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -32,7 +34,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
 
   useEffect(() => {
     fetchUnreadCount();
-    const interval = setInterval(fetchUnreadCount, 30000);
+    const interval = setInterval(fetchUnreadCount, 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -64,12 +66,21 @@ export default function Topbar({ title = '' }: { title?: string }) {
   };
 
   return (
-    <header className="h-16 bg-bg-surface border-b border-border flex items-center justify-between px-6 shrink-0">
-      <div>
-        <div className="mono" style={{ fontSize: 10, color: '#6b6b70', marginBottom: 4 }}>
-          DASHBOARD / {title.toUpperCase()}
+    <header className="h-16 bg-bg-surface border-b border-border flex items-center justify-between px-4 md:px-6 shrink-0">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={openSidebar}
+          aria-label="Open menu"
+          className="lg:hidden p-2 -ml-1 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <div>
+          <div className="mono" style={{ fontSize: 10, color: '#6b6b70', marginBottom: 4 }}>
+            DASHBOARD / {title.toUpperCase()}
+          </div>
+          <h2 style={{ fontSize: 22, fontWeight: 600, color: '#f5f5f4', margin: 0, letterSpacing: '-0.01em' }}>{title}</h2>
         </div>
-        <h2 style={{ fontSize: 22, fontWeight: 600, color: '#f5f5f4', margin: 0, letterSpacing: '-0.01em' }}>{title}</h2>
       </div>
       <div className="flex items-center gap-2">
         <button
@@ -147,7 +158,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
 
         {user && (
           <div className="h-8 w-8 rounded-full bg-accent-subtle text-accent-text flex items-center justify-center text-sm font-semibold ml-1">
-            {user.name.charAt(0).toUpperCase()}
+            {(user.name || '?').charAt(0).toUpperCase()}
           </div>
         )}
       </div>

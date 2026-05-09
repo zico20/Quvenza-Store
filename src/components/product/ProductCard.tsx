@@ -157,15 +157,15 @@ export default function ProductCard({ product }: { product: Product }) {
           style={{
             marginTop: 4, width: '100%',
             padding: '8px 8px', fontSize: 11, fontWeight: 600,
-            background: '#1f1f23', color: '#f5f5f4',
+            background: '#ff6a2b', color: '#ffffff',
             border: 'none', borderRadius: 4, cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
             opacity: product.stock === 0 ? 0.5 : 1,
-            transition: 'background 0.15s',
+            transition: 'background 0.15s, opacity 0.15s',
             fontFamily: 'inherit',
           }}
-          onMouseEnter={(e: any) => { if (product.stock > 0) e.currentTarget.style.background = '#2a2a30'; }}
-          onMouseLeave={(e: any) => { e.currentTarget.style.background = '#1f1f23'; }}
+          onMouseEnter={(e: any) => { if (product.stock > 0) e.currentTarget.style.opacity = '0.88'; }}
+          onMouseLeave={(e: any) => { e.currentTarget.style.opacity = product.stock === 0 ? '0.5' : '1'; }}
         >
           {added ? (
             <><Check size={12} /> {t('common.addedToCart')}</>

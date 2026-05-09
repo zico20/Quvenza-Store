@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     await requireAdmin(request);
     const admins = await listAdminUsers();
-    return sendSuccess({ admins });
+    return sendSuccess(admins);
   } catch (error) {
     return handleApiError(error);
   }
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createAdminUserSchema.parse(body);
     const admin = await createAdminUser(validated);
-    return sendSuccess({ admin }, 'Admin created', 201);
+    return sendSuccess(admin, 'Admin created', 201);
   } catch (error) {
     return handleApiError(error);
   }

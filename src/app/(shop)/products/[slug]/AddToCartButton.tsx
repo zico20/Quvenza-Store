@@ -20,7 +20,7 @@ export default function AddToCartButton({ product, disabled }: { product: Produc
     <button
       onClick={handleClick}
       disabled={disabled || added}
-      className="btn-primary w-full py-3 text-base"
+      className="btn-accent w-full py-3 text-base"
     >
       {added ? (
         <><Check className="h-5 w-5" /> {t('common.addedToCart')}</>

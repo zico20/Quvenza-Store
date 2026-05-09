@@ -1,17 +1,22 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, ShoppingBag, Tag, Users, Bell, LogOut, Settings2 } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Tag, Users, Bell, LogOut, Settings2, X } from 'lucide-react';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { adminAuth } from '@/lib/admin/api';
 import { adminConfig } from '@/config/admin.config';
 import { useLang } from '@/hooks/admin/useLang';
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void;
+  showCloseButton?: boolean;
+}
+
+export default function Sidebar({ onClose, showCloseButton = false }: SidebarProps) {
   const pathname = usePathname();
   const router   = useRouter();
   const { logout, user } = useAdminAuthStore();
-  const { t } = useLang();
+  const { t, isRTL } = useLang();
 
   const navItems = [
     { href: '/admin/dashboard',               label: t('nav.overview'),      icon: LayoutDashboard },
@@ -20,7 +25,7 @@ export default function Sidebar() {
     { href: '/admin/dashboard/categories',    label: t('nav.categories'),    icon: Tag },
     { href: '/admin/dashboard/customers',     label: t('nav.customers'),     icon: Users },
     { href: '/admin/dashboard/notifications', label: t('nav.notifications'), icon: Bell },
-    { href: '/admin/dashboard/settings', label: t('nav.settings'), icon: Settings2 },
+    { href: '/admin/dashboard/settings',      label: t('nav.settings'),      icon: Settings2 },
   ];
 
   async function handleLogout() {
@@ -28,7 +33,21 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="w-60 bg-bg-surface border-r border-border min-h-screen flex flex-col shrink-0">
+    <aside className={`
+      h-full w-60 bg-bg-surface flex flex-col relative
+      ${isRTL ? 'border-l border-border' : 'border-r border-border'}
+    `}>
+      {/* Mobile close button */}
+      {showCloseButton && (
+        <button
+          onClick={onClose}
+          className={`absolute top-4 p-1 text-text-muted hover:text-text-primary ${isRTL ? 'left-4' : 'right-4'}`}
+          aria-label="Close menu"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      )}
+
       {/* Brand header */}
       <div className="px-5 py-6 border-b border-border">
         <div className="mono" style={{ fontSize: 10, color: '#6b6b70', marginBottom: 6 }}>
@@ -40,19 +59,20 @@ export default function Sidebar() {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 p-3 flex flex-col gap-0.5">
+      <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(href));
           return (
             <Link
               key={href}
               href={href}
+              onClick={onClose}
               style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '10px 12px', borderRadius: 5,
                 background: active ? '#1f1f23' : 'transparent',
                 color: active ? '#f5f5f4' : '#a1a1a6',
-                borderLeft: `2px solid ${active ? '#ff6a2b' : 'transparent'}`,
+                borderInlineStart: `2px solid ${active ? '#ff6a2b' : 'transparent'}`,
                 textDecoration: 'none', fontSize: 13,
                 fontWeight: active ? 600 : 500,
                 transition: 'all 0.15s',
@@ -76,7 +96,7 @@ export default function Sidebar() {
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
             }}>
-              {user.name.charAt(0).toUpperCase()}
+              {(user.name || '?').charAt(0).toUpperCase()}
             </div>
             <span className="text-text-muted text-xs truncate">{user.name}</span>
           </div>

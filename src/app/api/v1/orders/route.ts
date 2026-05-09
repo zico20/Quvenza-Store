@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validated = createOrderSchema.parse(body);
     const order = await createOrder({ ...validated, userId: user.id });
-    return sendSuccess({ order }, 'Order created', 201);
+    return sendSuccess(order, 'Order created', 201);
   } catch (error) {
     return handleApiError(error);
   }
