@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Search, ShoppingCart, User, Heart, Menu, X } from 'lucide-react';
@@ -28,6 +28,12 @@ export default function Header({ navCategories }: HeaderProps) {
   const [search, setSearch] = useState('');
   const [mobileOpen, setMobileOpen] = useState(false);
   const { t, lang, isRTL, toggleLang } = useLang();
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
   const { currency, toggleCurrency } = useCurrency();
 
   const STATIC_NAV = [
