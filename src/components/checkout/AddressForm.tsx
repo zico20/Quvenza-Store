@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Check } from 'lucide-react';
-import { GOVERNORATE_NAMES, getCitiesForGovernorate, getGovernorateName } from '@/lib/iraq-locations';
+import { GOVERNORATE_NAMES, getCitiesForGovernorate, getGovernorateName, getCityName } from '@/lib/iraq-locations';
 import { useLang } from '@/hooks/useLang';
 
 // Static schema just for type inference (not used for validation):
@@ -100,7 +100,7 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
   const resolvedSubmitLabel = submitLabel ?? t('address.saveAddress');
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 16 }} suppressHydrationWarning>
 
       {/* Full Name */}
       <div>
@@ -144,7 +144,7 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
             onFocus={focusStyle} onBlur={blurStyle}
           >
             <option value="">{selectedGovernorate ? t('address.cityPlaceholder') : t('address.cityWaiting')}</option>
-            {cities.map(c => <option key={c} value={c}>{c}</option>)}
+            {cities.map(c => <option key={c} value={c}>{getCityName(c, lang)}</option>)}
           </select>
           <ErrorMsg msg={errors.city?.message} />
         </div>
