@@ -9,9 +9,8 @@ import type { Lang } from '@/lib/i18n';
 // Mobile  images (9:16): /public/banners/mobile/banner-1.jpg   …banner-3.jpg
 // Missing file → colored gradient fallback is shown automatically.
 const SLIDES = [
-  { desktop: '/banners/desktop/banner-1.jpg', mobile: '/banners/mobile/banner-1.jpg', tone: 2 },
-  { desktop: '/banners/desktop/banner-2.jpg', mobile: '/banners/mobile/banner-2.jpg', tone: 3 },
-  { desktop: '/banners/desktop/banner-3.jpg', mobile: '/banners/mobile/banner-3.jpg', tone: 4 },
+  { desktop: '/banners/desktop/gpt%20baneer.jpeg', mobile: '/banners/mobile/banner-1.jpg', tone: 2 },
+  { desktop: '/banners/desktop/coursera.jpeg',     mobile: '/banners/mobile/banner-2.jpg', tone: 3 },
 ];
 
 function SlideBg({ desktop, mobile, tone }: { desktop: string; mobile: string; tone: number }) {
