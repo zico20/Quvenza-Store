@@ -302,11 +302,12 @@ const STRINGS = {
   },
   orders: {
     myOrders:    { en: 'My Orders',     ar: 'طلباتي' },
+    order:       { en: 'Order',         ar: 'طلب' },
     noOrders:    { en: 'No orders yet', ar: 'لا طلبات بعد' },
     noOrdersSub: { en: 'Start shopping to see your orders here.', ar: 'ابدأ التسوق لترى طلباتك هنا.' },
     shopNow:     { en: 'Shop Now',      ar: 'تسوق الآن' },
     notFound:    { en: 'Order not found.', ar: 'الطلب غير موجود.' },
-    items:       { en: 'item',          ar: 'قطعة' },
+    items:       { en: 'Items',         ar: 'المنتجات' },
     status: {
       PENDING:    { en: 'Pending',    ar: 'قيد الانتظار' },
       PROCESSING: { en: 'Processing', ar: 'قيد المعالجة' },

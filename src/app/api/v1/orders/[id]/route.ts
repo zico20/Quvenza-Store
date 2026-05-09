@@ -13,7 +13,7 @@ export async function GET(
     const { id } = await context.params;
     // Non-admins can only see their own orders (userId filter); admins see all
     const order = await getOrderById(id, user.role === 'ADMIN' ? undefined : user.id);
-    return sendSuccess({ order });
+    return sendSuccess(order);
   } catch (error) {
     return handleApiError(error);
   }
