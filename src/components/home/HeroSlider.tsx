@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLang } from '@/hooks/useLang';
 import type { Lang } from '@/lib/i18n';
@@ -50,6 +50,11 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
 
   const prev = () => setIdx((idx - 1 + SLIDES.length) % SLIDES.length);
   const next = () => setIdx((idx + 1) % SLIDES.length);
+
+  useEffect(() => {
+    const timer = setInterval(() => setIdx((i) => (i + 1) % SLIDES.length), 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section
