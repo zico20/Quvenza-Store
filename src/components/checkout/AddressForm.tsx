@@ -30,7 +30,7 @@ interface AddressFormProps {
 
 // ── Shared field styles ──────────────────────────────────────
 const inputStyle: React.CSSProperties = {
-  width: '100%', padding: '12px 14px',
+  width: '100%', padding: '10px 12px',
   background: '#0e0e10', border: '1px solid #2a2a30', borderRadius: 4,
   color: '#f5f5f4', fontFamily: 'inherit', fontSize: 14, outline: 'none',
   boxSizing: 'border-box', transition: 'border-color 0.15s',
@@ -38,7 +38,7 @@ const inputStyle: React.CSSProperties = {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#a1a1a6', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
+    <div style={{ fontSize: 14, fontWeight: 600, color: '#f5f5f4', marginBottom: 6 }}>
       {children}
     </div>
   );
@@ -100,14 +100,13 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
   const resolvedSubmitLabel = submitLabel ?? t('address.saveAddress');
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
       {/* Full Name */}
       <div>
         <Label>{t('address.fullName')}</Label>
         <input
           {...register('fullName')}
-          placeholder={t('address.fullNamePlaceholder')}
           style={inputStyle}
           onFocus={focusStyle} onBlur={blurStyle}
         />
@@ -120,7 +119,6 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
         <input
           {...register('phone')}
           type="tel"
-          placeholder={t('address.phonePlaceholder')}
           style={inputStyle}
           onFocus={focusStyle} onBlur={blurStyle}
         />
@@ -161,7 +159,6 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
         <textarea
           {...register('address')}
           rows={3}
-          placeholder={t('address.streetPlaceholder')}
           style={{ ...inputStyle, resize: 'none' } as React.CSSProperties}
           onFocus={focusStyle} onBlur={blurStyle}
         />
@@ -173,7 +170,6 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
         <Label>{t('address.landmark')} <span style={{ color: '#6b6b70', textTransform: 'none' }}>{t('address.landmarkOptional')}</span></Label>
         <input
           {...register('nearestLandmark')}
-          placeholder={t('address.landmarkPlaceholder')}
           style={inputStyle}
           onFocus={focusStyle} onBlur={blurStyle}
         />
