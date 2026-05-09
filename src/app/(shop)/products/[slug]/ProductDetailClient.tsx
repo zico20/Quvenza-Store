@@ -20,7 +20,7 @@ function ProductDetailSkeleton() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="h-4 w-48 bg-bg-elevated rounded animate-pulse mb-8" />
         <div className="grid lg:grid-cols-2 gap-12">
-          <div className="aspect-square bg-bg-elevated rounded-xl animate-pulse" />
+          <div className="aspect-[4/3] lg:aspect-auto lg:h-[400px] bg-bg-elevated rounded-xl animate-pulse" />
           <div className="flex flex-col gap-4">
             <div className="h-6 w-24 bg-bg-elevated rounded animate-pulse" />
             <div className="h-10 w-3/4 bg-bg-elevated rounded animate-pulse" />
@@ -88,10 +88,10 @@ export default function ProductDetailClient({ product }: Props) {
           <span className="text-text-secondary truncate max-w-[160px]">{product.name}</span>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 lg:items-start">
           {/* Image gallery */}
           <div className="flex flex-col gap-3">
-            <div className="aspect-square bg-bg-elevated rounded-xl overflow-hidden border border-border shadow-lg">
+            <div className="aspect-[4/3] lg:aspect-auto lg:h-[400px] bg-bg-elevated rounded-xl overflow-hidden border border-border shadow-lg">
               {product.images?.[selectedImage] ? (
                 <Image
                   src={product.images[selectedImage]}
@@ -139,9 +139,9 @@ export default function ProductDetailClient({ product }: Props) {
               {product.category?.name && (
                 <span className="badge mb-3 inline-block">{categoryName}</span>
               )}
-              <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-3">{product.name}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-text-primary tracking-tight mb-3">{product.name}</h1>
               <div className="flex flex-wrap items-baseline gap-3">
-                <span className="text-2xl sm:text-3xl font-bold text-text-primary">{formatPrice(product.price)}</span>
+                <span className="text-xl sm:text-2xl font-bold text-text-primary">{formatPrice(product.price)}</span>
                 {product.comparePrice && (
                   <>
                     <span className="text-lg text-text-muted line-through">{formatPrice(product.comparePrice)}</span>
@@ -178,7 +178,7 @@ export default function ProductDetailClient({ product }: Props) {
               <button
                 onClick={handleAddToCart}
                 disabled={product.stock === 0 || adding}
-                className="btn-primary flex-1 py-3 flex items-center justify-center gap-2"
+                className="btn-accent flex-1 py-3 flex items-center justify-center gap-2"
               >
                 {adding ? (
                   <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{t('product.addingToCart')}</>
