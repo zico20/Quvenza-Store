@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Check } from 'lucide-react';
-import { GOVERNORATE_NAMES, getCitiesForGovernorate } from '@/lib/iraq-locations';
+import { GOVERNORATE_NAMES, getCitiesForGovernorate, getGovernorateName } from '@/lib/iraq-locations';
 import { useLang } from '@/hooks/useLang';
 
 // Static schema just for type inference (not used for validation):
@@ -51,7 +51,7 @@ function ErrorMsg({ msg }: { msg?: string }) {
 
 // ── Component ────────────────────────────────────────────────
 export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = false }: AddressFormProps) {
-  const { t, isRTL } = useLang();
+  const { t, lang, isRTL } = useLang();
 
   const addressSchema = useMemo(() => z.object({
     fullName:        z.string().min(3, t('address.validation.fullNameMin')),
@@ -123,9 +123,6 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
           onFocus={focusStyle} onBlur={blurStyle}
         />
         <ErrorMsg msg={errors.phone?.message} />
-        <p style={{ fontSize: 11, color: '#6b6b70', marginTop: 5, fontFamily: 'JetBrains Mono, monospace' }}>
-          {t('address.phoneHint')}
-        </p>
       </div>
 
       {/* Governorate + City */}
@@ -134,7 +131,7 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
           <Label>{t('address.governorate')}</Label>
           <select {...register('governorate')} style={selectStyle} onFocus={focusStyle} onBlur={blurStyle}>
             <option value="">{t('address.governoratePlaceholder')}</option>
-            {GOVERNORATE_NAMES.map(g => <option key={g} value={g}>{g}</option>)}
+            {GOVERNORATE_NAMES.map(g => <option key={g} value={g}>{getGovernorateName(g, lang)}</option>)}
           </select>
           <ErrorMsg msg={errors.governorate?.message} />
         </div>

@@ -73,6 +73,30 @@ export const IRAQ_GOVERNORATES: Record<string, string[]> = {
 
 export const GOVERNORATE_NAMES = Object.keys(IRAQ_GOVERNORATES);
 
+export const GOVERNORATE_AR: Record<string, string> = {
+  Baghdad:      'بغداد',
+  Basra:        'البصرة',
+  Nineveh:      'نينوى',
+  Erbil:        'أربيل',
+  Sulaymaniyah: 'السليمانية',
+  Duhok:        'دهوك',
+  Kirkuk:       'كركوك',
+  Anbar:        'الأنبار',
+  Diyala:       'ديالى',
+  Saladin:      'صلاح الدين',
+  Wasit:        'واسط',
+  Babil:        'بابل',
+  Karbala:      'كربلاء',
+  Najaf:        'النجف',
+  Qadisiyyah:   'القادسية',
+  Muthanna:     'المثنى',
+  Maysan:       'ميسان',
+};
+
+export function getGovernorateName(key: string, lang: string): string {
+  return lang === 'ar' ? (GOVERNORATE_AR[key] ?? key) : key;
+}
+
 export function getCitiesForGovernorate(governorate: string): string[] {
   return IRAQ_GOVERNORATES[governorate] || [];
 }
