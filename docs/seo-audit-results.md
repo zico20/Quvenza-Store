@@ -281,8 +281,366 @@ GPTBot, ChatGPT-User, OAI-SearchBot, Google-Extended, GoogleOther, ClaudeBot, an
 9. **Declare `DigitalProduct` / `SoftwareApplication` type** — More specific than generic `Product` for digital subscription items; may trigger dedicated Google rich result type.
 10. **Add noindex to `/search` page** — Search result pages (`/search?q=x`) are typically duplicate content; add `robots: { index: false }` to the search page metadata.
 
+---
+
+# 🔍 AUDIT 2: CONTENT, KEYWORDS & ON-PAGE SEO
+
+**Date:** 2026-05-11
+**Scope:** Content quality, keyword targeting, on-page elements
+**Method:** Readonly code + content analysis (seed.ts as ground truth for product content)
 
 ---
+
+## Executive Summary
+
+| Category | Score (0-10) | Status |
+|---|---|---|
+| Keyword targeting | 7/10 | ⚠ Good but homepage H1 missing |
+| Content depth | 5/10 | ⚠ Products strong, static pages thin |
+| Heading hierarchy | 6/10 | ⚠ Homepage no H1 — critical gap |
+| Internal linking | 4/10 | 🔴 Most pages isolated, 0 links |
+| Product copy quality | 8/10 | ✅ Rich seed content, Iraqi context |
+| FAQ + Glossary | 8/10 | ✅ Comprehensive, Iraq-specific |
+| Blog content | 0/10 | 🔴 No blog routes exist |
+| E-E-A-T signals | 5/10 | ⚠ Partial — missing founder, reviews |
+| Long-tail coverage | 6/10 | ⚠ Product-level good, no blog |
+| Anchor text variety | 4/10 | 🔴 Limited links, all i18n keys |
+| **OVERALL CONTENT SEO** | **53/100** | **⚠ Needs work** |
+
+---
+
+## 1. Keyword Targeting Per Page Type
+
+### Homepage (`src/app/page.tsx`)
+
+- **Primary keyword detected:** "اشتراكات ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق"
+- **Secondary keywords (root layout):** 10 Arabic keywords including "اشتراك ChatGPT Plus العراق", "شراء ChatGPT بالدينار العراقي", "Canva Pro العراق", "اشتراكات رقمية بغداد"
+- **Iraqi market signals:** ✅ Dinar, ZainCash, Baghdad, 18 provinces, "أكبر متجر"
+- **H1 actual text:** ⚠ **MISSING — no `<h1>` tag in page.tsx or HeroSlider.tsx**
+- **Meta title:** `SoftoDev | اشترِ ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق` (~70 chars ✅)
+- **Meta description:** `أكبر متجر اشتراكات رقمية في العراق — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus. تفعيل فوري خلال 30 دقيقة، دفع بالدينار العراقي، ضمان كامل.` (~152 chars ✅)
+
+**Issues:**
+- Homepage has **no H1 at all** — Google cannot identify the primary topic of the most important page
+- Hero slider is visual-only (banner images), contributes no text H1
+- Section headings use H2 only (bestsellers editorial section)
+
+### Product Pages (`src/app/(shop)/products/[slug]/page.tsx`)
+
+- **Title pattern:** `{metaTitle}` custom or fallback `{product.name} — اشتراك في العراق`
+  - Example: `ChatGPT Plus شهرين — اشتراك في العراق | SoftoDev` (~50 chars ✅)
+  - Layout template appends: `| SoftoDev — اشتراكات رقمية العراق`
+- **Per-product metaKeywords:** ✅ 5 keywords each (Arabic + English variants)
+  - Example: `ChatGPT Plus العراق, اشتراك ChatGPT عراق, شراء ChatGPT العراق, ChatGPT Plus Iraq, GPT-4o عراق`
+- **Iraqi market hooks:** ✅ ZainCash, Dinar pricing, 30-minute activation, Baghdad COD
+- **SEO-friendly slugs:** ✅ `chatgpt-plus-2months`, `canva-pro-1year`, `capcut-pro-1month`
+- **H1 location:** `ProductDetailClient.tsx:142` (client component, SSR-rendered) ✓
+
+**Issues:**
+- H1 is inside a `'use client'` component — renders correctly via Next.js SSR but not in server `page.tsx` itself
+- All product images are placeholder URLs (`placehold.co/600x600`) — zero real images for Google Image search or rich snippets
+
+### Category Pages (`src/app/(shop)/category/[slug]/page.tsx`)
+
+- **Title pattern:** `{category.name} — اشتراكات في العراق`
+- **Meta description:** `اشترِ أفضل {name} في العراق بأسعار بالدينار العراقي — تفعيل فوري، ضمان كامل. {N} منتج متاح.`
+- **H1 actual text:** Category name from DB (e.g., `أدوات الذكاء الاصطناعي`) ✅
+- **Sub-heading:** `{N} منتج متاح في العراق` (plain `<p>`, not H2)
+- **Intro paragraph:** ⚠ ABSENT — only product count, then straight into product grid
+
+**Issues:**
+- No descriptive intro paragraph above the product grid
+- No H2 sub-sections (e.g., "لماذا تشترك في أدوات الذكاء الاصطناعي؟")
+- Keywords array: only 4 generic items per category
+
+### Static Pages
+
+| Page | H1 Text | Approx Words | Status |
+|---|---|---|---|
+| `/about` | "من نحن" | ~350 | ⚠ Thin, no founder name |
+| `/faq` | "الأسئلة الشائعة" | ~976 | ✅ Good depth |
+| `/glossary` | "قاموس المصطلحات" | ~554 | ⚠ Moderate |
+| `/how-it-works` | "كيف يعمل المتجر؟" | ~493 | ⚠ Slightly thin |
+| `/payment-methods` | "طرق الدفع المتاحة" | ~282 | 🔴 Very thin |
+| `/contact` | "اتصل بنا" | ~372 | ⚠ No SEO metadata — `'use client'` page |
+| `/privacy` | "Privacy Policy" (English) | ~159 | 🔴 Skeleton only, English |
+| `/terms` | "Terms of Service" (English) | ~138 | 🔴 Skeleton only, English |
+
+**Issues:**
+- `/contact` uses `'use client'` with NO `generateMetadata` export — page has no custom title, description, or canonical
+- `/privacy` and `/terms` are English-only stubs — high-trust pages in an Arabic-first market
+- H1 text on static pages does not include target keywords (e.g., "من نحن" misses "SoftoDev العراق")
+
+**Score: 7/10**
+
+---
+
+## 2. Content Depth
+
+| Page | Approx Words | Recommended | Gap |
+|---|---|---|---|
+| Homepage | ~686 (template) | 500–1000 | ✅ Meets threshold |
+| Product (template code) | ~364 | 800–1500 | See note* |
+| Category | ~317 | 400–800 | 🔴 Below minimum |
+| About | ~350 | 600–1200 | 🔴 Below minimum |
+| FAQ | ~976 | 800–1500 | ✅ Meets threshold |
+| Glossary | ~554 | 1000+ | ⚠ Below target |
+| How-it-works | ~493 | 600–1000 | ⚠ Slightly thin |
+| Payment methods | ~282 | 400–800 | 🔴 Well below |
+
+\*Product pages: template code is ~364 words but longDescription seed data adds ~130 words + features + FAQs at render time. Estimated full rendered word count: ~500–900 words ✅
+
+**Issues:**
+- `/payment-methods` at ~282 words is severely thin for a page targeting "طرق الدفع زين كاش آسيا حوالة العراق"
+- `/about` at ~350 words lacks founder story, company credentials, or team bios
+- Category pages have zero descriptive editorial content above the product grid
+- Glossary at 14 terms is a good start but far below a 1,000+ word authority piece
+
+**Score: 5/10**
+
+---
+
+## 3. Heading Hierarchy
+
+| Page | H1 | H2 | H3 | Issues |
+|---|---|---|---|---|
+| Homepage | 0 | 1 (bestsellers) | 0 | 🔴 Missing H1 entirely |
+| Product (rendered) | 1 | Multiple (in longDescription) | Yes | ✅ |
+| Category | 1 | 0 | 0 | ⚠ No H2 sub-sections |
+| About | 1 | 4 | 0 | ✅ |
+| FAQ | 1 | 2 | 0 | ✅ |
+| Glossary | 1 | 14 (each term) | 0 | ✅ |
+| How-it-works | 1 | 1 | 0 | ⚠ Steps are div not h3 |
+| Payment methods | 1 | 4 (one per method) | 0 | ✅ |
+| Contact | 1 | 1 | 0 | ✅ |
+| Privacy | 1 | 0 | 0 | 🔴 English H1, no sections |
+| Terms | 1 | 0 | 0 | 🔴 English H1, no sections |
+
+**Issues found:**
+- **1 page with missing H1:** Homepage — the highest-priority page on the site
+- **0 pages skipping heading levels** ✅
+- **2 pages with English H1:** `/privacy` ("Privacy Policy") and `/terms` ("Terms of Service") — mismatch with Arabic audience
+- How-it-works: 4 numbered steps (01–04) are `<div>` elements, not `<h3>` — missed semantic hierarchy
+
+**Score: 6/10**
+
+---
+
+## 4. Internal Linking
+
+### Links per page
+
+| Page | Internal links | Quality |
+|---|---|---|
+| Homepage | 5 | ⚠ /account, /products, /category/{slug} x3 |
+| Product page.tsx | 0 | ⚠ Breadcrumb via JSON-LD only |
+| Category | 0 | ⚠ Product links inside ProductGrid component |
+| About | 1 (/contact) | 🔴 Near-isolated |
+| FAQ | 0 | 🔴 21 Q&As mention products — zero links |
+| Glossary | 1 (/faq) | 🔴 14 terms define products — zero product links |
+| How-it-works | 2 (/products, /payment-methods) | ⚠ Minimal |
+| Payment methods | 1 | 🔴 Isolated |
+| Contact | 1 (/faq) | 🔴 No links to products |
+| Privacy / Terms | 0 | 🔴 Dead ends |
+
+### Anchor text variety
+
+- **Keyword-descriptive anchors in code:** "راجع الأسئلة الشائعة", "تواصل معنا", "تصفح الأسئلة الشائعة" ✅
+- **Generic anchors ("اضغط هنا", "click here"):** 0 instances ✅
+- **Most CTAs:** i18n t() keys — actual text at runtime; not statically auditable
+- **Product-to-product cross-links:** 0
+- **FAQ-to-product links:** 0
+- **Glossary-to-product links:** 0
+
+**Issues:**
+- FAQ has 21 answers naming ChatGPT Plus, Canva Pro, CapCut, Coursera as plain text with zero `<Link>` to product pages — massive missed PageRank flow
+- Glossary defines 14 products/services with zero links to matching product pages
+- About page mentions multiple products in text but links nowhere
+
+**Score: 4/10**
+
+---
+
+## 5. Product Copy Quality
+
+| Metric | Value |
+|---|---|
+| Total products in seed | 20 (28 slugs minus 8 category slugs) |
+| Products with longDescription | 18/20 (90%) |
+| Products with features array | 18/20 (90%) |
+| Products with FAQs | 18/20 (90%) |
+| avg longDescription length | 631 chars (~130 words) |
+| min / max longDescription | 325 / 1,201 chars |
+| avg features per product | 6.0 items |
+| avg FAQs per product | 3.5 Q&A pairs |
+
+**Quality snapshot — ChatGPT Plus 2 months:**
+- metaTitle: 'ChatGPT Plus شهرين — اشتراك في العراق | SoftoDev' — 50 chars ✅
+- metaDescription: '...بـ 50,000 د.ع في العراق. GPT-4o + DALL-E 3. تفعيل فوري، دفع زين كاش.' — 94 chars ✅
+- metaKeywords: 5 terms, Arabic + English variants ✅
+- longDescription: ~900 chars, markdown-formatted, Iraqi payment section ✅
+- features: 6 items with title + description + emoji icon ✅
+- faqs: 5 Q&A pairs, all Iraq-specific ✅
+- imageAlt: 'اشتراك ChatGPT Plus شهرين في العراق — SoftoDev' ✅
+
+**Quality issues:**
+- 2/20 products missing longDescription/features/FAQs (likely gaming category)
+- All product images are placehold.co placeholder URLs — zero real product visuals; no Google Image indexing, no social sharing previews
+- price field stores numeric value (e.g., 35) but metaDescription shows 50,000 د.ع — USD to IQD conversion exists but mismatch may cause confusion in content editing
+- FAQs average 3.5 per product — below the recommended 5–10 for People Also Ask coverage
+
+**Score: 8/10**
+
+---
+
+## 6. FAQ + Glossary Coverage
+
+### `/faq` — 21 Q&A pairs in 6 groups
+
+| Group | Count | Iraqi-specific? |
+|---|---|---|
+| عن المتجر | 3 | ✅ Baghdad, "متجر عراقي 100%" |
+| طرق الدفع | 3 | ✅ ZainCash, COD Baghdad, no Visa |
+| التفعيل والتوصيل | 3 | ✅ 30-minute activation, WhatsApp flow |
+| الضمان والاسترداد | 3 | ✅ Refund policy, warranty terms |
+| المنتجات | 4 | ✅ ChatGPT Plus vs Pro, CapCut iPhone/Android |
+| التقنية والأمان | 5 | ✅ VPN, multi-device, data privacy |
+
+- Iraqi-specific questions: 18/21 (86%) ✅
+- "People Also Ask" coverage: ✅ Excellent — VPN, no-Visa, COD, auto-renewal all addressed
+- Schema: ✅ FAQPage JSON-LD + itemProp="mainEntity" microdata
+- Issue: Zero `<Link>` components — product names are plain text only, no links to product pages
+
+### `/glossary` — 14 terms
+
+| Category | Terms |
+|---|---|
+| Products | ChatGPT Plus, Canva Pro, CapCut Pro, Coursera Plus |
+| AI features | GPT-5, DALL-E 3, Magic AI, Brand Kit |
+| Payment | ZainCash, AsiaHawala, FastPay, IQD |
+| Process | تفعيل الاشتراك, كاش عند الاستلام |
+
+- Schema: ✅ DefinedTerm on each article element
+- Bilingual: ⚠ Term names are bilingual (e.g., "زين كاش (ZainCash)") but definitions are Arabic-only
+- Missing terms: License Key, Account Sharing, VPN, رمز التفعيل, Pro vs Premium distinction
+
+**Score: 8/10**
+
+---
+
+## 7. Blog Content
+
+**Blog routes exist:** NO — no src/app/blog/ directory
+
+**Blog models in Prisma schema:** YES — BlogPost and BlogCategory fully defined with title, slug, excerpt, content, coverImage, metaTitle (VARCHAR 70), metaDescription (VARCHAR 170), tags, authorName, isPublished, publishedAt, viewCount, and proper indexes.
+
+**Blog API routes:** None found
+**Published posts:** 0
+
+This is a critical SEO gap. The full data model is built but zero frontend pages were created.
+
+**Recommended immediate actions:**
+1. Build src/app/blog/page.tsx + src/app/blog/[slug]/page.tsx using the existing BlogPost schema
+2. Write first 5 articles targeting high-intent Iraqi queries
+3. Target 50–100 articles within 6 months for long-tail dominance
+
+**Score: 0/10**
+
+---
+
+## 8. E-E-A-T Signals
+
+| Signal | Present | Quality |
+|---|---|---|
+| Founder/team story | Partial | "SoftoDev" brand story — no founder name or photo |
+| Physical address | YES | "بغداد، العراق" in Contact, FAQ, About |
+| Phone number | Placeholder | 9647700000000 — calls will fail |
+| WhatsApp | Placeholder | Same 9647700000000 |
+| Telegram | YES | https://t.me/softodeviq |
+| Email | YES | support@softodeviqstore.com |
+| Reviews / testimonials | NO | No review section on any public page |
+| Privacy policy | Skeleton | English-only, ~159 words |
+| Terms of service | Skeleton | English-only, ~138 words |
+| Trust badges | Metadata only | "ضمان كامل" in meta desc, no visual on-page badges |
+| Customer count | YES | "+500 عميل راضٍ" on About page |
+| Years in business | Weak | "تأسسنا 2026" — current year, no track record |
+
+**Issues:**
+- Placeholder phone/WhatsApp number 9647700000000 — must be replaced before launch
+- No customer reviews or star ratings anywhere on the site (Review model exists in Prisma but no frontend)
+- Privacy Policy and Terms are English stubs — negative E-E-A-T for Arabic-language pages
+- No founder name, bio, or photo — digital services require human authority signals
+- "+500 عميل" stat only on About subpage, not visible on homepage
+
+**Score: 5/10**
+
+---
+
+## 9. Long-tail Keyword Opportunities
+
+**Currently covered:** Product-level metaKeywords per product + root layout 10-term keyword array ✅
+
+**Missed categories — no blog means no coverage:**
+- How-to: "كيف أستخدم ChatGPT لكتابة المحتوى"
+- Comparison: "ChatGPT Plus مقابل Pro أيهما أختار"
+- Troubleshooting: "ChatGPT لا يعمل في العراق الحل"
+- Price research: "سعر Canva Pro بالدينار العراقي 2026"
+- Use-case: "استخدام CapCut Pro لتيك توك دليل"
+- Category guides: "أفضل اشتراكات للمصمم العراقي"
+
+**Score: 6/10**
+
+---
+
+## 10. Anchor Text Variety
+
+- Keyword-descriptive anchors in code: "راجع الأسئلة الشائعة", "تواصل معنا", "تصفح الأسئلة الشائعة" ✅
+- Generic anchors ("اضغط هنا", "click here"): 0 instances ✅
+- Most CTAs use i18n t() keys — actual text rendered at runtime, not auditable statically
+- Product-to-product cross-links: 0
+- Editorial-to-product links from FAQ, Glossary, About: 0
+
+**Score: 4/10**
+
+---
+
+## 🎯 AUDIT 2 — Priority Recommendations
+
+### 🔴 Critical (do this week)
+
+1. **Add H1 to homepage** — src/app/page.tsx has no H1. Add one above or within the editorial section, e.g., `اشتراكات رقمية أصلية في العراق — ChatGPT Plus، Canva Pro وأكثر`. 15-minute fix, high SEO impact.
+
+2. **Replace placeholder phone/WhatsApp number** — 9647700000000 appears in src/app/contact/page.tsx, src/app/faq/page.tsx, and product FAQ seed data. Replace with the real business number before launch.
+
+3. **Add generateMetadata to /contact** — Contact page is 'use client' with no metadata export. Extract to a server component wrapper or add a src/app/contact/layout.tsx with title, description, and canonical.
+
+4. **Launch blog with 3+ articles** — BlogPost model exists in Prisma. Build src/app/blog/page.tsx and src/app/blog/[slug]/page.tsx. Even 3 articles targeting Iraqi search intent will outperform all on-page fixes for organic traffic.
+
+### 🟡 High (do this month)
+
+5. **Add Link from FAQ answers to product pages** — In src/app/faq/page.tsx, add Link components wherever ChatGPT Plus, Canva Pro, CapCut, Coursera appear in answers.
+
+6. **Add Link from Glossary terms to product pages** — In src/app/glossary/page.tsx, each of the 4 product terms should link to /products/{slug}.
+
+7. **Translate and expand Privacy Policy and Terms to Arabic** — Rewrite both pages in Arabic, minimum 600 words each. Critical for trust on an Arabic-first site.
+
+8. **Add category intro paragraphs** — In src/app/(shop)/category/[slug]/page.tsx, add a 2–3 sentence descriptive paragraph between H1 and the product grid.
+
+9. **Add trust/testimonials section to homepage** — Review model exists in Prisma. Add 3–5 static customer quote cards to src/app/page.tsx.
+
+10. **Expand payment methods page** — src/app/payment-methods/page.tsx at ~282 words is the thinnest content page. Add step-by-step guides per payment method to reach 500+ words.
+
+### 🟢 Polish (long-term)
+
+11. Build blog with 20+ pillar articles in Arabic targeting Iraqi digital subscription queries
+12. Add founder profile to About page: name, photo, credentials, founding story
+13. Expand About page from ~350 to 700+ words
+14. Increase product-level FAQs from 3.5 avg to 5–7 per product
+15. Add 10+ glossary terms: License Key, رمز التفعيل, VPN, اشتراك مشترك, Pro vs Premium comparison
+
+---
+
+*End of Audit 2. Audit 3 (Schema validation, Core Web Vitals, crawlability deep-dive) to follow.*
 
 
 # 🔍 AUDIT 3: AEO/GEO + IRAQI COMPETITIVE POSITIONING
