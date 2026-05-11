@@ -107,6 +107,38 @@ export default async function Footer() {
           <div className="mono" style={{ fontSize: 10, color: '#6b6b70', textAlign: 'center' }}>
             {storeConfig.copyright}
           </div>
+          {/* Development attribution */}
+          <div style={{ marginTop: 8, fontSize: 11, color: '#6b6b70', textAlign: 'center' }}>
+            {lang === 'ar' ? (
+              <>
+                طُوّر بواسطة{' '}
+                <a
+                  href="https://softodeviq.com"
+                  target="_blank"
+                  rel="noopener"
+                  title="SoftoDevIq - شركة برمجة في بغداد"
+                  style={{ color: '#fb923c', textDecoration: 'none' }}
+                >
+                  SoftoDevIq
+                </a>
+                {' '}— شركة برمجة عراقية في بغداد
+              </>
+            ) : (
+              <>
+                Developed by{' '}
+                <a
+                  href="https://softodeviq.com"
+                  target="_blank"
+                  rel="noopener"
+                  title="SoftoDevIq - Software Development Company in Baghdad"
+                  style={{ color: '#fb923c', textDecoration: 'none' }}
+                >
+                  SoftoDevIq
+                </a>
+                {' '}— Iraqi software development company
+              </>
+            )}
+          </div>
         </div>
 
         {/* ── DESKTOP layout (md+) ── */}
@@ -124,6 +156,36 @@ export default async function Footer() {
             </div>
             <div className="mono" style={{ marginTop: 24, fontSize: 10, color: '#6b6b70' }}>
               {storeConfig.copyright}
+            </div>
+            {/* Development attribution */}
+            <div style={{ marginTop: 8, fontSize: 11, color: '#6b6b70' }}>
+              {lang === 'ar' ? (
+                <>
+                  طُوّر بواسطة{' '}
+                  <a
+                    href="https://softodeviq.com"
+                    target="_blank"
+                    rel="noopener"
+                    title="SoftoDevIq - شركة برمجة في بغداد"
+                    style={{ color: '#fb923c', textDecoration: 'none' }}
+                  >
+                    SoftoDevIq
+                  </a>
+                </>
+              ) : (
+                <>
+                  Developed by{' '}
+                  <a
+                    href="https://softodeviq.com"
+                    target="_blank"
+                    rel="noopener"
+                    title="SoftoDevIq - Software Development Company in Baghdad"
+                    style={{ color: '#fb923c', textDecoration: 'none' }}
+                  >
+                    SoftoDevIq
+                  </a>
+                </>
+              )}
             </div>
           </div>
           <FooterCol title={t('footer.cols.shop', lang)}    links={SHOP_LINKS}    isRTL={isRTL} />

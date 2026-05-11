@@ -209,9 +209,9 @@ export default async function HomePage() {
             <div className="mono" style={{ fontSize: 11, color: '#ff6a2b', letterSpacing: '0.15em', marginBottom: 14 }}>
               {t('home.editorial.kicker', lang)}
             </div>
-            <h3 style={{ fontSize: 'clamp(22px, 5vw, 34px)', fontWeight: 600, color: '#f5f5f4', margin: 0, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-              {t('home.editorial.title', lang)}
-            </h3>
+            <h1 style={{ fontSize: 'clamp(22px, 5vw, 34px)', fontWeight: 600, color: '#f5f5f4', margin: 0, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+              اشتراكات ChatGPT Plus وCanva Pro في العراق — دفع بالدينار، تفعيل فوري
+            </h1>
             <p style={{ fontSize: 14, color: '#a1a1a6', lineHeight: 1.6, marginTop: 16 }}>
               {t('home.editorial.body', lang)}
             </p>
