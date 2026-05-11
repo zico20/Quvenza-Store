@@ -1,24 +1,173 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
 import { storeConfig } from '@/config/store.config';
+
+export const metadata: Metadata = {
+  title: 'الشروط والأحكام | SoftoDev',
+  description: 'شروط وأحكام الاستخدام لمتجر SoftoDev — قواعد الشراء والدفع والضمان وحقوق المستخدم في العراق.',
+  alternates: { canonical: 'https://softodeviqstore.com/terms' },
+};
+
+const SECTION: React.CSSProperties = { marginBottom: 36 };
+const H2: React.CSSProperties = { fontSize: 20, fontWeight: 700, color: '#f5f5f4', marginBottom: 12, letterSpacing: '-0.01em' };
+const P: React.CSSProperties = { color: '#a1a1a6', lineHeight: 1.8, fontSize: 15, marginBottom: 12 };
+const UL: React.CSSProperties = { color: '#a1a1a6', lineHeight: 1.8, fontSize: 15, paddingRight: 24, marginBottom: 12 };
 
 export default function TermsPage() {
   return (
-    <div className="max-w-2xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold text-text-primary mb-4">Terms of Service</h1>
-      <p className="text-text-muted text-sm mb-8">{storeConfig.copyright}</p>
-      <div className="prose prose-invert max-w-none space-y-4 text-text-secondary text-sm leading-relaxed">
-        <p>
-          By using {storeConfig.name} you agree to these terms. Please read them carefully before
-          placing an order.
+    <div style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px' }}>
+      <h1 style={{ fontSize: 40, fontWeight: 700, color: '#f5f5f4', marginBottom: 8, letterSpacing: '-0.02em' }}>
+        الشروط والأحكام
+      </h1>
+      <p style={{ color: '#6b6b70', fontSize: 13, marginBottom: 48 }}>
+        آخر تحديث: يناير ٢٠٢٦ · {storeConfig.copyright}
+      </p>
+
+      <div style={SECTION}>
+        <h2 style={H2}>١. القبول والموافقة</h2>
+        <p style={P}>
+          باستخدامك موقع <strong style={{ color: '#f5f5f4' }}>softodeviqstore.com</strong> أو إتمامك أي عملية
+          شراء، فإنك تقرّ بأنك قرأت هذه الشروط وفهمتها ووافقت عليها بالكامل. إذا كنت تمثّل شركة أو
+          مؤسسة، فإنك تؤكد صلاحيتك القانونية للموافقة باسمها.
         </p>
-        <p>
-          All purchases are subject to product availability. We reserve the right to refuse or cancel
-          any order at our discretion. Prices are subject to change without notice.
+        <p style={P}>
+          نحتفظ بحق تعديل هذه الشروط في أي وقت؛ ستُنشر التعديلات على هذه الصفحة مع تحديث تاريخ
+          المراجعة. استمرارك في استخدام الموقع بعد التعديل يُعدّ قبولاً ضمنياً للشروط الجديدة.
         </p>
-        <p>
-          For questions about these terms, please contact us at{' '}
-          <a href={`mailto:${storeConfig.support.email}`} className="text-accent hover:underline">
-            {storeConfig.support.email}
-          </a>.
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٢. طبيعة الخدمة</h2>
+        <p style={P}>
+          <strong style={{ color: '#f5f5f4' }}>SoftoDev</strong> متجر عراقي متخصص في بيع الاشتراكات الرقمية الأصلية
+          (ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus وغيرها) بالدينار العراقي للمستخدمين في
+          جمهورية العراق.
+        </p>
+        <p style={P}>
+          جميع الاشتراكات المُباعة أصلية ومُرخَّصة من الشركات الأم. نعمل كوسيط موثوق يتيح للمستخدم
+          العراقي الحصول على هذه الخدمات بطرق دفع محلية دون الحاجة إلى بطاقات ائتمان دولية.
+        </p>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٣. الطلبات والدفع</h2>
+        <p style={P}>بإتمام طلبك توافق على ما يلي:</p>
+        <ul style={UL}>
+          <li>جميع الأسعار معروضة بالدينار العراقي (IQD) شاملةً لجميع الرسوم، ولا توجد رسوم خفية.</li>
+          <li>طرق الدفع المقبولة: زين كاش، آسيا حوالة، فاست باي، والكاش عند التسليم في بغداد.</li>
+          <li>يُعدّ الطلب مؤكَّداً بعد استلامنا تأكيد الدفع وتحقّقنا منه.</li>
+          <li>في حال فشل الدفع أو رفضه، لن يُعالَج الطلب حتى يُستكمَل الدفع بنجاح.</li>
+          <li>نحتفظ بحق رفض أي طلب يبدو احتيالياً أو مخالفاً لهذه الشروط.</li>
+        </ul>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٤. التفعيل والتسليم</h2>
+        <p style={P}>
+          الاشتراكات الرقمية منتجات غير ملموسة تُسلَّم إلكترونياً عبر البريد الإلكتروني للعميل.
+          شروط التسليم:
+        </p>
+        <ul style={UL}>
+          <li>يُفعَّل الاشتراك على البريد الإلكتروني الذي يُرسله العميل بعد تأكيد الدفع.</li>
+          <li>متوسط وقت التفعيل ٣٠ دقيقة، وقد يصل إلى ساعتين في أوقات الذروة.</li>
+          <li>مسؤولية إرسال بريد إلكتروني صحيح تقع على عاتق العميل؛ لا نتحمل مسؤولية الأخطاء الإملائية.</li>
+          <li>تُعدّ الخدمة مُسلَّمة فور إرسال تأكيد التفعيل إلى البريد الإلكتروني المُقدَّم.</li>
+        </ul>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٥. سياسة الضمان والاسترداد</h2>
+        <p style={P}>نقدّم ضماناً كاملاً على جميع اشتراكاتنا طوال فترة الاشتراك. شروط الاسترداد:</p>
+        <ul style={UL}>
+          <li>
+            <strong style={{ color: '#f5f5f4' }}>استرداد كامل:</strong> إذا لم يُفعَّل الاشتراك خلال ٢٤ ساعة من
+            تأكيد الدفع لأسباب تعود إلينا.
+          </li>
+          <li>
+            <strong style={{ color: '#f5f5f4' }}>استرداد جزئي أو استبدال:</strong> إذا توقّف الاشتراك خلال فترة
+            صلاحيته بسبب خلل تقني من جانبنا.
+          </li>
+          <li>
+            <strong style={{ color: '#f5f5f4' }}>لا يحق الاسترداد:</strong> إذا أرسل العميل بريداً إلكترونياً خاطئاً،
+            أو أساء استخدام الاشتراك، أو انتهك شروط المنصة الأم.
+          </li>
+        </ul>
+        <p style={P}>
+          لطلب الاسترداد، تواصل معنا عبر واتساب خلال ٤٨ ساعة من اكتشاف المشكلة مع ذكر رقم الطلب
+          والمشكلة بالتفصيل.
+        </p>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٦. الاستخدام المقبول</h2>
+        <p style={P}>توافق على استخدام المتجر وفق الشروط التالية:</p>
+        <ul style={UL}>
+          <li>الاشتراكات للاستخدام الشخصي فقط، ولا يجوز إعادة بيعها أو مشاركتها تجارياً.</li>
+          <li>يُحظر استخدام الموقع لأي نشاط احتيالي أو غير قانوني.</li>
+          <li>يُحظر محاولة اختراق الأنظمة أو التلاعب بأسعار المنتجات أو بيانات المستخدمين الآخرين.</li>
+          <li>حساب واحد لكل مستخدم؛ إنشاء حسابات متعددة بغرض الاستفادة من العروض يُعرّضك للحظر.</li>
+        </ul>
+        <p style={P}>
+          نحتفظ بحق تعليق أو إلغاء أي حساب يُخالف هذه الشروط دون إشعار مسبق وبدون التزام بأي تعويض.
+        </p>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٧. حدود المسؤولية</h2>
+        <p style={P}>
+          SoftoDev وسيط بين المستخدم العراقي وشركات البرمجيات العالمية. لذلك:
+        </p>
+        <ul style={UL}>
+          <li>لا نتحمل مسؤولية أي تغيير تقوم به شركات مثل OpenAI أو Canva على منتجاتها أو سياساتها.</li>
+          <li>لا نضمن توفّر الخدمات الخارجية في جميع الأوقات، إذ قد يحدث انقطاع مؤقت من الشركة الأم.</li>
+          <li>لا نتحمل مسؤولية الأضرار غير المباشرة الناتجة عن استخدام أو عدم توفّر الاشتراكات.</li>
+          <li>مسؤوليتنا القصوى في أي حالة تقتصر على قيمة الطلب المدفوع فعلياً.</li>
+        </ul>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٨. الملكية الفكرية</h2>
+        <p style={P}>
+          جميع محتويات الموقع من نصوص وصور وتصاميم وكود برمجي هي ملك حصري لـ SoftoDev أو مرخَّصة
+          لها. يُحظر نسخ أي محتوى أو إعادة استخدامه تجارياً دون إذن كتابي مسبق. الاشتراكات المُباعة
+          تخضع لشروط الملكية الفكرية الخاصة بشركاتها الأم.
+        </p>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>٩. القانون المُطبَّق والنزاعات</h2>
+        <p style={P}>
+          تخضع هذه الشروط وتُفسَّر وفقاً لقوانين جمهورية العراق. في حال نشوء أي نزاع يتعلق بهذه
+          الشروط أو بأي معاملة تجرى عبر الموقع، يُحاول الطرفان حلّه وِدّياً أولاً عبر التواصل المباشر.
+          إذا تعذّر الحل الودّي، تُحال النزاعات إلى المحاكم المختصة في بغداد، جمهورية العراق.
+        </p>
+      </div>
+
+      <div style={SECTION}>
+        <h2 style={H2}>١٠. التواصل</h2>
+        <p style={P}>
+          لأي استفسار يتعلق بهذه الشروط، تواصل معنا عبر:
+        </p>
+        <ul style={UL}>
+          <li>
+            البريد الإلكتروني:{' '}
+            <a href={`mailto:${storeConfig.support.email}`} style={{ color: '#ff6a2b', textDecoration: 'none' }}>
+              {storeConfig.support.email}
+            </a>
+          </li>
+          <li>واتساب: متاح ٢٤/٧ للردّ على استفساراتك.</li>
+          <li>العنوان: بغداد، جمهورية العراق.</li>
+        </ul>
+      </div>
+
+      <div style={{ borderTop: '1px solid #2a2a30', paddingTop: 24, marginTop: 8 }}>
+        <p style={{ color: '#6b6b70', fontSize: 13 }}>
+          اقرأ أيضاً:{' '}
+          <Link href="/privacy" style={{ color: '#ff6a2b', textDecoration: 'none' }}>سياسة الخصوصية</Link>
+          {' '}·{' '}
+          <Link href="/faq" style={{ color: '#ff6a2b', textDecoration: 'none' }}>الأسئلة الشائعة</Link>
+          {' '}·{' '}
+          <Link href="/contact" style={{ color: '#ff6a2b', textDecoration: 'none' }}>تواصل معنا</Link>.
         </p>
       </div>
     </div>
