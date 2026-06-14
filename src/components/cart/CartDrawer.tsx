@@ -5,13 +5,17 @@ import { useCartStore } from '@/store/cart.store';
 import CartItem from './CartItem';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useLang } from '@/hooks/useLang';
+import { formatPrice as fmt } from '@/lib/utils';
+import { storeConfig } from '@/config/store.config';
 
 export default function CartDrawer() {
   const { items, isOpen, toggleDrawer } = useCartStore();
   const { t, isRTL } = useLang();
-  const { formatPrice } = useCurrency();
+  const { currency, formatPrice } = useCurrency();
   const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
   const itemCount = items.reduce((s, i) => s + i.quantity, 0);
+  // Secondary currency line (always show the other of USD/IQD as a trust cue)
+  const secondary = fmt(total, currency === 'USD' ? 'IQD' : 'USD', storeConfig.exchangeRates.IQD_PER_USD);
 
   if (!isOpen) return null;
 
@@ -19,7 +23,7 @@ export default function CartDrawer() {
     <>
       <div className="fixed inset-0 bg-black/60 z-50" style={{ backdropFilter: 'blur(4px)' }} onClick={toggleDrawer} />
       <div
-        className="fixed top-0 h-full w-full bg-bg-surface border-border shadow-lg z-50 flex flex-col"
+        className="fixed top-0 h-full w-full bg-bg-surface border-border z-50 flex flex-col animate-[slideIn_.26s_cubic-bezier(.16,1,.3,1)]"
         style={{
           maxWidth: 'min(448px, 100vw)',
           right: isRTL ? 'auto' : 0,
@@ -27,14 +31,17 @@ export default function CartDrawer() {
           borderLeftWidth: isRTL ? 0 : 1,
           borderRightWidth: isRTL ? 1 : 0,
           borderStyle: 'solid',
+          boxShadow: 'var(--shadow-lg)',
         }}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div className="flex items-center gap-2">
-            <h2 className="font-semibold text-text-primary">{t('cart.title')}</h2>
-            {itemCount > 0 && <span className="badge">{itemCount}</span>}
+            <h2 className="font-semibold text-text-primary font-[family-name:var(--font-display)]">{t('cart.title')}</h2>
+            {itemCount > 0 && (
+              <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-accent/15 text-accent text-xs font-bold">{itemCount}</span>
+            )}
           </div>
-          <button onClick={toggleDrawer} className="btn-ghost p-1.5" aria-label="Close">
+          <button onClick={toggleDrawer} className="btn-ghost p-1.5" aria-label={t('common.close') !== 'common.close' ? t('common.close') : 'Close'}>
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -60,9 +67,12 @@ export default function CartDrawer() {
           <div className="px-5 py-4 border-t border-border space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-text-secondary text-sm">{t('cart.subtotal')}</span>
-              <span className="text-text-primary font-bold text-xl">{formatPrice(total)}</span>
+              <div className="text-right ltr-nums">
+                <div className="text-text-primary font-bold text-xl font-[family-name:var(--font-display)]">{formatPrice(total)}</div>
+                <div className="text-text-muted text-xs">{secondary}</div>
+              </div>
             </div>
-            <Link href="/checkout" onClick={toggleDrawer} className="btn-primary w-full py-3 text-base">
+            <Link href="/checkout" onClick={toggleDrawer} className="btn-accent w-full py-3 text-base">
               {t('common.checkout')}
             </Link>
             <button onClick={toggleDrawer} className="btn-ghost w-full py-2 text-sm">

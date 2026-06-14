@@ -1,6 +1,12 @@
 @import "tailwindcss";
 /* Fonts loaded via next/font in layout.tsx — no @import needed here */
 
+/* Drawer slide-in (works LTR + RTL: pinned to the correct edge, fades+nudges in) */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 @theme {
   /* ════════════════════════════════════════════════════════════════
      VOLTAGE — deep-tech dark system (near-black + electric orange + plasma)

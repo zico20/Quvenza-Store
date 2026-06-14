@@ -25,7 +25,7 @@ export default function CartItem({ item }: { item: CartItemType }) {
 
       <div className="flex-1 min-w-0">
         <p className="text-text-primary text-sm font-medium truncate">{item.product.name}</p>
-        <p className="text-accent font-semibold text-sm mt-0.5">{formatPrice(item.product.price)}</p>
+        <p className="text-accent font-semibold text-sm mt-0.5 ltr-nums">{formatPrice(item.product.price)}</p>
         <div className="flex items-center gap-2 mt-2">
           <button
             onClick={() => updateQuantity(item.productId, item.quantity - 1)}
@@ -44,7 +44,7 @@ export default function CartItem({ item }: { item: CartItemType }) {
       </div>
 
       <div className="flex flex-col items-end justify-between">
-        <span className="text-text-primary text-sm font-semibold">
+        <span className="text-text-primary text-sm font-semibold ltr-nums">
           {formatPrice(Number(item.product.price) * item.quantity)}
         </span>
         <button
