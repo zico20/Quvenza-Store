@@ -6,11 +6,14 @@ import { orders } from '@/lib/api';
 import CheckoutSteps from '@/components/checkout/CheckoutSteps';
 import type { Address } from '@/types';
 import { useLang } from '@/hooks/useLang';
+import { useCurrency } from '@/hooks/useCurrency';
 
 export default function PaymentPage() {
   const router = useRouter();
   const { items, clearCart } = useCartStore();
   const { t } = useLang();
+  const { formatPrice } = useCurrency();
+  const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -72,9 +75,25 @@ export default function PaymentPage() {
         ))}
       </div>
       {error && <p className="text-error text-sm mb-4">{error}</p>}
-      <button onClick={handlePlaceOrder} disabled={loading} className="btn-primary w-full py-3 disabled:opacity-50">
+
+      {/* Desktop place-order button (inline) */}
+      <button onClick={handlePlaceOrder} disabled={loading} className="btn-accent w-full py-3 disabled:opacity-50 hidden sm:flex">
         {loading ? t('checkout.placingOrder') : t('checkout.placeOrder')}
       </button>
+
+      {/* Spacer so the sticky bar never covers content on mobile */}
+      <div className="h-24 sm:hidden" />
+
+      {/* Mobile sticky pay bar — total never scrolls away */}
+      <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-bg-surface/95 backdrop-blur px-4 py-3 flex items-center gap-3" style={{ boxShadow: 'var(--shadow-lg)' }}>
+        <div className="ltr-nums shrink-0">
+          <div className="text-[11px] text-text-muted">{t('cart.subtotal')}</div>
+          <div className="text-lg font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(total)}</div>
+        </div>
+        <button onClick={handlePlaceOrder} disabled={loading} className="btn-accent flex-1 py-3 disabled:opacity-50 min-h-[48px]">
+          {loading ? t('checkout.placingOrder') : t('checkout.placeOrder')}
+        </button>
+      </div>
     </div>
   );
 }

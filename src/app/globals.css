@@ -1,39 +1,86 @@
 @import "tailwindcss";
 /* Fonts loaded via next/font in layout.tsx — no @import needed here */
 
+/* Drawer slide-in (works LTR + RTL: pinned to the correct edge, fades+nudges in) */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 @theme {
-  /* ── Graphite (dark / orange) ── */
-  --color-bg-base:      #0e0e10;
-  --color-bg-surface:   #17171a;
-  --color-bg-elevated:  #1f1f23;
-  --color-bg-subtle:    #1f1f23;
+  /* ════════════════════════════════════════════════════════════════
+     VOLTAGE — deep-tech dark system (near-black + electric orange + plasma)
+     Canonical token names below are kept stable so existing utility
+     classes (bg-bg-base, text-text-primary, border-border, …) keep
+     working while now rendering the Voltage palette. New Voltage-named
+     aliases are added alongside for components migrating to them.
+     ════════════════════════════════════════════════════════════════ */
 
-  --color-text-primary:   #f5f5f4;
-  --color-text-secondary: #a1a1a6;
-  --color-text-muted:     #6b6b70;
+  /* ── Core neutrals (canonical) ── */
+  --color-bg-base:      #0A0A0C;   /* page canvas */
+  --color-bg-surface:   #121216;   /* cards, panels, inputs */
+  --color-bg-elevated:  #1A1A20;   /* raised surfaces, chips, hover */
+  --color-bg-subtle:    #232329;   /* elevated-2: menus, popovers */
 
-  --color-accent:        #ff6a2b;
-  --color-accent-hover:  #e55a1e;
-  --color-accent-subtle: rgba(255,106,43,0.12);
-  --color-accent-text:   #ffffff;
+  --color-text-primary:   #F7F7F8;
+  --color-text-secondary: #A6A6AE;
+  --color-text-muted:     #6C6C76;
 
-  --color-border:        #2a2a30;
-  --color-border-strong: #3a3a42;
+  --color-accent:        #FF7A33;  /* electric orange */
+  --color-accent-hover:  #FF9357;  /* accent-hi */
+  --color-accent-subtle: rgba(255,122,51,0.12);
+  --color-accent-text:   #0A0A0C;  /* near-black text on accent fills */
 
-  --color-success: #4ade80;
-  --color-warning: #fbbf24;
-  --color-error:   #f87171;
+  --color-plasma:        #19D4E8;  /* plasma-cyan — tech/trust cue */
 
-  --shadow-sm:     0 1px 3px rgba(0,0,0,0.5);
-  --shadow-md:     0 4px 16px rgba(0,0,0,0.6);
-  --shadow-lg:     0 8px 32px rgba(0,0,0,0.7);
-  --shadow-accent: 0 0 24px rgba(255,106,43,0.15);
+  --color-border:        #26262E;
+  --color-border-strong: #36363F;
 
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-error:   #FB7185;
 
-  --font-sans: var(--font-cairo), var(--font-inter), system-ui, sans-serif;
+  /* ── Voltage-named tokens (used by ui/* primitives: bg-surface, text-plasma, …) ──
+     Both this set and the canonical set above are intentional and permanent —
+     screens use the canonical names, primitives use the Voltage names. ── */
+  --color-surface:        #121216;
+  --color-elevated:       #1A1A20;
+  --color-elevated-2:     #232329;
+  --color-text:           #F7F7F8;
+  --color-accent-hi:      #FF9357;
+
+  /* ── Elevation ── */
+  --shadow-sm:     0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md:     0 6px 18px rgba(0,0,0,0.45);
+  --shadow-lg:     0 16px 40px rgba(0,0,0,0.55);
+  --shadow-accent: 0 0 24px rgba(255,122,51,0.15);
+  --shadow-glow:   0 0 24px rgba(255,122,51,0.5);
+
+  /* ── Radius ── */
+  --radius-sm: 6px;   /* inputs, chips */
+  --radius-md: 10px;  /* buttons */
+  --radius-lg: 16px;  /* cards */
+  --radius-xl: 20px;  /* hero / feature panels */
+
+  /* ── Spacing (8px base) ── */
+  --spacing-xs:  4px;
+  --spacing-sm:  8px;
+  --spacing-md:  16px;
+  --spacing-lg:  24px;
+  --spacing-xl:  32px;
+  --spacing-2xl: 48px;
+
+  /* ── Motion ── */
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 260ms;
+  --ease-out:    cubic-bezier(.16,1,.3,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+
+  /* ── Type ── */
+  --font-display: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
+  --font-arabic: var(--font-cairo), system-ui, sans-serif;
   --font-mono: var(--font-mono), 'Fira Code', monospace;
 }
 
@@ -45,8 +92,8 @@
   }
 
   body {
-    background-color: #0e0e10;
-    color: #f5f5f4;
+    background-color: #0A0A0C;
+    color: #F7F7F8;
     font-family: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
     font-size: 14.5px;
     font-weight: 450;
@@ -55,7 +102,22 @@
     overflow-x: hidden;
   }
 
-  h1, h2, h3, h4 { font-weight: 600; letter-spacing: -0.015em; }
+  /* Latin headings use the Space Grotesk display face */
+  h1, h2, h3, h4 {
+    font-family: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  /* Respect reduced-motion: kill decorative animation/transition */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 
   /* Arabic: Cairo — heavier weight for dark-bg readability */
   :lang(ar) body,
@@ -96,12 +158,25 @@
     text-align: right;
   }
 
-  ::selection { background: rgba(255,106,43,0.25); color: #f5f5f4; }
+  ::selection { background: rgba(255,122,51,0.3); color: #F7F7F8; }
 
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #0e0e10; }
-  ::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #3a3a42; }
+  ::-webkit-scrollbar-track { background: #0A0A0C; }
+  ::-webkit-scrollbar-thumb { background: #26262E; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #36363F; }
+
+  /* Visible keyboard focus ring (accent) across interactive elements */
+  :focus-visible {
+    outline: 2px solid #FF7A33;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Prices / numeric runs stay LTR even inside RTL layouts */
+  .ltr-nums { direction: ltr; unicode-bidi: isolate; }
+
+  /* Mirror directional icons (back/next/prev chevrons & arrows) under RTL */
+  [dir="rtl"] .rtl-flip { transform: scaleX(-1); }
 }
 
 @layer components {
@@ -117,13 +192,14 @@
 
   .btn-accent {
     @apply inline-flex items-center justify-center gap-2
-           px-5 py-2.5 rounded text-sm font-semibold
-           transition-opacity duration-150
+           px-5 py-2.5 rounded-md text-sm font-semibold
+           transition-all duration-150
            disabled:opacity-50 disabled:cursor-not-allowed;
-    background-color: #ff6a2b;
-    color: #ffffff;
+    background: linear-gradient(135deg, #FF7A33, #FF5C1A);
+    color: #0A0A0C;
+    box-shadow: 0 6px 18px rgba(255,122,51,0.30);
   }
-  .btn-accent:hover:not(:disabled) { opacity: 0.88; }
+  .btn-accent:hover:not(:disabled) { box-shadow: 0 8px 24px rgba(255,122,51,0.45); filter: brightness(1.05); }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2
@@ -152,8 +228,8 @@
            px-4 py-2.5 text-text-primary text-sm
            outline-none transition-colors duration-150 w-full;
   }
-  .input::placeholder { color: #6b6b70; }
-  .input:focus { border-color: #ff6a2b; }
+  .input::placeholder { color: #6C6C76; }
+  .input:focus { border-color: #FF7A33; box-shadow: 0 0 0 3px rgba(255,122,51,0.15); }
 
   /* ── Mono label (brand/SKU/kickers) ── */
   .mono {
@@ -168,21 +244,22 @@
     font-family: 'JetBrains Mono', monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    background: #1f1f23;
-    color: #a1a1a6;
+    background: #1A1A20;
+    color: #A6A6AE;
   }
-  .tag-new  { background: #ff6a2b; color: #fff; }
-  .tag-sale { background: #f87171; color: #fff; }
-  .tag-best { background: #f5f5f4; color: #0e0e10; }
+  .tag-new  { background: #FF7A33; color: #0A0A0C; }
+  .tag-sale { background: #FB7185; color: #0A0A0C; }
+  .tag-best { background: #F7F7F8; color: #0A0A0C; }
 
   /* ── Header icon button ── */
   .nav-icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    padding: 8px; border-radius: 4px;
-    color: #f5f5f4; background: transparent; text-decoration: none;
+    min-width: 40px; min-height: 40px;
+    padding: 9px; border-radius: 8px;
+    color: #F7F7F8; background: transparent; text-decoration: none;
     position: relative; transition: background 0.15s;
   }
-  .nav-icon-btn:hover { background: #17171a; }
+  .nav-icon-btn:hover { background: #1A1A20; }
 
   /* ── Nav category link hover ── */
   .nav-cat-link {
@@ -196,15 +273,15 @@
     white-space: nowrap;
     transition: color 0.15s;
   }
-  .nav-cat-link:hover { color: #f5f5f4 !important; }
+  .nav-cat-link:hover { color: #F7F7F8 !important; }
 
   /* ── Category / product card hover border ── */
   .hover-accent-border { transition: border-color 0.2s; }
-  .hover-accent-border:hover { border-color: #ff6a2b !important; }
+  .hover-accent-border:hover { border-color: #FF7A33 !important; }
 
   /* ── Footer link hover ── */
-  .footer-link { color: #a1a1a6; font-size: 13px; text-decoration: none; transition: color 0.15s; }
-  .footer-link:hover { color: #f5f5f4; }
+  .footer-link { color: #A6A6AE; font-size: 13px; text-decoration: none; transition: color 0.15s; }
+  .footer-link:hover { color: #F7F7F8; }
 
   .section-title {
     @apply text-2xl font-semibold text-text-primary tracking-tight;
@@ -216,8 +293,10 @@
   .badge-dot {
     @apply absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full
            flex items-center justify-center
-           text-[10px] font-bold text-white;
+           text-[10px] font-bold;
     font-family: 'JetBrains Mono', monospace;
-    background: #ff6a2b;
+    background: #FF7A33;
+    color: #0A0A0C;
+    box-shadow: 0 0 10px rgba(255,122,51,0.6);
   }
 }

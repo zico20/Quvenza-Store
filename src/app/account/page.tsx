@@ -24,10 +24,10 @@ function fmtDate(s: string): string {
 const STATUS_COLOR: Record<string, string> = {
   PENDING:    '#fbbf24',
   PROCESSING: '#60a5fa',
-  SHIPPED:    '#ff6a2b',
+  SHIPPED:    '#FF7A33',
   DELIVERED:  '#4ade80',
-  CANCELLED:  '#6b6b70',
-  REFUNDED:   '#6b6b70',
+  CANCELLED:  '#6C6C76',
+  REFUNDED:   '#6C6C76',
 };
 
 const ADDR_KEY = 'store-addresses';
@@ -36,8 +36,8 @@ const ADDR_KEY = 'store-addresses';
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
     <div>
-      <div className="mono" style={{ fontSize: 10, color: '#a1a1a6', letterSpacing: '0.15em', textTransform: 'uppercase' }}>{label}</div>
-      <div style={{ fontSize: 24, fontWeight: 700, color: '#f5f5f4', marginTop: 4, letterSpacing: '-0.01em' }}>{value}</div>
+      <div className="mono" style={{ fontSize: 10, color: '#A6A6AE', letterSpacing: '0.15em', textTransform: 'uppercase' }}>{label}</div>
+      <div style={{ fontSize: 24, fontWeight: 700, color: '#F7F7F8', marginTop: 4, letterSpacing: '-0.01em' }}>{value}</div>
     </div>
   );
 }
@@ -102,7 +102,7 @@ export default function AccountPage() {
   if (!user) {
     return (
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '80px 32px', textAlign: 'center' }}>
-        <p style={{ color: '#a1a1a6', marginBottom: 20 }}>{t('account.signInPrompt')}</p>
+        <p style={{ color: '#A6A6AE', marginBottom: 20 }}>{t('account.signInPrompt')}</p>
         <Link href="/login" className="btn-accent" style={{ textDecoration: 'none' }}>{t('common.signIn')}</Link>
       </div>
     );
@@ -115,25 +115,25 @@ export default function AccountPage() {
 
       {/* ── Profile Header ── */}
       <div style={{
-        background: '#17171a', border: '1px solid #2a2a30', borderRadius: 8,
+        background: '#121216', border: '1px solid #26262E', borderRadius: 8,
         padding: 32, marginBottom: 24,
         display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap',
       }}>
         <div style={{
           width: 72, height: 72, borderRadius: 36, flexShrink: 0,
-          background: 'rgba(255,106,43,0.14)', color: '#ff6a2b',
+          background: 'rgba(255,106,43,0.14)', color: '#FF7A33',
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 28, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
         }}>{initials}</div>
 
         <div style={{ flex: 1 }}>
-          <div className="mono" style={{ fontSize: 11, color: '#a1a1a6' }}>
+          <div className="mono" style={{ fontSize: 11, color: '#A6A6AE' }}>
             {t('account.memberSince')} {new Date(user.createdAt).getFullYear()}
           </div>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#f5f5f4', margin: '4px 0 0', letterSpacing: '-0.01em' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#F7F7F8', margin: '4px 0 0', letterSpacing: '-0.01em' }}>
             {`${t('account.hello')} ${user.name.split(' ')[0]}`}
           </h1>
-          <div style={{ color: '#a1a1a6', fontSize: 13, marginTop: 2 }}>{user.email}</div>
+          <div style={{ color: '#A6A6AE', fontSize: 13, marginTop: 2 }}>{user.email}</div>
         </div>
 
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
@@ -154,10 +154,10 @@ export default function AccountPage() {
               style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '12px 14px', textAlign: 'left',
-                background: tab === key ? '#17171a' : 'transparent',
-                border: `1px solid ${tab === key ? '#2a2a30' : 'transparent'}`,
-                borderLeft: `2px solid ${tab === key ? '#ff6a2b' : 'transparent'}`,
-                color: tab === key ? '#f5f5f4' : '#a1a1a6',
+                background: tab === key ? '#121216' : 'transparent',
+                border: `1px solid ${tab === key ? '#26262E' : 'transparent'}`,
+                borderLeft: `2px solid ${tab === key ? '#FF7A33' : 'transparent'}`,
+                color: tab === key ? '#F7F7F8' : '#A6A6AE',
                 borderRadius: 6, cursor: 'pointer',
                 fontFamily: 'inherit', fontSize: 13,
                 fontWeight: tab === key ? 600 : 500,
@@ -193,7 +193,7 @@ export default function AccountPage() {
               {ordersLoading ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {[...Array(3)].map((_, i) => (
-                    <div key={i} style={{ height: 72, background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, animation: 'pulse 1.5s infinite' }} />
+                    <div key={i} style={{ height: 72, background: '#121216', border: '1px solid #26262E', borderRadius: 6, animation: 'pulse 1.5s infinite' }} />
                   ))}
                 </div>
               ) : ordersList.length === 0 ? (
@@ -201,38 +201,38 @@ export default function AccountPage() {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {ordersList.map(o => {
-                    const statusColor = STATUS_COLOR[o.status] ?? '#a1a1a6';
+                    const statusColor = STATUS_COLOR[o.status] ?? '#A6A6AE';
                     return (
                       <Link
                         key={o.id}
                         href={`/account/orders/${o.id}`}
                         style={{
-                          background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6,
+                          background: '#121216', border: '1px solid #26262E', borderRadius: 6,
                           padding: 18, textDecoration: 'none',
                           display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr auto', gap: 16, alignItems: 'center',
                         }}
                       >
                         <div>
-                          <div className="mono" style={{ fontSize: 12, color: '#f5f5f4', fontWeight: 600 }}>
+                          <div className="mono" style={{ fontSize: 12, color: '#F7F7F8', fontWeight: 600 }}>
                             {o.id.slice(-10).toUpperCase()}
                           </div>
-                          <div style={{ color: '#a1a1a6', fontSize: 11, marginTop: 4 }}>{fmtDate(o.createdAt)}</div>
+                          <div style={{ color: '#A6A6AE', fontSize: 11, marginTop: 4 }}>{fmtDate(o.createdAt)}</div>
                         </div>
                         <div>
-                          <div className="mono" style={{ fontSize: 10, color: '#6b6b70', letterSpacing: '0.1em' }}>{t('account.orders.statusCol')}</div>
+                          <div className="mono" style={{ fontSize: 10, color: '#6C6C76', letterSpacing: '0.1em' }}>{t('account.orders.statusCol')}</div>
                           <div style={{ color: statusColor, fontSize: 13, fontWeight: 600, marginTop: 4 }}>
                             ● {t(`orders.status.${o.status}`)}
                           </div>
                         </div>
                         <div>
-                          <div className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{t('account.orders.itemsCol')}</div>
-                          <div style={{ color: '#f5f5f4', fontSize: 13, marginTop: 4 }}>{o.items?.length ?? '—'}</div>
+                          <div className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{t('account.orders.itemsCol')}</div>
+                          <div style={{ color: '#F7F7F8', fontSize: 13, marginTop: 4 }}>{o.items?.length ?? '—'}</div>
                         </div>
                         <div>
-                          <div className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{t('account.orders.totalCol')}</div>
-                          <div style={{ color: '#f5f5f4', fontSize: 15, fontWeight: 700, marginTop: 4 }}>{fmtPrice(o.total)}</div>
+                          <div className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{t('account.orders.totalCol')}</div>
+                          <div style={{ color: '#F7F7F8', fontSize: 15, fontWeight: 700, marginTop: 4 }}>{fmtPrice(o.total)}</div>
                         </div>
-                        <ChevronRight size={14} style={{ color: '#6b6b70' }} />
+                        <ChevronRight size={14} style={{ color: '#6C6C76' }} />
                       </Link>
                     );
                   })}
@@ -258,14 +258,14 @@ export default function AccountPage() {
           {/* ADDRESSES */}
           {tab === 'addresses' && (
             <div>
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 24, borderBottom: '1px solid #2a2a30', paddingBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 24, borderBottom: '1px solid #26262E', paddingBottom: 16 }}>
                 <div>
-                  <div className="mono" style={{ fontSize: 11, color: '#a1a1a6', marginBottom: 6 }}>{t('account.addresses.kicker')}</div>
-                  <h2 style={{ margin: 0, fontSize: 26, fontWeight: 600, color: '#f5f5f4', letterSpacing: '-0.01em' }}>{t('account.addresses.title')}</h2>
+                  <div className="mono" style={{ fontSize: 11, color: '#A6A6AE', marginBottom: 6 }}>{t('account.addresses.kicker')}</div>
+                  <h2 style={{ margin: 0, fontSize: 26, fontWeight: 600, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{t('account.addresses.title')}</h2>
                 </div>
                 <Link href="/account/addresses" style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  padding: '9px 16px', background: '#ff6a2b', color: '#fff',
+                  padding: '9px 16px', background: '#FF7A33', color: '#fff',
                   borderRadius: 4, fontSize: 12, fontWeight: 600, textDecoration: 'none',
                 }}>
                   <Plus size={14} /> {t('account.addresses.newAddress')}
@@ -277,14 +277,14 @@ export default function AccountPage() {
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                   {addresses.map(addr => (
-                    <div key={addr.id} style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 20 }}>
+                    <div key={addr.id} style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 20 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#f5f5f4' }}>{addr.fullName}</div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: '#F7F7F8' }}>{addr.fullName}</div>
                         {addr.isDefault && (
-                          <span className="mono" style={{ fontSize: 10, padding: '3px 8px', background: '#1f1f23', color: '#a1a1a6', borderRadius: 3 }}>{t('account.addresses.default')}</span>
+                          <span className="mono" style={{ fontSize: 10, padding: '3px 8px', background: '#1A1A20', color: '#A6A6AE', borderRadius: 3 }}>{t('account.addresses.default')}</span>
                         )}
                       </div>
-                      <div style={{ color: '#a1a1a6', fontSize: 13, lineHeight: 1.6 }}>
+                      <div style={{ color: '#A6A6AE', fontSize: 13, lineHeight: 1.6 }}>
                         <div>{addr.phone}</div>
                         <div>{addr.address}</div>
                         <div>{addr.city}, {(addr as any).governorate}, {addr.country}</div>
@@ -315,13 +315,13 @@ export default function AccountPage() {
                   { type: 'Visa',       last: '4242', exp: '08/28' },
                   { type: 'Mastercard', last: '1847', exp: '11/27' },
                 ].map((c, i) => (
-                  <div key={i} style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 20 }}>
+                  <div key={i} style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 20 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                      <div style={{ width: 50, height: 32, background: '#1f1f23', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span className="mono" style={{ fontSize: 10, color: '#f5f5f4' }}>{c.type}</span>
+                      <div style={{ width: 50, height: 32, background: '#1A1A20', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span className="mono" style={{ fontSize: 10, color: '#F7F7F8' }}>{c.type}</span>
                       </div>
-                      <div className="mono" style={{ flex: 1, color: '#f5f5f4', fontSize: 14 }}>•••• •••• •••• {c.last}</div>
-                      <div className="mono" style={{ color: '#a1a1a6', fontSize: 12 }}>EXP {c.exp}</div>
+                      <div className="mono" style={{ flex: 1, color: '#F7F7F8', fontSize: 14 }}>•••• •••• •••• {c.last}</div>
+                      <div className="mono" style={{ color: '#A6A6AE', fontSize: 12 }}>EXP {c.exp}</div>
                       <button style={{ ...ghostBtn, marginLeft: 8 }}>{t('account.payment.remove')}</button>
                     </div>
                   </div>
@@ -334,7 +334,7 @@ export default function AccountPage() {
           {tab === 'settings' && (
             <div>
               <SectionHeader kicker={t('account.settings.kicker')} title={t('account.settings.title')} />
-              <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 24 }}>
+              <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 24 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                   <FieldInput label={t('account.settings.firstName')} value={nameVal.split(' ')[0]} onChange={() => {}} />
                   <FieldInput label={t('account.settings.lastName')} value={nameVal.split(' ').slice(1).join(' ')} onChange={() => {}} />
@@ -346,7 +346,7 @@ export default function AccountPage() {
                   <button
                     onClick={() => { setSaving(true); setTimeout(() => { setSaving(false); showToast(t('toasts.changesSaved')); }, 800); }}
                     style={{
-                      padding: '10px 20px', background: '#ff6a2b', color: '#fff',
+                      padding: '10px 20px', background: '#FF7A33', color: '#fff',
                       border: 'none', borderRadius: 4, fontSize: 13, fontWeight: 600,
                       cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6,
                       fontFamily: 'inherit',
@@ -368,22 +368,22 @@ export default function AccountPage() {
 // ── shared helpers ──────────────────────────────────────────────
 function SectionHeader({ kicker, title }: { kicker: string; title: string }) {
   return (
-    <div style={{ marginBottom: 24, borderBottom: '1px solid #2a2a30', paddingBottom: 16 }}>
-      <div className="mono" style={{ fontSize: 11, color: '#a1a1a6', marginBottom: 6 }}>{kicker}</div>
-      <h2 style={{ margin: 0, fontSize: 26, fontWeight: 600, color: '#f5f5f4', letterSpacing: '-0.01em' }}>{title}</h2>
+    <div style={{ marginBottom: 24, borderBottom: '1px solid #26262E', paddingBottom: 16 }}>
+      <div className="mono" style={{ fontSize: 11, color: '#A6A6AE', marginBottom: 6 }}>{kicker}</div>
+      <h2 style={{ margin: 0, fontSize: 26, fontWeight: 600, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{title}</h2>
     </div>
   );
 }
 
 function EmptyState({ icon: Icon, title, sub, href, cta }: { icon: React.ElementType; title: string; sub: string; href: string; cta: string }) {
   return (
-    <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-      <Icon size={44} strokeWidth={1.2} style={{ color: '#6b6b70', marginBottom: 16 }} />
-      <h3 style={{ color: '#f5f5f4', fontSize: 18, fontWeight: 600, margin: 0 }}>{title}</h3>
-      <p style={{ color: '#a1a1a6', fontSize: 14, marginTop: 8 }}>{sub}</p>
+    <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
+      <Icon size={44} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+      <h3 style={{ color: '#F7F7F8', fontSize: 18, fontWeight: 600, margin: 0 }}>{title}</h3>
+      <p style={{ color: '#A6A6AE', fontSize: 14, marginTop: 8 }}>{sub}</p>
       <Link href={href} style={{
         display: 'inline-flex', marginTop: 20, padding: '10px 20px',
-        background: '#ff6a2b', color: '#fff', borderRadius: 4,
+        background: '#FF7A33', color: '#fff', borderRadius: 4,
         fontSize: 13, fontWeight: 600, textDecoration: 'none',
       }}>{cta}</Link>
     </div>
@@ -393,15 +393,15 @@ function EmptyState({ icon: Icon, title, sub, href, cta }: { icon: React.Element
 function FieldInput({ label, value, onChange, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; type?: string }) {
   return (
     <label style={{ display: 'block' }}>
-      <div className="mono" style={{ fontSize: 10, color: '#a1a1a6', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
+      <div className="mono" style={{ fontSize: 10, color: '#A6A6AE', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
       <input
         type={type}
         defaultValue={value}
         onChange={e => onChange(e.target.value)}
         style={{
           width: '100%', padding: '12px 14px',
-          background: '#0e0e10', border: '1px solid #2a2a30', borderRadius: 4,
-          color: '#f5f5f4', fontFamily: 'inherit', fontSize: 14, outline: 'none',
+          background: '#0A0A0C', border: '1px solid #26262E', borderRadius: 4,
+          color: '#F7F7F8', fontFamily: 'inherit', fontSize: 14, outline: 'none',
           boxSizing: 'border-box' as const,
         }}
       />
@@ -412,7 +412,7 @@ function FieldInput({ label, value, onChange, type = 'text' }: { label: string; 
 const ghostBtn: React.CSSProperties = {
   display: 'inline-flex', alignItems: 'center', gap: 4,
   padding: '7px 12px', background: 'transparent',
-  border: '1px solid #2a2a30', borderRadius: 4,
-  color: '#a1a1a6', fontSize: 12, cursor: 'pointer',
+  border: '1px solid #26262E', borderRadius: 4,
+  color: '#A6A6AE', fontSize: 12, cursor: 'pointer',
   fontFamily: 'inherit',
 };

@@ -57,8 +57,8 @@ export default function Header({ navCategories }: HeaderProps) {
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         padding: '5px 9px', borderRadius: 4,
-        border: '1px solid #2a2a30', background: 'transparent',
-        color: '#f5f5f4', cursor: 'pointer',
+        border: '1px solid #26262E', background: 'transparent',
+        color: '#F7F7F8', cursor: 'pointer',
         fontSize: 12, fontWeight: 700,
         fontFamily: lang === 'ar' ? 'Cairo, sans-serif' : 'JetBrains Mono, monospace',
         letterSpacing: lang === 'ar' ? 0 : '0.05em',
@@ -75,8 +75,8 @@ export default function Header({ navCategories }: HeaderProps) {
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
         padding: '5px 9px', borderRadius: 4,
-        border: '1px solid #2a2a30', background: 'transparent',
-        color: '#ff6a2b', cursor: 'pointer',
+        border: '1px solid #26262E', background: 'transparent',
+        color: '#FF7A33', cursor: 'pointer',
         fontSize: 11, fontWeight: 700,
         fontFamily: 'JetBrains Mono, monospace',
         letterSpacing: '0.05em',
@@ -90,11 +90,11 @@ export default function Header({ navCategories }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-50" style={{ background: '#0e0e10f0', backdropFilter: 'blur(12px)', borderBottom: '1px solid #2a2a30' }}>
+      <header className="sticky top-0 z-50" style={{ background: '#0A0A0Cf0', backdropFilter: 'blur(12px)', borderBottom: '1px solid #26262E' }}>
 
         {/* Announcement bar — overflow hidden to prevent horizontal scroll */}
-        <div className="overflow-hidden" style={{ borderBottom: '1px solid #2a2a30', padding: '7px 16px', textAlign: 'center' }}>
-          <p className="mono text-[11px] truncate" style={{ color: '#a1a1a6', letterSpacing: '0.06em' }}>
+        <div className="overflow-hidden" style={{ borderBottom: '1px solid #26262E', padding: '7px 16px', textAlign: 'center' }}>
+          <p className="mono text-[11px] truncate" style={{ color: '#A6A6AE', letterSpacing: '0.06em' }}>
             {t('announce.bar')}
           </p>
         </div>
@@ -103,11 +103,17 @@ export default function Header({ navCategories }: HeaderProps) {
         <div className="md:hidden px-4 pt-3 pb-2.5">
           {/* Row 1: Brand + Cart + Lang + Menu */}
           <div className="flex items-center justify-between mb-2.5">
-            <Link href="/" style={{ display: 'flex', alignItems: 'baseline', gap: 5, textDecoration: 'none' }}>
-              <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em', color: '#f5f5f4' }}>
+            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              <span style={{
+                width: 30, height: 30, borderRadius: 9, flexShrink: 0,
+                background: 'linear-gradient(135deg,#FF7A33,#FF5C1A)',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: '#0A0A0C',
+                boxShadow: '0 0 16px rgba(255,122,51,0.45)',
+              }}>{storeConfig.name.charAt(0).toUpperCase()}</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, letterSpacing: '-0.01em', color: '#F7F7F8' }}>
                 {storeConfig.name}
               </span>
-              <span className="mono" style={{ fontSize: 9, color: '#ff6a2b', letterSpacing: '0.15em' }}>store</span>
             </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <button
@@ -123,7 +129,7 @@ export default function Header({ navCategories }: HeaderProps) {
               {langBtn}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 8, borderRadius: 4, color: '#f5f5f4', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 8, borderRadius: 4, color: '#F7F7F8', background: 'transparent', border: 'none', cursor: 'pointer' }}
                 aria-label="Menu"
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -133,14 +139,14 @@ export default function Header({ navCategories }: HeaderProps) {
           {/* Row 2: Search — full width */}
           <form
             onSubmit={handleSearch}
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}
           >
-            <Search size={15} strokeWidth={1.6} style={{ color: '#6b6b70', flexShrink: 0 }} />
+            <Search size={15} strokeWidth={1.6} style={{ color: '#6C6C76', flexShrink: 0 }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('common.search')}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f5f5f4', fontSize: 13, fontFamily: 'inherit', minWidth: 0 }}
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F7F7F8', fontSize: 13, fontFamily: 'inherit', minWidth: 0 }}
             />
           </form>
         </div>
@@ -151,23 +157,29 @@ export default function Header({ navCategories }: HeaderProps) {
           style={{ gridTemplateColumns: 'auto 1fr auto' }}
         >
           {/* Brand */}
-          <Link href="/" style={{ display: 'flex', alignItems: 'baseline', gap: 6, textDecoration: 'none' }}>
-            <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.02em', color: '#f5f5f4' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+            <span style={{
+              width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+              background: 'linear-gradient(135deg,#FF7A33,#FF5C1A)',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: '#0A0A0C',
+              boxShadow: '0 0 18px rgba(255,122,51,0.45)',
+            }}>{storeConfig.name.charAt(0).toUpperCase()}</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em', color: '#F7F7F8' }}>
               {storeConfig.name}
             </span>
-            <span className="mono" style={{ fontSize: 10, color: '#ff6a2b', letterSpacing: '0.15em' }}>store</span>
           </Link>
 
           {/* Search */}
-          <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4, color: '#a1a1a6' }}>
+          <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE' }}>
             <Search size={16} strokeWidth={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('common.search')}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f5f5f4', fontSize: 13, fontFamily: 'inherit' }}
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F7F7F8', fontSize: 13, fontFamily: 'inherit' }}
             />
-            <kbd className="mono" style={{ fontSize: 10, padding: '2px 6px', border: '1px solid #2a2a30', borderRadius: 3, color: '#6b6b70' }}>⌘ K</kbd>
+            <kbd className="mono" style={{ fontSize: 10, padding: '2px 6px', border: '1px solid #26262E', borderRadius: 3, color: '#6C6C76' }}>⌘ K</kbd>
           </form>
 
           {/* Right actions */}
@@ -195,13 +207,13 @@ export default function Header({ navCategories }: HeaderProps) {
               key={item.href}
               href={item.href}
               className="nav-cat-link"
-              style={{ color: pathname === item.href ? '#f5f5f4' : '#a1a1a6', fontWeight: pathname === item.href ? 600 : 400 }}
+              style={{ color: pathname === item.href ? '#F7F7F8' : '#A6A6AE', fontWeight: pathname === item.href ? 600 : 400 }}
             >
               {item.label}
             </Link>
           ))}
           {visibleCats.length > 0 && (
-            <span style={{ width: 1, height: 12, background: '#2a2a30', flexShrink: 0 }} />
+            <span style={{ width: 1, height: 12, background: '#26262E', flexShrink: 0 }} />
           )}
           {visibleCats.map(cat => {
             const href = `/category/${cat.slug}`;
@@ -211,14 +223,14 @@ export default function Header({ navCategories }: HeaderProps) {
                 key={cat.id}
                 href={href}
                 className="nav-cat-link"
-                style={{ color: active ? '#f5f5f4' : '#a1a1a6', fontWeight: active ? 600 : 400 }}
+                style={{ color: active ? '#F7F7F8' : '#A6A6AE', fontWeight: active ? 600 : 400 }}
               >
                 {getCategoryName(cat.slug, cat.name, lang)}
               </Link>
             );
           })}
           {visibleCats.length > 0 && (
-            <Link href="/products" className="nav-cat-link mono" style={{ color: '#6b6b70', fontSize: 11, letterSpacing: '0.1em', marginLeft: 4 }}>
+            <Link href="/products" className="nav-cat-link mono" style={{ color: '#6C6C76', fontSize: 11, letterSpacing: '0.1em', marginLeft: 4 }}>
               {isRTL ? '← الكل' : 'All →'}
             </Link>
           )}
@@ -239,21 +251,21 @@ export default function Header({ navCategories }: HeaderProps) {
           <div style={{
             position: 'absolute', top: 0, bottom: 0, right: 0,
             width: '100%', maxWidth: 340,
-            background: '#17171a',
-            borderLeft: '1px solid #2a2a30',
+            background: '#121216',
+            borderLeft: '1px solid #26262E',
             display: 'flex', flexDirection: 'column',
             overflowY: 'auto',
             zIndex: 10000,
           }}>
             {/* Drawer header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #2a2a30', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #26262E', flexShrink: 0 }}>
               <Link href="/" onClick={() => setMobileOpen(false)} style={{ display: 'flex', alignItems: 'baseline', gap: 5, textDecoration: 'none' }}>
-                <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.02em', color: '#f5f5f4' }}>{storeConfig.name}</span>
-                <span className="mono" style={{ fontSize: 9, color: '#ff6a2b', letterSpacing: '0.15em' }}>store</span>
+                <span style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.02em', color: '#F7F7F8' }}>{storeConfig.name}</span>
+                <span className="mono" style={{ fontSize: 9, color: '#FF7A33', letterSpacing: '0.15em' }}>store</span>
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
-                style={{ padding: 6, color: '#6b6b70', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 4 }}
+                style={{ padding: 6, color: '#6C6C76', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 4 }}
                 aria-label="Close menu"
               >
                 <X size={20} />
@@ -261,22 +273,22 @@ export default function Header({ navCategories }: HeaderProps) {
             </div>
 
             {/* Account shortcuts */}
-            <div style={{ display: 'flex', gap: 8, padding: '16px 20px', borderBottom: '1px solid #2a2a30' }}>
+            <div style={{ display: 'flex', gap: 8, padding: '16px 20px', borderBottom: '1px solid #26262E' }}>
               <Link href="/account" onClick={() => setMobileOpen(false)} style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                padding: '10px 12px', background: '#1f1f23', borderRadius: 6,
-                color: '#a1a1a6', textDecoration: 'none', fontSize: 13, fontWeight: 500,
+                padding: '10px 12px', background: '#1A1A20', borderRadius: 6,
+                color: '#A6A6AE', textDecoration: 'none', fontSize: 13, fontWeight: 500,
               }}>
                 <User size={14} strokeWidth={1.6} /> {t('nav.account')}
               </Link>
               <Link href="/account" onClick={() => setMobileOpen(false)} style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                padding: '10px 12px', background: '#1f1f23', borderRadius: 6,
-                color: '#a1a1a6', textDecoration: 'none', fontSize: 13, fontWeight: 500, position: 'relative',
+                padding: '10px 12px', background: '#1A1A20', borderRadius: 6,
+                color: '#A6A6AE', textDecoration: 'none', fontSize: 13, fontWeight: 500, position: 'relative',
               }}>
                 <Heart size={14} strokeWidth={1.6} /> {t('nav.wishlist')}
                 {wishlistCount > 0 && (
-                  <span style={{ position: 'absolute', top: 6, right: 8, background: '#ff6a2b', color: '#fff', borderRadius: 10, fontSize: 10, padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1.4 }}>
+                  <span style={{ position: 'absolute', top: 6, right: 8, background: '#FF7A33', color: '#fff', borderRadius: 10, fontSize: 10, padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1.4 }}>
                     {wishlistCount}
                   </span>
                 )}
@@ -284,16 +296,16 @@ export default function Header({ navCategories }: HeaderProps) {
             </div>
 
             {/* Main nav links */}
-            <div style={{ padding: '8px 0', borderBottom: '1px solid #2a2a30' }}>
+            <div style={{ padding: '8px 0', borderBottom: '1px solid #26262E' }}>
               {STATIC_NAV.map(item => (
                 <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} style={{
                   display: 'flex', alignItems: 'center',
                   padding: '14px 20px',
-                  color: pathname === item.href ? '#f5f5f4' : '#a1a1a6',
+                  color: pathname === item.href ? '#F7F7F8' : '#A6A6AE',
                   textDecoration: 'none', fontSize: 16, fontWeight: pathname === item.href ? 600 : 400,
-                  borderBottom: '1px solid #1f1f23',
+                  borderBottom: '1px solid #1A1A20',
                   transition: 'color 0.15s',
-                  borderRight: pathname === item.href ? '3px solid #ff6a2b' : '3px solid transparent',
+                  borderRight: pathname === item.href ? '3px solid #FF7A33' : '3px solid transparent',
                 }}>
                   {item.label}
                 </Link>
@@ -303,7 +315,7 @@ export default function Header({ navCategories }: HeaderProps) {
             {/* Categories */}
             {visibleCats.length > 0 && (
               <div style={{ padding: '8px 0', flex: 1 }}>
-                <div className="mono" style={{ fontSize: 10, color: '#6b6b70', padding: '12px 20px 8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                <div className="mono" style={{ fontSize: 10, color: '#6C6C76', padding: '12px 20px 8px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                   {t('nav.categories')}
                 </div>
                 {visibleCats.map(cat => {
@@ -313,10 +325,10 @@ export default function Header({ navCategories }: HeaderProps) {
                     <Link key={cat.id} href={href} onClick={() => setMobileOpen(false)} style={{
                       display: 'flex', alignItems: 'center',
                       padding: '12px 20px',
-                      color: active ? '#f5f5f4' : '#a1a1a6',
+                      color: active ? '#F7F7F8' : '#A6A6AE',
                       textDecoration: 'none', fontSize: 14, fontWeight: active ? 600 : 400,
-                      borderBottom: '1px solid #1f1f23',
-                      borderRight: active ? '3px solid #ff6a2b' : '3px solid transparent',
+                      borderBottom: '1px solid #1A1A20',
+                      borderRight: active ? '3px solid #FF7A33' : '3px solid transparent',
                       transition: 'color 0.15s',
                     }}>
                       {getCategoryName(cat.slug, cat.name, lang)}
@@ -326,7 +338,7 @@ export default function Header({ navCategories }: HeaderProps) {
                 <Link href="/products" onClick={() => setMobileOpen(false)} style={{
                   display: 'flex', alignItems: 'center', gap: 6,
                   padding: '13px 20px',
-                  color: '#ff6a2b', textDecoration: 'none', fontSize: 13, fontWeight: 600,
+                  color: '#FF7A33', textDecoration: 'none', fontSize: 13, fontWeight: 600,
                 }}>
                   {isRTL ? '← جميع المنتجات' : 'All Products →'}
                 </Link>

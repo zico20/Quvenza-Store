@@ -6,7 +6,7 @@ import { useLang } from '@/hooks/admin/useLang';
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   PENDING:    'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  PROCESSING: 'bg-[rgba(255,106,43,0.1)] text-[#ff6a2b] border-[rgba(255,106,43,0.2)]',
+  PROCESSING: 'bg-[rgba(255,106,43,0.1)] text-[#FF7A33] border-[rgba(255,106,43,0.2)]',
   SHIPPED:    'bg-purple-500/10 text-purple-400 border-purple-500/20',
   DELIVERED:  'bg-green-500/10 text-green-400 border-green-500/20',
   CANCELLED:  'bg-red-500/10 text-red-400 border-red-500/20',

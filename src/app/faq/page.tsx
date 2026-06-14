@@ -59,16 +59,16 @@ export default function FAQPage() {
       <JsonLd data={{ ...faqSchema(FAQS), speakable: speakableSpec(['.faq-question', '.faq-answer']) }} />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px' }}>
-        <h1 style={{ fontSize: 40, fontWeight: 700, color: '#f5f5f4', marginBottom: 12, letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: 40, fontWeight: 700, color: '#F7F7F8', marginBottom: 12, letterSpacing: '-0.02em' }}>
           الأسئلة الشائعة
         </h1>
-        <p style={{ color: '#a1a1a6', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
+        <p style={{ color: '#A6A6AE', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
           إجابات على أكثر الأسئلة شيوعاً عن متجر SoftoDev والاشتراكات الرقمية في العراق.
         </p>
 
         {GROUPS.map((group) => (
           <div key={group.title} style={{ marginBottom: 48 }}>
-            <h2 style={{ fontSize: 12, fontWeight: 700, color: '#ff6a2b', marginBottom: 16, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            <h2 style={{ fontSize: 12, fontWeight: 700, color: '#FF7A33', marginBottom: 16, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               {group.title}
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -78,21 +78,21 @@ export default function FAQPage() {
                   itemScope
                   itemProp="mainEntity"
                   itemType="https://schema.org/Question"
-                  style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 8, overflow: 'hidden' }}
+                  style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 8, overflow: 'hidden' }}
                 >
                   <summary
                     itemProp="name"
                     className="faq-question"
-                    style={{ padding: '16px 20px', cursor: 'pointer', fontWeight: 600, color: '#f5f5f4', fontSize: 15, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    style={{ padding: '16px 20px', cursor: 'pointer', fontWeight: 600, color: '#F7F7F8', fontSize: 15, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                   >
                     <span>{faq.question}</span>
-                    <span style={{ color: '#ff6a2b', flexShrink: 0, marginRight: 8 }}>+</span>
+                    <span style={{ color: '#FF7A33', flexShrink: 0, marginRight: 8 }}>+</span>
                   </summary>
                   <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
                     <p
                       itemProp="text"
                       className="faq-answer"
-                      style={{ padding: '0 20px 16px', color: '#a1a1a6', lineHeight: 1.75, fontSize: 14, margin: 0 }}
+                      style={{ padding: '0 20px 16px', color: '#A6A6AE', lineHeight: 1.75, fontSize: 14, margin: 0 }}
                     >
                       {faq.answer}
                     </p>
@@ -104,13 +104,13 @@ export default function FAQPage() {
         ))}
 
         <div style={{ background: 'rgba(255,106,43,0.08)', border: '1px solid rgba(255,106,43,0.25)', borderRadius: 8, padding: 32, textAlign: 'center', marginTop: 16 }}>
-          <h2 style={{ fontSize: 22, fontWeight: 600, color: '#f5f5f4', marginBottom: 8 }}>لم تجد إجابة؟</h2>
-          <p style={{ color: '#a1a1a6', marginBottom: 20 }}>تواصل معنا مباشرة على واتساب وسنجيبك خلال دقائق.</p>
+          <h2 style={{ fontSize: 22, fontWeight: 600, color: '#F7F7F8', marginBottom: 8 }}>لم تجد إجابة؟</h2>
+          <p style={{ color: '#A6A6AE', marginBottom: 20 }}>تواصل معنا مباشرة على واتساب وسنجيبك خلال دقائق.</p>
           <a
             href={`https://wa.me/${WHATSAPP}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'inline-block', background: '#ff6a2b', color: '#fff', padding: '12px 32px', borderRadius: 6, fontWeight: 600, textDecoration: 'none', fontSize: 15 }}
+            style={{ display: 'inline-block', background: '#FF7A33', color: '#fff', padding: '12px 32px', borderRadius: 6, fontWeight: 600, textDecoration: 'none', fontSize: 15 }}
           >
             تواصل عبر WhatsApp
           </a>

@@ -42,7 +42,7 @@ export function ProductNotFound() {
         <h2 className="text-xl font-semibold text-text-primary mb-2">{t('product.notFound')}</h2>
         <p className="text-text-muted mb-6">{t('product.notFoundSub')}</p>
         <button onClick={() => router.back()} className="btn-primary flex items-center gap-2 mx-auto">
-          <ArrowLeft size={16} /> {t('product.goBack')}
+          <ArrowLeft size={16} className="rtl-flip" /> {t('product.goBack')}
         </button>
       </div>
     </div>
@@ -137,11 +137,11 @@ export default function ProductDetailClient({ product }: Props) {
           <div className="flex flex-col gap-5">
             <div>
               {product.category?.name && (
-                <span className="badge mb-3 inline-block">{categoryName}</span>
+                <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-[0.08em] text-plasma font-[family-name:var(--font-display)]">{categoryName}</span>
               )}
-              <h1 className="text-xl sm:text-2xl font-bold text-text-primary tracking-tight mb-3">{product.name}</h1>
-              <div className="flex flex-wrap items-baseline gap-3">
-                <span className="text-xl sm:text-2xl font-bold text-text-primary">{formatPrice(product.price)}</span>
+              <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-3 font-[family-name:var(--font-display)]">{product.name}</h1>
+              <div className="flex flex-wrap items-baseline gap-3 ltr-nums">
+                <span className="text-2xl sm:text-3xl font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(product.price)}</span>
                 {product.comparePrice && (
                   <>
                     <span className="text-lg text-text-muted line-through">{formatPrice(product.comparePrice)}</span>
@@ -181,7 +181,7 @@ export default function ProductDetailClient({ product }: Props) {
                 className="btn-accent flex-1 py-3 flex items-center justify-center gap-2"
               >
                 {adding ? (
-                  <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{t('product.addingToCart')}</>
+                  <><div className="w-4 h-4 border-2 border-bg-base/30 border-t-bg-base rounded-full animate-spin" />{t('product.addingToCart')}</>
                 ) : (
                   <><ShoppingCart size={18} />{t('common.addToCart')}</>
                 )}
@@ -195,7 +195,7 @@ export default function ProductDetailClient({ product }: Props) {
               </button>
             </div>
 
-            {/* Trust signals */}
+            {/* Trust signals — the four conversion cues */}
             <div className="grid grid-cols-2 gap-2 pt-2">
               {[
                 { icon: '⚡', text: 'تفعيل خلال 30 دقيقة' },
@@ -203,13 +203,34 @@ export default function ProductDetailClient({ product }: Props) {
                 { icon: '🛡️', text: 'ضمان كامل' },
                 { icon: '💳', text: 'دفع بالدينار العراقي' },
               ].map((item) => (
-                <div key={item.text} style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#a1a1a6' }}>
-                  <span>{item.icon}</span> {item.text}
+                <div
+                  key={item.text}
+                  className="flex items-center gap-2 rounded-lg border border-border bg-bg-surface px-3 py-2.5 text-xs text-text-secondary"
+                >
+                  <span className="text-sm">{item.icon}</span> {item.text}
                 </div>
               ))}
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Spacer so the sticky bar never covers content on mobile */}
+      <div className="h-24 lg:hidden" />
+
+      {/* Mobile sticky add-to-cart bar */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-bg-surface/95 backdrop-blur px-4 py-3 flex items-center gap-3" style={{ boxShadow: 'var(--shadow-lg)' }}>
+        <div className="ltr-nums shrink-0">
+          <div className="text-lg font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(product.price)}</div>
+        </div>
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stock === 0 || adding}
+          className="btn-accent flex-1 py-3 min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          <ShoppingCart size={18} />
+          {product.stock === 0 ? t('common.outOfStock') : t('common.addToCart')}
+        </button>
       </div>
     </div>
   );

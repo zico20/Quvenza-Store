@@ -4,13 +4,14 @@ import type { DashboardStats, OrderStatus } from '@/types';
 
 type StatusData = DashboardStats['ordersByStatus'][number];
 
+// Voltage semantic palette (matches StatusBadge: in-progress = plasma)
 const STATUS_COLORS: Record<OrderStatus, string> = {
-  PENDING: '#EAB308',
-  PROCESSING: '#3B82F6',
-  SHIPPED: '#8B5CF6',
-  DELIVERED: '#22C55E',
-  CANCELLED: '#EF4444',
-  REFUNDED: '#F97316',
+  PENDING: '#FBBF24',     // warning
+  PROCESSING: '#19D4E8',  // plasma
+  SHIPPED: '#19D4E8',     // plasma
+  DELIVERED: '#34D399',   // success
+  CANCELLED: '#FB7185',   // error
+  REFUNDED: '#6C6C76',    // muted
 };
 
 export default function OrderStatusChart({ data }: { data: StatusData[] }) {
@@ -26,15 +27,15 @@ export default function OrderStatusChart({ data }: { data: StatusData[] }) {
           <PieChart>
             <Pie data={filtered} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={80} innerRadius={40}>
               {filtered.map((entry) => (
-                <Cell key={entry.status} fill={STATUS_COLORS[entry.status as OrderStatus] ?? '#6B7280'} />
+                <Cell key={entry.status} fill={STATUS_COLORS[entry.status as OrderStatus] ?? '#6C6C76'} />
               ))}
             </Pie>
             <Tooltip
-              contentStyle={{ backgroundColor: '#1f1f23', border: '1px solid #2a2a30', borderRadius: '6px', fontSize: '12px', color: '#f5f5f4' }}
+              contentStyle={{ backgroundColor: '#1A1A20', border: '1px solid #26262E', borderRadius: '6px', fontSize: '12px', color: '#F7F7F8' }}
               formatter={(v, name) => [v, name]}
             />
             <Legend
-              formatter={(value) => <span style={{ color: '#6b6b70', fontSize: '11px' }}>{value}</span>}
+              formatter={(value) => <span style={{ color: '#6C6C76', fontSize: '11px' }}>{value}</span>}
             />
           </PieChart>
         </ResponsiveContainer>

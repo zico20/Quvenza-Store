@@ -1,12 +1,14 @@
+// Voltage semantic map (see specs/.../data-model.md). Codes stay UPPERCASE;
+// token-based classes replace the old arbitrary rgba() values.
 const STYLES: Record<string, string> = {
-  PENDING:    'bg-[rgba(245,158,11,0.1)] text-warning border border-[rgba(245,158,11,0.2)]',
-  PROCESSING: 'bg-accent-subtle text-accent-text border border-[rgba(255,106,43,0.2)]',
-  SHIPPED:    'bg-[rgba(168,85,247,0.1)] text-purple-300 border border-[rgba(168,85,247,0.2)]',
-  DELIVERED:  'bg-[rgba(34,197,94,0.1)] text-success border border-[rgba(34,197,94,0.2)]',
-  CANCELLED:  'bg-[rgba(239,68,68,0.1)] text-error border border-[rgba(239,68,68,0.2)]',
+  PENDING:    'bg-warning/10 text-warning border border-warning/20',
+  PROCESSING: 'bg-plasma/10 text-plasma border border-plasma/20',
+  SHIPPED:    'bg-plasma/10 text-plasma border border-plasma/20',
+  DELIVERED:  'bg-success/10 text-success border border-success/20',
+  CANCELLED:  'bg-error/10 text-error border border-error/20',
   REFUNDED:   'bg-bg-elevated text-text-muted border border-border',
-  PAID:       'bg-[rgba(34,197,94,0.1)] text-success border border-[rgba(34,197,94,0.2)]',
-  FAILED:     'bg-[rgba(239,68,68,0.1)] text-error border border-[rgba(239,68,68,0.2)]',
+  PAID:       'bg-success/10 text-success border border-success/20',
+  FAILED:     'bg-error/10 text-error border border-error/20',
 };
 
 export default function StatusBadge({ status }: { status: string }) {

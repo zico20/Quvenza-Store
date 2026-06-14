@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cairo, Inter, JetBrains_Mono } from 'next/font/google';
+import { Cairo, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -21,6 +21,15 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-inter',
   preload: false,
+});
+
+// Space Grotesk — display/heading face (Latin) for the Voltage system
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-space-grotesk',
+  preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -112,7 +121,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#ff6a2b',
+  themeColor: '#FF7A33',
 };
 
 async function getNavCategories(): Promise<{ id: string; name: string; slug: string }[]> {
@@ -128,11 +137,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const navCategories = await getNavCategories();
 
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="author" href="/humans.txt" />
       </head>
-      <body className="flex flex-col min-h-screen" style={{ background: '#0e0e10', color: '#f5f5f4' }}>
+      <body className="flex flex-col min-h-screen" style={{ background: '#0A0A0C', color: '#F7F7F8' }}>
         <LangInitializer />
         <StoreChrome
           header={<Header navCategories={navCategories} />}

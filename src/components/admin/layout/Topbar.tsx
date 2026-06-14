@@ -76,10 +76,10 @@ export default function Topbar({ title = '' }: { title?: string }) {
           <Menu className="h-5 w-5" />
         </button>
         <div>
-          <div className="mono" style={{ fontSize: 10, color: '#6b6b70', marginBottom: 4 }}>
+          <div className="mono" style={{ fontSize: 10, color: '#6C6C76', marginBottom: 4 }}>
             DASHBOARD / {title.toUpperCase()}
           </div>
-          <h2 style={{ fontSize: 22, fontWeight: 600, color: '#f5f5f4', margin: 0, letterSpacing: '-0.01em' }}>{title}</h2>
+          <h2 style={{ fontSize: 22, fontWeight: 600, color: '#F7F7F8', margin: 0, letterSpacing: '-0.01em' }}>{title}</h2>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -88,8 +88,8 @@ export default function Topbar({ title = '' }: { title?: string }) {
           style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             padding: '6px 10px', borderRadius: 4,
-            border: '1px solid #2a2a30', background: 'transparent',
-            color: '#f5f5f4', cursor: 'pointer',
+            border: '1px solid #26262E', background: 'transparent',
+            color: '#F7F7F8', cursor: 'pointer',
             fontSize: 12, fontWeight: 700,
             fontFamily: lang === 'ar' ? 'Cairo, sans-serif' : 'JetBrains Mono, monospace',
           }}
@@ -105,7 +105,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
           >
             <Bell className="h-5 w-5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 h-4 w-4 text-white text-[10px] font-bold rounded-full flex items-center justify-center" style={{ background: '#ff6a2b', fontFamily: 'JetBrains Mono, monospace' }}>
+              <span className="absolute top-1 right-1 h-4 w-4 text-white text-[10px] font-bold rounded-full flex items-center justify-center" style={{ background: '#FF7A33', fontFamily: 'JetBrains Mono, monospace' }}>
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -119,7 +119,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
               <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                 <span className="text-sm font-semibold text-text-primary">{t('topbar.notifications')}</span>
                 {unreadCount > 0 && (
-                  <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'rgba(255,106,43,0.12)', color: '#ff6a2b', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 }}>{unreadCount} {t('topbar.unread')}</span>
+                  <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'rgba(255,106,43,0.12)', color: '#FF7A33', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 }}>{unreadCount} {t('topbar.unread')}</span>
                 )}
               </div>
               <div className="max-h-72 overflow-y-auto">
