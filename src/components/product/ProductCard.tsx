@@ -166,8 +166,8 @@ export default function ProductCard({ product }: { product: Product }) {
           onClick={handleAddToCart}
           disabled={product.stock === 0}
           style={{
-            marginTop: 6, width: '100%', minHeight: 40,
-            padding: '9px 8px', fontSize: 12, fontWeight: 700,
+            marginTop: 6, width: '100%', minHeight: 44,
+            padding: '11px 8px', fontSize: 12, fontWeight: 700,
             background: product.stock === 0 ? 'var(--color-bg-elevated)' : 'linear-gradient(135deg,#FF7A33,#FF5C1A)',
             color: product.stock === 0 ? 'var(--color-text-muted)' : '#0A0A0C',
             border: 'none', borderRadius: 10, cursor: product.stock === 0 ? 'not-allowed' : 'pointer',

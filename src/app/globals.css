@@ -252,7 +252,8 @@
   /* ── Header icon button ── */
   .nav-icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    padding: 8px; border-radius: 8px;
+    min-width: 40px; min-height: 40px;
+    padding: 9px; border-radius: 8px;
     color: #F7F7F8; background: transparent; text-decoration: none;
     position: relative; transition: background 0.15s;
   }

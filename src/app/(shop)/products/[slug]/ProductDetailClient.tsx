@@ -214,6 +214,24 @@ export default function ProductDetailClient({ product }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Spacer so the sticky bar never covers content on mobile */}
+      <div className="h-24 lg:hidden" />
+
+      {/* Mobile sticky add-to-cart bar */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-bg-surface/95 backdrop-blur px-4 py-3 flex items-center gap-3" style={{ boxShadow: 'var(--shadow-lg)' }}>
+        <div className="ltr-nums shrink-0">
+          <div className="text-lg font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(product.price)}</div>
+        </div>
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stock === 0 || adding}
+          className="btn-accent flex-1 py-3 min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          <ShoppingCart size={18} />
+          {product.stock === 0 ? t('common.outOfStock') : t('common.addToCart')}
+        </button>
+      </div>
     </div>
   );
 }

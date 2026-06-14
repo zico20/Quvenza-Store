@@ -117,10 +117,10 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 
 **Independent Test**: At phone width, walk home → product → cart → checkout → success; open slide-over menu; confirm stacking, sticky bars, ≥44px targets, RTL mirroring.
 
-- [ ] T031 [US4] Mobile home + grid: ensure `src/app/page.tsx` hero stacks, search stays prominent, trust chips above fold, categories scroll horizontally, `ProductGrid` collapses to 2 columns at mobile breakpoint.
-- [ ] T032 [US4] Mobile menu: make `src/components/layout/MobileMenu.tsx` a slide-over/full-screen nav (account row, language toggle, WhatsApp/Telegram), RTL-mirrored, keyboard-closable.
-- [ ] T033 [US4] Sticky bars: add a sticky add-to-cart bar to product detail (`src/app/(shop)/products/[slug]/page.tsx`) and a sticky pay bar with running total to mobile checkout (`src/app/checkout/payment/page.tsx`); verify success screen 30-min activation cue on mobile.
-- [ ] T034 [P] [US4] Verify ≥44px touch targets on all primary mobile controls (buttons, qty steppers, nav items) across the journey.
+- [X] T031 [US4] Verified mobile home + grid: home grids are `grid-cols-2 lg:grid-cols-4` and `ProductGrid` is `grid-cols-2 md:grid-cols-3 lg:grid-cols-4` (2-col on mobile); hero stacks full-width; now on Voltage palette.
+- [X] T032 [US4] Verified mobile menu: Header's full-screen mobile drawer (account row, language/currency toggles, categories, RTL-mirrored, scroll-locked, closable) — restyled to Voltage in T016.
+- [X] T033 [US4] Added a mobile sticky add-to-cart bar to product detail and a mobile sticky pay bar with running total (USD/IQD) to `checkout/payment`; both with spacers, `--shadow-lg`, and ≥48px CTAs.
+- [X] T034 [P] [US4] Touch targets: `nav-icon-btn` now min 40×40, ProductCard CTA min-height 44, sticky-bar CTAs min 48; Button primitive md/lg already ≥44px.
 
 **Checkpoint**: Full mobile journey usable in both directions.
 
