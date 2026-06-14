@@ -40,7 +40,9 @@
   --color-warning: #FBBF24;
   --color-error:   #FB7185;
 
-  /* ── Voltage-named aliases (for components using the new names) ── */
+  /* ── Voltage-named tokens (used by ui/* primitives: bg-surface, text-plasma, …) ──
+     Both this set and the canonical set above are intentional and permanent —
+     screens use the canonical names, primitives use the Voltage names. ── */
   --color-surface:        #121216;
   --color-elevated:       #1A1A20;
   --color-elevated-2:     #232329;

@@ -1,4 +1,5 @@
 'use client';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { X, ShoppingBag } from 'lucide-react';
 import { useCartStore } from '@/store/cart.store';
@@ -17,12 +18,23 @@ export default function CartDrawer() {
   // Secondary currency line (always show the other of USD/IQD as a trust cue)
   const secondary = fmt(total, currency === 'USD' ? 'IQD' : 'USD', storeConfig.exchangeRates.IQD_PER_USD);
 
+  // Close on Escape for keyboard users
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') toggleDrawer(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, toggleDrawer]);
+
   if (!isOpen) return null;
 
   return (
     <>
       <div className="fixed inset-0 bg-black/60 z-50" style={{ backdropFilter: 'blur(4px)' }} onClick={toggleDrawer} />
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('cart.title')}
         className="fixed top-0 h-full w-full bg-bg-surface border-border z-50 flex flex-col animate-[slideIn_.26s_cubic-bezier(.16,1,.3,1)]"
         style={{
           maxWidth: 'min(448px, 100vw)',

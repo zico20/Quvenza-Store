@@ -1341,9 +1341,28 @@ backend is running. The middleware checks for a valid token via the auth store.
 <!-- SPECKIT START -->
 ## Active Spec-Kit Feature
 
-- **Feature**: Voltage Storefront & Admin Redesign
-- **Branch**: `001-voltage-storefront-redesign`
-- **Plan**: `specs/001-voltage-storefront-redesign/plan.md`
+- **Feature**: Voltage Storefront & Admin Redesign — **implemented** (branch `001-voltage-storefront-redesign`)
+- **Plan**: `specs/001-voltage-storefront-redesign/plan.md` · **Tasks**: `specs/001-voltage-storefront-redesign/tasks.md`
 - **Note**: Live project is a single Next.js 16 / React 19 / Tailwind v4 app under `src/` (not the legacy monorepo described above). Treat `src/` as ground truth. Redesign is presentation-layer only — no routes/API/data-model/enum changes.
+
+### Voltage design system (current visual layer)
+
+- **Tokens** live in `src/app/globals.css` `@theme`. Two intentional, permanent name sets:
+  the **canonical** names (`--color-bg-base`, `--color-bg-surface`, `--color-text-primary`,
+  `--color-accent`, …) repointed to Voltage values and used by most screens via utility
+  classes (`bg-bg-base`, `text-text-primary`); and the **Voltage** names
+  (`--color-surface`, `--color-elevated-2`, `--color-text`, `--color-accent-hi`,
+  `--color-plasma`) used by `src/components/ui/*` primitives (`bg-surface`, `text-plasma`).
+- **Palette**: bg `#0A0A0C` · surface `#121216` · elevated `#1A1A20` · border `#26262E` ·
+  text `#F7F7F8`/`#A6A6AE`/`#6C6C76` · accent `#FF7A33` (hi `#FF9357`) · plasma `#19D4E8` ·
+  success `#34D399` · warning `#FBBF24` · error `#FB7185`.
+- **Fonts** (via `next/font` in `src/app/layout.tsx`): Space Grotesk (display, `--font-display`),
+  Inter (Latin body), Cairo (Arabic). Headings use the display face.
+- **Shared primitives**: `src/components/ui/{Button,EmptyState,Skeleton,Toast}.tsx`.
+- **Helpers in globals.css**: `.ltr-nums` (keep prices LTR in RTL), `.rtl-flip` (mirror
+  directional icons under RTL), `:focus-visible` ring, and a `prefers-reduced-motion` guard.
+- **Status pills**: `src/components/orders/StatusBadge.tsx` (+ admin variant) map UPPERCASE
+  enum codes → Voltage colors (PROCESSING/SHIPPED = plasma); codes stay UPPERCASE.
+- Do **not** reintroduce arbitrary hex; use tokens. Brand strings stay in `src/config/*`.
 <!-- SPECKIT END -->
 
