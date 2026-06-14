@@ -43,11 +43,11 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 - [X] T003 Replace the Graphite `@theme` block in `src/app/globals.css` with the Voltage token set (colors, radii, fonts, motion, shadows, glow) from `contracts/design-system.md` §1 and `data-model.md`; add the 8px spacing scale.
 - [X] T004 In `src/app/globals.css`, repoint the canonical token names to Voltage values (so existing `bg-bg-base`/`text-text-primary`/`border-border` utilities keep working) and add Voltage-named aliases (`--color-surface`, `--color-elevated-2`, `--color-text`, `--color-accent-hi`, `--color-plasma`); add a `@media (prefers-reduced-motion: reduce)` block disabling decorative animation, a `:focus-visible` ring, and a `.ltr-nums` helper.
 - [X] T005 Add **Space Grotesk** via `next/font/google` in `src/app/layout.tsx`, expose as `--font-space-grotesk`/`--font-display`, and wire base heading styles in `src/app/globals.css` to use it (Latin) while keeping Cairo for Arabic.
-- [ ] T006 [P] Create `src/components/ui/Button.tsx` — primary (accent gradient + glow), secondary (surface + border-strong), ghost variants; sm/md/lg sizes; hover/focus-visible/active/disabled/loading states; ≥44px tap target; typed props.
-- [ ] T007 [P] Create `src/components/ui/EmptyState.tsx` — icon + message + optional recovery action, RTL-aware.
-- [ ] T008 [P] Create `src/components/ui/Skeleton.tsx` — shimmer placeholder primitives (block + grid/table variants), no CLS.
-- [ ] T009 [P] Create `src/components/ui/Toast.tsx` (and minimal inline-alert) — semantic variants (success/error/warning/plasma-info) using tokens.
-- [ ] T010 Restyle the shared status pills to the Voltage semantic map (`data-model.md`): `src/components/orders/StatusBadge.tsx` (storefront) and `src/components/admin/orders/StatusBadge.tsx` (admin) — map UPPERCASE codes → color token + localized AR/EN label; neutral fallback for unmapped; codes unchanged.
+- [X] T006 [P] Create `src/components/ui/Button.tsx` — primary (accent gradient + glow), secondary (surface + border-strong), ghost variants; sm/md/lg sizes; hover/focus-visible/active/disabled/loading states; ≥44px tap target; typed props.
+- [X] T007 [P] Create `src/components/ui/EmptyState.tsx` — icon + message + optional recovery action, RTL-aware.
+- [X] T008 [P] Create `src/components/ui/Skeleton.tsx` — shimmer placeholder primitives (block + grid/table variants), no CLS.
+- [X] T009 [P] Create `src/components/ui/Toast.tsx` (and minimal inline-alert) — semantic variants (success/error/warning/plasma-info) using tokens.
+- [X] T010 Restyle the shared status pills to the Voltage semantic map (`data-model.md`): `src/components/orders/StatusBadge.tsx` (storefront) and `src/components/admin/orders/StatusBadge.tsx` (admin) — map UPPERCASE codes → color token + localized AR/EN label; neutral fallback for unmapped; codes unchanged.
 
 **Checkpoint**: Tokens live, display font active, shared primitives + status pills on Voltage. Screen migration can begin.
 
