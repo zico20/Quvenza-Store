@@ -11,10 +11,10 @@ function getStrength(pwd: string): { score: number; label: string; color: string
   const checks = [/[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/, /.{8}/];
   const score = checks.filter(r => r.test(pwd)).length;
   const map = [
-    { label: 'Weak',   color: '#f87171' },
+    { label: 'Weak',   color: '#FB7185' },
     { label: 'Fair',   color: '#fbbf24' },
     { label: 'Good',   color: '#fbbf24' },
-    { label: 'Strong', color: '#4ade80' },
+    { label: 'Strong', color: '#34D399' },
   ];
   return { score, ...map[Math.max(0, score - 1)] ?? map[0] };
 }
@@ -62,12 +62,12 @@ function Field({
           style={{
             width: '100%', padding: isPassword ? '11px 42px 11px 14px' : '11px 14px',
             background: disabled ? '#1a1a1d' : '#0A0A0C',
-            border: `1px solid ${error ? '#f87171' : '#26262E'}`, borderRadius: 4,
+            border: `1px solid ${error ? '#FB7185' : '#26262E'}`, borderRadius: 4,
             color: disabled ? '#6C6C76' : '#F7F7F8', fontFamily: 'inherit', fontSize: 14,
             outline: 'none', boxSizing: 'border-box' as const,
           }}
           onFocus={e => !disabled && (e.currentTarget.style.borderColor = '#FF7A33')}
-          onBlur={e => !disabled && (e.currentTarget.style.borderColor = error ? '#f87171' : '#26262E')}
+          onBlur={e => !disabled && (e.currentTarget.style.borderColor = error ? '#FB7185' : '#26262E')}
         />
         {isPassword && onToggleShow && (
           <button type="button" onClick={onToggleShow} style={{
@@ -78,7 +78,7 @@ function Field({
           </button>
         )}
       </div>
-      {error && <p style={{ color: '#f87171', fontSize: 11, marginTop: 4, fontFamily: 'JetBrains Mono, monospace' }}>{error}</p>}
+      {error && <p style={{ color: '#FB7185', fontSize: 11, marginTop: 4, fontFamily: 'JetBrains Mono, monospace' }}>{error}</p>}
     </label>
   );
 }
@@ -94,7 +94,7 @@ function useToast() {
 }
 
 // ── Avatar ──────────────────────────────────────────────────────
-const COLORS = ['#FF7A33','#4ade80','#60a5fa','#a78bfa','#fbbf24'];
+const COLORS = ['#FF7A33','#34D399','#60a5fa','#a78bfa','#fbbf24'];
 function avatar(name: string) {
   let h = 0; for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffffff;
   return { color: COLORS[Math.abs(h) % COLORS.length], initials: name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() };
@@ -282,9 +282,9 @@ export default function SettingsPage() {
         <div style={{
           position: 'fixed', top: 20, right: 24, zIndex: 100,
           padding: '12px 20px', borderRadius: 6, fontSize: 13, fontWeight: 500,
-          background: toast.ok ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
-          border: `1px solid ${toast.ok ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)'}`,
-          color: toast.ok ? '#4ade80' : '#f87171',
+          background: toast.ok ? 'rgba(52,211,153,0.15)' : 'rgba(251,113,133,0.15)',
+          border: `1px solid ${toast.ok ? 'rgba(52,211,153,0.3)' : 'rgba(251,113,133,0.3)'}`,
+          color: toast.ok ? '#34D399' : '#FB7185',
           display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(8px)',
         }}>
           {toast.ok ? <Check size={14} /> : <X size={14} />} {toast.msg}
@@ -400,7 +400,7 @@ export default function SettingsPage() {
                       <div>
                         <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{a.name}</div>
                         {isMe && (
-                          <span className="mono" style={{ fontSize: 9, padding: '2px 6px', background: 'rgba(255,106,43,0.12)', color: '#FF7A33', borderRadius: 3 }}>
+                          <span className="mono" style={{ fontSize: 9, padding: '2px 6px', background: 'rgba(255,122,51,0.12)', color: '#FF7A33', borderRadius: 3 }}>
                             {t('settings.youBadge')}
                           </span>
                         )}
@@ -420,7 +420,7 @@ export default function SettingsPage() {
                         onClick={() => !isMe && setDeleteTarget(a)}
                         disabled={isMe}
                         title={isMe ? 'Cannot delete yourself' : t('settings.deleteAdmin')}
-                        style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #26262E', color: isMe ? '#36363F' : '#f87171', cursor: isMe ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isMe ? 0.4 : 1 }}
+                        style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #26262E', color: isMe ? '#36363F' : '#FB7185', cursor: isMe ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isMe ? 0.4 : 1 }}
                       >
                         <Trash2 size={13} strokeWidth={1.6} />
                       </button>
@@ -482,7 +482,7 @@ export default function SettingsPage() {
           </p>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <button onClick={() => setDeleteTarget(null)} style={btnGhost}>{t('common.cancel')}</button>
-            <button onClick={handleDelete} style={{ ...btnOrange, background: '#f87171' }}>
+            <button onClick={handleDelete} style={{ ...btnOrange, background: '#FB7185' }}>
               <Trash2 size={14} strokeWidth={1.6} />
               {t('settings.deleteAdmin')}
             </button>

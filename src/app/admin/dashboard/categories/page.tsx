@@ -185,7 +185,7 @@ export default function CategoriesPage() {
                   placeholder="e.g. Electronics"
                   style={{ width: '100%', background: '#1A1A20', border: '1px solid #26262E', borderRadius: 4, padding: '8px 12px', color: '#F7F7F8', fontSize: 13, outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
                 />
-                {errors.name && <p style={{ color: '#f87171', fontSize: 11, marginTop: 4 }}>{errors.name.message}</p>}
+                {errors.name && <p style={{ color: '#FB7185', fontSize: 11, marginTop: 4 }}>{errors.name.message}</p>}
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: 12, color: '#A6A6AE', marginBottom: 6 }}>
@@ -196,7 +196,7 @@ export default function CategoriesPage() {
                   placeholder="e.g. electronics"
                   style={{ width: '100%', background: '#1A1A20', border: '1px solid #26262E', borderRadius: 4, padding: '8px 12px', color: '#F7F7F8', fontSize: 13, outline: 'none', fontFamily: 'JetBrains Mono, monospace', boxSizing: 'border-box' }}
                 />
-                {errors.slug && <p style={{ color: '#f87171', fontSize: 11, marginTop: 4 }}>{errors.slug.message}</p>}
+                {errors.slug && <p style={{ color: '#FB7185', fontSize: 11, marginTop: 4 }}>{errors.slug.message}</p>}
               </div>
               {editingCategory && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -306,7 +306,7 @@ export default function CategoriesPage() {
                   <span style={{
                     display: 'inline-flex', padding: '3px 10px', borderRadius: 3, fontSize: 10, fontWeight: 600,
                     fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em', textTransform: 'uppercase',
-                    background: 'rgba(74,222,128,0.1)', color: '#4ade80', border: '1px solid rgba(74,222,128,0.2)',
+                    background: 'rgba(52,211,153,0.1)', color: '#34D399', border: '1px solid rgba(52,211,153,0.2)',
                   }}>
                     {t('common.active')}
                   </span>

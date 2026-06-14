@@ -20,7 +20,7 @@ function getLevel(totalSpent: number): { label: string; color: string; bg: strin
 }
 
 // Avatar color from name
-const AVATAR_COLORS = ['#FF7A33','#4ade80','#60a5fa','#a78bfa','#fbbf24','#f87171'];
+const AVATAR_COLORS = ['#FF7A33','#34D399','#60a5fa','#a78bfa','#fbbf24','#FB7185'];
 function avatarColor(name: string) {
   let h = 0;
   for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffffff;
@@ -78,9 +78,9 @@ export default function CustomersPage() {
   const avgLifetimeValue = all.length > 0 ? all.reduce((s, c) => s + (c.totalSpent ?? 0), 0) / all.length : 0;
 
   const kpis = [
-    { label: t('customers.columns.customer') + ' ' + t('orders.total'), value: totalCustomers.toLocaleString(), sub: `+${all.filter(c => new Date(c.createdAt) > thirtyDaysAgo).length} ${t('dashboard.revenueToday') === 'Revenue today' ? 'this week' : 'هذا الأسبوع'}`, subColor: '#4ade80' },
+    { label: t('customers.columns.customer') + ' ' + t('orders.total'), value: totalCustomers.toLocaleString(), sub: `+${all.filter(c => new Date(c.createdAt) > thirtyDaysAgo).length} ${t('dashboard.revenueToday') === 'Revenue today' ? 'this week' : 'هذا الأسبوع'}`, subColor: '#34D399' },
     { label: t('orders.delivered').replace('(Month)', '(30d)'), value: active30d.toLocaleString(), sub: all.length > 0 ? `${Math.round((active30d / Math.max(all.length, 1)) * 100)}%` : '—', subColor: '#A6A6AE' },
-    { label: t('customers.columns.customer') + ' retention', value: `${retention}%`, sub: retention > 50 ? '+' + (retention - 50) + '%' : '—', subColor: '#4ade80' },
+    { label: t('customers.columns.customer') + ' retention', value: `${retention}%`, sub: retention > 50 ? '+' + (retention - 50) + '%' : '—', subColor: '#34D399' },
     { label: 'Lifetime Value', value: formatPrice(avgLifetimeValue), sub: all.length > 0 ? `${all.length} customers` : '—', subColor: '#A6A6AE' },
   ];
 

@@ -22,7 +22,7 @@ export default function StatsCard({ title, value, trend }: StatsCardProps) {
       {trend && (
         <div className="mono" style={{
           marginTop: 6, fontSize: 12,
-          color: trend.isPositive ? '#4ade80' : '#f87171',
+          color: trend.isPositive ? '#34D399' : '#FB7185',
         }}>
           {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%{' '}
           <span style={{ color: '#6C6C76' }}>vs yesterday</span>

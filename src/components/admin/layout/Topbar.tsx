@@ -119,7 +119,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
               <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                 <span className="text-sm font-semibold text-text-primary">{t('topbar.notifications')}</span>
                 {unreadCount > 0 && (
-                  <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'rgba(255,106,43,0.12)', color: '#FF7A33', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 }}>{unreadCount} {t('topbar.unread')}</span>
+                  <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'rgba(255,122,51,0.12)', color: '#FF7A33', fontFamily: 'JetBrains Mono, monospace', fontSize: 10 }}>{unreadCount} {t('topbar.unread')}</span>
                 )}
               </div>
               <div className="max-h-72 overflow-y-auto">

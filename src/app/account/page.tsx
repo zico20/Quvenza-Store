@@ -25,7 +25,7 @@ const STATUS_COLOR: Record<string, string> = {
   PENDING:    '#fbbf24',
   PROCESSING: '#60a5fa',
   SHIPPED:    '#FF7A33',
-  DELIVERED:  '#4ade80',
+  DELIVERED:  '#34D399',
   CANCELLED:  '#6C6C76',
   REFUNDED:   '#6C6C76',
 };
@@ -121,7 +121,7 @@ export default function AccountPage() {
       }}>
         <div style={{
           width: 72, height: 72, borderRadius: 36, flexShrink: 0,
-          background: 'rgba(255,106,43,0.14)', color: '#FF7A33',
+          background: 'rgba(255,122,51,0.14)', color: '#FF7A33',
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 28, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
         }}>{initials}</div>
@@ -175,7 +175,7 @@ export default function AccountPage() {
               display: 'flex', alignItems: 'center', gap: 12,
               padding: '12px 14px', textAlign: 'left',
               background: 'transparent', border: '1px solid transparent',
-              color: '#f87171', borderRadius: 6, cursor: 'pointer',
+              color: '#FB7185', borderRadius: 6, cursor: 'pointer',
               fontFamily: 'inherit', fontSize: 13, marginTop: 16,
             }}
           >
@@ -295,7 +295,7 @@ export default function AccountPage() {
                             <Star size={12} /> {t('account.addresses.setDefault')}
                           </button>
                         )}
-                        <button onClick={() => removeAddress(addr.id!)} style={{ ...ghostBtn, color: '#f87171' }}>
+                        <button onClick={() => removeAddress(addr.id!)} style={{ ...ghostBtn, color: '#FB7185' }}>
                           <Trash2 size={12} /> {t('account.addresses.remove')}
                         </button>
                       </div>

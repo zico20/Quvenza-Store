@@ -101,7 +101,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
           <div className="flex items-center gap-3 px-3 py-2.5 mb-0.5">
             <div style={{
               width: 28, height: 28, borderRadius: 14, flexShrink: 0,
-              background: 'rgba(255,106,43,0.14)', color: '#FF7A33',
+              background: 'rgba(255,122,51,0.14)', color: '#FF7A33',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
             }}>

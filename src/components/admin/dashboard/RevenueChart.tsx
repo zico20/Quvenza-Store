@@ -42,7 +42,7 @@ export default function RevenueChart({ data }: { data: { date: string; revenue: 
           <Tooltip
             contentStyle={{ backgroundColor: '#1A1A20', border: '1px solid #26262E', borderRadius: 6, fontSize: 12, color: '#F7F7F8' }}
             formatter={v => [`$${Number(v).toFixed(0)}`, 'Revenue']}
-            cursor={{ fill: 'rgba(255,106,43,0.06)' }}
+            cursor={{ fill: 'rgba(255,122,51,0.06)' }}
           />
           <Bar
             dataKey="revenue"

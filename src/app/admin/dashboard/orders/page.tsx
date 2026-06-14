@@ -82,7 +82,7 @@ export default function OrdersPage() {
       label: t('orders.today'),
       value: todayOrders.length,
       sub: todayRevenue > 0 ? formatPrice(todayRevenue) : '—',
-      subColor: '#4ade80',
+      subColor: '#34D399',
     },
     {
       label: t('orders.processing'),
@@ -94,7 +94,7 @@ export default function OrdersPage() {
       label: t('orders.delivered'),
       value: deliveredMonth.length,
       sub: deliveredMonth.length > 0 ? '+' + deliveredMonth.length : '—',
-      subColor: '#4ade80',
+      subColor: '#34D399',
     },
     {
       label: t('orders.avgValue'),

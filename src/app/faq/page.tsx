@@ -103,7 +103,7 @@ export default function FAQPage() {
           </div>
         ))}
 
-        <div style={{ background: 'rgba(255,106,43,0.08)', border: '1px solid rgba(255,106,43,0.25)', borderRadius: 8, padding: 32, textAlign: 'center', marginTop: 16 }}>
+        <div style={{ background: 'rgba(255,122,51,0.08)', border: '1px solid rgba(255,122,51,0.25)', borderRadius: 8, padding: 32, textAlign: 'center', marginTop: 16 }}>
           <h2 style={{ fontSize: 22, fontWeight: 600, color: '#F7F7F8', marginBottom: 8 }}>لم تجد إجابة؟</h2>
           <p style={{ color: '#A6A6AE', marginBottom: 20 }}>تواصل معنا مباشرة على واتساب وسنجيبك خلال دقائق.</p>
           <a

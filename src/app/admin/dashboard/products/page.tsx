@@ -117,7 +117,7 @@ export default function ProductsPage() {
                   {/* Price */}
                   <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{formatPrice(p.price)}</div>
                   {/* Stock */}
-                  <div style={{ fontSize: 13, fontWeight: 600, color: p.stock === 0 ? '#f87171' : p.stock <= 10 ? '#fbbf24' : '#4ade80' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: p.stock === 0 ? '#FB7185' : p.stock <= 10 ? '#fbbf24' : '#34D399' }}>
                     {p.stock}
                   </div>
                   {/* Status */}
@@ -125,9 +125,9 @@ export default function ProductsPage() {
                     <span style={{
                       display: 'inline-flex', padding: '3px 10px', borderRadius: 3, fontSize: 10, fontWeight: 600,
                       fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.08em', textTransform: 'uppercase',
-                      background: p.isActive ? 'rgba(74,222,128,0.1)' : 'rgba(248,113,113,0.1)',
-                      color: p.isActive ? '#4ade80' : '#f87171',
-                      border: `1px solid ${p.isActive ? 'rgba(74,222,128,0.2)' : 'rgba(248,113,113,0.2)'}`,
+                      background: p.isActive ? 'rgba(52,211,153,0.1)' : 'rgba(251,113,133,0.1)',
+                      color: p.isActive ? '#34D399' : '#FB7185',
+                      border: `1px solid ${p.isActive ? 'rgba(52,211,153,0.2)' : 'rgba(251,113,133,0.2)'}`,
                     }}>
                       {p.isActive ? t('common.active') : t('common.inactive')}
                     </span>

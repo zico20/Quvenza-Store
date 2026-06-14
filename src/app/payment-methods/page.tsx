@@ -23,7 +23,7 @@ const methods = [
     nameEn: 'Cash on Delivery',
     desc: 'ادفع نقداً بعد التفعيل. لا رسوم إضافية.',
     note: 'متاح في بغداد حالياً',
-    color: '#4ade80',
+    color: '#34D399',
   },
   {
     icon: '📱',
@@ -86,7 +86,7 @@ export default function PaymentMethodsPage() {
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
             {['بطاقات فيزا أو ماستركارد دولية', 'PayPal', 'تحويلات Western Union', 'عملات رقمية (Crypto)'].map((item) => (
               <li key={item} style={{ color: '#A6A6AE', fontSize: 14, display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ color: '#f87171' }}>✗</span> {item}
+                <span style={{ color: '#FB7185' }}>✗</span> {item}
               </li>
             ))}
           </ul>
@@ -95,7 +95,7 @@ export default function PaymentMethodsPage() {
           </p>
         </div>
 
-        <div style={{ textAlign: 'center', padding: 32, background: 'rgba(255,106,43,0.06)', border: '1px solid rgba(255,106,43,0.2)', borderRadius: 8 }}>
+        <div style={{ textAlign: 'center', padding: 32, background: 'rgba(255,122,51,0.06)', border: '1px solid rgba(255,122,51,0.2)', borderRadius: 8 }}>
           <p style={{ color: '#A6A6AE', marginBottom: 16 }}>لديك سؤال عن طريقة الدفع؟</p>
           <a href="/contact" style={{ display: 'inline-block', background: '#FF7A33', color: '#fff', padding: '10px 28px', borderRadius: 6, fontWeight: 600, textDecoration: 'none' }}>
             تواصل معنا

@@ -80,7 +80,7 @@ export default function AboutPage() {
           اليوم، SoftoDev هو الخيار الأول للطلاب، صناع المحتوى، أصحاب الأعمال الصغيرة، والمصممين العراقيين الذين يريدون أدوات احترافية بثقة محلية.
         </p>
 
-        <div style={{ background: 'rgba(255,106,43,0.08)', border: '1px solid rgba(255,106,43,0.25)', borderRadius: 8, padding: 32, textAlign: 'center' }}>
+        <div style={{ background: 'rgba(255,122,51,0.08)', border: '1px solid rgba(255,122,51,0.25)', borderRadius: 8, padding: 32, textAlign: 'center' }}>
           <p style={{ color: '#A6A6AE', marginBottom: 16, fontSize: 16 }}>هل لديك سؤال؟ نحن هنا</p>
           <a
             href="/contact"

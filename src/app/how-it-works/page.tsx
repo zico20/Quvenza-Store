@@ -78,7 +78,7 @@ export default function HowItWorksPage() {
             <div key={step.num} style={{ display: 'flex', gap: 24, marginBottom: i < STEPS.length - 1 ? 40 : 0, alignItems: 'flex-start' }}>
               {/* Number + connector */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,106,43,0.12)', border: '2px solid #FF7A33', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#FF7A33', fontFamily: 'JetBrains Mono, monospace' }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,122,51,0.12)', border: '2px solid #FF7A33', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#FF7A33', fontFamily: 'JetBrains Mono, monospace' }}>
                   {step.num}
                 </div>
                 {i < STEPS.length - 1 && (
@@ -98,9 +98,9 @@ export default function HowItWorksPage() {
 
         {/* Time indicator */}
         <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 8, padding: 24, marginTop: 48, display: 'flex', alignItems: 'center', gap: 20 }}>
-          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(74,222,128,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>⏱️</div>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(52,211,153,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>⏱️</div>
           <div>
-            <div style={{ fontWeight: 700, color: '#4ade80', fontSize: 18 }}>إجمالي الوقت: أقل من 30 دقيقة</div>
+            <div style={{ fontWeight: 700, color: '#34D399', fontSize: 18 }}>إجمالي الوقت: أقل من 30 دقيقة</div>
             <div style={{ color: '#A6A6AE', fontSize: 14, marginTop: 4 }}>من لحظة الدفع حتى بدء الاستخدام — أسرع من طلب بيتزا</div>
           </div>
         </div>

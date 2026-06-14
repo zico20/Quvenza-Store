@@ -128,7 +128,7 @@ export default function AddressesPage() {
               key={addr.id}
               style={{
                 background: '#121216',
-                border: `1px solid ${addr.isDefault ? 'rgba(255,106,43,0.4)' : '#26262E'}`,
+                border: `1px solid ${addr.isDefault ? 'rgba(255,122,51,0.4)' : '#26262E'}`,
                 borderRadius: 6, padding: 20,
                 position: 'relative',
               }}
@@ -138,14 +138,14 @@ export default function AddressesPage() {
                 <div style={{
                   position: 'absolute', top: 16, right: 16,
                   fontFamily: 'JetBrains Mono, monospace', fontSize: 9,
-                  padding: '3px 8px', background: 'rgba(255,106,43,0.12)',
+                  padding: '3px 8px', background: 'rgba(255,122,51,0.12)',
                   color: '#FF7A33', borderRadius: 3, letterSpacing: '0.08em', textTransform: 'uppercase',
                 }}>{t('account.addresses.default')}</div>
               )}
 
               {/* Name + phone */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: 18, background: 'rgba(255,106,43,0.10)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 18, background: 'rgba(255,122,51,0.10)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <MapPin size={16} style={{ color: '#FF7A33' }} strokeWidth={1.6} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -175,7 +175,7 @@ export default function AddressesPage() {
                     {t('account.addresses.setDefault')}
                   </button>
                 )}
-                <button onClick={() => remove(addr.id!)} style={{ ...actionBtn, color: '#f87171', borderColor: 'rgba(248,113,113,0.2)' }}>
+                <button onClick={() => remove(addr.id!)} style={{ ...actionBtn, color: '#FB7185', borderColor: 'rgba(251,113,133,0.2)' }}>
                   <Trash2 size={12} strokeWidth={1.6} />
                   {t('account.addresses.remove')}
                 </button>

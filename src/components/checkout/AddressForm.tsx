@@ -46,7 +46,7 @@ function Label({ children }: { children: React.ReactNode }) {
 
 function ErrorMsg({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return <p style={{ color: '#f87171', fontSize: 11, marginTop: 5, fontFamily: 'JetBrains Mono, monospace' }}>{msg}</p>;
+  return <p style={{ color: '#FB7185', fontSize: 11, marginTop: 5, fontFamily: 'JetBrains Mono, monospace' }}>{msg}</p>;
 }
 
 // ── Component ────────────────────────────────────────────────
