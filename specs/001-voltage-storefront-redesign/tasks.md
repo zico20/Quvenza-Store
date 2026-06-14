@@ -29,8 +29,8 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 
 **Purpose**: Reference material and a safe starting point.
 
-- [ ] T001 Confirm branch `001-voltage-storefront-redesign` is checked out and working tree is clean; review `specs/001-voltage-storefront-redesign/contracts/design-system.md` and `data-model.md` as the token/component source of truth.
-- [ ] T002 [P] Capture a baseline `npm run type-check` and `npm run lint` result so regressions introduced by the redesign are detectable.
+- [X] T001 Confirm branch `001-voltage-storefront-redesign` is checked out and working tree is clean; review `specs/001-voltage-storefront-redesign/contracts/design-system.md` and `data-model.md` as the token/component source of truth.
+- [X] T002 [P] Capture a baseline `npm run type-check` and `npm run lint` result so regressions introduced by the redesign are detectable.
 
 ---
 
@@ -40,9 +40,9 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 
 **⚠️ CRITICAL**: No screen migration can begin until T003–T010 are complete.
 
-- [ ] T003 Replace the Graphite `@theme` block in `src/app/globals.css` with the Voltage token set (colors, radii, fonts, motion, shadows, glow) from `contracts/design-system.md` §1 and `data-model.md`; add the 8px spacing scale.
-- [ ] T004 In `src/app/globals.css`, add temporary backward-compatible aliases mapping old token names (`--color-bg-surface`→surface, `--color-text-primary`→text, `--color-accent-hover`→accent-hi, `--color-bg-base`, `--color-border*`) so existing components keep rendering during migration; add a `@media (prefers-reduced-motion: reduce)` block disabling decorative animations.
-- [ ] T005 Add **Space Grotesk** via `next/font/google` in `src/app/layout.tsx`, expose as `--font-display`, and wire base heading styles in `src/app/globals.css` to use it (Latin) while keeping Cairo for Arabic.
+- [X] T003 Replace the Graphite `@theme` block in `src/app/globals.css` with the Voltage token set (colors, radii, fonts, motion, shadows, glow) from `contracts/design-system.md` §1 and `data-model.md`; add the 8px spacing scale.
+- [X] T004 In `src/app/globals.css`, repoint the canonical token names to Voltage values (so existing `bg-bg-base`/`text-text-primary`/`border-border` utilities keep working) and add Voltage-named aliases (`--color-surface`, `--color-elevated-2`, `--color-text`, `--color-accent-hi`, `--color-plasma`); add a `@media (prefers-reduced-motion: reduce)` block disabling decorative animation, a `:focus-visible` ring, and a `.ltr-nums` helper.
+- [X] T005 Add **Space Grotesk** via `next/font/google` in `src/app/layout.tsx`, expose as `--font-space-grotesk`/`--font-display`, and wire base heading styles in `src/app/globals.css` to use it (Latin) while keeping Cairo for Arabic.
 - [ ] T006 [P] Create `src/components/ui/Button.tsx` — primary (accent gradient + glow), secondary (surface + border-strong), ghost variants; sm/md/lg sizes; hover/focus-visible/active/disabled/loading states; ≥44px tap target; typed props.
 - [ ] T007 [P] Create `src/components/ui/EmptyState.tsx` — icon + message + optional recovery action, RTL-aware.
 - [ ] T008 [P] Create `src/components/ui/Skeleton.tsx` — shimmer placeholder primitives (block + grid/table variants), no CLS.

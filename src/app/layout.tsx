@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cairo, Inter, JetBrains_Mono } from 'next/font/google';
+import { Cairo, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -21,6 +21,15 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-inter',
   preload: false,
+});
+
+// Space Grotesk — display/heading face (Latin) for the Voltage system
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-space-grotesk',
+  preload: true,
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -128,7 +137,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const navCategories = await getNavCategories();
 
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="author" href="/humans.txt" />
       </head>
