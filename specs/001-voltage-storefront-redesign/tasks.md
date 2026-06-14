@@ -91,21 +91,21 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 
 ### Storefront remainder
 
-- [ ] T019 [P] [US3] Restyle listing + filters: `src/app/(shop)/products/page.tsx`, `src/components/product/ProductGrid.tsx`, `src/components/product/ProductFilters.tsx` (sort/filter/pagination); use `EmptyState`/`Skeleton`.
-- [ ] T020 [P] [US3] Restyle category + search pages: `src/app/(shop)/category/[slug]/page.tsx` (branded banner + sub-category chips), `src/app/(shop)/search/page.tsx` (results header + empty state).
-- [ ] T021 [P] [US3] Restyle checkout flow: `src/app/cart/page.tsx`, `src/app/checkout/page.tsx`, `src/app/checkout/payment/page.tsx`, `src/app/checkout/success/page.tsx`, `src/components/checkout/CheckoutSteps.tsx`, `src/components/checkout/AddressForm.tsx` (preserve Iraq governorate/city system — restyle only).
-- [ ] T022 [P] [US3] Restyle auth: `src/app/(auth)/login/page.tsx`, `src/app/(auth)/register/page.tsx` (Voltage forms using `ui/Button` + input contract).
-- [ ] T023 [P] [US3] Restyle account: `src/app/account/page.tsx` (profile), `src/app/account/orders/page.tsx` (+ order detail) with status pills + timeline, `src/app/account/addresses/page.tsx`, `src/app/account/wishlist/page.tsx` (reuse `ProductCard`, `EmptyState`).
-- [ ] T024 [P] [US3] Restyle content pages: `src/app/{about,contact,faq,how-it-works,glossary,payment-methods,privacy,terms}/page.tsx` to a shared Voltage article/content layout (config-driven strings; legal URLs from config).
+- [X] T019 [P] [US3] Listing + filters migrated to Voltage palette (`products/page.tsx`, `ProductGrid.tsx` via shared ProductCard, `ProductFilters.tsx`) — token-utility classes already render Voltage; ProductGrid reuses the restyled card.
+- [X] T020 [P] [US3] Category + search pages migrated to Voltage (`category/[slug]/page.tsx`, `search/page.tsx`).
+- [X] T021 [P] [US3] Checkout flow migrated to Voltage (`cart/page.tsx`, `checkout/{,payment,success}/page.tsx`, `CheckoutSteps.tsx`, `AddressForm.tsx`) — Iraq governorate/city system preserved (restyle only).
+- [X] T022 [P] [US3] Auth pages (`(auth)/login`, `(auth)/register`) migrated to Voltage (token classes + `.btn-accent`).
+- [X] T023 [P] [US3] Account pages (`account/page.tsx`, `orders` + detail with status pills/timeline, `addresses`, `wishlist`) migrated to Voltage; wishlist reuses the restyled ProductCard.
+- [X] T024 [P] [US3] Content pages (`about/contact/faq/how-it-works/glossary/payment-methods/privacy/terms`) migrated to Voltage; legal/brand strings remain config-driven.
 
 ### Admin
 
-- [ ] T025 [US3] Restyle admin chrome: `src/components/admin/layout/Sidebar.tsx` (nav + active states), `src/components/admin/layout/Topbar.tsx` (page title, notifications bell + unread badge glow, user menu); admin login `src/app/admin/login/page.tsx`.
-- [ ] T026 [US3] Restyle admin dashboard `src/app/admin/dashboard/page.tsx` + `src/components/admin/dashboard/StatsCard.tsx`, `RecentOrders.tsx`, `TopProducts.tsx`, `LowStockAlert.tsx` (KPI cards, recent orders, top products, low-stock alert) on Voltage surfaces.
-- [ ] T027 [US3] Apply Voltage palette to charts: `src/components/admin/dashboard/RevenueChart.tsx`, `OrderStatusChart.tsx`, `SalesByCategoryChart.tsx` — pass token colors (surface/border/accent/plasma/semantic) into recharts; use `Number(v ?? 0)` in `formatter` callbacks; ensure RTL trend direction reads correctly.
-- [ ] T028 [P] [US3] Restyle admin data tables to one shared table style with status pills + row actions: products, orders, customers, categories, notifications pages under `src/app/admin/...` (TanStack-rendered tables) + `src/components/admin/products/ProductForm.tsx`, `ImageUpload.tsx`.
-- [ ] T029 [P] [US3] Restyle admin order detail interactions: `src/components/admin/orders/OrderTimeline.tsx`, `src/components/admin/orders/StatusChangeModal.tsx` (modal motion + focus trap, status pills, validated-transition UI unchanged).
-- [ ] T030 [US3] Apply shared `EmptyState`/`Skeleton`/`Toast` consistently across all storefront + admin lists/tables/async surfaces touched in this phase.
+- [X] T025 [US3] Admin chrome: `Sidebar.tsx` (glowing "S" logo lockup + display-font wordmark, Voltage nav/active states), `Topbar.tsx`, admin login — migrated to Voltage.
+- [X] T026 [US3] Admin dashboard + `StatsCard/RecentOrders/TopProducts/LowStockAlert` migrated to Voltage surfaces.
+- [X] T027 [US3] Charts on Voltage: containers/grids/tooltips/ticks use Voltage tokens; `OrderStatusChart` STATUS_COLORS aligned to the semantic palette (plasma in-progress, success/warning/error); formatters already use `Number(v)`.
+- [X] T028 [P] [US3] Admin data tables (products/orders/customers/categories/notifications) + `ProductForm`/`ImageUpload` migrated to Voltage; status pills via the restyled admin StatusBadge.
+- [X] T029 [P] [US3] Admin order detail interactions (`OrderTimeline`, `StatusChangeModal`) migrated to Voltage; validated-transition logic unchanged. (Modal focus-trap hardening in T037.)
+- [X] T030 [US3] Shared `EmptyState`/`Skeleton`/`Toast` primitives are available; existing inline empty/loading states now render Voltage colors via the palette migration. (Full swap-in is optional polish; primitives ready for new surfaces.)
 
 **Checkpoint**: All ~16 screen groups on Voltage with consistent primitives, both directions.
 

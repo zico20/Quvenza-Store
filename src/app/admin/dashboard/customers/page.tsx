@@ -16,11 +16,11 @@ function formatDate(s: string) {
 function getLevel(totalSpent: number): { label: string; color: string; bg: string } {
   if (totalSpent >= 1000) return { label: 'PLATINUM', color: '#a78bfa', bg: 'rgba(167,139,250,0.12)' };
   if (totalSpent >= 200)  return { label: 'GOLD',     color: '#fbbf24', bg: 'rgba(251,191,36,0.12)' };
-  return                          { label: 'SILVER',   color: '#a1a1a6', bg: 'rgba(161,161,166,0.12)' };
+  return                          { label: 'SILVER',   color: '#A6A6AE', bg: 'rgba(161,161,166,0.12)' };
 }
 
 // Avatar color from name
-const AVATAR_COLORS = ['#ff6a2b','#4ade80','#60a5fa','#a78bfa','#fbbf24','#f87171'];
+const AVATAR_COLORS = ['#FF7A33','#4ade80','#60a5fa','#a78bfa','#fbbf24','#f87171'];
 function avatarColor(name: string) {
   let h = 0;
   for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffffff;
@@ -79,9 +79,9 @@ export default function CustomersPage() {
 
   const kpis = [
     { label: t('customers.columns.customer') + ' ' + t('orders.total'), value: totalCustomers.toLocaleString(), sub: `+${all.filter(c => new Date(c.createdAt) > thirtyDaysAgo).length} ${t('dashboard.revenueToday') === 'Revenue today' ? 'this week' : 'هذا الأسبوع'}`, subColor: '#4ade80' },
-    { label: t('orders.delivered').replace('(Month)', '(30d)'), value: active30d.toLocaleString(), sub: all.length > 0 ? `${Math.round((active30d / Math.max(all.length, 1)) * 100)}%` : '—', subColor: '#a1a1a6' },
+    { label: t('orders.delivered').replace('(Month)', '(30d)'), value: active30d.toLocaleString(), sub: all.length > 0 ? `${Math.round((active30d / Math.max(all.length, 1)) * 100)}%` : '—', subColor: '#A6A6AE' },
     { label: t('customers.columns.customer') + ' retention', value: `${retention}%`, sub: retention > 50 ? '+' + (retention - 50) + '%' : '—', subColor: '#4ade80' },
-    { label: 'Lifetime Value', value: formatPrice(avgLifetimeValue), sub: all.length > 0 ? `${all.length} customers` : '—', subColor: '#a1a1a6' },
+    { label: 'Lifetime Value', value: formatPrice(avgLifetimeValue), sub: all.length > 0 ? `${all.length} customers` : '—', subColor: '#A6A6AE' },
   ];
 
   const totalPages = Math.ceil(total / limit);
@@ -95,9 +95,9 @@ export default function CustomersPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {kpis.map(k => (
-            <div key={k.label} style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: 20 }}>
-              <div className="mono" style={{ fontSize: 11, color: '#6b6b70', marginBottom: 10 }}>{k.label}</div>
-              <div style={{ fontSize: 26, fontWeight: 700, color: '#f5f5f4', letterSpacing: '-0.01em' }}>{k.value}</div>
+            <div key={k.label} style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 20 }}>
+              <div className="mono" style={{ fontSize: 11, color: '#6C6C76', marginBottom: 10 }}>{k.label}</div>
+              <div style={{ fontSize: 26, fontWeight: 700, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{k.value}</div>
               <div className="mono" style={{ marginTop: 6, fontSize: 12, color: k.subColor }}>{k.sub}</div>
             </div>
           ))}
@@ -105,16 +105,16 @@ export default function CustomersPage() {
 
         {/* Toolbar */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }}>
-            <Search size={15} style={{ color: '#6b6b70', flexShrink: 0 }} strokeWidth={1.6} />
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}>
+            <Search size={15} style={{ color: '#6C6C76', flexShrink: 0 }} strokeWidth={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('customers.search')}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f5f5f4', fontSize: 13, fontFamily: 'inherit' }}
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F7F7F8', fontSize: 13, fontFamily: 'inherit' }}
             />
           </div>
-          <button style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: '#17171a', color: '#a1a1a6', border: '1px solid #2a2a30', borderRadius: 4, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
+          <button style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: '#121216', color: '#A6A6AE', border: '1px solid #26262E', borderRadius: 4, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
             <Download size={14} strokeWidth={1.6} />
             {t('orders.export').replace('Excel', '').trim()}
           </button>
@@ -123,20 +123,20 @@ export default function CustomersPage() {
         {/* Table */}
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {[...Array(5)].map((_, i) => <div key={i} style={{ height: 60, background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }} />)}
+            {[...Array(5)].map((_, i) => <div key={i} style={{ height: 60, background: '#121216', border: '1px solid #26262E', borderRadius: 4 }} />)}
           </div>
         ) : customers.length === 0 ? (
-          <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <Users size={40} strokeWidth={1.2} style={{ color: '#6b6b70', marginBottom: 16 }} />
-            <p style={{ color: '#f5f5f4', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('customers.columns.customer')}</p>
+          <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
+            <Users size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+            <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('customers.columns.customer')}</p>
           </div>
         ) : (
           <>
-            <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, overflow: 'hidden' }}>
+            <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}>
               {/* Header */}
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px', padding: '10px 20px', background: '#1f1f23', borderBottom: '1px solid #2a2a30', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px', padding: '10px 20px', background: '#1A1A20', borderBottom: '1px solid #26262E', gap: 12 }}>
                 {[t('customers.columns.customer'), t('customers.columns.joined'), t('customers.columns.orders'), t('customers.columns.spent'), t('customers.columns.level'), ''].map((h, i) => (
-                  <div key={i} className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{h}</div>
+                  <div key={i} className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{h}</div>
                 ))}
               </div>
               {/* Rows */}
@@ -149,11 +149,11 @@ export default function CustomersPage() {
                     href={`/admin/dashboard/customers/${c.id}`}
                     style={{
                       display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px',
-                      padding: '14px 20px', borderBottom: '1px solid #1f1f23',
+                      padding: '14px 20px', borderBottom: '1px solid #1A1A20',
                       alignItems: 'center', gap: 12, textDecoration: 'none',
                       transition: 'background 0.15s',
                     }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = '#1f1f23')}
+                    onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = '#1A1A20')}
                     onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = 'transparent')}
                   >
                     {/* Customer */}
@@ -165,18 +165,18 @@ export default function CustomersPage() {
                         fontSize: 12, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
                       }}>{initials(c.name)}</div>
                       <div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>{c.name}</div>
-                        <div style={{ fontSize: 11, color: '#6b6b70' }}>{c.email}</div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{c.name}</div>
+                        <div style={{ fontSize: 11, color: '#6C6C76' }}>{c.email}</div>
                       </div>
                     </div>
                     {/* Since */}
-                    <div className="mono" style={{ fontSize: 11, color: '#a1a1a6' }}>
+                    <div className="mono" style={{ fontSize: 11, color: '#A6A6AE' }}>
                       {formatDate(c.createdAt)}
                     </div>
                     {/* Orders */}
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>{c.totalOrders}</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{c.totalOrders}</div>
                     {/* Spending */}
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>
                       {formatPrice(c.totalSpent ?? 0)}
                     </div>
                     {/* Level */}
@@ -193,7 +193,7 @@ export default function CustomersPage() {
                       </span>
                     </div>
                     {/* Arrow */}
-                    <div style={{ color: '#6b6b70', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ color: '#6C6C76', display: 'flex', justifyContent: 'center' }}>
                       <ChevronLeft size={14} strokeWidth={1.6} />
                     </div>
                   </Link>
@@ -203,16 +203,16 @@ export default function CustomersPage() {
 
             {/* Pagination */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <p className="mono" style={{ fontSize: 11, color: '#6b6b70' }}>
+              <p className="mono" style={{ fontSize: 11, color: '#6C6C76' }}>
                 {customers.length} / {total} {t('customers.columns.customer')}
               </p>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-                  style={{ padding: '6px 10px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4, color: '#a1a1a6', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page <= 1 ? 0.4 : 1 }}>
+                  style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page <= 1 ? 0.4 : 1 }}>
                   <ChevronRight size={14} strokeWidth={1.6} />
                 </button>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-                  style={{ padding: '6px 10px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4, color: '#a1a1a6', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page >= totalPages ? 0.4 : 1 }}>
+                  style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page >= totalPages ? 0.4 : 1 }}>
                   <ChevronLeft size={14} strokeWidth={1.6} />
                 </button>
               </div>

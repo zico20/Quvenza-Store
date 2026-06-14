@@ -31,14 +31,14 @@ interface AddressFormProps {
 // ── Shared field styles ──────────────────────────────────────
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '10px 12px',
-  background: '#0e0e10', border: '1px solid #2a2a30', borderRadius: 4,
-  color: '#f5f5f4', fontFamily: 'inherit', fontSize: 14, outline: 'none',
+  background: '#0A0A0C', border: '1px solid #26262E', borderRadius: 4,
+  color: '#F7F7F8', fontFamily: 'inherit', fontSize: 14, outline: 'none',
   boxSizing: 'border-box', transition: 'border-color 0.15s',
 };
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ fontSize: 14, fontWeight: 600, color: '#f5f5f4', marginBottom: 6 }}>
+    <div style={{ fontSize: 14, fontWeight: 600, color: '#F7F7F8', marginBottom: 6 }}>
       {children}
     </div>
   );
@@ -80,10 +80,10 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
   }, [selectedGovernorate, setValue]);
 
   function focusStyle(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    e.currentTarget.style.borderColor = '#ff6a2b';
+    e.currentTarget.style.borderColor = '#FF7A33';
   }
   function blurStyle(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-    e.currentTarget.style.borderColor = '#2a2a30';
+    e.currentTarget.style.borderColor = '#26262E';
   }
 
   const arrowPos = isRTL ? 'left 14px center' : 'right 14px center';
@@ -164,7 +164,7 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
 
       {/* Nearest landmark */}
       <div>
-        <Label>{t('address.landmark')} <span style={{ color: '#6b6b70', textTransform: 'none' }}>{t('address.landmarkOptional')}</span></Label>
+        <Label>{t('address.landmark')} <span style={{ color: '#6C6C76', textTransform: 'none' }}>{t('address.landmarkOptional')}</span></Label>
         <input
           {...register('nearestLandmark')}
           style={inputStyle}
@@ -178,13 +178,13 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
           <input type="checkbox" {...register('isDefault')} style={{ opacity: 0, position: 'absolute', inset: 0, cursor: 'pointer', margin: 0 }} />
           <div style={{
             width: 18, height: 18, borderRadius: 3,
-            border: '1.5px solid #2a2a30', background: '#0e0e10',
+            border: '1.5px solid #26262E', background: '#0A0A0C',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            {watch('isDefault') && <Check size={12} style={{ color: '#ff6a2b' }} strokeWidth={2.5} />}
+            {watch('isDefault') && <Check size={12} style={{ color: '#FF7A33' }} strokeWidth={2.5} />}
           </div>
         </div>
-        <span style={{ fontSize: 13, color: '#a1a1a6' }}>{t('address.setDefault')}</span>
+        <span style={{ fontSize: 13, color: '#A6A6AE' }}>{t('address.setDefault')}</span>
       </label>
 
       {/* Submit */}
@@ -192,7 +192,7 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
         type="submit"
         disabled={loading}
         style={{
-          padding: '14px 24px', background: '#ff6a2b', color: '#fff',
+          padding: '14px 24px', background: '#FF7A33', color: '#fff',
           border: 'none', borderRadius: 4, fontSize: 14, fontWeight: 600,
           cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1,
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,

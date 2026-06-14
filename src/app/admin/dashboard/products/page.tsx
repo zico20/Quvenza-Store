@@ -41,20 +41,20 @@ export default function ProductsPage() {
       <div style={{ padding: 32 }}>
         {/* Toolbar */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 24, alignItems: 'center' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }}>
-            <Search size={15} style={{ color: '#6b6b70', flexShrink: 0 }} strokeWidth={1.6} />
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}>
+            <Search size={15} style={{ color: '#6C6C76', flexShrink: 0 }} strokeWidth={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('products.search')}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#f5f5f4', fontSize: 13, fontFamily: 'inherit' }}
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F7F7F8', fontSize: 13, fontFamily: 'inherit' }}
             />
           </div>
           <Link
             href="/admin/dashboard/products/new"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '10px 18px', background: '#ff6a2b', color: '#fff',
+              padding: '10px 18px', background: '#FF7A33', color: '#fff',
               borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none',
             }}
           >
@@ -67,23 +67,23 @@ export default function ProductsPage() {
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[...Array(6)].map((_, i) => (
-              <div key={i} style={{ height: 60, background: '#17171a', border: '1px solid #2a2a30', borderRadius: 4 }} />
+              <div key={i} style={{ height: 60, background: '#121216', border: '1px solid #26262E', borderRadius: 4 }} />
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <Package size={40} strokeWidth={1.2} style={{ color: '#6b6b70', marginBottom: 16 }} />
-            <p style={{ color: '#f5f5f4', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('products.noProducts')}</p>
+          <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
+            <Package size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+            <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('products.noProducts')}</p>
           </div>
         ) : (
-          <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6, overflow: 'hidden' }}>
+          <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}>
             {/* Header */}
             <div style={{
               display: 'grid', gridTemplateColumns: '2.5fr 1fr 100px 80px 100px 80px',
-              padding: '10px 20px', background: '#1f1f23', borderBottom: '1px solid #2a2a30', gap: 12,
+              padding: '10px 20px', background: '#1A1A20', borderBottom: '1px solid #26262E', gap: 12,
             }}>
               {[t('products.columns.product'), t('products.columns.category'), t('products.columns.price'), t('products.columns.stock'), t('products.columns.status'), t('products.columns.actions')].map((h, i) => (
-                <div key={i} className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{h}</div>
+                <div key={i} className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{h}</div>
               ))}
             </div>
             {/* Rows */}
@@ -93,29 +93,29 @@ export default function ProductsPage() {
               return (
                 <div key={p.id} style={{
                   display: 'grid', gridTemplateColumns: '2.5fr 1fr 100px 80px 100px 80px',
-                  padding: '12px 20px', borderBottom: '1px solid #1f1f23',
+                  padding: '12px 20px', borderBottom: '1px solid #1A1A20',
                   alignItems: 'center', gap: 12, transition: 'background 0.15s',
                 }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#1f1f23')}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#1A1A20')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                 >
                   {/* Product */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: 4, overflow: 'hidden', flexShrink: 0, background: p.images?.[0] ? '#1f1f23' : placeholderBg }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 4, overflow: 'hidden', flexShrink: 0, background: p.images?.[0] ? '#1A1A20' : placeholderBg }}>
                       {p.images?.[0] && (
                         <Image src={p.images[0]} alt={p.name} width={40} height={40} className="object-cover w-full h-full"
                           unoptimized={p.images[0].startsWith('http://localhost')} />
                       )}
                     </div>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>{p.name}</div>
-                      <div className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>{p.slug}</div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{p.name}</div>
+                      <div className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{p.slug}</div>
                     </div>
                   </div>
                   {/* Category */}
-                  <div style={{ fontSize: 12, color: '#a1a1a6' }}>{(p as any).category?.name ?? '—'}</div>
+                  <div style={{ fontSize: 12, color: '#A6A6AE' }}>{(p as any).category?.name ?? '—'}</div>
                   {/* Price */}
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4' }}>{formatPrice(p.price)}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{formatPrice(p.price)}</div>
                   {/* Stock */}
                   <div style={{ fontSize: 13, fontWeight: 600, color: p.stock === 0 ? '#f87171' : p.stock <= 10 ? '#fbbf24' : '#4ade80' }}>
                     {p.stock}
@@ -137,14 +137,14 @@ export default function ProductsPage() {
                     <Link href={`/admin/dashboard/products/${p.id}`} style={{
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       width: 30, height: 30, borderRadius: 4,
-                      background: 'transparent', color: '#a1a1a6', border: 'none', cursor: 'pointer', textDecoration: 'none',
+                      background: 'transparent', color: '#A6A6AE', border: 'none', cursor: 'pointer', textDecoration: 'none',
                     }}>
                       <Edit size={14} strokeWidth={1.6} />
                     </Link>
                     <button onClick={() => handleDelete(p.id)} style={{
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       width: 30, height: 30, borderRadius: 4,
-                      background: 'transparent', color: '#a1a1a6', border: 'none', cursor: 'pointer',
+                      background: 'transparent', color: '#A6A6AE', border: 'none', cursor: 'pointer',
                     }}>
                       <Trash2 size={14} strokeWidth={1.6} />
                     </button>
@@ -155,7 +155,7 @@ export default function ProductsPage() {
           </div>
         )}
         {/* Count */}
-        <p className="mono" style={{ fontSize: 10, color: '#6b6b70', marginTop: 12 }}>
+        <p className="mono" style={{ fontSize: 10, color: '#6C6C76', marginTop: 12 }}>
           {filtered.length} {t('products.columns.product')}
         </p>
       </div>

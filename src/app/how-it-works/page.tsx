@@ -68,8 +68,8 @@ export default function HowItWorksPage() {
       ])} />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px' }}>
-        <h1 style={{ fontSize: 40, fontWeight: 700, color: '#f5f5f4', marginBottom: 12, letterSpacing: '-0.02em' }}>كيف يعمل المتجر؟</h1>
-        <p style={{ color: '#a1a1a6', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
+        <h1 style={{ fontSize: 40, fontWeight: 700, color: '#F7F7F8', marginBottom: 12, letterSpacing: '-0.02em' }}>كيف يعمل المتجر؟</h1>
+        <p style={{ color: '#A6A6AE', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
           احصل على اشتراكك الرقمي في 4 خطوات بسيطة. بدون تعقيد، بدون انتظار.
         </p>
 
@@ -78,39 +78,39 @@ export default function HowItWorksPage() {
             <div key={step.num} style={{ display: 'flex', gap: 24, marginBottom: i < STEPS.length - 1 ? 40 : 0, alignItems: 'flex-start' }}>
               {/* Number + connector */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,106,43,0.12)', border: '2px solid #ff6a2b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#ff6a2b', fontFamily: 'JetBrains Mono, monospace' }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'rgba(255,106,43,0.12)', border: '2px solid #FF7A33', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#FF7A33', fontFamily: 'JetBrains Mono, monospace' }}>
                   {step.num}
                 </div>
                 {i < STEPS.length - 1 && (
-                  <div style={{ width: 2, height: 40, background: '#2a2a30', marginTop: 8 }} />
+                  <div style={{ width: 2, height: 40, background: '#26262E', marginTop: 8 }} />
                 )}
               </div>
 
               {/* Content */}
-              <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 8, padding: '20px 24px', flex: 1, paddingBottom: i < STEPS.length - 1 ? 20 : 20 }}>
+              <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 8, padding: '20px 24px', flex: 1, paddingBottom: i < STEPS.length - 1 ? 20 : 20 }}>
                 <div style={{ fontSize: 28, marginBottom: 8 }}>{step.icon}</div>
-                <h2 style={{ fontSize: 20, fontWeight: 700, color: '#f5f5f4', margin: '0 0 8px', letterSpacing: '-0.01em' }}>{step.title}</h2>
-                <p style={{ color: '#a1a1a6', fontSize: 14, lineHeight: 1.75, margin: 0 }}>{step.desc}</p>
+                <h2 style={{ fontSize: 20, fontWeight: 700, color: '#F7F7F8', margin: '0 0 8px', letterSpacing: '-0.01em' }}>{step.title}</h2>
+                <p style={{ color: '#A6A6AE', fontSize: 14, lineHeight: 1.75, margin: 0 }}>{step.desc}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Time indicator */}
-        <div style={{ background: '#17171a', border: '1px solid #2a2a30', borderRadius: 8, padding: 24, marginTop: 48, display: 'flex', alignItems: 'center', gap: 20 }}>
+        <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 8, padding: 24, marginTop: 48, display: 'flex', alignItems: 'center', gap: 20 }}>
           <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(74,222,128,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>⏱️</div>
           <div>
             <div style={{ fontWeight: 700, color: '#4ade80', fontSize: 18 }}>إجمالي الوقت: أقل من 30 دقيقة</div>
-            <div style={{ color: '#a1a1a6', fontSize: 14, marginTop: 4 }}>من لحظة الدفع حتى بدء الاستخدام — أسرع من طلب بيتزا</div>
+            <div style={{ color: '#A6A6AE', fontSize: 14, marginTop: 4 }}>من لحظة الدفع حتى بدء الاستخدام — أسرع من طلب بيتزا</div>
           </div>
         </div>
 
         {/* CTA */}
         <div style={{ textAlign: 'center', marginTop: 48 }}>
-          <a href="/products" style={{ display: 'inline-block', background: '#ff6a2b', color: '#fff', padding: '14px 40px', borderRadius: 6, fontWeight: 700, textDecoration: 'none', fontSize: 16 }}>
+          <a href="/products" style={{ display: 'inline-block', background: '#FF7A33', color: '#fff', padding: '14px 40px', borderRadius: 6, fontWeight: 700, textDecoration: 'none', fontSize: 16 }}>
             ابدأ التسوق الآن
           </a>
-          <p style={{ color: '#6b6b70', fontSize: 13, marginTop: 12 }}>لديك سؤال؟ <a href="/faq" style={{ color: '#ff6a2b', textDecoration: 'none' }}>راجع الأسئلة الشائعة</a> أو <a href="/contact" style={{ color: '#ff6a2b', textDecoration: 'none' }}>تواصل معنا</a></p>
+          <p style={{ color: '#6C6C76', fontSize: 13, marginTop: 12 }}>لديك سؤال؟ <a href="/faq" style={{ color: '#FF7A33', textDecoration: 'none' }}>راجع الأسئلة الشائعة</a> أو <a href="/contact" style={{ color: '#FF7A33', textDecoration: 'none' }}>تواصل معنا</a></p>
         </div>
       </div>
     </>

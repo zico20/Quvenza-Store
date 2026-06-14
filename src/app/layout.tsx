@@ -121,7 +121,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#ff6a2b',
+  themeColor: '#FF7A33',
 };
 
 async function getNavCategories(): Promise<{ id: string; name: string; slug: string }[]> {
@@ -141,7 +141,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="author" href="/humans.txt" />
       </head>
-      <body className="flex flex-col min-h-screen" style={{ background: '#0e0e10', color: '#f5f5f4' }}>
+      <body className="flex flex-col min-h-screen" style={{ background: '#0A0A0C', color: '#F7F7F8' }}>
         <LangInitializer />
         <StoreChrome
           header={<Header navCategories={navCategories} />}
