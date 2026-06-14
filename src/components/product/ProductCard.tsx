@@ -12,9 +12,9 @@ import { useCurrency } from '@/hooks/useCurrency';
 
 function StarRow({ value }: { value: number }) {
   return (
-    <div style={{ display: 'inline-flex', gap: 1, color: '#ff6a2b' }}>
+    <div style={{ display: 'inline-flex', gap: 1, color: '#FF9357' }}>
       {[1, 2, 3, 4, 5].map(i => (
-        <Star key={i} size={11} strokeWidth={0} fill={i <= Math.round(value) ? '#ff6a2b' : 'rgba(255,106,43,0.2)'} />
+        <Star key={i} size={11} strokeWidth={0} fill={i <= Math.round(value) ? '#FF9357' : 'rgba(255,147,87,0.2)'} />
       ))}
     </div>
   );
@@ -53,29 +53,28 @@ export default function ProductCard({ product }: { product: Product }) {
   const hues = [18, 220, 280, 140, 40, 320];
   const hue = hues[(product.id?.charCodeAt(product.id.length - 1) ?? 0) % hues.length];
   const placeholderBg = `
-    repeating-linear-gradient(135deg, oklch(0.78 0.04 ${hue}) 0 2px, transparent 2px 14px),
-    linear-gradient(160deg, oklch(0.88 0.03 ${hue}), oklch(0.72 0.05 ${hue}))
+    radial-gradient(circle at 30% 25%, oklch(0.45 0.12 ${hue} / 0.5), transparent 60%),
+    linear-gradient(160deg, #16161b, #0a0a0c)
   `;
 
   return (
     <Link
       href={`/products/${product.slug}`}
+      className="group hover-accent-border"
       style={{
-        background: '#17171a', border: '1px solid #2a2a30', borderRadius: 6,
+        background: 'var(--color-bg-surface)', border: '1px solid var(--color-border)', borderRadius: 16,
         overflow: 'hidden', cursor: 'pointer', display: 'flex', flexDirection: 'column',
-        textDecoration: 'none', transition: 'border-color 0.2s',
+        textDecoration: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
       }}
-      onMouseEnter={(e: any) => e.currentTarget.style.borderColor = '#ff6a2b'}
-      onMouseLeave={(e: any) => e.currentTarget.style.borderColor = '#2a2a30'}
     >
       {/* Image area */}
-      <div style={{ position: 'relative', aspectRatio: '1/1', background: '#1f1f23', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', aspectRatio: '1/1', background: 'var(--color-bg-elevated)', overflow: 'hidden' }}>
         {product.images?.[0] ? (
           <Image
             src={product.images[0]}
             alt={product.name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
             sizes="(max-width: 768px) 50vw, 25vw"
             unoptimized={product.images[0].startsWith('http://localhost') || product.images[0].includes('placehold.co')}
           />
@@ -84,8 +83,8 @@ export default function ProductCard({ product }: { product: Product }) {
             <span
               className="mono"
               style={{
-                position: 'absolute', bottom: 12, left: 12,
-                fontSize: 10, color: 'rgba(23,22,26,0.4)',
+                position: 'absolute', bottom: 12, insetInlineStart: 12,
+                fontSize: 10, color: 'rgba(247,247,248,0.35)',
               }}
             >
               {(product as any).category?.name || 'product shot'}
@@ -93,9 +92,9 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
         )}
 
-        {/* Tag chip */}
+        {/* Discount chip */}
         {hasDiscount && (
-          <div style={{ position: 'absolute', top: 12, left: 12 }}>
+          <div style={{ position: 'absolute', top: 12, insetInlineStart: 12 }}>
             <span className="tag tag-sale">−{discountPct}%</span>
           </div>
         )}
@@ -104,50 +103,62 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           onClick={handleWishlist}
           style={{
-            position: 'absolute', top: 10, right: 10,
-            width: 34, height: 34, borderRadius: 17,
-            background: 'rgba(14,14,16,0.85)', border: '1px solid #2a2a30',
-            color: inWishlist ? '#f87171' : '#f5f5f4',
+            position: 'absolute', top: 10, insetInlineEnd: 10,
+            width: 36, height: 36, borderRadius: 18,
+            background: 'rgba(10,10,12,0.85)', border: '1px solid var(--color-border)',
+            color: inWishlist ? '#FB7185' : '#F7F7F8',
             cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             backdropFilter: 'blur(6px)',
           }}
           aria-label={inWishlist ? t('wishlist.remove') : t('wishlist.add')}
         >
-          <Heart size={15} strokeWidth={1.6} fill={inWishlist ? '#f87171' : 'none'} />
+          <Heart size={15} strokeWidth={1.6} fill={inWishlist ? '#FB7185' : 'none'} />
         </button>
       </div>
 
       {/* Info */}
       <div className="px-3 py-3 sm:px-4 sm:py-4 flex flex-col flex-1" style={{ gap: 6 }}>
-        <div className="mono" style={{ fontSize: 10, color: '#6b6b70' }}>
-          {(product as any).category?.name || 'softodeviq'} · {product.id?.slice(-6).toUpperCase()}
+        <div
+          style={{
+            fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+            color: 'var(--color-plasma)', fontFamily: 'var(--font-display)',
+          }}
+        >
+          {(product as any).category?.name || 'softodeviq'}
         </div>
 
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#f5f5f4', lineHeight: 1.35, minHeight: 34 }}>
+        <div
+          style={{
+            fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.35, minHeight: 36,
+            fontFamily: 'var(--font-display)',
+          }}
+        >
           {product.name}
         </div>
 
         {/* Rating */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#a1a1a6', fontSize: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--color-text-secondary)', fontSize: 10 }}>
           <StarRow value={4.5} />
-          <span style={{ color: '#6b6b70' }}>(—)</span>
+          <span style={{ color: 'var(--color-text-muted)' }}>(—)</span>
         </div>
 
-        {/* Price */}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 'auto', paddingTop: 6 }}>
-          <div style={{ fontSize: 16, fontWeight: 700, color: '#f5f5f4' }}>{formatPrice(product.price)}</div>
+        {/* Price (USD + IQD), kept LTR */}
+        <div className="ltr-nums" style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 'auto', paddingTop: 6 }}>
+          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-display)' }}>
+            {formatPrice(product.price)}
+          </div>
           {hasDiscount && (
-            <div style={{ fontSize: 11, color: '#6b6b70', textDecoration: 'line-through' }}>{formatPrice(product.comparePrice)}</div>
+            <div style={{ fontSize: 11, color: 'var(--color-text-muted)', textDecoration: 'line-through' }}>{formatPrice(product.comparePrice)}</div>
           )}
         </div>
 
         {/* Stock status */}
         {product.stock === 0 ? (
-          <div style={{ fontSize: 10, color: '#f87171' }}>{t('common.outOfStock')}</div>
+          <div style={{ fontSize: 10, color: '#FB7185' }}>{t('common.outOfStock')}</div>
         ) : product.stock <= 10 ? (
-          <div style={{ fontSize: 10, color: '#fbbf24' }}>{`${t('common.lowStock')} — ${product.stock}`}</div>
+          <div style={{ fontSize: 10, color: '#FBBF24' }}>{`${t('common.lowStock')} — ${product.stock}`}</div>
         ) : (
-          <div style={{ fontSize: 10, color: '#4ade80' }}>{t('common.inStock')}</div>
+          <div style={{ fontSize: 10, color: '#34D399' }}>{t('common.inStock')}</div>
         )}
 
         {/* CTA */}
@@ -155,22 +166,23 @@ export default function ProductCard({ product }: { product: Product }) {
           onClick={handleAddToCart}
           disabled={product.stock === 0}
           style={{
-            marginTop: 4, width: '100%',
-            padding: '8px 8px', fontSize: 11, fontWeight: 600,
-            background: '#ff6a2b', color: '#ffffff',
-            border: 'none', borderRadius: 4, cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-            opacity: product.stock === 0 ? 0.5 : 1,
-            transition: 'background 0.15s, opacity 0.15s',
+            marginTop: 6, width: '100%', minHeight: 40,
+            padding: '9px 8px', fontSize: 12, fontWeight: 700,
+            background: product.stock === 0 ? 'var(--color-bg-elevated)' : 'linear-gradient(135deg,#FF7A33,#FF5C1A)',
+            color: product.stock === 0 ? 'var(--color-text-muted)' : '#0A0A0C',
+            border: 'none', borderRadius: 10, cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            boxShadow: product.stock === 0 ? 'none' : '0 6px 16px rgba(255,122,51,0.28)',
+            transition: 'filter 0.15s, box-shadow 0.15s',
             fontFamily: 'inherit',
           }}
-          onMouseEnter={(e: any) => { if (product.stock > 0) e.currentTarget.style.opacity = '0.88'; }}
-          onMouseLeave={(e: any) => { e.currentTarget.style.opacity = product.stock === 0 ? '0.5' : '1'; }}
+          onMouseEnter={(e: any) => { if (product.stock > 0) e.currentTarget.style.filter = 'brightness(1.05)'; }}
+          onMouseLeave={(e: any) => { e.currentTarget.style.filter = 'none'; }}
         >
           {added ? (
-            <><Check size={12} /> {t('common.addedToCart')}</>
+            <><Check size={13} /> {t('common.addedToCart')}</>
           ) : (
-            <><ShoppingCart size={12} strokeWidth={1.6} /> {t('common.addToCart')}</>
+            <><ShoppingCart size={13} strokeWidth={1.8} /> {t('common.addToCart')}</>
           )}
         </button>
       </div>
