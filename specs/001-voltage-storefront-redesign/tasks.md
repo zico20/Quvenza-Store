@@ -61,7 +61,7 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 
 - [X] T011 [US1] Restyle the shared product card `src/components/product/ProductCard.tsx` to the Voltage card contract (brand mark, plasma eyebrow, display-font name, rating, USD+IQD price via `formatPrice()` with `dir=ltr`, add-to-cart affordance, stock/discount badge); this propagates to listing/category/search/wishlist/related.
 - [X] T012 [US1] Restyle `src/components/home/HeroSlider.tsx` and the home page `src/app/page.tsx` — Voltage hero (accent glow pagination, dark fallback, RTL chevrons), value-props with glow icons, categories, featured/bestseller grids, editorial banner with dark-toned placeholders. Brand strings via i18n/config.
-- [ ] T013 [US1] Restyle the product detail page `src/app/(shop)/products/[slug]/page.tsx` (and any product-detail subcomponents) — gallery/brand mark, variant/duration selector, trust badges above the fold, add-to-cart, tabs, related products (reusing `ProductCard`).
+- [X] T013 [US1] Restyle product detail (`ProductDetailClient.tsx`) — plasma category eyebrow + display-font title, LTR price block, refined trust-signal grid (token-based, the four conversion cues), accent-thumbnail selection, fixed CTA spinner contrast. (Sticky mobile add-to-cart bar deferred to T033/US4.)
 - [ ] T014 [US1] Restyle `src/components/cart/CartDrawer.tsx` and `src/components/cart/CartItem.tsx` — slide-over drawer (token motion, `--shadow-lg`), line items, totals (USD+IQD), clear checkout CTA; keyboard-operable (Esc, focus trap).
 - [ ] T015 [US1] Verify trust/payment/support strings on US1 surfaces come from config and that the SoftoDev WhatsApp/contact + social links are unchanged (`src/config/store.config.ts`, `src/components/layout/Footer.tsx`).
 
