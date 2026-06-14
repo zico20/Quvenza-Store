@@ -1,0 +1,197 @@
+---
+
+description: "Task list for Voltage Storefront & Admin Redesign"
+---
+
+# Tasks: Voltage Storefront & Admin Redesign
+
+**Input**: Design documents from `specs/001-voltage-storefront-redesign/`
+
+**Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/design-system.md, quickstart.md
+
+**Tests**: Not requested. Per research.md Decision 7, verification = `npm run type-check` (`tsc --noEmit`) passing + manual bilingual (LTR + RTL) visual review of each affected screen. No automated test tasks are generated.
+
+**Organization**: Tasks are grouped by user story. US2 (bilingual/RTL) is woven into every story as an acceptance condition rather than a separate screen set, with explicit RTL-hardening tasks where global work is needed.
+
+## Format: `[ID] [P?] [Story] Description`
+
+- **[P]**: Can run in parallel (different files, no dependencies on incomplete tasks)
+- **[Story]**: US1 = conversion path, US2 = bilingual/RTL, US3 = system consistency, US4 = mobile
+- Exact file paths included. Per-task gate: `npm run type-check` clean + visual check LTR & RTL.
+
+## Path Conventions
+
+Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test tasks).
+
+---
+
+## Phase 1: Setup (Shared Infrastructure)
+
+**Purpose**: Reference material and a safe starting point.
+
+- [ ] T001 Confirm branch `001-voltage-storefront-redesign` is checked out and working tree is clean; review `specs/001-voltage-storefront-redesign/contracts/design-system.md` and `data-model.md` as the token/component source of truth.
+- [ ] T002 [P] Capture a baseline `npm run type-check` and `npm run lint` result so regressions introduced by the redesign are detectable.
+
+---
+
+## Phase 2: Foundational (Blocking Prerequisites)
+
+**Purpose**: The Voltage token foundation + display font + shared primitives. Everything else consumes these.
+
+**⚠️ CRITICAL**: No screen migration can begin until T003–T010 are complete.
+
+- [ ] T003 Replace the Graphite `@theme` block in `src/app/globals.css` with the Voltage token set (colors, radii, fonts, motion, shadows, glow) from `contracts/design-system.md` §1 and `data-model.md`; add the 8px spacing scale.
+- [ ] T004 In `src/app/globals.css`, add temporary backward-compatible aliases mapping old token names (`--color-bg-surface`→surface, `--color-text-primary`→text, `--color-accent-hover`→accent-hi, `--color-bg-base`, `--color-border*`) so existing components keep rendering during migration; add a `@media (prefers-reduced-motion: reduce)` block disabling decorative animations.
+- [ ] T005 Add **Space Grotesk** via `next/font/google` in `src/app/layout.tsx`, expose as `--font-display`, and wire base heading styles in `src/app/globals.css` to use it (Latin) while keeping Cairo for Arabic.
+- [ ] T006 [P] Create `src/components/ui/Button.tsx` — primary (accent gradient + glow), secondary (surface + border-strong), ghost variants; sm/md/lg sizes; hover/focus-visible/active/disabled/loading states; ≥44px tap target; typed props.
+- [ ] T007 [P] Create `src/components/ui/EmptyState.tsx` — icon + message + optional recovery action, RTL-aware.
+- [ ] T008 [P] Create `src/components/ui/Skeleton.tsx` — shimmer placeholder primitives (block + grid/table variants), no CLS.
+- [ ] T009 [P] Create `src/components/ui/Toast.tsx` (and minimal inline-alert) — semantic variants (success/error/warning/plasma-info) using tokens.
+- [ ] T010 Restyle the shared status pills to the Voltage semantic map (`data-model.md`): `src/components/orders/StatusBadge.tsx` (storefront) and `src/components/admin/orders/StatusBadge.tsx` (admin) — map UPPERCASE codes → color token + localized AR/EN label; neutral fallback for unmapped; codes unchanged.
+
+**Checkpoint**: Tokens live, display font active, shared primitives + status pills on Voltage. Screen migration can begin.
+
+---
+
+## Phase 3: User Story 1 - Trust-first storefront that drives a confident purchase (Priority: P1) 🎯 MVP
+
+**Goal**: The core conversion path (home → product card → product detail → cart drawer) on Voltage, with trust cues, USD+IQD pricing, and one shared product card.
+
+**Independent Test**: Load home, scroll hero/trust-strip/featured/categories/how-it-works, open a product, add to cart; verify Voltage styling, trust cues (authenticity, 30-min delivery, warranty, support), accepted payment methods, and USD+IQD prices — in both LTR and RTL.
+
+- [ ] T011 [US1] Restyle the shared product card `src/components/product/ProductCard.tsx` to the Voltage card contract (brand mark, plasma eyebrow, display-font name, rating, USD+IQD price via `formatPrice()` with `dir=ltr`, add-to-cart affordance, stock/discount badge); this propagates to listing/category/search/wishlist/related.
+- [ ] T012 [US1] Restyle `src/components/home/HeroSlider.tsx` and the home page `src/app/page.tsx` — Voltage hero with prominent trust cues + primary CTA, trust strip (authenticity / instant delivery / warranty / support), accepted payment methods (ZainCash, FastPay, AsiaHawala, COD), featured grid, categories, how-it-works. Brand strings from `src/config/store.config.ts`.
+- [ ] T013 [US1] Restyle the product detail page `src/app/(shop)/products/[slug]/page.tsx` (and any product-detail subcomponents) — gallery/brand mark, variant/duration selector, trust badges above the fold, add-to-cart, tabs, related products (reusing `ProductCard`).
+- [ ] T014 [US1] Restyle `src/components/cart/CartDrawer.tsx` and `src/components/cart/CartItem.tsx` — slide-over drawer (token motion, `--shadow-lg`), line items, totals (USD+IQD), clear checkout CTA; keyboard-operable (Esc, focus trap).
+- [ ] T015 [US1] Verify trust/payment/support strings on US1 surfaces come from config and that the SoftoDev WhatsApp/contact + social links are unchanged (`src/config/store.config.ts`, `src/components/layout/Footer.tsx`).
+
+**Checkpoint**: The MVP conversion path is fully on Voltage and independently demoable in both directions.
+
+---
+
+## Phase 4: User Story 2 - Flawless bilingual (Arabic-first RTL + English LTR) (Priority: P1)
+
+**Goal**: Global chrome + direction handling so every screen mirrors cleanly; prices/numbers stay LTR; directional icons flip.
+
+**Independent Test**: Toggle Arabic on the US1 surfaces and global chrome; confirm full mirroring (nav, drawers, forms), flipped chevrons/arrows, LTR prices, correct Arabic typeface — zero broken/clipped layouts.
+
+- [ ] T016 [US2] Restyle global chrome to Voltage with logical CSS properties: `src/components/layout/Header.tsx` (logo lockup + glow, nav, search, language toggle, cart badge with glow), `src/components/layout/Footer.tsx`, `src/components/layout/MobileMenu.tsx`.
+- [ ] T017 [US2] Audit `src/components/layout/StoreChrome.tsx` + `src/components/layout/LangInitializer.tsx` to ensure `dir` is set correctly and Arabic uses `--font-arabic`; add a shared utility/class for `dir=ltr` price/number runs and apply it in `ProductCard`/cart/detail.
+- [ ] T018 [US2] Flip directional icons (chevrons/arrows, prev/next, "view all") under RTL across header, cart drawer, product detail, and pagination; verify with the Arabic toggle.
+
+**Checkpoint**: US1 surfaces + global chrome are flawless in both directions.
+
+---
+
+## Phase 5: User Story 3 - Cohesive design system applied across all screens (Priority: P2)
+
+**Goal**: Extend Voltage to every remaining storefront and admin screen with shared tables, pills, empty/skeleton/toast states, and on-brand charts.
+
+**Independent Test**: Visit each screen group; confirm shared table style, status-pill semantics, empty/loading states, and admin charts on Voltage — all mirrored in RTL.
+
+### Storefront remainder
+
+- [ ] T019 [P] [US3] Restyle listing + filters: `src/app/(shop)/products/page.tsx`, `src/components/product/ProductGrid.tsx`, `src/components/product/ProductFilters.tsx` (sort/filter/pagination); use `EmptyState`/`Skeleton`.
+- [ ] T020 [P] [US3] Restyle category + search pages: `src/app/(shop)/category/[slug]/page.tsx` (branded banner + sub-category chips), `src/app/(shop)/search/page.tsx` (results header + empty state).
+- [ ] T021 [P] [US3] Restyle checkout flow: `src/app/cart/page.tsx`, `src/app/checkout/page.tsx`, `src/app/checkout/payment/page.tsx`, `src/app/checkout/success/page.tsx`, `src/components/checkout/CheckoutSteps.tsx`, `src/components/checkout/AddressForm.tsx` (preserve Iraq governorate/city system — restyle only).
+- [ ] T022 [P] [US3] Restyle auth: `src/app/(auth)/login/page.tsx`, `src/app/(auth)/register/page.tsx` (Voltage forms using `ui/Button` + input contract).
+- [ ] T023 [P] [US3] Restyle account: `src/app/account/page.tsx` (profile), `src/app/account/orders/page.tsx` (+ order detail) with status pills + timeline, `src/app/account/addresses/page.tsx`, `src/app/account/wishlist/page.tsx` (reuse `ProductCard`, `EmptyState`).
+- [ ] T024 [P] [US3] Restyle content pages: `src/app/{about,contact,faq,how-it-works,glossary,payment-methods,privacy,terms}/page.tsx` to a shared Voltage article/content layout (config-driven strings; legal URLs from config).
+
+### Admin
+
+- [ ] T025 [US3] Restyle admin chrome: `src/components/admin/layout/Sidebar.tsx` (nav + active states), `src/components/admin/layout/Topbar.tsx` (page title, notifications bell + unread badge glow, user menu); admin login `src/app/admin/login/page.tsx`.
+- [ ] T026 [US3] Restyle admin dashboard `src/app/admin/dashboard/page.tsx` + `src/components/admin/dashboard/StatsCard.tsx`, `RecentOrders.tsx`, `TopProducts.tsx`, `LowStockAlert.tsx` (KPI cards, recent orders, top products, low-stock alert) on Voltage surfaces.
+- [ ] T027 [US3] Apply Voltage palette to charts: `src/components/admin/dashboard/RevenueChart.tsx`, `OrderStatusChart.tsx`, `SalesByCategoryChart.tsx` — pass token colors (surface/border/accent/plasma/semantic) into recharts; use `Number(v ?? 0)` in `formatter` callbacks; ensure RTL trend direction reads correctly.
+- [ ] T028 [P] [US3] Restyle admin data tables to one shared table style with status pills + row actions: products, orders, customers, categories, notifications pages under `src/app/admin/...` (TanStack-rendered tables) + `src/components/admin/products/ProductForm.tsx`, `ImageUpload.tsx`.
+- [ ] T029 [P] [US3] Restyle admin order detail interactions: `src/components/admin/orders/OrderTimeline.tsx`, `src/components/admin/orders/StatusChangeModal.tsx` (modal motion + focus trap, status pills, validated-transition UI unchanged).
+- [ ] T030 [US3] Apply shared `EmptyState`/`Skeleton`/`Toast` consistently across all storefront + admin lists/tables/async surfaces touched in this phase.
+
+**Checkpoint**: All ~16 screen groups on Voltage with consistent primitives, both directions.
+
+---
+
+## Phase 6: User Story 4 - Responsive, mobile-first journey (Priority: P3)
+
+**Goal**: Mobile layouts for the journey — stacked hero, 2-col grid, slide-over menu, sticky CTAs.
+
+**Independent Test**: At phone width, walk home → product → cart → checkout → success; open slide-over menu; confirm stacking, sticky bars, ≥44px targets, RTL mirroring.
+
+- [ ] T031 [US4] Mobile home + grid: ensure `src/app/page.tsx` hero stacks, search stays prominent, trust chips above fold, categories scroll horizontally, `ProductGrid` collapses to 2 columns at mobile breakpoint.
+- [ ] T032 [US4] Mobile menu: make `src/components/layout/MobileMenu.tsx` a slide-over/full-screen nav (account row, language toggle, WhatsApp/Telegram), RTL-mirrored, keyboard-closable.
+- [ ] T033 [US4] Sticky bars: add a sticky add-to-cart bar to product detail (`src/app/(shop)/products/[slug]/page.tsx`) and a sticky pay bar with running total to mobile checkout (`src/app/checkout/payment/page.tsx`); verify success screen 30-min activation cue on mobile.
+- [ ] T034 [P] [US4] Verify ≥44px touch targets on all primary mobile controls (buttons, qty steppers, nav items) across the journey.
+
+**Checkpoint**: Full mobile journey usable in both directions.
+
+---
+
+## Phase 7: Polish & Cross-Cutting Concerns
+
+**Purpose**: Remove scaffolding, enforce token purity, final verification.
+
+- [ ] T035 Remove the temporary token aliases added in T004 and update any remaining references to the canonical Voltage token names.
+- [ ] T036 [P] Grep for stray ad-hoc hex values and lowercase enum comparisons introduced by the redesign (`rg -n "#[0-9a-fA-F]{6}" src/components src/app`, `rg -ni "=== ['\"](pending|paid|admin|shipped|delivered|cancelled|refunded|failed|processing)" src`); fix any found (FR-001, Principle V).
+- [ ] T037 [P] Accessibility pass: confirm AA contrast on text/UI, visible `:focus-visible` rings, and keyboard operability of drawers/modals/menus across redesigned screens.
+- [ ] T038 Run `npm run type-check` (must be clean) and `npm run lint`; then run the `quickstart.md` acceptance smoke (home → product → cart → checkout → success; account/orders; admin dashboard + a table) in both LTR and RTL.
+- [ ] T039 Update `CLAUDE.md` design-system notes (token names, fonts) and confirm the SPECKIT block reflects completion.
+
+---
+
+## Dependencies & Execution Order
+
+### Phase Dependencies
+
+- **Setup (Phase 1)**: No dependencies.
+- **Foundational (Phase 2)**: Depends on Setup. **BLOCKS all user stories** (tokens/font/primitives/pills must exist first).
+- **US1 (Phase 3)**: After Foundational. The MVP.
+- **US2 (Phase 4)**: After Foundational; best right after US1 (it hardens RTL on US1 surfaces + global chrome). US1 surfaces should exist to verify mirroring.
+- **US3 (Phase 5)**: After Foundational; reuses primitives from Phase 2 + ProductCard/StatusBadge from US1/US2. Most subtasks are parallel.
+- **US4 (Phase 6)**: After the screens it makes responsive exist (US1 + US3).
+- **Polish (Phase 7)**: After all desired stories; T035 (alias removal) must come after every screen migrated off old token names.
+
+### Within Each User Story
+
+- Shared component before the screens that consume it (e.g., T011 ProductCard before T019/T020/T023).
+- Per-task gate: `npm run type-check` clean + LTR/RTL visual check before marking done.
+
+### Parallel Opportunities
+
+- Phase 2: T006–T009 (different new files) run in parallel; T010 after T003.
+- Phase 5: T019–T024 (distinct storefront pages) parallel; T028/T029 parallel after admin chrome (T025).
+- Phase 7: T036/T037 parallel.
+
+---
+
+## Parallel Example: User Story 3 (storefront remainder)
+
+```bash
+# After Foundational + ProductCard (T011) exist, these touch different files:
+Task: "T019 Restyle listing + filters"
+Task: "T020 Restyle category + search"
+Task: "T021 Restyle checkout flow"
+Task: "T022 Restyle auth"
+Task: "T023 Restyle account"
+Task: "T024 Restyle content pages"
+```
+
+---
+
+## Implementation Strategy
+
+### MVP First (User Story 1)
+
+1. Phase 1 Setup → 2. Phase 2 Foundational (CRITICAL) → 3. Phase 3 US1 → **STOP & VALIDATE** the conversion path in LTR + RTL → demo.
+
+### Incremental Delivery
+
+Foundational ready → US1 (MVP) → US2 (bilingual hardening) → US3 (full coverage) → US4 (mobile) → Polish. Each story adds value without breaking previous ones.
+
+---
+
+## Notes
+
+- [P] = different files, no incomplete-task dependency.
+- US2 is partly cross-cutting (RTL is an acceptance condition on every task) plus explicit global tasks (T016–T018).
+- Commit + push after each task (per user request).
+- Guardrails: no changes under `src/app/api/`, `src/services/`, `prisma/`, or to enum values; brand strings only from `src/config/*`; prices only via `formatPrice()`; `.env*` never committed; status codes stay UPPERCASE.

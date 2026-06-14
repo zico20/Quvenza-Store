@@ -1337,3 +1337,13 @@ backend is running. The middleware checks for a valid token via the auth store.
 *End of CLAUDE.md — Version 1.4 — SoftoDev E-Commerce Platform*
 *Last updated: April 2026 — Post Agent A+B parallel development session: notifications, enhanced dashboard, order export/invoice/timeline, customer management*
 *This file should be updated whenever major architectural changes are made.*
+
+<!-- SPECKIT START -->
+## Active Spec-Kit Feature
+
+- **Feature**: Voltage Storefront & Admin Redesign
+- **Branch**: `001-voltage-storefront-redesign`
+- **Plan**: `specs/001-voltage-storefront-redesign/plan.md`
+- **Note**: Live project is a single Next.js 16 / React 19 / Tailwind v4 app under `src/` (not the legacy monorepo described above). Treat `src/` as ground truth. Redesign is presentation-layer only — no routes/API/data-model/enum changes.
+<!-- SPECKIT END -->
+
