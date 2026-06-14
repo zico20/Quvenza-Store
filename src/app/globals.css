@@ -172,6 +172,9 @@
 
   /* Prices / numeric runs stay LTR even inside RTL layouts */
   .ltr-nums { direction: ltr; unicode-bidi: isolate; }
+
+  /* Mirror directional icons (back/next/prev chevrons & arrows) under RTL */
+  [dir="rtl"] .rtl-flip { transform: scaleX(-1); }
 }
 
 @layer components {

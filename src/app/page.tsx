@@ -132,7 +132,7 @@ export default async function HomePage() {
                 color: '#F7F7F8', fontSize: 12, fontWeight: 600,
                 textDecoration: 'none', background: 'transparent', flexShrink: 0,
               }}>
-                {t('common.viewAll', lang)} <ArrowRight size={14} />
+                {t('common.viewAll', lang)} <ArrowRight size={14} className="rtl-flip" />
               </Link>
             </div>
 
@@ -154,7 +154,7 @@ export default async function HomePage() {
                     <div style={{ fontSize: 12, color: '#A6A6AE', marginTop: 4 }}>{t('home.categories.explore', lang)}</div>
                   </div>
                   <div style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#FF7A33', fontSize: 12, fontWeight: 600 }}>
-                    {t('common.browse', lang)} <ArrowRight size={14} />
+                    {t('common.browse', lang)} <ArrowRight size={14} className="rtl-flip" />
                   </div>
                 </Link>
               ))}
@@ -174,7 +174,7 @@ export default async function HomePage() {
               padding: '8px 14px', border: '1px solid #26262E', borderRadius: 4,
               color: '#F7F7F8', fontSize: 12, fontWeight: 600, textDecoration: 'none', flexShrink: 0,
             }}>
-              {t('common.viewAll', lang)} <ArrowRight size={14} />
+              {t('common.viewAll', lang)} <ArrowRight size={14} className="rtl-flip" />
             </Link>
           </div>
 

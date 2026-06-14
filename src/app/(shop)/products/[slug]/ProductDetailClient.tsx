@@ -42,7 +42,7 @@ export function ProductNotFound() {
         <h2 className="text-xl font-semibold text-text-primary mb-2">{t('product.notFound')}</h2>
         <p className="text-text-muted mb-6">{t('product.notFoundSub')}</p>
         <button onClick={() => router.back()} className="btn-primary flex items-center gap-2 mx-auto">
-          <ArrowLeft size={16} /> {t('product.goBack')}
+          <ArrowLeft size={16} className="rtl-flip" /> {t('product.goBack')}
         </button>
       </div>
     </div>

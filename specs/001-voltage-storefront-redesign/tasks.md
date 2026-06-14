@@ -63,7 +63,7 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 - [X] T012 [US1] Restyle `src/components/home/HeroSlider.tsx` and the home page `src/app/page.tsx` — Voltage hero (accent glow pagination, dark fallback, RTL chevrons), value-props with glow icons, categories, featured/bestseller grids, editorial banner with dark-toned placeholders. Brand strings via i18n/config.
 - [X] T013 [US1] Restyle product detail (`ProductDetailClient.tsx`) — plasma category eyebrow + display-font title, LTR price block, refined trust-signal grid (token-based, the four conversion cues), accent-thumbnail selection, fixed CTA spinner contrast. (Sticky mobile add-to-cart bar deferred to T033/US4.)
 - [X] T014 [US1] Restyle `src/components/cart/CartDrawer.tsx` and `src/components/cart/CartItem.tsx` — slide-over drawer (slideIn keyframe, `--shadow-lg`), accent count badge, display-font title, dual-currency (USD+IQD) subtotal, accent checkout CTA, LTR price runs. (Focus-trap/Esc hardening in T037.)
-- [ ] T015 [US1] Verify trust/payment/support strings on US1 surfaces come from config and that the SoftoDev WhatsApp/contact + social links are unchanged (`src/config/store.config.ts`, `src/components/layout/Footer.tsx`).
+- [X] T015 [US1] Verified: Footer reads name/email/phone/copyright/legal/social from `storeConfig` (no hardcoded brand strings); WhatsApp/contact (+964…) and social links live in config and are unchanged by the redesign.
 
 **Checkpoint**: The MVP conversion path is fully on Voltage and independently demoable in both directions.
 
@@ -75,9 +75,9 @@ Single Next.js App Router project. Source under `src/`. No `tests/` dir (no test
 
 **Independent Test**: Toggle Arabic on the US1 surfaces and global chrome; confirm full mirroring (nav, drawers, forms), flipped chevrons/arrows, LTR prices, correct Arabic typeface — zero broken/clipped layouts.
 
-- [ ] T016 [US2] Restyle global chrome to Voltage with logical CSS properties: `src/components/layout/Header.tsx` (logo lockup + glow, nav, search, language toggle, cart badge with glow), `src/components/layout/Footer.tsx`, `src/components/layout/MobileMenu.tsx`.
-- [ ] T017 [US2] Audit `src/components/layout/StoreChrome.tsx` + `src/components/layout/LangInitializer.tsx` to ensure `dir` is set correctly and Arabic uses `--font-arabic`; add a shared utility/class for `dir=ltr` price/number runs and apply it in `ProductCard`/cart/detail.
-- [ ] T018 [US2] Flip directional icons (chevrons/arrows, prev/next, "view all") under RTL across header, cart drawer, product detail, and pagination; verify with the Arabic toggle.
+- [X] T016 [US2] Restyle global chrome to Voltage: `Header.tsx` (glowing "S" logo lockup + display-font wordmark, cart `badge-dot` glow, Voltage palette), `Footer.tsx`, `MobileMenu.tsx` (token-based, auto-adopted). Contact/social strings stay config-driven.
+- [X] T017 [US2] Verified `LangInitializer` sets `dir`/`lang` on `<html>` from the lang store and `globals.css` routes Arabic to Cairo; added/applied the `.ltr-nums` helper to prices in ProductCard/cart/detail.
+- [X] T018 [US2] Added `[dir=rtl] .rtl-flip { transform: scaleX(-1) }` and applied to directional arrows on home + product detail; Header/HeroSlider already flip chevrons via `isRTL`. (Account/admin arrows handled in their US3 tasks.)
 
 **Checkpoint**: US1 surfaces + global chrome are flawless in both directions.
 
