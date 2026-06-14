@@ -1,0 +1,74 @@
+# ====================================================================
+# تشغيل المشروع كامل (التطبيق + قاعدة البيانات) عبر Docker.
+#
+# تشغيل كل شي:   docker compose up -d --build
+# إيقاف:         docker compose stop
+# حذف كل شي (مع البيانات): docker compose down -v
+# السجلات:        docker compose logs -f app
+#
+# التطبيق:  http://localhost:3000   |   قاعدة البيانات: localhost:5432
+# المتغيرات الحساسة تُقرأ من .env.docker (انسخه من .env.docker.example).
+# ====================================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce_local_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ecommerce
+      POSTGRES_PASSWORD: ecommerce_local_pass
+      POSTGRES_DB: ecommerce_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ecommerce_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecommerce -d ecommerce_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce_app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Inside the compose network the DB host is the service name "postgres", not localhost.
+    environment:
+      DATABASE_URL: "postgresql://ecommerce:ecommerce_local_pass@postgres:5432/ecommerce_db?schema=public"
+      DIRECT_URL: "postgresql://ecommerce:ecommerce_local_pass@postgres:5432/ecommerce_db?schema=public"
+      NODE_ENV: production
+    # App-specific secrets (JWT, Cloudinary, Telegram, public URLs) come from .env.docker
+    env_file:
+      - .env.docker
+    ports:
+      - "3000:3000"
+    # The standalone server starts directly. The schema is applied separately via the
+    # one-off "migrate" profile below (keeps the runtime image free of the Prisma CLI).
+    command: ["node", "server.js"]
+
+  # One-off helper to push the Prisma schema into the DB. Not started by default.
+  #   docker compose run --rm migrate
+  migrate:
+    profiles: ["tools"]
+    image: node:20-alpine
+    working_dir: /app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://ecommerce:ecommerce_local_pass@postgres:5432/ecommerce_db?schema=public"
+      DIRECT_URL: "postgresql://ecommerce:ecommerce_local_pass@postgres:5432/ecommerce_db?schema=public"
+    volumes:
+      - ./prisma:/app/prisma
+      - ./package.json:/app/package.json
+    command: sh -c "apk add --no-cache openssl >/dev/null && npx prisma@5.22.0 db push --skip-generate"
+
+volumes:
+  ecommerce_pgdata:
+    name: ecommerce_local_pgdata

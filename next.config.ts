@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // === Docker / self-host: emit a minimal standalone server bundle ===
+  output: 'standalone',
+
   // === Security & Trust ===
   poweredByHeader: false,
   compress: true,
