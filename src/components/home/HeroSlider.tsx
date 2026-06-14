@@ -17,9 +17,11 @@ const SLIDES = [
 function SlideBg({ desktop, mobile, tone, priority }: { desktop: string; mobile: string; tone: number; priority?: boolean }) {
   const hues = [18, 220, 280, 140, 40, 320];
   const h = hues[(tone - 1) % hues.length];
+  // Dark Voltage fallback: a deep near-black wash with an accent/tone glow
   const gradient = `
-    repeating-linear-gradient(135deg, oklch(0.78 0.04 ${h}) 0 2px, transparent 2px 14px),
-    linear-gradient(160deg, oklch(0.88 0.03 ${h}), oklch(0.72 0.05 ${h}))
+    radial-gradient(ellipse at 30% 20%, oklch(0.5 0.13 ${h} / 0.4), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(25,212,232,0.10), transparent 55%),
+    linear-gradient(160deg, #16161b, #0A0A0C)
   `;
   return (
     <>
@@ -93,9 +95,10 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
             aria-label={`Slide ${i + 1}`}
             style={{
               width: i === idx ? 28 : 8, height: 8, borderRadius: 4,
-              background: i === idx ? '#fff' : 'rgba(255,255,255,0.45)',
+              background: i === idx ? '#FF7A33' : 'rgba(255,255,255,0.45)',
+              boxShadow: i === idx ? '0 0 10px rgba(255,122,51,0.6)' : 'none',
               border: 'none', cursor: 'pointer',
-              transition: 'width 0.3s',
+              transition: 'width 0.3s, box-shadow 0.3s',
               padding: 0,
             }}
           />
