@@ -15,12 +15,12 @@ function formatDate(s: string) {
 // Level based on total spent
 function getLevel(totalSpent: number): { label: string; color: string; bg: string } {
   if (totalSpent >= 1000) return { label: 'PLATINUM', color: '#a78bfa', bg: 'rgba(167,139,250,0.12)' };
-  if (totalSpent >= 200)  return { label: 'GOLD',     color: '#fbbf24', bg: 'rgba(251,191,36,0.12)' };
-  return                          { label: 'SILVER',   color: '#A6A6AE', bg: 'rgba(161,161,166,0.12)' };
+  if (totalSpent >= 200)  return { label: 'GOLD',     color: '#F59E0B', bg: 'rgba(251,191,36,0.12)' };
+  return                          { label: 'SILVER',   color: '#4B5563', bg: 'rgba(161,161,166,0.12)' };
 }
 
 // Avatar color from name
-const AVATAR_COLORS = ['#FF7A33','#34D399','#60a5fa','#a78bfa','#fbbf24','#FB7185'];
+const AVATAR_COLORS = ['#2563EB','#16A34A','#60a5fa','#a78bfa','#F59E0B','#EF4444'];
 function avatarColor(name: string) {
   let h = 0;
   for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffffff;
@@ -78,10 +78,10 @@ export default function CustomersPage() {
   const avgLifetimeValue = all.length > 0 ? all.reduce((s, c) => s + (c.totalSpent ?? 0), 0) / all.length : 0;
 
   const kpis = [
-    { label: t('customers.columns.customer') + ' ' + t('orders.total'), value: totalCustomers.toLocaleString(), sub: `+${all.filter(c => new Date(c.createdAt) > thirtyDaysAgo).length} ${t('dashboard.revenueToday') === 'Revenue today' ? 'this week' : 'هذا الأسبوع'}`, subColor: '#34D399' },
-    { label: t('orders.delivered').replace('(Month)', '(30d)'), value: active30d.toLocaleString(), sub: all.length > 0 ? `${Math.round((active30d / Math.max(all.length, 1)) * 100)}%` : '—', subColor: '#A6A6AE' },
-    { label: t('customers.columns.customer') + ' retention', value: `${retention}%`, sub: retention > 50 ? '+' + (retention - 50) + '%' : '—', subColor: '#34D399' },
-    { label: 'Lifetime Value', value: formatPrice(avgLifetimeValue), sub: all.length > 0 ? `${all.length} customers` : '—', subColor: '#A6A6AE' },
+    { label: t('customers.columns.customer') + ' ' + t('orders.total'), value: totalCustomers.toLocaleString(), sub: `+${all.filter(c => new Date(c.createdAt) > thirtyDaysAgo).length} ${t('dashboard.revenueToday') === 'Revenue today' ? 'this week' : 'هذا الأسبوع'}`, subColor: '#16A34A' },
+    { label: t('orders.delivered').replace('(Month)', '(30d)'), value: active30d.toLocaleString(), sub: all.length > 0 ? `${Math.round((active30d / Math.max(all.length, 1)) * 100)}%` : '—', subColor: '#4B5563' },
+    { label: t('customers.columns.customer') + ' retention', value: `${retention}%`, sub: retention > 50 ? '+' + (retention - 50) + '%' : '—', subColor: '#16A34A' },
+    { label: 'Lifetime Value', value: formatPrice(avgLifetimeValue), sub: all.length > 0 ? `${all.length} customers` : '—', subColor: '#4B5563' },
   ];
 
   const totalPages = Math.ceil(total / limit);
@@ -95,9 +95,9 @@ export default function CustomersPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {kpis.map(k => (
-            <div key={k.label} style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 20 }}>
-              <div className="mono" style={{ fontSize: 11, color: '#6C6C76', marginBottom: 10 }}>{k.label}</div>
-              <div style={{ fontSize: 26, fontWeight: 700, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{k.value}</div>
+            <div key={k.label} style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, padding: 20 }}>
+              <div className="mono" style={{ fontSize: 11, color: '#9097A1', marginBottom: 10 }}>{k.label}</div>
+              <div style={{ fontSize: 26, fontWeight: 700, color: '#111827', letterSpacing: '-0.01em' }}>{k.value}</div>
               <div className="mono" style={{ marginTop: 6, fontSize: 12, color: k.subColor }}>{k.sub}</div>
             </div>
           ))}
@@ -105,16 +105,16 @@ export default function CustomersPage() {
 
         {/* Toolbar */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}>
-            <Icon name="search" size={15} style={{ color: '#6C6C76', flexShrink: 0 }} stroke={1.6} />
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 4 }}>
+            <Icon name="search" size={15} style={{ color: '#9097A1', flexShrink: 0 }} stroke={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('customers.search')}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#F7F7F8', fontSize: 13, fontFamily: 'inherit' }}
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: '#111827', fontSize: 13, fontFamily: 'inherit' }}
             />
           </div>
-          <button style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: '#121216', color: '#A6A6AE', border: '1px solid #26262E', borderRadius: 4, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
+          <button style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: '#FFFFFF', color: '#4B5563', border: '1px solid #EAECEF', borderRadius: 4, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
             <Icon name="download" size={14} stroke={1.6} />
             {t('orders.export').replace('Excel', '').trim()}
           </button>
@@ -123,20 +123,20 @@ export default function CustomersPage() {
         {/* Table */}
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {[...Array(5)].map((_, i) => <div key={i} style={{ height: 60, background: '#121216', border: '1px solid #26262E', borderRadius: 4 }} />)}
+            {[...Array(5)].map((_, i) => <div key={i} style={{ height: 60, background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 4 }} />)}
           </div>
         ) : customers.length === 0 ? (
-          <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <Icon name="user" size={40} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
-            <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('customers.columns.customer')}</p>
+          <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
+            <Icon name="user" size={40} stroke={1.2} style={{ color: '#9097A1', marginBottom: 16 }} />
+            <p style={{ color: '#111827', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('customers.columns.customer')}</p>
           </div>
         ) : (
           <>
-            <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, overflow: 'hidden' }}>
               {/* Header */}
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px', padding: '10px 20px', background: '#1A1A20', borderBottom: '1px solid #26262E', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px', padding: '10px 20px', background: '#F3F4F6', borderBottom: '1px solid #EAECEF', gap: 12 }}>
                 {[t('customers.columns.customer'), t('customers.columns.joined'), t('customers.columns.orders'), t('customers.columns.spent'), t('customers.columns.level'), ''].map((h, i) => (
-                  <div key={i} className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{h}</div>
+                  <div key={i} className="mono" style={{ fontSize: 10, color: '#9097A1' }}>{h}</div>
                 ))}
               </div>
               {/* Rows */}
@@ -149,11 +149,11 @@ export default function CustomersPage() {
                     href={`/admin/dashboard/customers/${c.id}`}
                     style={{
                       display: 'grid', gridTemplateColumns: '2fr 120px 80px 120px 120px 40px',
-                      padding: '14px 20px', borderBottom: '1px solid #1A1A20',
+                      padding: '14px 20px', borderBottom: '1px solid #F3F4F6',
                       alignItems: 'center', gap: 12, textDecoration: 'none',
                       transition: 'background 0.15s',
                     }}
-                    onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = '#1A1A20')}
+                    onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = '#F3F4F6')}
                     onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.background = 'transparent')}
                   >
                     {/* Customer */}
@@ -165,18 +165,18 @@ export default function CustomersPage() {
                         fontSize: 12, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
                       }}>{initials(c.name)}</div>
                       <div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{c.name}</div>
-                        <div style={{ fontSize: 11, color: '#6C6C76' }}>{c.email}</div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{c.name}</div>
+                        <div style={{ fontSize: 11, color: '#9097A1' }}>{c.email}</div>
                       </div>
                     </div>
                     {/* Since */}
-                    <div className="mono" style={{ fontSize: 11, color: '#A6A6AE' }}>
+                    <div className="mono" style={{ fontSize: 11, color: '#4B5563' }}>
                       {formatDate(c.createdAt)}
                     </div>
                     {/* Orders */}
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{c.totalOrders}</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{c.totalOrders}</div>
                     {/* Spending */}
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>
                       {formatPrice(c.totalSpent ?? 0)}
                     </div>
                     {/* Level */}
@@ -193,7 +193,7 @@ export default function CustomersPage() {
                       </span>
                     </div>
                     {/* Arrow */}
-                    <div style={{ color: '#6C6C76', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ color: '#9097A1', display: 'flex', justifyContent: 'center' }}>
                       <Icon name="chevronL" size={14} stroke={1.6} />
                     </div>
                   </Link>
@@ -203,16 +203,16 @@ export default function CustomersPage() {
 
             {/* Pagination */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <p className="mono" style={{ fontSize: 11, color: '#6C6C76' }}>
+              <p className="mono" style={{ fontSize: 11, color: '#9097A1' }}>
                 {customers.length} / {total} {t('customers.columns.customer')}
               </p>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-                  style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page <= 1 ? 0.4 : 1 }}>
+                  style={{ padding: '6px 10px', background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 4, color: '#4B5563', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page <= 1 ? 0.4 : 1 }}>
                   <Icon name="chevron" size={14} stroke={1.6} />
                 </button>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-                  style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page >= totalPages ? 0.4 : 1 }}>
+                  style={{ padding: '6px 10px', background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 4, color: '#4B5563', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page >= totalPages ? 0.4 : 1 }}>
                   <Icon name="chevronL" size={14} stroke={1.6} />
                 </button>
               </div>

@@ -50,18 +50,18 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
 
       {/* Brand header */}
       <div className="px-5 py-6 border-b border-border">
-        <div className="mono" style={{ fontSize: 10, color: '#6C6C76', marginBottom: 10 }}>
+        <div className="mono" style={{ fontSize: 10, color: '#9097A1', marginBottom: 10 }}>
           ADMIN PANEL
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{
             width: 30, height: 30, borderRadius: 9, flexShrink: 0,
-            background: 'linear-gradient(135deg,#FF7A33,#FF5C1A)',
+            background: 'linear-gradient(135deg,#2563EB,#1D4ED8)',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: '#0A0A0C',
-            boxShadow: '0 0 16px rgba(255,122,51,0.45)',
+            fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: '#F7F8FA',
+            boxShadow: '0 0 16px rgba(37,99,235,0.45)',
           }}>{adminConfig.storeName.charAt(0).toUpperCase()}</span>
-          <span style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: '#F7F7F8', letterSpacing: '-0.01em' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: '#111827', letterSpacing: '-0.01em' }}>
             {adminConfig.storeName}
           </span>
         </div>
@@ -79,9 +79,9 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
               style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '10px 12px', borderRadius: 5,
-                background: active ? '#1A1A20' : 'transparent',
-                color: active ? '#F7F7F8' : '#A6A6AE',
-                borderInlineStart: `2px solid ${active ? '#FF7A33' : 'transparent'}`,
+                background: active ? '#F3F4F6' : 'transparent',
+                color: active ? '#111827' : '#4B5563',
+                borderInlineStart: `2px solid ${active ? '#2563EB' : 'transparent'}`,
                 textDecoration: 'none', fontSize: 13,
                 fontWeight: active ? 600 : 500,
                 transition: 'all 0.15s',
@@ -101,7 +101,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
           <div className="flex items-center gap-3 px-3 py-2.5 mb-0.5">
             <div style={{
               width: 28, height: 28, borderRadius: 14, flexShrink: 0,
-              background: 'rgba(255,122,51,0.14)', color: '#FF7A33',
+              background: 'rgba(37,99,235,0.14)', color: '#2563EB',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
             }}>

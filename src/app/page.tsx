@@ -60,7 +60,7 @@ function CategoryPlaceholder({ index }: { index: number }) {
       flex: 1, minHeight: 60,
       background: `
         radial-gradient(circle at 30% 25%, oklch(0.5 0.13 ${h} / 0.45), transparent 60%),
-        linear-gradient(160deg, #16161b, #0A0A0C)
+        linear-gradient(160deg, #FFFFFF, #F7F8FA)
       `,
       borderRadius: 12,
     }} />
@@ -97,21 +97,21 @@ export default async function HomePage() {
         {/* ── VALUE PROPS ── */}
         <section
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-12 md:mb-16"
-          style={{ gap: 1, background: '#26262E', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}
+          style={{ gap: 1, background: '#EAECEF', border: '1px solid #EAECEF', borderRadius: 6, overflow: 'hidden' }}
         >
           {VALUE_PROPS.map(({ icon, title, sub }) => (
-            <div key={title} style={{ background: '#0A0A0C', padding: '20px 20px', display: 'flex', gap: 14, alignItems: 'center' }}>
+            <div key={title} style={{ background: '#F7F8FA', padding: '20px 20px', display: 'flex', gap: 14, alignItems: 'center' }}>
               <div style={{
                 width: 42, height: 42, borderRadius: 12, flexShrink: 0,
-                background: 'rgba(255,122,51,0.12)', color: '#FF9357',
-                boxShadow: '0 0 18px rgba(255,122,51,0.18)',
+                background: 'rgba(37,99,235,0.12)', color: '#1D4ED8',
+                boxShadow: '0 0 18px rgba(37,99,235,0.18)',
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <Icon name={icon} size={18} stroke={1.8} />
               </div>
               <div>
-                <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F7F7F8', fontFamily: 'var(--font-display)' }}>{title}</div>
-                <div style={{ fontSize: 12, color: '#A6A6AE', marginTop: 2 }}>{sub}</div>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: '#111827', fontFamily: 'var(--font-display)' }}>{title}</div>
+                <div style={{ fontSize: 12, color: '#4B5563', marginTop: 2 }}>{sub}</div>
               </div>
             </div>
           ))}
@@ -121,15 +121,15 @@ export default async function HomePage() {
         {categories.length > 0 && (
           <section className="mb-12 md:mb-16">
             {/* Section header */}
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #26262E', paddingBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #EAECEF', paddingBottom: 14 }}>
               <div>
-                <div className="mono" style={{ fontSize: 11, color: '#A6A6AE', marginBottom: 6 }}>{t('home.categories.sectionNum', lang)}</div>
-                <h2 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 26px)', fontWeight: 600, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{t('home.categories.title', lang)}</h2>
+                <div className="mono" style={{ fontSize: 11, color: '#4B5563', marginBottom: 6 }}>{t('home.categories.sectionNum', lang)}</div>
+                <h2 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 26px)', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>{t('home.categories.title', lang)}</h2>
               </div>
               <Link href="/products" style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '8px 14px', border: '1px solid #26262E', borderRadius: 4,
-                color: '#F7F7F8', fontSize: 12, fontWeight: 600,
+                padding: '8px 14px', border: '1px solid #EAECEF', borderRadius: 4,
+                color: '#111827', fontSize: 12, fontWeight: 600,
                 textDecoration: 'none', background: 'transparent', flexShrink: 0,
               }}>
                 {t('common.viewAll', lang)} <Icon name="arrow" size={14} className="rtl-flip" />
@@ -143,17 +143,17 @@ export default async function HomePage() {
                   href={`/category/${cat.slug}`}
                   className="hover-accent-border"
                   style={{
-                    background: '#121216', border: '1px solid #26262E', borderRadius: 6,
+                    background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6,
                     padding: '18px 18px', display: 'flex', flexDirection: 'column', gap: 16,
                     minHeight: 160, textDecoration: 'none',
                   }}
                 >
-                  <div className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>0{i + 1}</div>
+                  <div className="mono" style={{ fontSize: 10, color: '#9097A1' }}>0{i + 1}</div>
                   <div>
-                    <div style={{ fontSize: 'clamp(16px, 3vw, 22px)', fontWeight: 600, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{getCategoryName(cat.slug, cat.name, lang)}</div>
-                    <div style={{ fontSize: 12, color: '#A6A6AE', marginTop: 4 }}>{t('home.categories.explore', lang)}</div>
+                    <div style={{ fontSize: 'clamp(16px, 3vw, 22px)', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>{getCategoryName(cat.slug, cat.name, lang)}</div>
+                    <div style={{ fontSize: 12, color: '#4B5563', marginTop: 4 }}>{t('home.categories.explore', lang)}</div>
                   </div>
-                  <div style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#FF7A33', fontSize: 12, fontWeight: 600 }}>
+                  <div style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#2563EB', fontSize: 12, fontWeight: 600 }}>
                     {t('common.browse', lang)} <Icon name="arrow" size={14} className="rtl-flip" />
                   </div>
                 </Link>
@@ -164,15 +164,15 @@ export default async function HomePage() {
 
         {/* ── FEATURED PRODUCTS ── */}
         <section className="mb-12 md:mb-16">
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #26262E', paddingBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #EAECEF', paddingBottom: 14 }}>
             <div>
-              <div className="mono" style={{ fontSize: 11, color: '#A6A6AE', marginBottom: 6 }}>{t('home.featured.sectionNum', lang)}</div>
-              <h2 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 26px)', fontWeight: 600, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{t('home.featured.title', lang)}</h2>
+              <div className="mono" style={{ fontSize: 11, color: '#4B5563', marginBottom: 6 }}>{t('home.featured.sectionNum', lang)}</div>
+              <h2 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 26px)', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>{t('home.featured.title', lang)}</h2>
             </div>
             <Link href="/products" style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '8px 14px', border: '1px solid #26262E', borderRadius: 4,
-              color: '#F7F7F8', fontSize: 12, fontWeight: 600, textDecoration: 'none', flexShrink: 0,
+              padding: '8px 14px', border: '1px solid #EAECEF', borderRadius: 4,
+              color: '#111827', fontSize: 12, fontWeight: 600, textDecoration: 'none', flexShrink: 0,
             }}>
               {t('common.viewAll', lang)} <Icon name="arrow" size={14} className="rtl-flip" />
             </Link>
@@ -185,12 +185,12 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {[...Array(4)].map((_, i) => (
-                <div key={i} style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}>
-                  <div style={{ aspectRatio: '1/1', background: '#1A1A20' }} />
+                <div key={i} style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, overflow: 'hidden' }}>
+                  <div style={{ aspectRatio: '1/1', background: '#F3F4F6' }} />
                   <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <div style={{ height: 10, background: '#1A1A20', borderRadius: 3 }} />
-                    <div style={{ height: 10, background: '#1A1A20', borderRadius: 3, width: '60%' }} />
-                    <div style={{ height: 32, background: '#1A1A20', borderRadius: 4, marginTop: 8 }} />
+                    <div style={{ height: 10, background: '#F3F4F6', borderRadius: 3 }} />
+                    <div style={{ height: 10, background: '#F3F4F6', borderRadius: 3, width: '60%' }} />
+                    <div style={{ height: 32, background: '#F3F4F6', borderRadius: 4, marginTop: 8 }} />
                   </div>
                 </div>
               ))}
@@ -202,18 +202,18 @@ export default async function HomePage() {
         <section
           className="flex flex-col lg:grid lg:grid-cols-2 mb-12 md:mb-16 p-6 sm:p-8 md:p-12"
           style={{
-            background: '#121216', border: '1px solid #26262E', borderRadius: 8,
+            background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 8,
             gap: 32, alignItems: 'flex-start',
           }}
         >
           <div>
-            <div className="mono" style={{ fontSize: 11, color: '#FF7A33', letterSpacing: '0.15em', marginBottom: 14 }}>
+            <div className="mono" style={{ fontSize: 11, color: '#2563EB', letterSpacing: '0.15em', marginBottom: 14 }}>
               {t('home.editorial.kicker', lang)}
             </div>
-            <h1 style={{ fontSize: 'clamp(22px, 5vw, 34px)', fontWeight: 600, color: '#F7F7F8', margin: 0, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+            <h1 style={{ fontSize: 'clamp(22px, 5vw, 34px)', fontWeight: 600, color: '#111827', margin: 0, letterSpacing: '-0.02em', lineHeight: 1.1 }}>
               اشتراكات ChatGPT Plus وCanva Pro في العراق — دفع بالدينار، تفعيل فوري
             </h1>
-            <p style={{ fontSize: 14, color: '#A6A6AE', lineHeight: 1.6, marginTop: 16 }}>
+            <p style={{ fontSize: 14, color: '#4B5563', lineHeight: 1.6, marginTop: 16 }}>
               {t('home.editorial.body', lang)}
             </p>
             <div style={{ marginTop: 24, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
@@ -227,12 +227,12 @@ export default async function HomePage() {
             {[2, 5, 3, 8, 1, 4].map((tone, i) => {
               const h = TONE_HUES[(tone - 1) % TONE_HUES.length];
               return (
-                <div key={i} style={{ borderRadius: 12, overflow: 'hidden', aspectRatio: '1/1', border: '1px solid #26262E' }}>
+                <div key={i} style={{ borderRadius: 12, overflow: 'hidden', aspectRatio: '1/1', border: '1px solid #EAECEF' }}>
                   <div style={{
                     width: '100%', height: '100%',
                     background: `
                       radial-gradient(circle at 30% 25%, oklch(0.5 0.13 ${h} / 0.45), transparent 60%),
-                      linear-gradient(160deg, #16161b, #0A0A0C)
+                      linear-gradient(160deg, #FFFFFF, #F7F8FA)
                     `,
                   }} />
                 </div>
@@ -243,10 +243,10 @@ export default async function HomePage() {
 
         {/* ── BESTSELLERS ── */}
         <section className="mb-16 md:mb-20">
-          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #26262E', paddingBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20, borderBottom: '1px solid #EAECEF', paddingBottom: 14 }}>
             <div>
-              <div className="mono" style={{ fontSize: 11, color: '#A6A6AE', marginBottom: 6 }}>{t('home.bestsellers.sectionNum', lang)}</div>
-              <h2 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 26px)', fontWeight: 600, color: '#F7F7F8', letterSpacing: '-0.01em' }}>{t('home.bestsellers.title', lang)}</h2>
+              <div className="mono" style={{ fontSize: 11, color: '#4B5563', marginBottom: 6 }}>{t('home.bestsellers.sectionNum', lang)}</div>
+              <h2 style={{ margin: 0, fontSize: 'clamp(18px, 4vw, 26px)', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>{t('home.bestsellers.title', lang)}</h2>
             </div>
           </div>
 
@@ -257,12 +257,12 @@ export default async function HomePage() {
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {[...Array(8)].map((_, i) => (
-                <div key={i} style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}>
-                  <div style={{ aspectRatio: '1/1', background: '#1A1A20' }} />
+                <div key={i} style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, overflow: 'hidden' }}>
+                  <div style={{ aspectRatio: '1/1', background: '#F3F4F6' }} />
                   <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <div style={{ height: 10, background: '#1A1A20', borderRadius: 3 }} />
-                    <div style={{ height: 10, background: '#1A1A20', borderRadius: 3, width: '60%' }} />
-                    <div style={{ height: 32, background: '#1A1A20', borderRadius: 4, marginTop: 8 }} />
+                    <div style={{ height: 10, background: '#F3F4F6', borderRadius: 3 }} />
+                    <div style={{ height: 10, background: '#F3F4F6', borderRadius: 3, width: '60%' }} />
+                    <div style={{ height: 32, background: '#F3F4F6', borderRadius: 4, marginTop: 8 }} />
                   </div>
                 </div>
               ))}

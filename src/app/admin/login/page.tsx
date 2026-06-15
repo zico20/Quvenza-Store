@@ -53,10 +53,10 @@ export default function AdminLoginPage() {
           </div>
 
           {process.env.NODE_ENV !== 'production' && (
-            <div style={{ background: 'rgba(255,122,51,0.08)', border: '1px solid rgba(255,122,51,0.2)', borderRadius: 4, padding: '10px 14px', marginBottom: 20, fontSize: 12 }}>
-              <div className="mono" style={{ color: '#FF7A33', fontSize: 10, marginBottom: 4 }}>DEV CREDENTIALS</div>
-              <div style={{ color: '#A6A6AE' }}>admin@softodeviqstore.com</div>
-              <div style={{ color: '#A6A6AE', fontFamily: 'JetBrains Mono, monospace' }}>Admin@2026!</div>
+            <div style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)', borderRadius: 4, padding: '10px 14px', marginBottom: 20, fontSize: 12 }}>
+              <div className="mono" style={{ color: '#2563EB', fontSize: 10, marginBottom: 4 }}>DEV CREDENTIALS</div>
+              <div style={{ color: '#4B5563' }}>admin@softodeviqstore.com</div>
+              <div style={{ color: '#4B5563', fontFamily: 'JetBrains Mono, monospace' }}>Admin@2026!</div>
             </div>
           )}
 

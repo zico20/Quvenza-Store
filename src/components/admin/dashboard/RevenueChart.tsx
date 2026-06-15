@@ -5,22 +5,22 @@ import { useLang } from '@/hooks/admin/useLang';
 export default function RevenueChart({ data }: { data: { date: string; revenue: number }[] }) {
   const { t } = useLang();
   return (
-    <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 24 }}>
+    <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, padding: 24 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#F7F7F8' }}>{t('dashboard.revenueChart')}</div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{t('dashboard.revenueChart')}</div>
           {data.length > 0 && (
-            <div className="mono" style={{ fontSize: 11, color: '#6C6C76', marginTop: 4 }}>
+            <div className="mono" style={{ fontSize: 11, color: '#9097A1', marginTop: 4 }}>
               ${data.reduce((s, d) => s + d.revenue, 0).toLocaleString()} {t('dashboard.totalLabel')}
             </div>
           )}
         </div>
-        <div style={{ display: 'flex', gap: 2, padding: 2, background: '#0A0A0C', border: '1px solid #26262E', borderRadius: 4 }}>
+        <div style={{ display: 'flex', gap: 2, padding: 2, background: '#F7F8FA', border: '1px solid #EAECEF', borderRadius: 4 }}>
           {['7D', '30D', '90D'].map((p, i) => (
             <button key={p} style={{
               padding: '4px 10px', fontSize: 11, fontFamily: 'JetBrains Mono, monospace',
-              background: i === 1 ? '#121216' : 'transparent',
-              color: i === 1 ? '#F7F7F8' : '#6C6C76',
+              background: i === 1 ? '#FFFFFF' : 'transparent',
+              color: i === 1 ? '#111827' : '#9097A1',
               border: 'none', borderRadius: 3, cursor: 'pointer',
             }}>{p}</button>
           ))}
@@ -28,25 +28,25 @@ export default function RevenueChart({ data }: { data: { date: string; revenue: 
       </div>
       <ResponsiveContainer width="100%" height={180}>
         <BarChart data={data} margin={{ top: 0, right: 0, left: 0, bottom: 0 }} barCategoryGap="20%">
-          <CartesianGrid strokeDasharray="3 3" stroke="#26262E" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#EAECEF" vertical={false} />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 10, fill: '#6C6C76', fontFamily: 'JetBrains Mono, monospace' }}
+            tick={{ fontSize: 10, fill: '#9097A1', fontFamily: 'JetBrains Mono, monospace' }}
             tickLine={false} axisLine={false}
           />
           <YAxis
-            tick={{ fontSize: 10, fill: '#6C6C76', fontFamily: 'JetBrains Mono, monospace' }}
+            tick={{ fontSize: 10, fill: '#9097A1', fontFamily: 'JetBrains Mono, monospace' }}
             tickLine={false} axisLine={false}
             tickFormatter={v => `$${v}`}
           />
           <Tooltip
-            contentStyle={{ backgroundColor: '#1A1A20', border: '1px solid #26262E', borderRadius: 6, fontSize: 12, color: '#F7F7F8' }}
+            contentStyle={{ backgroundColor: '#F3F4F6', border: '1px solid #EAECEF', borderRadius: 6, fontSize: 12, color: '#111827' }}
             formatter={v => [`$${Number(v).toFixed(0)}`, 'Revenue']}
-            cursor={{ fill: 'rgba(255,122,51,0.06)' }}
+            cursor={{ fill: 'rgba(37,99,235,0.06)' }}
           />
           <Bar
             dataKey="revenue"
-            fill="#1A1A20"
+            fill="#F3F4F6"
             radius={[2, 2, 0, 0]}
           />
         </BarChart>
@@ -67,7 +67,7 @@ function DemoBars() {
       {bars.map((h, i) => (
         <div key={i} style={{
           flex: 1, height: `${h}%`,
-          background: i === bars.length - 1 ? '#FF7A33' : '#1A1A20',
+          background: i === bars.length - 1 ? '#2563EB' : '#F3F4F6',
           borderRadius: '2px 2px 0 0',
           transition: 'background 0.2s',
         }} />

@@ -23,13 +23,13 @@ const base =
   'disabled:opacity-50 disabled:cursor-not-allowed';
 
 const variants: Record<Variant, string> = {
-  // Electric-orange gradient with glow — the "sells" button
+  // Cobalt primary CTA — solid cobalt, white text, soft accent shadow, active depress
   primary:
-    'text-bg-base [background:linear-gradient(135deg,#FF7A33,#FF5C1A)] ' +
-    'shadow-[0_6px_18px_rgba(255,122,51,0.3)] ' +
-    'hover:shadow-[0_8px_24px_rgba(255,122,51,0.45)] hover:brightness-105',
+    'text-white bg-accent ' +
+    'shadow-[0_1px_2px_rgba(37,99,235,0.30)] ' +
+    'hover:bg-accent-hover hover:shadow-[0_6px_16px_rgba(37,99,235,0.30)] active:translate-y-px',
   secondary:
-    'bg-bg-surface text-text-primary border border-border-strong hover:bg-bg-elevated',
+    'bg-white text-text-primary border border-border-strong hover:bg-bg-base active:translate-y-px',
   ghost: 'bg-transparent text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
 };
 

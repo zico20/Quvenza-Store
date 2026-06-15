@@ -46,10 +46,10 @@ export default function GlossaryPage() {
       })))} />
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px' }}>
-        <h1 style={{ fontSize: 40, fontWeight: 700, color: '#F7F7F8', marginBottom: 12, letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: 40, fontWeight: 700, color: '#111827', marginBottom: 12, letterSpacing: '-0.02em' }}>
           قاموس المصطلحات
         </h1>
-        <p className="lead-paragraph" style={{ color: '#A6A6AE', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
+        <p className="lead-paragraph" style={{ color: '#4B5563', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
           دليل شامل لكل المصطلحات المتعلقة بالاشتراكات الرقمية في العراق.
         </p>
 
@@ -59,18 +59,18 @@ export default function GlossaryPage() {
               key={t.term}
               itemScope
               itemType="https://schema.org/DefinedTerm"
-              style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 8, padding: '24px 28px' }}
+              style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 8, padding: '24px 28px' }}
             >
               <h2
                 itemProp="name"
-                style={{ fontSize: 22, fontWeight: 700, color: '#FF7A33', marginBottom: 12, letterSpacing: '-0.01em' }}
+                style={{ fontSize: 22, fontWeight: 700, color: '#2563EB', marginBottom: 12, letterSpacing: '-0.01em' }}
               >
                 {t.term}
               </h2>
               <p
                 itemProp="description"
                 className="faq-answer"
-                style={{ color: '#A6A6AE', lineHeight: 1.75, fontSize: 14, margin: 0 }}
+                style={{ color: '#4B5563', lineHeight: 1.75, fontSize: 14, margin: 0 }}
               >
                 {t.definition}
               </p>
@@ -78,10 +78,10 @@ export default function GlossaryPage() {
           ))}
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: 48, padding: '24px', borderTop: '1px solid #26262E' }}>
-          <p style={{ color: '#6C6C76', fontSize: 13 }}>
+        <div style={{ textAlign: 'center', marginTop: 48, padding: '24px', borderTop: '1px solid #EAECEF' }}>
+          <p style={{ color: '#9097A1', fontSize: 13 }}>
             هل تريد معرفة أكثر؟{' '}
-            <a href="/faq" style={{ color: '#FF7A33', textDecoration: 'none' }}>راجع الأسئلة الشائعة</a>
+            <a href="/faq" style={{ color: '#2563EB', textDecoration: 'none' }}>راجع الأسئلة الشائعة</a>
           </p>
         </div>
       </div>

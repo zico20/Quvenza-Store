@@ -21,7 +21,7 @@ function SlideBg({ desktop, mobile, tone, priority }: { desktop: string; mobile:
   const gradient = `
     radial-gradient(ellipse at 30% 20%, oklch(0.5 0.13 ${h} / 0.4), transparent 60%),
     radial-gradient(ellipse at 80% 80%, rgba(25,212,232,0.10), transparent 55%),
-    linear-gradient(160deg, #16161b, #0A0A0C)
+    linear-gradient(160deg, #FFFFFF, #F7F8FA)
   `;
   return (
     <>
@@ -95,8 +95,8 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
             aria-label={`Slide ${i + 1}`}
             style={{
               width: i === idx ? 28 : 8, height: 8, borderRadius: 4,
-              background: i === idx ? '#FF7A33' : 'rgba(255,255,255,0.45)',
-              boxShadow: i === idx ? '0 0 10px rgba(255,122,51,0.6)' : 'none',
+              background: i === idx ? '#2563EB' : 'rgba(255,255,255,0.45)',
+              boxShadow: i === idx ? '0 0 10px rgba(37,99,235,0.6)' : 'none',
               border: 'none', cursor: 'pointer',
               transition: 'width 0.3s, box-shadow 0.3s',
               padding: 0,

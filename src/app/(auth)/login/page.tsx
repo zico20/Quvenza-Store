@@ -83,7 +83,7 @@ export default function LoginPage() {
           <div className="relative my-6">
             <div className="divider" />
             <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center">
-              <span className="px-3 text-text-muted text-xs" style={{ backgroundColor: '#111113' }}>or</span>
+              <span className="px-3 text-text-muted text-xs" style={{ backgroundColor: '#FFFFFF' }}>or</span>
             </span>
           </div>
 
