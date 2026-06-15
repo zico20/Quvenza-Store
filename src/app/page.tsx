@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import type { Product, Category } from '@/types';
 import ProductCard from '@/components/product/ProductCard';
-import HeroSlider from '@/components/home/HeroSlider';
 import { getServerLang, t, getCategoryName } from '@/lib/i18n';
+import { storeConfig } from '@/config/store.config';
 import JsonLd from '@/components/seo/JsonLd';
 import { organizationSchema, websiteSchema, localBusinessSchema } from '@/lib/schema';
 
@@ -89,8 +89,86 @@ export default async function HomePage() {
       <JsonLd data={websiteSchema()} />
       <JsonLd data={localBusinessSchema()} />
 
-      {/* ── HERO ── */}
-      <HeroSlider lang={lang} />
+      {/* ── HERO (Cobalt, image-free) ── */}
+      <section className="relative overflow-hidden border-b border-border bg-bg-surface">
+        {/* soft cobalt wash, no imagery */}
+        <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse at 75% 10%, rgba(37,99,235,0.10), transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(6,182,212,0.08), transparent 55%)' }} />
+        <div className="relative max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-12 items-center">
+          {/* Copy */}
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-bg-base px-3 py-1 text-xs font-semibold text-text-secondary">
+              <span className="h-1.5 w-1.5 rounded-full bg-success" style={{ boxShadow: '0 0 0 3px rgba(22,163,74,0.18)' }} />
+              {t('hero.slides.0.kicker', lang)}
+            </span>
+            <h1 className="mt-5 font-[family-name:var(--font-cairo)] font-extrabold leading-[1.16] tracking-tight text-[clamp(30px,5vw,52px)]" style={{ color: '#0B1220' }}>
+              {storeConfig.tagline}
+              <br />
+              <span className="text-accent">{t('hero.slides.0.cta', lang)} · {storeConfig.name}</span>
+            </h1>
+            <p className="mt-4 max-w-lg text-text-secondary leading-relaxed text-[15px] sm:text-base">
+              {t('hero.slides.0.body', lang)}
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Link href="/products" className="btn-accent text-base px-6 py-3.5">
+                {t('hero.slides.0.cta', lang)}
+                <Icon name="arrow" size={18} className="rtl-flip" />
+              </Link>
+              <Link href="/how-it-works" className="btn-secondary text-base px-6 py-3.5">
+                {t('home.editorial.cta2', lang) !== 'home.editorial.cta2' ? t('home.editorial.cta2', lang) : t('hero.slides.0.ctaAll', lang)}
+              </Link>
+            </div>
+            {/* Trust stars */}
+            <div className="mt-6 flex items-center gap-2">
+              <span className="inline-flex gap-0.5">
+                {[1, 2, 3, 4, 5].map((i) => <Icon key={i} name="star" size={15} stroke={0} color="#F59E0B" />)}
+              </span>
+              <span className="text-xs text-text-muted">{t('home.valueProps.localWarranty.title', lang)} · {t('home.valueProps.fastShipping.title', lang)}</span>
+            </div>
+          </div>
+
+          {/* Drawn "active subscription" card — no image */}
+          <div className="hidden lg:block">
+            <div className="relative rounded-2xl border border-border bg-white p-6 shadow-[0_14px_36px_rgba(16,24,40,0.12)]">
+              <div className="flex items-center justify-between">
+                <span className="mono text-[11px] font-bold tracking-wider text-text-muted">SUBSCRIPTION</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-[10px] font-bold text-success">
+                  <span className="h-1.5 w-1.5 rounded-full bg-success" /> {t('common.inStock', lang) !== 'common.inStock' ? t('common.inStock', lang) : 'فعّال'}
+                </span>
+              </div>
+              <div className="mt-4 flex items-center gap-3">
+                <div className="grid h-12 w-12 place-items-center rounded-xl bg-accent-subtle text-accent">
+                  <Icon name="sparkle" size={24} />
+                </div>
+                <div>
+                  <div className="font-[family-name:var(--font-display)] text-lg font-bold text-text-primary">ChatGPT Plus</div>
+                  <div className="text-xs text-text-muted">{t('hero.slides.0.kicker', lang)}</div>
+                </div>
+              </div>
+              <div className="mt-5 grid grid-cols-3 gap-2">
+                {([
+                  { icon: 'bolt', label: t('home.valueProps.fastShipping.title', lang) },
+                  { icon: 'shield', label: t('home.valueProps.localWarranty.title', lang) },
+                  { icon: 'bank', label: t('home.valueProps.expertSupport.title', lang) },
+                ] as const).map((f) => (
+                  <div key={f.label} className="rounded-xl border border-border bg-bg-base p-3 text-center">
+                    <Icon name={f.icon} size={18} className="mx-auto text-accent" />
+                    <div className="mt-1.5 text-[10px] font-medium text-text-secondary leading-tight">{f.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 flex items-end justify-between border-t border-border pt-4">
+                <div className="ltr-nums">
+                  <span className="font-[family-name:var(--font-display)] text-2xl font-extrabold text-text-primary">$25</span>
+                  <span className="text-text-muted line-through text-sm ms-2">$40</span>
+                </div>
+                <Link href="/products" className="btn-accent text-sm px-4 py-2">
+                  {t('hero.slides.0.cta', lang)}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8">
 
