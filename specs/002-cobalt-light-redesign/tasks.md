@@ -118,10 +118,10 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 **Independent Test**: At phone width, walk home → product → cart → 4-step checkout → confirmation; sidebars collapse, sticky CTAs work, RTL mirrored.
 
-- [ ] T036 [US4] Verify/adjust mobile home + grids (`page.tsx`, `ProductGrid`) collapse to 2 columns; hero stacks; categories scroll; trust cues above fold.
-- [ ] T037 [US4] Filter/nav collapse: listing/category filter sidebar → horizontal chip/filter bar; account + admin side-nav → horizontal top bar at mobile breakpoint.
-- [ ] T038 [US4] Sticky CTAs: sticky add-to-cart on product detail + sticky pay bar with running total on mobile checkout; mobile menu = full-screen slide-over.
-- [ ] T039 [P] [US4] Verify ≥44px touch targets on primary mobile controls (buttons, qty steppers, nav items, filter chips).
+- [X] T036 [US4] Verify/adjust mobile home + grids (`page.tsx`, `ProductGrid`) collapse to 2 columns; hero stacks; categories scroll; trust cues above fold.
+- [X] T037 [US4] Filter/nav collapse: listing/category filter sidebar → horizontal chip/filter bar; account + admin side-nav → horizontal top bar at mobile breakpoint.
+- [X] T038 [US4] Sticky CTAs: sticky add-to-cart on product detail + sticky pay bar with running total on mobile checkout; mobile menu = full-screen slide-over.
+- [X] T039 [P] [US4] Verify ≥44px touch targets on primary mobile controls (buttons, qty steppers, nav items, filter chips).
 
 **Checkpoint**: Full mobile journey usable both directions.
 
