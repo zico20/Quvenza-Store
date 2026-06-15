@@ -84,7 +84,7 @@ export default function ProductCard({ product }: { product: Product }) {
               className="mono"
               style={{
                 position: 'absolute', bottom: 12, insetInlineStart: 12,
-                fontSize: 10, color: 'rgba(247,247,248,0.35)',
+                fontSize: 10, color: 'rgba(17,24,39,0.45)',
               }}
             >
               {(product as any).category?.name || 'product shot'}
@@ -105,8 +105,8 @@ export default function ProductCard({ product }: { product: Product }) {
           style={{
             position: 'absolute', top: 10, insetInlineEnd: 10,
             width: 36, height: 36, borderRadius: 18,
-            background: 'rgba(10,10,12,0.85)', border: '1px solid var(--color-border)',
-            color: inWishlist ? '#EF4444' : '#111827',
+            background: 'rgba(255,255,255,0.9)', border: '1px solid var(--color-border)',
+            color: inWishlist ? '#EF4444' : '#4B5563',
             cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             backdropFilter: 'blur(6px)',
           }}

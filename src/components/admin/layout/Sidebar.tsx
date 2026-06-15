@@ -59,7 +59,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
             background: 'linear-gradient(135deg,#2563EB,#1D4ED8)',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, color: '#F7F8FA',
-            boxShadow: '0 0 16px rgba(37,99,235,0.45)',
+            boxShadow: '0 2px 8px rgba(37,99,235,0.25)',
           }}>{adminConfig.storeName.charAt(0).toUpperCase()}</span>
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 17, fontWeight: 700, color: '#111827', letterSpacing: '-0.01em' }}>
             {adminConfig.storeName}

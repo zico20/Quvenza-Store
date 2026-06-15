@@ -129,12 +129,12 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 ## Phase 7: Polish & Cross-Cutting
 
-- [ ] T040 **Dark→light hunt (final)**: grep for any remaining Voltage dark hex/rgba in `src` (`*.tsx`/`*.css`) and fix; confirm zero leftover dark-theme colors (FR/SC-002).
-- [ ] T041 [P] Confirm zero `lucide-react` imports remain in redesigned screens (`grep -rn "lucide-react" src`); all icons via custom `Icon` (SC-009).
-- [ ] T042 [P] Grep for lowercase enum comparisons introduced by the redesign; ensure status codes stay UPPERCASE (Principle V).
-- [ ] T043 [P] Accessibility pass: AA contrast on light, visible `:focus-visible` rings, keyboard operability of drawers/modals/menus/tabs/accordions/code-reveal.
-- [ ] T044 Run `npm run type-check` (clean) + `next build`; run the `quickstart.md` acceptance smoke (home plan toggle → product tabs/FAQ → cart → 4-step checkout → confirmation; order-detail code reveal; admin dashboard + table + order detail) in both LTR + RTL.
-- [ ] T045 Update `CLAUDE.md` SPECKIT block: mark Cobalt **implemented**, document Cobalt tokens/fonts/Icon, note Voltage superseded.
+- [X] T040 **Dark→light hunt (final)**: grep for any remaining Voltage dark hex/rgba in `src` (`*.tsx`/`*.css`) and fix; confirm zero leftover dark-theme colors (FR/SC-002).
+- [X] T041 [P] Confirm zero `lucide-react` imports remain in redesigned screens (`grep -rn "lucide-react" src`); all icons via custom `Icon` (SC-009).
+- [X] T042 [P] Grep for lowercase enum comparisons introduced by the redesign; ensure status codes stay UPPERCASE (Principle V).
+- [X] T043 [P] Accessibility pass: AA contrast on light, visible `:focus-visible` rings, keyboard operability of drawers/modals/menus/tabs/accordions/code-reveal.
+- [X] T044 Run `npm run type-check` (clean) + `next build`; run the `quickstart.md` acceptance smoke (home plan toggle → product tabs/FAQ → cart → 4-step checkout → confirmation; order-detail code reveal; admin dashboard + table + order detail) in both LTR + RTL.
+- [X] T045 Update `CLAUDE.md` SPECKIT block: mark Cobalt **implemented**, document Cobalt tokens/fonts/Icon, note Voltage superseded.
 
 ---
 
