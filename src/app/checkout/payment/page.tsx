@@ -50,7 +50,7 @@ export default function PaymentPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-lg">
-      <CheckoutSteps currentStep={2} />
+      <CheckoutSteps currentStep={3} />
       <h1 className="text-2xl font-bold text-text-primary mb-6">{t('checkout.paymentStep')}</h1>
       <div className="space-y-3 mb-6">
         {paymentOptions.map((m) => (

@@ -87,26 +87,26 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 ### Storefront remainder
 
-- [ ] T019 [P] [US3] Re-skin listing + filters: `src/app/(shop)/products/page.tsx`, `src/components/product/ProductGrid.tsx`, `src/components/product/ProductFilters.tsx` (filter sidebar → mobile chip bar, sort, results count, pagination, empty state).
-- [ ] T020 [P] [US3] Re-skin category + search: `src/app/(shop)/category/[slug]/page.tsx` (category hero banner + chips), `src/app/(shop)/search/page.tsx` (prominent field, suggestion chips, no-results empty state).
-- [ ] T021 [US3] **4-step checkout**: re-skin `src/app/cart/page.tsx`, `src/app/checkout/page.tsx`, `src/app/checkout/payment/page.tsx`, `src/app/checkout/success/page.tsx`, `src/components/checkout/CheckoutSteps.tsx`, `src/components/checkout/AddressForm.tsx` → Cart → Info → Payment → Confirmation with a sticky live order summary (subtotal/discount/total USD+IQD, trust badges); payment = ZainCash/Asia Hawala/Card (card form only when Card); preserve Iraq governorate/city system.
-- [ ] T022 [US3] Product detail **tabs + FAQ accordion**: add Description/Features/FAQ/Reviews tabs (one panel at a time) + FAQ accordion + related products grid to the product detail client (local state).
-- [ ] T023 [P] [US3] Re-skin auth: `src/app/(auth)/login/page.tsx`, `src/app/(auth)/register/page.tsx` → split layout (dark brand panel + form panel, leading-icon inputs, Google button).
-- [ ] T024 [US3] Account **order detail**: re-skin `src/app/account/orders/[id]/page.tsx` — order header + status badge + invoice, vertical timeline, items each with a **maskable activation code** (reveal/hide + copy-to-clipboard), summary + support card.
-- [ ] T025 [P] [US3] Re-skin remaining account: `src/app/account/page.tsx` (overview: stat cards + active subscriptions + recent orders), `src/app/account/orders/page.tsx`, `src/app/account/wishlist/page.tsx`, `src/app/account/addresses/page.tsx` (custom icons, status pills, EmptyState).
-- [ ] T026 [P] [US3] Re-skin content pages: `src/app/{about,contact,faq,how-it-works,glossary,payment-methods,privacy,terms}/page.tsx` to Cobalt (config-driven strings; legal URLs from config).
-- [ ] T027 [P] [US3] Create + style 404 `src/app/not-found.tsx` (big 404, message, search field, primary/secondary CTAs, popular-search chips).
+- [X] T019 [P] [US3] Re-skin listing + filters: `src/app/(shop)/products/page.tsx`, `src/components/product/ProductGrid.tsx`, `src/components/product/ProductFilters.tsx` (filter sidebar → mobile chip bar, sort, results count, pagination, empty state).
+- [X] T020 [P] [US3] Re-skin category + search: `src/app/(shop)/category/[slug]/page.tsx` (category hero banner + chips), `src/app/(shop)/search/page.tsx` (prominent field, suggestion chips, no-results empty state).
+- [X] T021 [US3] **4-step checkout**: re-skin `src/app/cart/page.tsx`, `src/app/checkout/page.tsx`, `src/app/checkout/payment/page.tsx`, `src/app/checkout/success/page.tsx`, `src/components/checkout/CheckoutSteps.tsx`, `src/components/checkout/AddressForm.tsx` → Cart → Info → Payment → Confirmation with a sticky live order summary (subtotal/discount/total USD+IQD, trust badges); payment = ZainCash/Asia Hawala/Card (card form only when Card); preserve Iraq governorate/city system.
+- [X] T022 [US3] Product detail **tabs + FAQ accordion**: add Description/Features/FAQ/Reviews tabs (one panel at a time) + FAQ accordion + related products grid to the product detail client (local state).
+- [X] T023 [P] [US3] Re-skin auth: `src/app/(auth)/login/page.tsx`, `src/app/(auth)/register/page.tsx` → split layout (dark brand panel + form panel, leading-icon inputs, Google button).
+- [X] T024 [US3] Account **order detail**: re-skin `src/app/account/orders/[id]/page.tsx` — order header + status badge + invoice, vertical timeline, items each with a **maskable activation code** (reveal/hide + copy-to-clipboard), summary + support card.
+- [X] T025 [P] [US3] Re-skin remaining account: `src/app/account/page.tsx` (overview: stat cards + active subscriptions + recent orders), `src/app/account/orders/page.tsx`, `src/app/account/wishlist/page.tsx`, `src/app/account/addresses/page.tsx` (custom icons, status pills, EmptyState).
+- [X] T026 [P] [US3] Re-skin content pages: `src/app/{about,contact,faq,how-it-works,glossary,payment-methods,privacy,terms}/page.tsx` to Cobalt (config-driven strings; legal URLs from config).
+- [X] T027 [P] [US3] Create + style 404 `src/app/not-found.tsx` (big 404, message, search field, primary/secondary CTAs, popular-search chips).
 
 ### Admin
 
-- [ ] T028 [US3] Re-skin admin chrome: `src/components/admin/layout/Sidebar.tsx` (dark sidebar + cobalt active states + "S" lockup), `src/components/admin/layout/Topbar.tsx`, admin login `src/app/admin/login/page.tsx`.
-- [ ] T029 [US3] Re-skin admin dashboard `src/app/admin/dashboard/page.tsx` + `src/components/admin/dashboard/{StatsCard,RecentOrders,TopProducts,LowStockAlert}.tsx` (stat cards w/ trend, recent-orders table) on Cobalt light surfaces.
-- [ ] T030 [US3] Apply Cobalt palette to charts: `src/components/admin/dashboard/{RevenueChart,OrderStatusChart,SalesByCategoryChart}.tsx` (token colors into recharts; light grid/surface; `Number(v ?? 0)` in formatters; RTL reads correctly).
-- [ ] T031 [P] [US3] Re-skin admin tables: `src/app/admin/dashboard/{orders,products,customers,categories,notifications}/page.tsx` to one Cobalt table style (status pills, row actions, custom icons).
-- [ ] T032 [P] [US3] Re-skin admin product form: `src/app/admin/dashboard/products/[id]/page.tsx` + `new/page.tsx` + `src/components/admin/products/{ProductForm,ImageUpload}.tsx` (basic info, per-plan pricing, SEO, image upload, visibility toggles).
-- [ ] T033 [P] [US3] Re-skin admin order detail `src/app/admin/dashboard/orders/[id]/page.tsx` + `src/components/admin/orders/{OrderTimeline,StatusChangeModal}.tsx` (status-change control, status-history timeline, internal note; validated-transition logic unchanged).
-- [ ] T034 [P] [US3] Re-skin admin customer detail `src/app/admin/dashboard/customers/[id]/page.tsx` + settings `src/app/admin/dashboard/settings/page.tsx`.
-- [ ] T035 [US3] Apply shared `EmptyState`/`Skeleton`/`Toast` across storefront + admin lists/tables/async surfaces touched in this phase.
+- [X] T028 [US3] Re-skin admin chrome: `src/components/admin/layout/Sidebar.tsx` (dark sidebar + cobalt active states + "S" lockup), `src/components/admin/layout/Topbar.tsx`, admin login `src/app/admin/login/page.tsx`.
+- [X] T029 [US3] Re-skin admin dashboard `src/app/admin/dashboard/page.tsx` + `src/components/admin/dashboard/{StatsCard,RecentOrders,TopProducts,LowStockAlert}.tsx` (stat cards w/ trend, recent-orders table) on Cobalt light surfaces.
+- [X] T030 [US3] Apply Cobalt palette to charts: `src/components/admin/dashboard/{RevenueChart,OrderStatusChart,SalesByCategoryChart}.tsx` (token colors into recharts; light grid/surface; `Number(v ?? 0)` in formatters; RTL reads correctly).
+- [X] T031 [P] [US3] Re-skin admin tables: `src/app/admin/dashboard/{orders,products,customers,categories,notifications}/page.tsx` to one Cobalt table style (status pills, row actions, custom icons).
+- [X] T032 [P] [US3] Re-skin admin product form: `src/app/admin/dashboard/products/[id]/page.tsx` + `new/page.tsx` + `src/components/admin/products/{ProductForm,ImageUpload}.tsx` (basic info, per-plan pricing, SEO, image upload, visibility toggles).
+- [X] T033 [P] [US3] Re-skin admin order detail `src/app/admin/dashboard/orders/[id]/page.tsx` + `src/components/admin/orders/{OrderTimeline,StatusChangeModal}.tsx` (status-change control, status-history timeline, internal note; validated-transition logic unchanged).
+- [X] T034 [P] [US3] Re-skin admin customer detail `src/app/admin/dashboard/customers/[id]/page.tsx` + settings `src/app/admin/dashboard/settings/page.tsx`.
+- [X] T035 [US3] Apply shared `EmptyState`/`Skeleton`/`Toast` across storefront + admin lists/tables/async surfaces touched in this phase.
 
 **Checkpoint**: All ~18 screen groups on Cobalt light with consistent primitives + new interactions, both directions.
 
