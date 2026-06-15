@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useLang } from '@/hooks/useLang';
 import type { Lang } from '@/lib/i18n';
 
@@ -122,7 +122,7 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
-          {isRTL ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {isRTL ? <Icon name="chevron" size={16} /> : <Icon name="chevronL" size={16} />}
         </button>
         <button
           onClick={next}
@@ -135,7 +135,7 @@ export default function HeroSlider({ lang: serverLang }: HeroSliderProps) {
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           }}
         >
-          {isRTL ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+          {isRTL ? <Icon name="chevronL" size={16} /> : <Icon name="chevron" size={16} />}
         </button>
       </div>
     </section>

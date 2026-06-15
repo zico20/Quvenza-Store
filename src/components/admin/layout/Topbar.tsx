@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Bell, Menu } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { useAdminUIStore } from '@/store/admin/ui.store';
 import { adminNotifications } from '@/lib/admin/api';
@@ -73,7 +73,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
           aria-label="Open menu"
           className="lg:hidden p-2 -ml-1 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors"
         >
-          <Menu className="h-5 w-5" />
+          <Icon name="menu" className="h-5 w-5" size={20} />
         </button>
         <div>
           <div className="mono" style={{ fontSize: 10, color: '#6C6C76', marginBottom: 4 }}>
@@ -103,7 +103,7 @@ export default function Topbar({ title = '' }: { title?: string }) {
             aria-label="Notifications"
             onClick={() => setOpen((o) => !o)}
           >
-            <Bell className="h-5 w-5" />
+            <Icon name="bell" className="h-5 w-5" size={20} />
             {unreadCount > 0 && (
               <span className="absolute top-1 right-1 h-4 w-4 text-white text-[10px] font-bold rounded-full flex items-center justify-center" style={{ background: '#FF7A33', fontFamily: 'JetBrains Mono, monospace' }}>
                 {unreadCount > 9 ? '9+' : unreadCount}

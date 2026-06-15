@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Edit, Trash2, Search, Package } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Product } from '@/types';
 import { adminProducts } from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
@@ -42,7 +42,7 @@ export default function ProductsPage() {
         {/* Toolbar */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 24, alignItems: 'center' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}>
-            <Search size={15} style={{ color: '#6C6C76', flexShrink: 0 }} strokeWidth={1.6} />
+            <Icon name="search" size={15} style={{ color: '#6C6C76', flexShrink: 0 }} stroke={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -58,7 +58,7 @@ export default function ProductsPage() {
               borderRadius: 4, fontSize: 13, fontWeight: 600, textDecoration: 'none',
             }}
           >
-            <Plus size={14} strokeWidth={2} />
+            <Icon name="plus" size={14} stroke={2} />
             {t('products.new')}
           </Link>
         </div>
@@ -72,7 +72,7 @@ export default function ProductsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <Package size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+            <Icon name="package" size={40} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
             <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('products.noProducts')}</p>
           </div>
         ) : (
@@ -139,14 +139,14 @@ export default function ProductsPage() {
                       width: 30, height: 30, borderRadius: 4,
                       background: 'transparent', color: '#A6A6AE', border: 'none', cursor: 'pointer', textDecoration: 'none',
                     }}>
-                      <Edit size={14} strokeWidth={1.6} />
+                      <Icon name="edit" size={14} stroke={1.6} />
                     </Link>
                     <button onClick={() => handleDelete(p.id)} style={{
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                       width: 30, height: 30, borderRadius: 4,
                       background: 'transparent', color: '#A6A6AE', border: 'none', cursor: 'pointer',
                     }}>
-                      <Trash2 size={14} strokeWidth={1.6} />
+                      <Icon name="trash" size={14} stroke={1.6} />
                     </button>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Download, Filter, ChevronLeft, ChevronRight, ShoppingBag } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Order } from '@/types';
 import { adminOrders } from '@/lib/admin/api';
 import StatusBadge from '@/components/admin/orders/StatusBadge';
@@ -124,7 +124,7 @@ export default function OrdersPage() {
         {/* Search + actions */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}>
-            <Search size={15} style={{ color: '#6C6C76', flexShrink: 0 }} strokeWidth={1.6} />
+            <Icon name="search" size={15} style={{ color: '#6C6C76', flexShrink: 0 }} stroke={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -143,7 +143,7 @@ export default function OrdersPage() {
               opacity: exporting ? 0.6 : 1,
             }}
           >
-            <Download size={14} strokeWidth={1.6} />
+            <Icon name="download" size={14} stroke={1.6} />
             {exporting ? '…' : t('orders.export')}
           </button>
         </div>
@@ -191,7 +191,7 @@ export default function OrdersPage() {
           </div>
         ) : orders.length === 0 ? (
           <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <ShoppingBag size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+            <Icon name="cart" size={40} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
             <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('orders.noOrders')}</p>
             <p style={{ color: '#6C6C76', fontSize: 13, marginTop: 6 }}>{t('orders.adjustFilters')}</p>
           </div>
@@ -241,7 +241,7 @@ export default function OrdersPage() {
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#F7F7F8' }}>{formatPrice(o.total)}</div>
                   <div><StatusBadge status={o.status} /></div>
                   <div style={{ color: '#6C6C76', display: 'flex', justifyContent: 'center' }}>
-                    <ChevronLeft size={14} strokeWidth={1.6} />
+                    <Icon name="chevronL" size={14} stroke={1.6} />
                   </div>
                 </div>
               ))}
@@ -259,14 +259,14 @@ export default function OrdersPage() {
                   disabled={pagination.page <= 1}
                   style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}
                 >
-                  <ChevronRight size={14} strokeWidth={1.6} />
+                  <Icon name="chevron" size={14} stroke={1.6} />
                 </button>
                 <button
                   onClick={() => setPagination(p => ({ ...p, page: Math.min(p.pages, p.page + 1) }))}
                   disabled={pagination.page >= pagination.pages}
                   style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}
                 >
-                  <ChevronLeft size={14} strokeWidth={1.6} />
+                  <Icon name="chevronL" size={14} stroke={1.6} />
                 </button>
               </div>
             </div>

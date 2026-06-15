@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingBag, ChevronLeft, ChevronRight, Package } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { orders as ordersApi } from '@/lib/api';
 import type { Order } from '@/types';
 import { formatDate } from '@/lib/utils';
@@ -36,7 +36,7 @@ export default function OrdersPage() {
 
       {ordersList.length === 0 ? (
         <div className="bg-bg-surface border border-border rounded-xl py-16 px-6 text-center">
-          <ShoppingBag className="h-10 w-10 text-text-muted mx-auto mb-3" />
+          <Icon name="cart" className="h-10 w-10 text-text-muted mx-auto mb-3" />
           <h2 className="text-text-primary text-base font-semibold mb-1">{t('orders.noOrders')}</h2>
           <p className="text-text-muted text-sm mb-5">{t('orders.noOrdersSub')}</p>
           <Link href="/products" className="btn-accent text-sm">{t('orders.shopNow')}</Link>
@@ -61,7 +61,7 @@ export default function OrdersPage() {
                   {/* Left: icon + info */}
                   <div className="flex items-start gap-3 min-w-0 flex-1">
                     <div className="w-10 h-10 rounded-lg bg-bg-elevated flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Package size={18} className="text-text-muted" strokeWidth={1.5} />
+                      <Icon name="package" size={18} className="text-text-muted" stroke={1.5} />
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-text-primary truncate">
@@ -80,8 +80,8 @@ export default function OrdersPage() {
                     <StatusBadge status={order.status} />
                   </div>
                   {isRTL
-                    ? <ChevronLeft size={16} className="text-text-muted flex-shrink-0 self-center group-hover:text-accent transition-colors" />
-                    : <ChevronRight size={16} className="text-text-muted flex-shrink-0 self-center group-hover:text-accent transition-colors" />
+                    ? <Icon name="chevronL" size={16} className="text-text-muted flex-shrink-0 self-center group-hover:text-accent transition-colors" />
+                    : <Icon name="chevron" size={16} className="text-text-muted flex-shrink-0 self-center group-hover:text-accent transition-colors" />
                   }
                 </div>
               </Link>

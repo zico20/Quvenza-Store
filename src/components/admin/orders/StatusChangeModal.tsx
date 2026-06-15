@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { OrderStatus } from '@/types';
 import { adminOrders } from '@/lib/admin/api';
 import StatusBadge from './StatusBadge';
@@ -59,7 +59,7 @@ export default function StatusChangeModal({
             onClick={onClose}
             className="p-1 rounded hover:bg-bg-elevated text-text-muted hover:text-text-primary transition-colors"
           >
-            <X className="h-5 w-5" />
+            <Icon name="x" className="h-5 w-5" size={20} />
           </button>
         </div>
 

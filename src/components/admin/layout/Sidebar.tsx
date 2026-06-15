@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Package, ShoppingBag, Tag, Users, Bell, LogOut, Settings2, X } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
 import { adminAuth } from '@/lib/admin/api';
 import { adminConfig } from '@/config/admin.config';
@@ -18,14 +18,14 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
   const { logout, user } = useAdminAuthStore();
   const { t, isRTL } = useLang();
 
-  const navItems = [
-    { href: '/admin/dashboard',               label: t('nav.overview'),      icon: LayoutDashboard },
-    { href: '/admin/dashboard/orders',        label: t('nav.orders'),        icon: ShoppingBag },
-    { href: '/admin/dashboard/products',      label: t('nav.products'),      icon: Package },
-    { href: '/admin/dashboard/categories',    label: t('nav.categories'),    icon: Tag },
-    { href: '/admin/dashboard/customers',     label: t('nav.customers'),     icon: Users },
-    { href: '/admin/dashboard/notifications', label: t('nav.notifications'), icon: Bell },
-    { href: '/admin/dashboard/settings',      label: t('nav.settings'),      icon: Settings2 },
+  const navItems: { href: string; label: string; icon: IconName }[] = [
+    { href: '/admin/dashboard',               label: t('nav.overview'),      icon: 'dashboard' },
+    { href: '/admin/dashboard/orders',        label: t('nav.orders'),        icon: 'cart' },
+    { href: '/admin/dashboard/products',      label: t('nav.products'),      icon: 'package' },
+    { href: '/admin/dashboard/categories',    label: t('nav.categories'),    icon: 'tag' },
+    { href: '/admin/dashboard/customers',     label: t('nav.customers'),     icon: 'user' },
+    { href: '/admin/dashboard/notifications', label: t('nav.notifications'), icon: 'bell' },
+    { href: '/admin/dashboard/settings',      label: t('nav.settings'),      icon: 'settings' },
   ];
 
   async function handleLogout() {
@@ -44,7 +44,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
           className={`absolute top-4 p-1 text-text-muted hover:text-text-primary ${isRTL ? 'left-4' : 'right-4'}`}
           aria-label="Close menu"
         >
-          <X className="h-5 w-5" />
+          <Icon name="x" className="h-5 w-5" />
         </button>
       )}
 
@@ -69,7 +69,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
 
       {/* Nav */}
       <nav className="flex-1 p-3 flex flex-col gap-0.5 overflow-y-auto">
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {navItems.map(({ href, label, icon }) => {
           const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(href));
           return (
             <Link
@@ -88,7 +88,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
               }}
               className={active ? '' : 'hover:text-text-primary hover:bg-bg-elevated'}
             >
-              <Icon size={16} strokeWidth={1.6} style={{ flexShrink: 0 }} />
+              <Icon name={icon} size={16} stroke={1.6} style={{ flexShrink: 0 }} />
               {label}
             </Link>
           );
@@ -115,7 +115,7 @@ export default function Sidebar({ onClose, showCloseButton = false }: SidebarPro
           className="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-error hover:bg-bg-elevated w-full transition-colors duration-150"
           style={{ fontFamily: 'inherit' }}
         >
-          <LogOut size={16} strokeWidth={1.6} style={{ flexShrink: 0 }} />
+          <Icon name="logout" size={16} stroke={1.6} style={{ flexShrink: 0 }} />
           {t('nav.logout')}
         </button>
       </div>

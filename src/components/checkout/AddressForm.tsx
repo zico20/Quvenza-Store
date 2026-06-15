@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Check } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { GOVERNORATE_NAMES, getCitiesForGovernorate, getGovernorateName, getCityName } from '@/lib/iraq-locations';
 import { useLang } from '@/hooks/useLang';
 
@@ -181,7 +181,7 @@ export function AddressForm({ defaultValues, onSubmit, submitLabel, loading = fa
             border: '1.5px solid #26262E', background: '#0A0A0C',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            {watch('isDefault') && <Check size={12} style={{ color: '#FF7A33' }} strokeWidth={2.5} />}
+            {watch('isDefault') && <Icon name="check" size={12} style={{ color: '#FF7A33' }} stroke={2.5} />}
           </div>
         </div>
         <span style={{ fontSize: 13, color: '#A6A6AE' }}>{t('address.setDefault')}</span>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, ShoppingCart, User, Heart, Menu, X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { storeConfig } from '@/config/store.config';
@@ -122,7 +122,7 @@ export default function Header({ navCategories }: HeaderProps) {
                 style={{ border: 'none', cursor: 'pointer', position: 'relative' }}
                 aria-label="Cart"
               >
-                <ShoppingCart size={18} strokeWidth={1.6} />
+                <Icon name="cart" size={18} stroke={1.6} />
                 {cartCount > 0 && <span className="badge-dot">{cartCount}</span>}
               </button>
               {currencyBtn}
@@ -132,7 +132,7 @@ export default function Header({ navCategories }: HeaderProps) {
                 style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 8, borderRadius: 4, color: '#F7F7F8', background: 'transparent', border: 'none', cursor: 'pointer' }}
                 aria-label="Menu"
               >
-                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                {mobileOpen ? <Icon name="x" size={20} /> : <Icon name="menu" size={20} />}
               </button>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default function Header({ navCategories }: HeaderProps) {
             onSubmit={handleSearch}
             style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '9px 12px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}
           >
-            <Search size={15} strokeWidth={1.6} style={{ color: '#6C6C76', flexShrink: 0 }} />
+            <Icon name="search" size={15} stroke={1.6} style={{ color: '#6C6C76', flexShrink: 0 }} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -172,7 +172,7 @@ export default function Header({ navCategories }: HeaderProps) {
 
           {/* Search */}
           <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE' }}>
-            <Search size={16} strokeWidth={1.6} />
+            <Icon name="search" size={16} stroke={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -185,14 +185,14 @@ export default function Header({ navCategories }: HeaderProps) {
           {/* Right actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Link href="/account" className="nav-icon-btn" aria-label="Wishlist" style={{ position: 'relative' }}>
-              <Heart size={18} strokeWidth={1.6} />
+              <Icon name="heart" size={18} stroke={1.6} />
               {wishlistCount > 0 && <span className="badge-dot">{wishlistCount}</span>}
             </Link>
             <Link href="/account" className="nav-icon-btn" aria-label="Account">
-              <User size={18} strokeWidth={1.6} />
+              <Icon name="user" size={18} stroke={1.6} />
             </Link>
             <button onClick={toggleDrawer} className="nav-icon-btn" style={{ border: 'none', cursor: 'pointer', position: 'relative' }}>
-              <ShoppingCart size={18} strokeWidth={1.6} />
+              <Icon name="cart" size={18} stroke={1.6} />
               {cartCount > 0 && <span className="badge-dot">{cartCount}</span>}
             </button>
             {currencyBtn}
@@ -268,7 +268,7 @@ export default function Header({ navCategories }: HeaderProps) {
                 style={{ padding: 6, color: '#6C6C76', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 4 }}
                 aria-label="Close menu"
               >
-                <X size={20} />
+                <Icon name="x" size={20} />
               </button>
             </div>
 
@@ -279,14 +279,14 @@ export default function Header({ navCategories }: HeaderProps) {
                 padding: '10px 12px', background: '#1A1A20', borderRadius: 6,
                 color: '#A6A6AE', textDecoration: 'none', fontSize: 13, fontWeight: 500,
               }}>
-                <User size={14} strokeWidth={1.6} /> {t('nav.account')}
+                <Icon name="user" size={14} stroke={1.6} /> {t('nav.account')}
               </Link>
               <Link href="/account" onClick={() => setMobileOpen(false)} style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
                 padding: '10px 12px', background: '#1A1A20', borderRadius: 6,
                 color: '#A6A6AE', textDecoration: 'none', fontSize: 13, fontWeight: 500, position: 'relative',
               }}>
-                <Heart size={14} strokeWidth={1.6} /> {t('nav.wishlist')}
+                <Icon name="heart" size={14} stroke={1.6} /> {t('nav.wishlist')}
                 {wishlistCount > 0 && (
                   <span style={{ position: 'absolute', top: 6, right: 8, background: '#FF7A33', color: '#fff', borderRadius: 10, fontSize: 10, padding: '1px 5px', fontFamily: 'JetBrains Mono, monospace', lineHeight: 1.4 }}>
                     {wishlistCount}

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plus, Edit2, Trash2, Tag, X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Category } from '@/types';
 import adminApiClient from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
@@ -172,7 +172,7 @@ export default function CategoriesPage() {
                 onClick={closeModal}
                 style={{ background: 'transparent', border: 'none', color: '#6C6C76', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
-                <X size={18} />
+                <Icon name="x" size={18} />
               </button>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -241,7 +241,7 @@ export default function CategoriesPage() {
               borderRadius: 4, fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer',
             }}
           >
-            <Plus size={14} strokeWidth={2} />
+            <Icon name="plus" size={14} stroke={2} />
             {t('categories.new')}
           </button>
         </div>
@@ -254,7 +254,7 @@ export default function CategoriesPage() {
           </div>
         ) : categories.length === 0 ? (
           <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <Tag size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+            <Icon name="tag" size={40} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
             <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: '0 0 12px' }}>
               {t('categories.title')}
             </p>
@@ -294,7 +294,7 @@ export default function CategoriesPage() {
                     {cat.image ? (
                       <img src={cat.image} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <Tag size={14} style={{ color: '#6C6C76' }} strokeWidth={1.4} />
+                      <Icon name="tag" size={14} style={{ color: '#6C6C76' }} stroke={1.4} />
                     )}
                   </div>
                   <span style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{cat.name}</span>
@@ -317,13 +317,13 @@ export default function CategoriesPage() {
                     onClick={() => openEdit(cat)}
                     style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: 4, background: 'transparent', color: '#A6A6AE', border: 'none', cursor: 'pointer' }}
                   >
-                    <Edit2 size={14} strokeWidth={1.6} />
+                    <Icon name="edit" size={14} stroke={1.6} />
                   </button>
                   <button
                     onClick={() => setDeleteConfirm(cat)}
                     style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 30, borderRadius: 4, background: 'transparent', color: '#A6A6AE', border: 'none', cursor: 'pointer' }}
                   >
-                    <Trash2 size={14} strokeWidth={1.6} />
+                    <Icon name="trash" size={14} stroke={1.6} />
                   </button>
                 </div>
               </div>

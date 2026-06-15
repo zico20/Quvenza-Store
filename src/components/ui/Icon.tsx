@@ -15,7 +15,11 @@ export type IconName =
   | 'check' | 'checkCircle' | 'arrow' | 'arrowLeft' | 'chevron' | 'chevronL'
   | 'x' | 'menu' | 'user' | 'package' | 'pin' | 'filter' | 'sort' | 'trash'
   | 'plus' | 'minus' | 'mail' | 'phone' | 'tag' | 'info' | 'eye' | 'edit'
-  | 'logout' | 'clock' | 'grid' | 'facebook' | 'instagram' | 'twitter';
+  | 'logout' | 'clock' | 'grid' | 'facebook' | 'instagram' | 'twitter'
+  // Extras added for the lucide→Icon migration (same line style):
+  | 'download' | 'upload' | 'save' | 'refresh' | 'toggle' | 'dollar'
+  | 'file' | 'settings' | 'alert' | 'bell' | 'calendar' | 'trending'
+  | 'dashboard' | 'key' | 'truck' | 'spinner';
 
 type El = ['path' | 'circle' | 'rect', Record<string, string | number>];
 type Def = { filled?: boolean; els: El[] };
@@ -63,6 +67,23 @@ const ICONS: Record<IconName, Def> = {
   facebook:  { els: [['path', { d: 'M14.5 8.5 H17 V5.5 H14.5 C12.8 5.5 11.5 6.8 11.5 8.5 V10.5 H9.5 V13.5 H11.5 V20 H14.5 V13.5 H16.8 L17.2 10.5 H14.5 V8.8 C14.5 8.6 14.6 8.5 14.5 8.5 Z', fill: 'currentColor', stroke: 'none' }]] },
   instagram: { els: [['rect', { x: 4, y: 4, width: 16, height: 16, rx: 5 }], ['circle', { cx: 12, cy: 12, r: 3.6 }], ['path', { d: 'M16.6 7.4 H16.61' }]] },
   twitter:   { els: [['path', { d: 'M5 5 L11 13 L5 19 H7 L12 14 L16 19 H20 L13.5 10.5 L19 5 H17 L12.5 9.5 L9 5 Z', fill: 'currentColor', stroke: 'none' }]] },
+  // ── Extras for the migration (line style, 1.7px stroke) ──
+  download:  { els: [['path', { d: 'M12 4 V15' }], ['path', { d: 'M7.5 10.5 L12 15 L16.5 10.5' }], ['path', { d: 'M5 19 H19' }]] },
+  upload:    { els: [['path', { d: 'M12 20 V9' }], ['path', { d: 'M7.5 13.5 L12 9 L16.5 13.5' }], ['path', { d: 'M5 5 H19' }]] },
+  save:      { els: [['path', { d: 'M5 5 H16 L19 8 V19 H5 Z' }], ['path', { d: 'M8 5 V9 H15 V5' }], ['rect', { x: 8, y: 13, width: 8, height: 6 }]] },
+  refresh:   { els: [['path', { d: 'M19 8 A8 8 0 1 0 20 12' }], ['path', { d: 'M20 4 V8 H16' }]] },
+  toggle:    { els: [['rect', { x: 3, y: 8, width: 18, height: 8, rx: 4 }], ['circle', { cx: 16, cy: 12, r: 2.5, fill: 'currentColor', stroke: 'none' }]] },
+  dollar:    { els: [['path', { d: 'M12 4 V20' }], ['path', { d: 'M16 7.5 C16 6 14.5 5 12 5 C9.5 5 8 6.2 8 8 C8 12 16 11 16 15 C16 16.8 14.5 18 12 18 C9.5 18 8 17 8 15.5' }]] },
+  file:      { els: [['path', { d: 'M6 3 H14 L19 8 V21 H6 Z' }], ['path', { d: 'M14 3 V8 H19' }], ['path', { d: 'M9 13 H15' }], ['path', { d: 'M9 16.5 H15' }]] },
+  settings:  { els: [['circle', { cx: 12, cy: 12, r: 3 }], ['path', { d: 'M12 3 V6' }], ['path', { d: 'M12 18 V21' }], ['path', { d: 'M3 12 H6' }], ['path', { d: 'M18 12 H21' }], ['path', { d: 'M5.6 5.6 L7.7 7.7' }], ['path', { d: 'M16.3 16.3 L18.4 18.4' }], ['path', { d: 'M18.4 5.6 L16.3 7.7' }], ['path', { d: 'M7.7 16.3 L5.6 18.4' }]] },
+  alert:     { els: [['path', { d: 'M12 4 L21 19 H3 Z' }], ['path', { d: 'M12 10 V14' }], ['path', { d: 'M12 16.5 H12.01' }]] },
+  bell:      { els: [['path', { d: 'M6 16 V11 A6 6 0 0 1 18 11 V16 L20 18 H4 Z' }], ['path', { d: 'M10 18 A2 2 0 0 0 14 18' }]] },
+  calendar:  { els: [['rect', { x: 4, y: 5.5, width: 16, height: 15, rx: 2 }], ['path', { d: 'M4 9.5 H20' }], ['path', { d: 'M8 3.5 V7' }], ['path', { d: 'M16 3.5 V7' }]] },
+  trending:  { els: [['path', { d: 'M4 16 L10 10 L13 13 L20 6' }], ['path', { d: 'M15 6 H20 V11' }]] },
+  dashboard: { els: [['rect', { x: 4, y: 4, width: 7, height: 9, rx: 1.5 }], ['rect', { x: 13, y: 4, width: 7, height: 5, rx: 1.5 }], ['rect', { x: 13, y: 11, width: 7, height: 9, rx: 1.5 }], ['rect', { x: 4, y: 15, width: 7, height: 5, rx: 1.5 }]] },
+  key:       { els: [['circle', { cx: 8, cy: 8, r: 4 }], ['path', { d: 'M11 11 L20 20' }], ['path', { d: 'M17 17 L19 15' }]] },
+  truck:     { els: [['rect', { x: 3, y: 7, width: 11, height: 9 }], ['path', { d: 'M14 10 H18 L21 13 V16 H14 Z' }], ['circle', { cx: 7, cy: 18, r: 1.6 }], ['circle', { cx: 17, cy: 18, r: 1.6 }]] },
+  spinner:   { els: [['path', { d: 'M12 3 A9 9 0 0 1 21 12' }]] },
 };
 
 export interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, 'name' | 'stroke'> {

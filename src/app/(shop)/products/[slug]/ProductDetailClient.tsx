@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Product } from '@/types';
-import { Heart, ShoppingCart, ArrowLeft } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { showToast } from '@/lib/toast';
@@ -42,7 +42,7 @@ export function ProductNotFound() {
         <h2 className="text-xl font-semibold text-text-primary mb-2">{t('product.notFound')}</h2>
         <p className="text-text-muted mb-6">{t('product.notFoundSub')}</p>
         <button onClick={() => router.back()} className="btn-primary flex items-center gap-2 mx-auto">
-          <ArrowLeft size={16} className="rtl-flip" /> {t('product.goBack')}
+          <Icon name="arrowLeft" size={16} className="rtl-flip" /> {t('product.goBack')}
         </button>
       </div>
     </div>
@@ -183,7 +183,7 @@ export default function ProductDetailClient({ product }: Props) {
                 {adding ? (
                   <><div className="w-4 h-4 border-2 border-bg-base/30 border-t-bg-base rounded-full animate-spin" />{t('product.addingToCart')}</>
                 ) : (
-                  <><ShoppingCart size={18} />{t('common.addToCart')}</>
+                  <><Icon name="cart" size={18} />{t('common.addToCart')}</>
                 )}
               </button>
               <button
@@ -191,7 +191,7 @@ export default function ProductDetailClient({ product }: Props) {
                 aria-label={inWishlist ? t('wishlist.remove') : t('wishlist.add')}
                 className={`btn-secondary px-4 py-3 rounded-md border transition-all ${inWishlist ? 'border-error/40 text-error hover:bg-error/10' : 'border-border hover:border-border-strong'}`}
               >
-                <Heart size={20} className={inWishlist ? 'fill-error' : ''} />
+                <Icon name={inWishlist ? 'heartFill' : 'heart'} size={20} className={inWishlist ? 'fill-error' : ''} />
               </button>
             </div>
 
@@ -228,7 +228,7 @@ export default function ProductDetailClient({ product }: Props) {
           disabled={product.stock === 0 || adding}
           className="btn-accent flex-1 py-3 min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          <ShoppingCart size={18} />
+          <Icon name="cart" size={18} />
           {product.stock === 0 ? t('common.outOfStock') : t('common.addToCart')}
         </button>
       </div>

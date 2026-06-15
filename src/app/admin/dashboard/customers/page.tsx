@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { Search, ChevronLeft, ChevronRight, Users, Download } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { CustomerSummary } from '@/types';
 import { adminCustomers } from '@/lib/admin/api';
 import Topbar from '@/components/admin/layout/Topbar';
@@ -106,7 +106,7 @@ export default function CustomersPage() {
         {/* Toolbar */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: '#121216', border: '1px solid #26262E', borderRadius: 4 }}>
-            <Search size={15} style={{ color: '#6C6C76', flexShrink: 0 }} strokeWidth={1.6} />
+            <Icon name="search" size={15} style={{ color: '#6C6C76', flexShrink: 0 }} stroke={1.6} />
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -115,7 +115,7 @@ export default function CustomersPage() {
             />
           </div>
           <button style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 14px', background: '#121216', color: '#A6A6AE', border: '1px solid #26262E', borderRadius: 4, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
-            <Download size={14} strokeWidth={1.6} />
+            <Icon name="download" size={14} stroke={1.6} />
             {t('orders.export').replace('Excel', '').trim()}
           </button>
         </div>
@@ -127,7 +127,7 @@ export default function CustomersPage() {
           </div>
         ) : customers.length === 0 ? (
           <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-            <Users size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+            <Icon name="user" size={40} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
             <p style={{ color: '#F7F7F8', fontSize: 16, fontWeight: 600, margin: 0 }}>{t('customers.columns.customer')}</p>
           </div>
         ) : (
@@ -194,7 +194,7 @@ export default function CustomersPage() {
                     </div>
                     {/* Arrow */}
                     <div style={{ color: '#6C6C76', display: 'flex', justifyContent: 'center' }}>
-                      <ChevronLeft size={14} strokeWidth={1.6} />
+                      <Icon name="chevronL" size={14} stroke={1.6} />
                     </div>
                   </Link>
                 );
@@ -209,11 +209,11 @@ export default function CustomersPage() {
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
                   style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page <= 1 ? 0.4 : 1 }}>
-                  <ChevronRight size={14} strokeWidth={1.6} />
+                  <Icon name="chevron" size={14} stroke={1.6} />
                 </button>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
                   style={{ padding: '6px 10px', background: '#121216', border: '1px solid #26262E', borderRadius: 4, color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', opacity: page >= totalPages ? 0.4 : 1 }}>
-                  <ChevronLeft size={14} strokeWidth={1.6} />
+                  <Icon name="chevronL" size={14} stroke={1.6} />
                 </button>
               </div>
             </div>

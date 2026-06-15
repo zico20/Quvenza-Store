@@ -2,7 +2,7 @@
 
 import { forwardRef } from 'react';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
 
 type Variant = 'primary' | 'secondary' | 'ghost';
@@ -51,7 +51,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
       className={cn(base, variants[variant], sizes[size], className)}
       {...props}
     >
-      {loading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : leftIcon}
+      {loading ? <Icon name="spinner" className="h-4 w-4 animate-spin" size={16} aria-hidden /> : leftIcon}
       {children}
       {!loading && rightIcon}
     </button>

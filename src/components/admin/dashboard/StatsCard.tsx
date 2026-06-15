@@ -1,9 +1,9 @@
-import type { LucideIcon } from 'lucide-react';
+import { type IconName } from '@/components/ui/Icon';
 
 interface StatsCardProps {
   title: string;
   value: string | number;
-  icon?: LucideIcon;
+  icon?: IconName;
   trend?: { value: number; isPositive: boolean };
   iconColor?: string;
 }

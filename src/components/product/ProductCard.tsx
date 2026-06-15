@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Star, ShoppingCart, Check } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Product } from '@/types';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
@@ -14,7 +14,7 @@ function StarRow({ value }: { value: number }) {
   return (
     <div style={{ display: 'inline-flex', gap: 1, color: '#FF9357' }}>
       {[1, 2, 3, 4, 5].map(i => (
-        <Star key={i} size={11} strokeWidth={0} fill={i <= Math.round(value) ? '#FF9357' : 'rgba(255,147,87,0.2)'} />
+        <Icon key={i} name="star" size={11} stroke={0} color={i <= Math.round(value) ? '#FF9357' : 'rgba(255,147,87,0.2)'} />
       ))}
     </div>
   );
@@ -112,7 +112,9 @@ export default function ProductCard({ product }: { product: Product }) {
           }}
           aria-label={inWishlist ? t('wishlist.remove') : t('wishlist.add')}
         >
-          <Heart size={15} strokeWidth={1.6} fill={inWishlist ? '#FB7185' : 'none'} />
+          {inWishlist
+            ? <Icon name="heartFill" size={15} stroke={1.6} />
+            : <Icon name="heart" size={15} stroke={1.6} />}
         </button>
       </div>
 
@@ -180,9 +182,9 @@ export default function ProductCard({ product }: { product: Product }) {
           onMouseLeave={(e: any) => { e.currentTarget.style.filter = 'none'; }}
         >
           {added ? (
-            <><Check size={13} /> {t('common.addedToCart')}</>
+            <><Icon name="check" size={13} /> {t('common.addedToCart')}</>
           ) : (
-            <><ShoppingCart size={13} strokeWidth={1.8} /> {t('common.addToCart')}</>
+            <><Icon name="cart" size={13} stroke={1.8} /> {t('common.addToCart')}</>
           )}
         </button>
       </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Truck, Shield, RefreshCw, Zap } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import type { Product, Category } from '@/types';
 import ProductCard from '@/components/product/ProductCard';
 import HeroSlider from '@/components/home/HeroSlider';
@@ -76,11 +76,11 @@ export default async function HomePage() {
     getBestsellers(),
   ]);
 
-  const VALUE_PROPS = [
-    { icon: Truck,     title: t('home.valueProps.fastShipping.title', lang),  sub: t('home.valueProps.fastShipping.sub', lang) },
-    { icon: Shield,    title: t('home.valueProps.localWarranty.title', lang), sub: t('home.valueProps.localWarranty.sub', lang) },
-    { icon: RefreshCw, title: t('home.valueProps.easyReturns.title', lang),  sub: t('home.valueProps.easyReturns.sub', lang) },
-    { icon: Zap,       title: t('home.valueProps.expertSupport.title', lang), sub: t('home.valueProps.expertSupport.sub', lang) },
+  const VALUE_PROPS: { icon: IconName; title: string; sub: string }[] = [
+    { icon: 'truck',   title: t('home.valueProps.fastShipping.title', lang),  sub: t('home.valueProps.fastShipping.sub', lang) },
+    { icon: 'shield',  title: t('home.valueProps.localWarranty.title', lang), sub: t('home.valueProps.localWarranty.sub', lang) },
+    { icon: 'refresh', title: t('home.valueProps.easyReturns.title', lang),  sub: t('home.valueProps.easyReturns.sub', lang) },
+    { icon: 'bolt',    title: t('home.valueProps.expertSupport.title', lang), sub: t('home.valueProps.expertSupport.sub', lang) },
   ];
 
   return (
@@ -99,7 +99,7 @@ export default async function HomePage() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-12 md:mb-16"
           style={{ gap: 1, background: '#26262E', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}
         >
-          {VALUE_PROPS.map(({ icon: Icon, title, sub }) => (
+          {VALUE_PROPS.map(({ icon, title, sub }) => (
             <div key={title} style={{ background: '#0A0A0C', padding: '20px 20px', display: 'flex', gap: 14, alignItems: 'center' }}>
               <div style={{
                 width: 42, height: 42, borderRadius: 12, flexShrink: 0,
@@ -107,7 +107,7 @@ export default async function HomePage() {
                 boxShadow: '0 0 18px rgba(255,122,51,0.18)',
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <Icon size={18} strokeWidth={1.8} />
+                <Icon name={icon} size={18} stroke={1.8} />
               </div>
               <div>
                 <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F7F7F8', fontFamily: 'var(--font-display)' }}>{title}</div>
@@ -132,7 +132,7 @@ export default async function HomePage() {
                 color: '#F7F7F8', fontSize: 12, fontWeight: 600,
                 textDecoration: 'none', background: 'transparent', flexShrink: 0,
               }}>
-                {t('common.viewAll', lang)} <ArrowRight size={14} className="rtl-flip" />
+                {t('common.viewAll', lang)} <Icon name="arrow" size={14} className="rtl-flip" />
               </Link>
             </div>
 
@@ -154,7 +154,7 @@ export default async function HomePage() {
                     <div style={{ fontSize: 12, color: '#A6A6AE', marginTop: 4 }}>{t('home.categories.explore', lang)}</div>
                   </div>
                   <div style={{ marginTop: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6, color: '#FF7A33', fontSize: 12, fontWeight: 600 }}>
-                    {t('common.browse', lang)} <ArrowRight size={14} className="rtl-flip" />
+                    {t('common.browse', lang)} <Icon name="arrow" size={14} className="rtl-flip" />
                   </div>
                 </Link>
               ))}
@@ -174,7 +174,7 @@ export default async function HomePage() {
               padding: '8px 14px', border: '1px solid #26262E', borderRadius: 4,
               color: '#F7F7F8', fontSize: 12, fontWeight: 600, textDecoration: 'none', flexShrink: 0,
             }}>
-              {t('common.viewAll', lang)} <ArrowRight size={14} className="rtl-flip" />
+              {t('common.viewAll', lang)} <Icon name="arrow" size={14} className="rtl-flip" />
             </Link>
           </div>
 

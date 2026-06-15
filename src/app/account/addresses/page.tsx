@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { MapPin, Star, Trash2, ArrowLeft, Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Address } from '@/types';
 import { AddressForm, type AddressFormData } from '@/components/checkout/AddressForm';
 import { showToast } from '@/lib/toast';
@@ -74,7 +74,7 @@ export default function AddressesPage() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <Link href="/account" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: 4, border: '1px solid #26262E', color: '#A6A6AE', textDecoration: 'none', transition: 'color 0.15s' }}>
-            <ArrowLeft size={16} strokeWidth={1.6} />
+            <Icon name="arrowLeft" size={16} stroke={1.6} />
           </Link>
           <div>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: '#6C6C76', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 4 }}>{t('address.breadcrumb')}</div>
@@ -93,7 +93,7 @@ export default function AddressesPage() {
             cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.15s',
           }}
         >
-          <Plus size={14} strokeWidth={2} />
+          <Icon name="plus" size={14} stroke={2} />
           {showForm ? t('common.cancel') : t('address.newAddress')}
         </button>
       </div>
@@ -111,7 +111,7 @@ export default function AddressesPage() {
       {/* Saved addresses */}
       {addresses.length === 0 && !showForm ? (
         <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '60px 32px', textAlign: 'center' }}>
-          <MapPin size={40} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+          <Icon name="pin" size={40} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
           <h3 style={{ color: '#F7F7F8', fontSize: 18, fontWeight: 600, margin: 0 }}>{t('account.addresses.noAddresses')}</h3>
           <p style={{ color: '#A6A6AE', fontSize: 14, marginTop: 8 }}>{t('account.addresses.noAddressSub')}</p>
           <button
@@ -146,7 +146,7 @@ export default function AddressesPage() {
               {/* Name + phone */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                 <div style={{ width: 36, height: 36, borderRadius: 18, background: 'rgba(255,122,51,0.10)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <MapPin size={16} style={{ color: '#FF7A33' }} strokeWidth={1.6} />
+                  <Icon name="pin" size={16} style={{ color: '#FF7A33' }} stroke={1.6} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#F7F7F8' }}>{addr.fullName}</div>
@@ -171,12 +171,12 @@ export default function AddressesPage() {
               <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
                 {!addr.isDefault && (
                   <button onClick={() => setDefault(addr.id!)} style={actionBtn}>
-                    <Star size={12} strokeWidth={1.6} />
+                    <Icon name="star" size={12} stroke={1.6} />
                     {t('account.addresses.setDefault')}
                   </button>
                 )}
                 <button onClick={() => remove(addr.id!)} style={{ ...actionBtn, color: '#FB7185', borderColor: 'rgba(251,113,133,0.2)' }}>
-                  <Trash2 size={12} strokeWidth={1.6} />
+                  <Icon name="trash" size={12} stroke={1.6} />
                   {t('account.addresses.remove')}
                 </button>
               </div>

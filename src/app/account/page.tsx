@@ -2,10 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  ShoppingBag, Heart, Truck, Tag, Settings, LogOut,
-  Star, Trash2, ChevronRight, MapPin, Plus, Check,
-} from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import { useAuthStore } from '@/store/auth.store';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { useCartStore } from '@/store/cart.store';
@@ -58,12 +55,12 @@ export default function AccountPage() {
   const [emailVal, setEmailVal] = useState('');
   const [saving, setSaving] = useState(false);
 
-  const TABS: { key: Tab; icon: React.ElementType; label: string }[] = [
-    { key: 'orders',    icon: ShoppingBag, label: t('account.tabs.orders') },
-    { key: 'wishlist',  icon: Heart,       label: t('account.tabs.wishlist') },
-    { key: 'addresses', icon: Truck,       label: t('account.tabs.addresses') },
-    { key: 'payment',   icon: Tag,         label: t('account.tabs.payment') },
-    { key: 'settings',  icon: Settings,    label: t('account.tabs.settings') },
+  const TABS: { key: Tab; icon: IconName; label: string }[] = [
+    { key: 'orders',    icon: 'cart',     label: t('account.tabs.orders') },
+    { key: 'wishlist',  icon: 'heart',    label: t('account.tabs.wishlist') },
+    { key: 'addresses', icon: 'truck',    label: t('account.tabs.addresses') },
+    { key: 'payment',   icon: 'tag',      label: t('account.tabs.payment') },
+    { key: 'settings',  icon: 'settings', label: t('account.tabs.settings') },
   ];
 
   useEffect(() => {
@@ -147,7 +144,7 @@ export default function AccountPage() {
 
         {/* ── Sidebar ── */}
         <aside style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {TABS.map(({ key, icon: Icon, label }) => (
+          {TABS.map(({ key, icon, label }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
@@ -164,7 +161,7 @@ export default function AccountPage() {
                 transition: 'all 0.15s',
               }}
             >
-              <Icon size={16} strokeWidth={1.6} />
+              <Icon name={icon} size={16} stroke={1.6} />
               {label}
             </button>
           ))}
@@ -179,7 +176,7 @@ export default function AccountPage() {
               fontFamily: 'inherit', fontSize: 13, marginTop: 16,
             }}
           >
-            <LogOut size={16} strokeWidth={1.6} />
+            <Icon name="logout" size={16} stroke={1.6} />
             {t('common.signOut')}
           </button>
         </aside>
@@ -197,7 +194,7 @@ export default function AccountPage() {
                   ))}
                 </div>
               ) : ordersList.length === 0 ? (
-                <EmptyState icon={ShoppingBag} title={t('account.orders.empty')} sub={t('account.orders.emptySub')} href="/products" cta={t('account.orders.shopNow')} />
+                <EmptyState icon="cart" title={t('account.orders.empty')} sub={t('account.orders.emptySub')} href="/products" cta={t('account.orders.shopNow')} />
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {ordersList.map(o => {
@@ -232,7 +229,7 @@ export default function AccountPage() {
                           <div className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{t('account.orders.totalCol')}</div>
                           <div style={{ color: '#F7F7F8', fontSize: 15, fontWeight: 700, marginTop: 4 }}>{fmtPrice(o.total)}</div>
                         </div>
-                        <ChevronRight size={14} style={{ color: '#6C6C76' }} />
+                        <Icon name="chevron" size={14} style={{ color: '#6C6C76' }} />
                       </Link>
                     );
                   })}
@@ -246,7 +243,7 @@ export default function AccountPage() {
             <div>
               <SectionHeader kicker={t('account.wishlist.kicker')} title={t('account.wishlist.title')} />
               {wishlistItems.length === 0 ? (
-                <EmptyState icon={Heart} title={t('account.wishlist.empty')} sub={t('account.wishlist.emptySub')} href="/products" cta={t('account.wishlist.browse')} />
+                <EmptyState icon="heart" title={t('account.wishlist.empty')} sub={t('account.wishlist.emptySub')} href="/products" cta={t('account.wishlist.browse')} />
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
                   {wishlistItems.map(p => <ProductCard key={p.id} product={p} />)}
@@ -268,12 +265,12 @@ export default function AccountPage() {
                   padding: '9px 16px', background: '#FF7A33', color: '#fff',
                   borderRadius: 4, fontSize: 12, fontWeight: 600, textDecoration: 'none',
                 }}>
-                  <Plus size={14} /> {t('account.addresses.newAddress')}
+                  <Icon name="plus" size={14} /> {t('account.addresses.newAddress')}
                 </Link>
               </div>
 
               {addresses.length === 0 ? (
-                <EmptyState icon={MapPin} title={t('account.addresses.noAddresses')} sub={t('account.addresses.noAddressSub')} href="/account/addresses" cta={t('account.addresses.addFirst')} />
+                <EmptyState icon="pin" title={t('account.addresses.noAddresses')} sub={t('account.addresses.noAddressSub')} href="/account/addresses" cta={t('account.addresses.addFirst')} />
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
                   {addresses.map(addr => (
@@ -292,11 +289,11 @@ export default function AccountPage() {
                       <div style={{ marginTop: 14, display: 'flex', gap: 8 }}>
                         {!addr.isDefault && (
                           <button onClick={() => setDefault(addr.id!)} style={ghostBtn}>
-                            <Star size={12} /> {t('account.addresses.setDefault')}
+                            <Icon name="star" size={12} /> {t('account.addresses.setDefault')}
                           </button>
                         )}
                         <button onClick={() => removeAddress(addr.id!)} style={{ ...ghostBtn, color: '#FB7185' }}>
-                          <Trash2 size={12} /> {t('account.addresses.remove')}
+                          <Icon name="trash" size={12} /> {t('account.addresses.remove')}
                         </button>
                       </div>
                     </div>
@@ -352,7 +349,7 @@ export default function AccountPage() {
                       fontFamily: 'inherit',
                     }}
                   >
-                    {saving ? t('account.settings.saving') : <><Check size={14} /> {t('account.settings.save')}</>}
+                    {saving ? t('account.settings.saving') : <><Icon name="check" size={14} /> {t('account.settings.save')}</>}
                   </button>
                   <button onClick={() => { setNameVal(user.name); setEmailVal(user.email); }} style={ghostBtn}>{t('account.settings.cancel')}</button>
                 </div>
@@ -375,10 +372,10 @@ function SectionHeader({ kicker, title }: { kicker: string; title: string }) {
   );
 }
 
-function EmptyState({ icon: Icon, title, sub, href, cta }: { icon: React.ElementType; title: string; sub: string; href: string; cta: string }) {
+function EmptyState({ icon, title, sub, href, cta }: { icon: IconName; title: string; sub: string; href: string; cta: string }) {
   return (
     <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: '64px 32px', textAlign: 'center' }}>
-      <Icon size={44} strokeWidth={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
+      <Icon name={icon} size={44} stroke={1.2} style={{ color: '#6C6C76', marginBottom: 16 }} />
       <h3 style={{ color: '#F7F7F8', fontSize: 18, fontWeight: 600, margin: 0 }}>{title}</h3>
       <p style={{ color: '#A6A6AE', fontSize: 14, marginTop: 8 }}>{sub}</p>
       <Link href={href} style={{

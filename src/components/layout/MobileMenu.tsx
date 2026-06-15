@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +12,7 @@ export default function MobileMenu() {
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-colors"
       >
-        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {isOpen ? <Icon name="x" className="h-5 w-5" size={20} /> : <Icon name="menu" className="h-5 w-5" size={20} />}
       </button>
 
       {isOpen && (

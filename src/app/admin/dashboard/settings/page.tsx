@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Shield, User, Key, Plus, Trash2, RotateCcw, Eye, EyeOff, X, Check } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import Topbar from '@/components/admin/layout/Topbar';
 import { useLang } from '@/hooks/admin/useLang';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
@@ -74,7 +74,7 @@ function Field({
             position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
             background: 'none', border: 'none', color: '#6C6C76', cursor: 'pointer', padding: 0,
           }}>
-            {show ? <EyeOff size={15} strokeWidth={1.6} /> : <Eye size={15} strokeWidth={1.6} />}
+            {show ? <Icon name="eye" size={15} stroke={1.6} /> : <Icon name="eye" size={15} stroke={1.6} />}
           </button>
         )}
       </div>
@@ -108,7 +108,7 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
           <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#F7F7F8' }}>{title}</h3>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#6C6C76', cursor: 'pointer', padding: 4 }}>
-            <X size={18} strokeWidth={1.6} />
+            <Icon name="x" size={18} stroke={1.6} />
           </button>
         </div>
         {children}
@@ -255,9 +255,9 @@ export default function SettingsPage() {
     } catch (e: any) { show(e.response?.data?.message ?? 'Failed', false); }
   }
 
-  const TABS: { key: Tab; icon: React.ElementType; label: string }[] = [
-    { key: 'account', icon: User,   label: t('settings.myAccount') },
-    { key: 'users',   icon: Shield, label: t('settings.adminUsers') },
+  const TABS: { key: Tab; icon: IconName; label: string }[] = [
+    { key: 'account', icon: 'user',   label: t('settings.myAccount') },
+    { key: 'users',   icon: 'shield', label: t('settings.adminUsers') },
   ];
 
   const btnOrange: React.CSSProperties = {
@@ -287,14 +287,14 @@ export default function SettingsPage() {
           color: toast.ok ? '#34D399' : '#FB7185',
           display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(8px)',
         }}>
-          {toast.ok ? <Check size={14} /> : <X size={14} />} {toast.msg}
+          {toast.ok ? <Icon name="check" size={14} /> : <Icon name="x" size={14} />} {toast.msg}
         </div>
       )}
 
       <div style={{ padding: 32, display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32, alignItems: 'start' }}>
         {/* Sidebar Tabs */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {TABS.map(({ key, icon: Icon, label }) => (
+          {TABS.map(({ key, icon, label }) => (
             <button key={key} onClick={() => setTab(key)} style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 5, textAlign: 'left',
@@ -305,7 +305,7 @@ export default function SettingsPage() {
               fontSize: 13, fontWeight: tab === key ? 600 : 500,
               cursor: 'pointer', fontFamily: 'inherit',
             }}>
-              <Icon size={15} strokeWidth={1.6} />
+              <Icon name={icon} size={15} stroke={1.6} />
               {label}
             </button>
           ))}
@@ -354,7 +354,7 @@ export default function SettingsPage() {
                     error={pwdErrors.conf} />
                 </div>
                 <button onClick={handleChangePwd} disabled={pwdSaving} style={{ ...btnOrange, opacity: pwdSaving ? 0.6 : 1 }}>
-                  <Key size={14} strokeWidth={1.6} />
+                  <Icon name="key" size={14} stroke={1.6} />
                   {pwdSaving ? '…' : t('settings.updatePwd')}
                 </button>
               </div>
@@ -370,7 +370,7 @@ export default function SettingsPage() {
                   {t('settings.adminUsers')}
                 </div>
                 <button onClick={() => setShowAddModal(true)} style={btnOrange}>
-                  <Plus size={14} strokeWidth={2} />
+                  <Icon name="plus" size={14} stroke={2} />
                   {t('settings.addAdmin')}
                 </button>
               </div>
@@ -414,7 +414,7 @@ export default function SettingsPage() {
                         title={t('settings.resetPwd')}
                         style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #26262E', color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                       >
-                        <RotateCcw size={13} strokeWidth={1.6} />
+                        <Icon name="refresh" size={13} stroke={1.6} />
                       </button>
                       <button
                         onClick={() => !isMe && setDeleteTarget(a)}
@@ -422,7 +422,7 @@ export default function SettingsPage() {
                         title={isMe ? 'Cannot delete yourself' : t('settings.deleteAdmin')}
                         style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #26262E', color: isMe ? '#36363F' : '#FB7185', cursor: isMe ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isMe ? 0.4 : 1 }}
                       >
-                        <Trash2 size={13} strokeWidth={1.6} />
+                        <Icon name="trash" size={13} stroke={1.6} />
                       </button>
                     </div>
                   </div>
@@ -467,7 +467,7 @@ export default function SettingsPage() {
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 24 }}>
             <button onClick={() => setResetTarget(null)} style={btnGhost}>{t('common.cancel')}</button>
             <button onClick={handleResetPwd} disabled={resetSaving} style={{ ...btnOrange, opacity: resetSaving ? 0.6 : 1 }}>
-              <Key size={14} strokeWidth={1.6} />
+              <Icon name="key" size={14} stroke={1.6} />
               {resetSaving ? '…' : t('settings.resetPwd')}
             </button>
           </div>
@@ -483,7 +483,7 @@ export default function SettingsPage() {
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <button onClick={() => setDeleteTarget(null)} style={btnGhost}>{t('common.cancel')}</button>
             <button onClick={handleDelete} style={{ ...btnOrange, background: '#FB7185' }}>
-              <Trash2 size={14} strokeWidth={1.6} />
+              <Icon name="trash" size={14} stroke={1.6} />
               {t('settings.deleteAdmin')}
             </button>
           </div>

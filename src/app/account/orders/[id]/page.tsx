@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Package } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { orders as ordersApi } from '@/lib/api';
 import type { Order } from '@/types';
 import { formatDate } from '@/lib/utils';
@@ -35,7 +35,7 @@ export default function OrderDetailPage() {
     <div className="max-w-lg mx-auto px-4 py-16 text-center">
       <p className="text-text-muted text-sm mb-4">{t('orders.notFound')}</p>
       <button onClick={() => router.back()} className="btn-accent text-sm inline-flex items-center gap-2">
-        {isRTL ? <ArrowRight size={14} /> : <ArrowLeft size={14} />}
+        {isRTL ? <Icon name="arrow" size={14} /> : <Icon name="arrowLeft" size={14} />}
         {t('orders.myOrders')}
       </button>
     </div>
@@ -51,7 +51,7 @@ export default function OrderDetailPage() {
         onClick={() => router.back()}
         className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-text-primary transition-colors mb-1"
       >
-        {isRTL ? <ArrowRight size={13} /> : <ArrowLeft size={13} />}
+        {isRTL ? <Icon name="arrow" size={13} /> : <Icon name="arrowLeft" size={13} />}
         {t('orders.myOrders')}
       </button>
 
@@ -79,7 +79,7 @@ export default function OrderDetailPage() {
                   <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Package size={13} className="text-text-muted" strokeWidth={1.5} />
+                    <Icon name="package" size={13} className="text-text-muted" stroke={1.5} />
                   </div>
                 )}
               </div>
