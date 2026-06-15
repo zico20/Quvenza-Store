@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: background .15s, box-shadow .15s, transform .12s; }
+  .hbtn:active { transform: translateY(1px); }
+  .ul:hover { color: #2563EB !important; }
+  .home-wrap { container-type: inline-size; background:#fff; }
+  .cq-nav-links { display: none; }
+  .statgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .valgrid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .footgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  @container (min-width: 760px) {
+    .cq-nav-links { display: flex; }
+    .statgrid { grid-template-columns: repeat(4,1fr); gap: 16px; }
+    .valgrid { grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .footgrid { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 28px; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <div style="max-width:1280px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV · {{ deviceLabel }} · {{ langLabel }} · {{ tx.pageTag }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+      <header style="border-bottom:1px solid #EAECEF; padding:14px 22px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:26px;">
+          <div style="display:flex; align-items:center; gap:9px;"><div class="hk" style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div><span class="ca" style="font-weight:700; font-size:16px; color:#0B1220;">SoftoDev</span></div>
+          <nav class="cq-nav-links" style="gap:22px; font-size:14px; color:#4B5563; font-weight:600;"><span class="ul" style="cursor:pointer;">{{ tx.navProducts }}</span><span class="ul" style="cursor:pointer;">{{ tx.navCats }}</span><span class="ul" style="cursor:pointer; color:#2563EB;">{{ tx.navAbout }}</span></nav>
+        </div>
+        <button class="hbtn" style="background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:9px 16px; border-radius:9px;">{{ tx.login }}</button>
+      </header>
+
+      <!-- HERO -->
+      <section style="padding:56px 24px 40px; text-align:center; background:radial-gradient(90% 70% at 50% 0%, #EAF1FE, rgba(234,241,254,0) 60%), #fff;">
+        <div class="hk" style="display:inline-block; font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#2563EB; background:#E8F0FE; padding:6px 14px; border-radius:20px; margin-bottom:18px;">{{ tx.kicker }}</div>
+        <h1 class="ca" style="margin:0 auto; max-width:640px; font-weight:800; font-size:clamp(26px,5cqw,40px); line-height:1.25; color:#0B1220;">{{ tx.heroTitle }}</h1>
+        <p style="margin:18px auto 0; max-width:520px; font-size:15.5px; line-height:1.85; color:#4B5563;">{{ tx.heroSub }}</p>
+      </section>
+
+      <!-- STATS -->
+      <section style="padding:10px 24px 40px;">
+        <div class="statgrid" style="max-width:1080px; margin:0 auto;">
+          <div style="background:#0B1220; border-radius:18px; padding:24px; text-align:center;"><div class="num" style="font-size:34px; font-weight:800; color:#fff;">4,800+</div><div class="ca" style="font-size:12.5px; color:#9CA3AF; margin-top:4px;">{{ tx.st1 }}</div></div>
+          <div style="background:#F7F8FA; border:1px solid #EAECEF; border-radius:18px; padding:24px; text-align:center;"><div class="num" style="font-size:34px; font-weight:800; color:#2563EB;">30 <span style="font-size:16px;">min</span></div><div class="ca" style="font-size:12.5px; color:#6B7280; margin-top:4px;">{{ tx.st2 }}</div></div>
+          <div style="background:#F7F8FA; border:1px solid #EAECEF; border-radius:18px; padding:24px; text-align:center;"><div class="num" style="font-size:34px; font-weight:800; color:#16A34A;">99.8%</div><div class="ca" style="font-size:12.5px; color:#6B7280; margin-top:4px;">{{ tx.st3 }}</div></div>
+          <div style="background:#F7F8FA; border:1px solid #EAECEF; border-radius:18px; padding:24px; text-align:center;"><div class="num" style="font-size:34px; font-weight:800; color:#0B1220;">50+</div><div class="ca" style="font-size:12.5px; color:#6B7280; margin-top:4px;">{{ tx.st4 }}</div></div>
+        </div>
+      </section>
+
+      <!-- MISSION -->
+      <section style="padding:30px 24px;">
+        <div style="max-width:1080px; margin:0 auto; background:linear-gradient(160deg,#F7F8FA,#fff); border:1px solid #EAECEF; border-radius:22px; padding:36px;">
+          <div class="hk" style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563EB; margin-bottom:14px;">{{ tx.missionKicker }}</div>
+          <p style="margin:0; font-size:clamp(16px,2.4cqw,21px); line-height:1.75; color:#1A2233; font-weight:600; max-width:760px;">{{ tx.mission }}</p>
+        </div>
+      </section>
+
+      <!-- VALUES -->
+      <section style="padding:20px 24px 40px;">
+        <div style="max-width:1080px; margin:0 auto;">
+          <h2 class="ca" style="margin:0 0 22px; font-weight:700; font-size:24px; color:#0B1220;">{{ tx.valuesTitle }}</h2>
+          <div class="valgrid">
+            <sc-for list="{{ values }}" as="v" hint-placeholder-count="3">
+              <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:24px;">
+                <span style="width:46px; height:46px; border-radius:13px; background:{{ v.bg }}; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px;"><dc-import name="Icon" icon="{{ v.icon }}" size="22" color="{{ v.color }}" hint-size="22px,22px"></dc-import></span>
+                <div class="ca" style="font-size:16px; font-weight:700; color:#0B1220; margin-bottom:8px;">{{ v.title }}</div>
+                <p style="margin:0; font-size:13.5px; line-height:1.8; color:#6B7280;">{{ v.desc }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section style="padding:0 24px 48px;">
+        <div style="max-width:1080px; margin:0 auto; background:linear-gradient(135deg,#2563EB,#3B82F6); border-radius:22px; padding:44px 32px; text-align:center; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background:radial-gradient(60% 100% at 50% 0%, rgba(255,255,255,0.18), transparent 60%);"></div>
+          <h2 class="ca" style="position:relative; margin:0; font-weight:800; font-size:clamp(22px,3.4cqw,30px); color:#fff;">{{ tx.ctaTitle }}</h2>
+          <p style="position:relative; margin:12px auto 0; max-width:420px; font-size:14.5px; color:rgba(255,255,255,0.92); line-height:1.8;">{{ tx.ctaSub }}</p>
+          <div style="position:relative; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:24px;">
+            <button class="hbtn" style="background:#fff; color:#1D4ED8; font-weight:800; font-size:14px; padding:13px 26px; border-radius:12px;">{{ tx.ctaBtn1 }}</button>
+            <button class="hbtn" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); color:#fff; font-weight:700; font-size:14px; padding:13px 26px; border-radius:12px;"><dc-import name="Icon" icon="chat" size="17" color="#fff" hint-size="17px,17px"></dc-import> {{ tx.ctaBtn2 }}</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer style="background:#0B1220; padding:40px 22px 26px;">
+        <div class="footgrid" style="max-width:1080px; margin:0 auto;">
+          <div>
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;"><div class="hk" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563EB,#3B82F6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;">S</div><span class="ca" style="font-weight:700; font-size:16px; color:#fff;">SoftoDev</span></div>
+            <p style="margin:0; max-width:280px; font-size:13px; line-height:1.85; color:#9CA3AF;">{{ tx.footAbout }}</p>
+          </div>
+          <div><div class="ca" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:14px;">{{ tx.footShop }}</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#9CA3AF;"><span class="ul" style="cursor:pointer;">{{ tx.navProducts }}</span><span class="ul" style="cursor:pointer;">{{ tx.navCats }}</span></div></div>
+          <div><div class="ca" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:14px;">{{ tx.footSupport }}</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#9CA3AF;"><span class="ul" style="cursor:pointer;">{{ tx.footContact }}</span><span class="ul" style="cursor:pointer;">{{ tx.footFaq }}</span></div></div>
+          <div><div class="ca" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:14px;">{{ tx.footFollow }}</div><div style="display:flex; gap:9px;"><span class="ul" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;"><dc-import name="Icon" icon="facebook" size="17" color="#fff" hint-size="17px,17px"></dc-import></span><span class="ul" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;"><dc-import name="Icon" icon="instagram" size="17" color="#fff" hint-size="17px,17px"></dc-import></span><span class="ul" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:pointer;"><dc-import name="Icon" icon="twitter" size="17" color="#fff" hint-size="17px,17px"></dc-import></span></div></div>
+        </div>
+        <div style="max-width:1080px; margin:26px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;"><span class="num" style="font-size:12px; color:#6B7280;">© 2026 SoftoDev. {{ tx.footRights }}</span><span class="num" style="font-size:12px; color:#6B7280;">{{ tx.footPay }}</span></div>
+      </footer>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang:'ar', device:'desktop' };
+  get T() {
+    const ar = {
+      pageTag:'من نحن', navProducts:'المنتجات', navCats:'الفئات', navAbout:'من نحن', login:'تسجيل الدخول',
+      kicker:'قصتنا', heroTitle:'نجعل الاشتراكات الرقمية في متناول كل عراقي', heroSub:'SoftoDev متجر عراقي متخصص في الاشتراكات الرقمية الأصلية — نوفّرها بأسعار بالدينار العراقي، بتفعيل فوري وضمان كامل، لأن التقنية يجب أن تكون سهلة الوصول للجميع.',
+      st1:'عميل سعيد', st2:'متوسط وقت التفعيل', st3:'نسبة نجاح الطلبات', st4:'منتج رقمي',
+      missionKicker:'مهمتنا', mission:'نؤمن أن كل طالب ومبدع ومطوّر في العراق يستحق الوصول لأفضل الأدوات الرقمية في العالم — دون عوائق الدفع أو القلق من الأصالة. لذلك بنينا منصة بسيطة وموثوقة تجعل الاشتراك في خدماتك المفضّلة بسهولة ضغطة زر.',
+      valuesTitle:'قيمنا',
+      ctaTitle:'جاهز تبدأ؟', ctaSub:'انضم لآلاف العملاء واحصل على اشتراكاتك المفضّلة بتفعيل فوري وضمان كامل.', ctaBtn1:'تصفّح المنتجات', ctaBtn2:'تواصل معنا',
+      v1t:'الأصالة أولاً', v1d:'كل اشتراك رسمي 100% على حسابك الخاص — لا حسابات مشتركة ولا مخاطر.',
+      v2t:'سرعة وموثوقية', v2d:'تفعيل فوري خلال دقائق، ونظام آلي يضمن وصول طلبك دون تأخير.',
+      v3t:'دعم محلي حقيقي', v3d:'فريق عراقي يفهم احتياجاتك ويرد عليك بسرعة، بلغتك، على مدار الساعة.',
+      footAbout:'أكبر متجر اشتراكات رقمية في العراق. تفعيل فوري، دفع بالدينار العراقي، وضمان كامل على كل طلب.',
+      footShop:'المتجر', footSupport:'الدعم', footContact:'تواصل معنا', footFaq:'الأسئلة الشائعة', footFollow:'تابعنا', footRights:'جميع الحقوق محفوظة.', footPay:'زين كاش · آسيا · ماستركارد · فيزا'
+    };
+    const en = {
+      pageTag:'ABOUT', navProducts:'Products', navCats:'Categories', navAbout:'About', login:'Sign in',
+      kicker:'Our story', heroTitle:'Making digital subscriptions accessible to every Iraqi', heroSub:'SoftoDev is an Iraqi store specialized in authentic digital subscriptions — offered in Iraqi Dinar, with instant activation and a full warranty, because technology should be within everyone\u2019s reach.',
+      st1:'Happy customers', st2:'Avg. activation time', st3:'Order success rate', st4:'Digital products',
+      missionKicker:'Our mission', mission:'We believe every student, creator, and developer in Iraq deserves access to the world\u2019s best digital tools — without payment barriers or authenticity worries. So we built a simple, reliable platform that makes subscribing to your favorite services as easy as one click.',
+      valuesTitle:'Our values',
+      ctaTitle:'Ready to start?', ctaSub:'Join thousands of customers and get your favorite subscriptions with instant activation and a full warranty.', ctaBtn1:'Browse products', ctaBtn2:'Contact us',
+      v1t:'Authenticity first', v1d:'Every subscription is 100% official on your own account — no shared accounts, no risks.',
+      v2t:'Speed & reliability', v2d:'Instant activation within minutes, with an automated system that ensures your order arrives without delay.',
+      v3t:'Real local support', v3d:'An Iraqi team that understands your needs and replies fast, in your language, around the clock.',
+      footAbout:'Iraq\u2019s largest digital subscriptions store. Instant activation, payment in Iraqi Dinar, and a full warranty on every order.',
+      footShop:'Shop', footSupport:'Support', footContact:'Contact us', footFaq:'FAQ', footFollow:'Follow us', footRights:'All rights reserved.', footPay:'ZainCash · Asia · Mastercard · Visa'
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+  get valuesData() {
+    const t = this.T;
+    return [
+      { title:t.v1t, desc:t.v1d, icon:'shield', bg:'#E7F6EE', color:'#15803D' },
+      { title:t.v2t, desc:t.v2d, icon:'bolt', bg:'#E0F7FB', color:'#0E7490' },
+      { title:t.v3t, desc:t.v3d, icon:'chat', bg:'#E8F0FE', color:'#2563EB' },
+    ];
+  }
+  toggleBtn(a){return a?'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:#fff;color:#0B1220;':'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:transparent;color:#9CA3AF;';}
+  renderVals() {
+    const ar = this.state.lang === 'ar'; const desk = this.state.device === 'desktop';
+    return {
+      dir: ar?'rtl':'ltr', tx:this.T, values:this.valuesData,
+      langLabel: ar?'AR':'EN', deviceLabel: desk?'DESKTOP':'MOBILE',
+      wrapStyle: desk ? 'width:100%; max-width:1180px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;' : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      setAr:()=>this.setState({lang:'ar'}), setEn:()=>this.setState({lang:'en'}),
+      setDesktop:()=>this.setState({device:'desktop'}), setMobile:()=>this.setState({device:'mobile'}),
+      arBtnStyle:this.toggleBtn(ar), enBtnStyle:this.toggleBtn(!ar), deskBtnStyle:this.toggleBtn(desk), mobBtnStyle:this.toggleBtn(!desk),
+    };
+  }
+}
+</script>
+</body>
+</html>

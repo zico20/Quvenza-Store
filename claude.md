@@ -1341,11 +1341,13 @@ backend is running. The middleware checks for a valid token via the auth store.
 <!-- SPECKIT START -->
 ## Active Spec-Kit Feature
 
-- **Feature**: Voltage Storefront & Admin Redesign — **implemented** (branch `001-voltage-storefront-redesign`)
-- **Plan**: `specs/001-voltage-storefront-redesign/plan.md` · **Tasks**: `specs/001-voltage-storefront-redesign/tasks.md`
+- **Feature**: Cobalt Light Storefront & Admin Redesign — **planning** (branch `002-cobalt-light-redesign`)
+- **Plan**: `specs/002-cobalt-light-redesign/plan.md` · **Spec**: `specs/002-cobalt-light-redesign/spec.md`
+- **Direction**: replaces the dark **Voltage** theme (feature 001, implemented) with a **light, Stripe-inspired "Cobalt"** system (cobalt-blue `#2563EB` accent + neutral grays on `#F7F8FA`). Source of truth: `design_handoff_softodev_redesign/` (`globals.css` + `Icon.tsx` are drop-ins; `references/*.dc.html` are visual reference only — never shipped).
+- **Cobalt fonts**: Hanken Grotesk (Latin/numbers), IBM Plex Sans Arabic (Arabic body), Cairo (Arabic headings), JetBrains Mono (codes). Custom `Icon.tsx` (under `src/components/ui/`) replaces lucide-react.
 - **Note**: Live project is a single Next.js 16 / React 19 / Tailwind v4 app under `src/` (not the legacy monorepo described above). Treat `src/` as ground truth. Redesign is presentation-layer only — no routes/API/data-model/enum changes.
 
-### Voltage design system (current visual layer)
+### Voltage design system (superseded by Cobalt once feature 002 lands)
 
 - **Tokens** live in `src/app/globals.css` `@theme`. Two intentional, permanent name sets:
   the **canonical** names (`--color-bg-base`, `--color-bg-surface`, `--color-text-primary`,

@@ -27,8 +27,8 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 ## Phase 1: Setup
 
-- [ ] T001 Confirm branch `002-cobalt-light-redesign` checked out + clean tree; review `contracts/design-system.md` and `data-model.md` (token + icon map) as source of truth.
-- [ ] T002 [P] Capture baseline `npm run type-check` result so regressions are detectable.
+- [X] T001 Confirm branch `002-cobalt-light-redesign` checked out + clean tree; review `contracts/design-system.md` and `data-model.md` (token + icon map) as source of truth.
+- [X] T002 [P] Capture baseline `npm run type-check` result so regressions are detectable.
 
 ---
 
@@ -36,9 +36,9 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 **⚠️ CRITICAL**: No screen migration until T003–T009 complete.
 
-- [ ] T003 Replace `src/app/globals.css` with the Cobalt theme from `design_handoff_softodev_redesign/globals.css` (flips the app to light; keeps canonical token names; redefines `.btn-accent`/`.btn-primary`/`.input`/`.tag-*`/`.card`, adds `.skeleton`, `.num`/`.ltr-nums`, `.rtl-flip`, focus ring, reduced-motion guard).
-- [ ] T004 Swap fonts in `src/app/layout.tsx` via `next/font/google`: add Hanken Grotesk (`--font-hanken`) + IBM Plex Sans Arabic (`--font-plex-ar`); keep Cairo (`--font-cairo`) + JetBrains Mono (`--font-mono`); remove Space Grotesk + Inter; apply the variables on `<html>`/`<body>`; fix the body inline bg/color to light tokens.
-- [ ] T005 Add the custom icon component `src/components/ui/Icon.tsx` from the bundle (typed `IconName`, ~40 glyphs).
+- [X] T003 Replace `src/app/globals.css` with the Cobalt theme from `design_handoff_softodev_redesign/globals.css` (flips the app to light; keeps canonical token names; redefines `.btn-accent`/`.btn-primary`/`.input`/`.tag-*`/`.card`, adds `.skeleton`, `.num`/`.ltr-nums`, `.rtl-flip`, focus ring, reduced-motion guard).
+- [X] T004 Swap fonts in `src/app/layout.tsx` via `next/font/google`: add Hanken Grotesk (`--font-hanken`) + IBM Plex Sans Arabic (`--font-plex-ar`); keep Cairo (`--font-cairo`) + JetBrains Mono (`--font-mono`); remove Space Grotesk + Inter; apply the variables on `<html>`/`<body>`; fix the body inline bg/color to light tokens.
+- [X] T005 Add the custom icon component `src/components/ui/Icon.tsx` from the bundle (typed `IconName`, ~40 glyphs).
 - [ ] T006 Migrate lucide-react → `<Icon>` across the 38 files using the map in `data-model.md`; extend `Icon.tsx` with same-style glyphs for unmatched icons (Download/Upload/Save/RefreshCw/RotateCcw/ToggleLeft-Right/DollarSign/FileText/Settings2/AlertTriangle/Bell/Calendar/TrendingUp/CheckCheck/Truck as needed); replace `Loader2` with a CSS spinner. (Do in sub-batches; type-check between batches.)
 - [ ] T007 [P] Restyle shared status pills to Cobalt semantics: `src/components/orders/StatusBadge.tsx` + `src/components/admin/orders/StatusBadge.tsx` (UPPERCASE codes → Cobalt colors + localized labels; neutral fallback; codes unchanged).
 - [ ] T008 [P] Re-skin shared `src/components/ui/{Button,EmptyState,Skeleton,Toast}.tsx` to Cobalt tokens (Button: accent=solid cobalt, primary=dark/neutral, outlined, ghost; active translateY(1px)).

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction: ltr; unicode-bidi: isolate; font-feature-settings: 'tnum'; }
+  .ds-btn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: background .15s ease, box-shadow .15s ease, transform .12s ease; }
+  .ds-btn:active { transform: translateY(1px); }
+  @keyframes dsSkeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  @keyframes dsSpin { to { transform: rotate(360deg); } }
+</style>
+</helmet>
+<div dir="rtl" style="min-height:100vh; background:#F7F8FA; font-family:'IBM Plex Sans Arabic',sans-serif; color:#111827; -webkit-font-smoothing:antialiased;">
+
+  <!-- Sticky header -->
+  <div style="position:sticky; top:0; z-index:20; background:rgba(247,248,250,0.88); backdrop-filter:blur(12px); border-bottom:1px solid #EAECEF; padding:16px 32px; display:flex; align-items:center; justify-content:space-between;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:'Hanken Grotesk'; font-size:15px;">S</div>
+      <span style="font-weight:700; font-size:15px; font-family:'Cairo';">SoftoDev</span>
+      <span style="color:#9097A1; font-size:13px;">— نظام التصميم</span>
+    </div>
+    <span style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; color:#2563EB; background:#E8F0FE; padding:5px 11px; border-radius:7px; letter-spacing:0.06em;">COBALT · v1.0</span>
+  </div>
+
+  <div style="max-width:1080px; margin:0 auto; padding:56px 24px 100px;">
+
+    <!-- Intro -->
+    <div style="margin-bottom:64px;">
+      <div style="font-family:'Hanken Grotesk'; font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:#2563EB; margin-bottom:16px;">Design System</div>
+      <h1 style="margin:0; font-family:'Cairo'; font-weight:800; font-size:clamp(28px,5vw,42px); letter-spacing:-0.01em; color:#0B1220;">نظام تصميم كوبالت</h1>
+      <p style="margin:16px 0 0; max-width:580px; font-size:16px; line-height:1.8; color:#4B5563;">توكنز ومكوّنات موحّدة تُبنى عليها كل صفحات المتجر — فاتح، هادئ، احترافي بروح Stripe. متوافق مع العربية والإنجليزية، RTL و LTR.</p>
+    </div>
+
+    <!-- ══ COLORS ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">01</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الألوان</h2>
+      </div>
+
+      <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:14px;">Brand — Cobalt</div>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:32px;">
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:72px; background:#2563EB;"></div><div style="padding:11px 13px;"><div style="font-size:12.5px; font-weight:700; color:#111827;">Primary</div><div class="num" style="font-size:11px; color:#9097A1;">#2563EB</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:72px; background:#1D4ED8;"></div><div style="padding:11px 13px;"><div style="font-size:12.5px; font-weight:700; color:#111827;">Hover</div><div class="num" style="font-size:11px; color:#9097A1;">#1D4ED8</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:72px; background:#E8F0FE;"></div><div style="padding:11px 13px;"><div style="font-size:12.5px; font-weight:700; color:#111827;">Soft</div><div class="num" style="font-size:11px; color:#9097A1;">#E8F0FE</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:72px; background:#06B6D4;"></div><div style="padding:11px 13px;"><div style="font-size:12.5px; font-weight:700; color:#111827;">Cyan</div><div class="num" style="font-size:11px; color:#9097A1;">#06B6D4</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:72px; background:#E0F7FB;"></div><div style="padding:11px 13px;"><div style="font-size:12.5px; font-weight:700; color:#111827;">Cyan soft</div><div class="num" style="font-size:11px; color:#9097A1;">#E0F7FB</div></div></div>
+      </div>
+
+      <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:14px;">Neutrals</div>
+      <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:32px;">
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#FFFFFF; border-bottom:1px solid #EAECEF;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">BG / Card</div><div class="num" style="font-size:10.5px; color:#9097A1;">#FFFFFF</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#F7F8FA;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Section</div><div class="num" style="font-size:10.5px; color:#9097A1;">#F7F8FA</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#F3F4F6;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Hover</div><div class="num" style="font-size:10.5px; color:#9097A1;">#F3F4F6</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#EAECEF;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Border</div><div class="num" style="font-size:10.5px; color:#9097A1;">#EAECEF</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#4B5563;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700; color:#111827;">Text 2</div><div class="num" style="font-size:10.5px; color:#9097A1;">#4B5563</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:64px; background:#111827;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700; color:#111827;">Text 1</div><div class="num" style="font-size:10.5px; color:#9097A1;">#111827</div></div></div>
+      </div>
+
+      <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:14px;">Semantic</div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px;">
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:56px; background:#16A34A;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Success</div><div class="num" style="font-size:10.5px; color:#9097A1;">#16A34A</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:56px; background:#F59E0B;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Warning / ★</div><div class="num" style="font-size:10.5px; color:#9097A1;">#F59E0B</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:56px; background:#EF4444;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Error</div><div class="num" style="font-size:10.5px; color:#9097A1;">#EF4444</div></div></div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;"><div style="height:56px; background:#6B7280;"></div><div style="padding:10px 12px;"><div style="font-size:12px; font-weight:700;">Muted</div><div class="num" style="font-size:10.5px; color:#9097A1;">#6B7280</div></div></div>
+      </div>
+    </section>
+
+    <!-- ══ TYPE ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">02</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الطباعة</h2>
+      </div>
+      <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:32px; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+        <div style="display:flex; align-items:baseline; gap:14px; padding-bottom:18px; border-bottom:1px solid #F1F2F5;">
+          <span class="num" style="font-size:11px; color:#9097A1; min-width:90px;">Display / 42</span>
+          <span style="font-family:'Cairo'; font-weight:800; font-size:42px; color:#0B1220; letter-spacing:-0.01em;">اشتراكاتك الرقمية</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px solid #F1F2F5;">
+          <span class="num" style="font-size:11px; color:#9097A1; min-width:90px;">H2 / 28</span>
+          <span style="font-family:'Cairo'; font-weight:700; font-size:28px; color:#111827;">الأكثر مبيعاً هذا الأسبوع</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px solid #F1F2F5;">
+          <span class="num" style="font-size:11px; color:#9097A1; min-width:90px;">H4 / 18</span>
+          <span style="font-family:'Cairo'; font-weight:700; font-size:18px; color:#111827;">ChatGPT Plus — اشتراك شهري</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:14px; padding:18px 0; border-bottom:1px solid #F1F2F5;">
+          <span class="num" style="font-size:11px; color:#9097A1; min-width:90px;">Body / 14.5</span>
+          <span style="font-size:14.5px; line-height:1.8; color:#4B5563; max-width:520px;">نصوص بخط IBM Plex Sans Arabic — مريحة للقراءة على الخلفية الفاتحة مع تباعد أسطر مريح للعين.</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; padding-top:18px;">
+          <span class="num" style="font-size:11px; color:#9097A1; min-width:90px;">Latin / Num</span>
+          <span class="num" style="font-weight:700; font-size:22px; color:#111827;">Hanken Grotesk — $20.00 · IQD 26,000</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ TOKENS: radius / shadow / spacing ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">03</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الحواف · الظلال · المسافات</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:24px;">
+          <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:18px;">Radius</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px;"><div style="width:48px; height:34px; background:#E8F0FE; border:1.5px solid #2563EB; border-radius:8px;"></div><span class="num" style="font-size:12px; color:#4B5563;">8 — inputs/buttons</span></div>
+            <div style="display:flex; align-items:center; gap:12px;"><div style="width:48px; height:34px; background:#E8F0FE; border:1.5px solid #2563EB; border-radius:14px;"></div><span class="num" style="font-size:12px; color:#4B5563;">14 — cards</span></div>
+            <div style="display:flex; align-items:center; gap:12px;"><div style="width:48px; height:34px; background:#E8F0FE; border:1.5px solid #2563EB; border-radius:20px;"></div><span class="num" style="font-size:12px; color:#4B5563;">20 — panels</span></div>
+          </div>
+        </div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:24px;">
+          <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:18px;">Shadow</div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; align-items:center; gap:12px;"><div style="width:48px; height:34px; background:#fff; border-radius:10px; box-shadow:0 1px 3px rgba(16,24,40,0.06),0 1px 2px rgba(16,24,40,0.04);"></div><span class="num" style="font-size:12px; color:#4B5563;">sm</span></div>
+            <div style="display:flex; align-items:center; gap:12px;"><div style="width:48px; height:34px; background:#fff; border-radius:10px; box-shadow:0 4px 14px rgba(16,24,40,0.08);"></div><span class="num" style="font-size:12px; color:#4B5563;">md</span></div>
+            <div style="display:flex; align-items:center; gap:12px;"><div style="width:48px; height:34px; background:#fff; border-radius:10px; box-shadow:0 14px 36px rgba(16,24,40,0.12);"></div><span class="num" style="font-size:12px; color:#4B5563;">lg</span></div>
+          </div>
+        </div>
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:24px;">
+          <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:18px;">Spacing · 8px</div>
+          <div style="display:flex; align-items:flex-end; gap:8px;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:4px; height:4px; background:#2563EB; border-radius:2px;"></div><span class="num" style="font-size:10px; color:#9097A1;">4</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:8px; height:8px; background:#2563EB; border-radius:2px;"></div><span class="num" style="font-size:10px; color:#9097A1;">8</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:16px; height:16px; background:#2563EB; border-radius:3px;"></div><span class="num" style="font-size:10px; color:#9097A1;">16</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:24px; height:24px; background:#2563EB; border-radius:4px;"></div><span class="num" style="font-size:10px; color:#9097A1;">24</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:32px; height:32px; background:#2563EB; border-radius:5px;"></div><span class="num" style="font-size:10px; color:#9097A1;">32</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:6px;"><div style="width:48px; height:48px; background:#2563EB; border-radius:6px;"></div><span class="num" style="font-size:10px; color:#9097A1;">48</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ BUTTONS ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">04</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الأزرار</h2>
+      </div>
+      <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:32px; box-shadow:0 1px 2px rgba(16,24,40,0.04); display:flex; flex-direction:column; gap:24px;">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
+          <button class="ds-btn" style="background:#2563EB; color:#fff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; box-shadow:0 1px 2px rgba(37,99,235,0.3);">اشترك الآن</button>
+          <button class="ds-btn" style="background:#fff; color:#111827; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; border:1px solid #D6DAE1;">أضف للسلة</button>
+          <button class="ds-btn" style="background:#F3F4F6; color:#374151; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px;">ثانوي</button>
+          <button class="ds-btn" style="background:transparent; color:#2563EB; font-weight:700; font-size:14px; padding:11px 14px; border-radius:10px;">عرض الكل ←</button>
+          <button class="ds-btn" style="background:#fff; color:#EF4444; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; border:1px solid #FBD5D5;">حذف</button>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
+          <button class="ds-btn" style="background:#2563EB; color:#fff; font-weight:700; font-size:12px; padding:8px 16px; border-radius:9px;">صغير</button>
+          <button class="ds-btn" style="background:#2563EB; color:#fff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px;">متوسط</button>
+          <button class="ds-btn" style="background:#2563EB; color:#fff; font-weight:700; font-size:16px; padding:15px 30px; border-radius:12px;">كبير</button>
+          <button class="ds-btn" disabled style="background:#E5E7EB; color:#9CA3AF; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:not-allowed;">معطّل</button>
+          <button class="ds-btn" style="background:#1D4ED8; color:#fff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; box-shadow:0 0 0 3px rgba(37,99,235,0.22);">تركيز (focus)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ INPUTS ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">05</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الحقول والنماذج</h2>
+      </div>
+      <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:32px; box-shadow:0 1px 2px rgba(16,24,40,0.04); display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+        <div>
+          <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:8px;">البريد الإلكتروني</label>
+          <input value="name@email.com" style="width:100%; font-family:'IBM Plex Sans Arabic'; font-size:14px; padding:12px 14px; border:1px solid #D6DAE1; border-radius:10px; color:#111827; outline:none;">
+        </div>
+        <div>
+          <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:8px;">تركيز نشط</label>
+          <input value="كلمة المرور" style="width:100%; font-family:'IBM Plex Sans Arabic'; font-size:14px; padding:12px 14px; border:1px solid #2563EB; border-radius:10px; color:#111827; outline:none; box-shadow:0 0 0 3px rgba(37,99,235,0.16);">
+        </div>
+        <div>
+          <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:8px;">خطأ في الإدخال</label>
+          <input value="بريد غير صالح" style="width:100%; font-family:'IBM Plex Sans Arabic'; font-size:14px; padding:12px 14px; border:1px solid #EF4444; border-radius:10px; color:#111827; outline:none; box-shadow:0 0 0 3px rgba(239,68,68,0.12);">
+          <div style="font-size:12px; color:#EF4444; margin-top:7px;">يرجى إدخال بريد إلكتروني صحيح.</div>
+        </div>
+        <div>
+          <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:8px;">قائمة منسدلة</label>
+          <div style="width:100%; font-size:14px; padding:12px 14px; border:1px solid #D6DAE1; border-radius:10px; color:#111827; display:flex; align-items:center; justify-content:space-between;">الدفع بالدينار العراقي <span style="color:#9097A1;">▾</span></div>
+        </div>
+        <div style="grid-column:1/-1; display:flex; gap:24px; align-items:center; padding-top:4px;">
+          <label style="display:flex; align-items:center; gap:9px; font-size:14px; color:#374151; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; background:#2563EB; display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:12px;">✓</span> أوافق على الشروط</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14px; color:#374151; cursor:pointer;"><span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #D6DAE1;"></span> رسائل العروض</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14px; color:#374151; cursor:pointer;"><span style="width:20px; height:20px; border-radius:50%; border:5px solid #2563EB; background:#fff;"></span> اشتراك سنوي</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ BADGES & RATING ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">06</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الشارات وإشارات الثقة</h2>
+      </div>
+      <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:32px; box-shadow:0 1px 2px rgba(16,24,40,0.04); display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
+        <span style="font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; background:#E8F0FE; color:#1D4ED8;">جديد</span>
+        <span style="font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; background:#FEECEC; color:#DC2626;">−25%</span>
+        <span style="font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; background:#E7F6EE; color:#15803D;">الأكثر مبيعاً</span>
+        <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:6px 12px; border-radius:20px; background:#E0F7FB; color:#0E7490;"><dc-import name="Icon" icon="bolt" size="13" color="#0E7490" hint-size="13px,13px"></dc-import> تسليم فوري</span>
+        <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:6px 12px; border-radius:20px; background:#F3F4F6; color:#374151;"><dc-import name="Icon" icon="lock" size="13" color="#374151" hint-size="13px,13px"></dc-import> دفع آمن</span>
+        <span style="display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:6px 12px; border-radius:20px; background:#F3F4F6; color:#374151;"><dc-import name="Icon" icon="shield" size="13" color="#374151" hint-size="13px,13px"></dc-import> ضمان كامل</span>
+        <div style="display:inline-flex; align-items:center; gap:7px; margin-inline-start:8px;">
+          <span style="color:#F59E0B; font-size:15px; letter-spacing:1px;">★★★★★</span>
+          <span class="num" style="font-size:13px; font-weight:700; color:#111827;">4.9</span>
+          <span class="num" style="font-size:12px; color:#9097A1;">(320 تقييم)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ COMPONENTS: cards ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">07</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">بطاقات المنتجات</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        <!-- card 1 -->
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+          <div style="aspect-ratio:1/1; background:linear-gradient(140deg,#E8F0FE,#E0F7FB); display:flex; align-items:center; justify-content:center; position:relative;">
+            <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#10A37F,#1AB68C); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:15px; box-shadow:0 8px 20px rgba(16,163,127,0.3);">GPT</div>
+            <span style="position:absolute; top:10px; inset-inline-start:10px; font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px; background:#fff; color:#0E7490; display:inline-flex; align-items:center; gap:4px;"><dc-import name="Icon" icon="bolt" size="11" color="#0E7490" hint-size="11px,11px"></dc-import> فوري</span>
+            <button style="position:absolute; top:9px; inset-inline-end:9px; width:32px; height:32px; border-radius:50%; background:#fff; border:1px solid #EAECEF; cursor:pointer; color:#9097A1; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="heart" size="15" color="#9097A1" hint-size="15px,15px"></dc-import></button>
+          </div>
+          <div style="padding:14px;">
+            <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">AI Tools</div>
+            <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#111827; margin:5px 0 8px; line-height:1.4;">ChatGPT Plus — شهري</div>
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;"><span style="color:#F59E0B; font-size:12px;">★★★★★</span><span class="num" style="font-size:11px; color:#9097A1;">4.9</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <div style="display:flex; align-items:baseline; gap:6px;"><span class="num" style="font-weight:800; font-size:19px; color:#111827;">$20</span><span class="num" style="font-size:12px; color:#9097A1; text-decoration:line-through;">$27</span></div>
+              <span style="font-size:11px; font-weight:700; color:#15803D;">متوفر</span>
+            </div>
+            <button class="ds-btn" style="width:100%; background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:11px; border-radius:10px;">أضف للسلة</button>
+          </div>
+        </div>
+        <!-- card 2 -->
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+          <div style="aspect-ratio:1/1; background:linear-gradient(140deg,#EDE9FE,#E8F0FE); display:flex; align-items:center; justify-content:center; position:relative;">
+            <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#7C3AED,#A855F7); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:15px; box-shadow:0 8px 20px rgba(124,58,237,0.3);">Cv</div>
+            <span style="position:absolute; top:10px; inset-inline-start:10px; font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px; background:#FEECEC; color:#DC2626;">−25%</span>
+            <button style="position:absolute; top:9px; inset-inline-end:9px; width:32px; height:32px; border-radius:50%; background:#fff; border:1px solid #EAECEF; cursor:pointer; color:#EF4444; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="heartFill" size="15" color="#EF4444" hint-size="15px,15px"></dc-import></button>
+          </div>
+          <div style="padding:14px;">
+            <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">Design</div>
+            <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#111827; margin:5px 0 8px; line-height:1.4;">Canva Pro — سنوي</div>
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;"><span style="color:#F59E0B; font-size:12px;">★★★★★</span><span class="num" style="font-size:11px; color:#9097A1;">4.8</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <div style="display:flex; align-items:baseline; gap:6px;"><span class="num" style="font-weight:800; font-size:19px; color:#111827;">$45</span><span class="num" style="font-size:12px; color:#9097A1; text-decoration:line-through;">$60</span></div>
+              <span style="font-size:11px; font-weight:700; color:#D97706;">آخر 4 قطع</span>
+            </div>
+            <button class="ds-btn" style="width:100%; background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:11px; border-radius:10px;">أضف للسلة</button>
+          </div>
+        </div>
+        <!-- card 3 -->
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+          <div style="aspect-ratio:1/1; background:linear-gradient(140deg,#E0F7FB,#E8F0FE); display:flex; align-items:center; justify-content:center; position:relative;">
+            <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#0EA5E9,#06B6D4); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:15px; box-shadow:0 8px 20px rgba(14,165,233,0.3);">CC</div>
+            <button style="position:absolute; top:9px; inset-inline-end:9px; width:32px; height:32px; border-radius:50%; background:#fff; border:1px solid #EAECEF; cursor:pointer; color:#9097A1; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="heart" size="15" color="#9097A1" hint-size="15px,15px"></dc-import></button>
+          </div>
+          <div style="padding:14px;">
+            <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">Video</div>
+            <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#111827; margin:5px 0 8px; line-height:1.4;">CapCut Pro — شهري</div>
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;"><span style="color:#F59E0B; font-size:12px;">★★★★☆</span><span class="num" style="font-size:11px; color:#9097A1;">4.6</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <span class="num" style="font-weight:800; font-size:19px; color:#111827;">$12</span>
+              <span style="font-size:11px; font-weight:700; color:#15803D;">متوفر</span>
+            </div>
+            <button class="ds-btn" style="width:100%; background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:11px; border-radius:10px;">أضف للسلة</button>
+          </div>
+        </div>
+        <!-- card 4: out of stock -->
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+          <div style="aspect-ratio:1/1; background:linear-gradient(140deg,#FEF3C7,#FEE2E2); display:flex; align-items:center; justify-content:center; position:relative; filter:saturate(0.7);">
+            <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#9CA3AF,#6B7280); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:15px;">Co</div>
+            <span style="position:absolute; inset:0; background:rgba(255,255,255,0.55); display:flex; align-items:center; justify-content:center; font-family:'Cairo'; font-weight:700; font-size:13px; color:#6B7280;">نفد المخزون</span>
+          </div>
+          <div style="padding:14px;">
+            <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">Learning</div>
+            <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#111827; margin:5px 0 8px; line-height:1.4;">Coursera Plus — سنوي</div>
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;"><span style="color:#F59E0B; font-size:12px;">★★★★★</span><span class="num" style="font-size:11px; color:#9097A1;">4.9</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <span class="num" style="font-weight:800; font-size:19px; color:#9097A1;">$59</span>
+              <span style="font-size:11px; font-weight:700; color:#DC2626;">غير متوفر</span>
+            </div>
+            <button class="ds-btn" disabled style="width:100%; background:#E5E7EB; color:#9CA3AF; font-weight:700; font-size:13px; padding:11px; border-radius:10px; cursor:not-allowed;">نفد المخزون</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ STATES: empty / loading / error / toast ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">08</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">الحالات: فارغ · تحميل · خطأ · تنبيه</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <!-- empty -->
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:36px; box-shadow:0 1px 2px rgba(16,24,40,0.04); text-align:center;">
+          <div style="width:56px; height:56px; border-radius:16px; background:#F3F4F6; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;"><dc-import name="Icon" icon="cart" size="26" color="#6B7280" hint-size="26px,26px"></dc-import></div>
+          <div style="font-family:'Cairo'; font-weight:700; font-size:16px; color:#111827;">سلتك فارغة</div>
+          <p style="margin:8px 0 18px; font-size:13px; color:#6B7280;">لم تُضِف أي اشتراك بعد. تصفّح الكتالوج وابدأ.</p>
+          <button class="ds-btn" style="background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:10px 20px; border-radius:10px;">تصفّح المنتجات</button>
+        </div>
+        <!-- loading skeleton -->
+        <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:28px; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+          <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9097A1; margin-bottom:18px;">Loading / Skeleton</div>
+          <div style="display:flex; gap:14px; align-items:center;">
+            <div style="width:64px; height:64px; border-radius:14px; background:linear-gradient(90deg,#F3F4F6 25%,#E9EBEF 37%,#F3F4F6 63%); background-size:400% 100%; animation:dsSkeleton 1.4s ease infinite;"></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:9px;">
+              <div style="height:11px; width:70%; border-radius:5px; background:linear-gradient(90deg,#F3F4F6 25%,#E9EBEF 37%,#F3F4F6 63%); background-size:400% 100%; animation:dsSkeleton 1.4s ease infinite;"></div>
+              <div style="height:11px; width:45%; border-radius:5px; background:linear-gradient(90deg,#F3F4F6 25%,#E9EBEF 37%,#F3F4F6 63%); background-size:400% 100%; animation:dsSkeleton 1.4s ease infinite;"></div>
+              <div style="height:11px; width:58%; border-radius:5px; background:linear-gradient(90deg,#F3F4F6 25%,#E9EBEF 37%,#F3F4F6 63%); background-size:400% 100%; animation:dsSkeleton 1.4s ease infinite;"></div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; margin-top:22px; color:#6B7280; font-size:13px;">
+            <span style="width:18px; height:18px; border:2.5px solid #E5E7EB; border-top-color:#2563EB; border-radius:50%; display:inline-block; animation:dsSpin 0.8s linear infinite;"></span>
+            جارٍ التحميل…
+          </div>
+        </div>
+        <!-- error -->
+        <div style="background:#fff; border:1px solid #FBD5D5; border-radius:18px; padding:24px; box-shadow:0 1px 2px rgba(16,24,40,0.04); display:flex; gap:14px; align-items:flex-start;">
+          <div style="width:38px; height:38px; border-radius:10px; background:#FEECEC; color:#DC2626; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">!</div>
+          <div><div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#111827;">تعذّر إتمام الدفع</div><p style="margin:5px 0 0; font-size:13px; color:#6B7280; line-height:1.7;">حدث خطأ أثناء معالجة بطاقتك. تأكّد من البيانات وحاول مرة أخرى.</p></div>
+        </div>
+        <!-- toast -->
+        <div style="display:flex; flex-direction:column; gap:12px; justify-content:center;">
+          <div style="background:#0B1220; color:#fff; border-radius:12px; padding:14px 18px; display:flex; align-items:center; gap:12px; box-shadow:0 14px 36px rgba(16,24,40,0.18);">
+            <span style="width:24px; height:24px; border-radius:50%; background:#16A34A; display:inline-flex; align-items:center; justify-content:center; color:#fff;"><dc-import name="Icon" icon="check" size="14" color="#fff" stroke="2.4" hint-size="14px,14px"></dc-import></span>
+            <span style="font-size:13.5px; font-weight:600;">تمت الإضافة إلى السلة</span>
+          </div>
+          <div style="background:#fff; border:1px solid #EAECEF; border-radius:12px; padding:14px 18px; display:flex; align-items:center; gap:12px; box-shadow:0 14px 36px rgba(16,24,40,0.12);">
+            <span style="width:24px; height:24px; border-radius:50%; background:#E0F7FB; color:#0E7490; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="info" size="14" color="#0E7490" hint-size="14px,14px"></dc-import></span>
+            <span style="font-size:13.5px; font-weight:600; color:#111827;">سيصلك رمز التفعيل خلال 30 دقيقة</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ ICONS ══ -->
+    <section style="margin-bottom:72px;">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:10px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">09</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">مكتبة الأيقونات المخصّصة</h2>
+      </div>
+      <p style="margin:0 0 22px 26px; font-size:14px; color:#6B7280;">طقم SVG خطّي موحّد مرسوم خصيصاً للمتجر — لا إيموجي. سماكة 1.7، زوايا دائرية، 24×24.</p>
+      <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:26px; box-shadow:0 1px 2px rgba(16,24,40,0.04); display:grid; grid-template-columns:repeat(8,1fr); gap:14px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="bolt" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">bolt</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="star" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">star</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="heart" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">heart</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="heartFill" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">heartFill</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="shield" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">shield</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="bank" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">bank</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="chat" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">chat</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="sparkle" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">sparkle</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="layers" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">layers</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="video" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">video</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="book" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">book</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="search" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">search</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="cart" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">cart</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="lock" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">lock</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="check" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">check</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="checkCircle" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">checkCircle</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="arrow" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">arrow</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="arrowLeft" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">arrowLeft</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="chevron" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">chevron</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="x" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">x</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="menu" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">menu</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="user" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">user</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="package" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">package</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="pin" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">pin</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="filter" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">filter</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="sort" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">sort</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="trash" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">trash</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="plus" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">plus</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="mail" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">mail</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="phone" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">phone</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="tag" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">tag</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="info" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">info</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="eye" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">eye</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="edit" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">edit</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="logout" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">logout</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="clock" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">clock</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="grid" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">grid</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="facebook" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">facebook</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="instagram" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">instagram</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid #F1F2F5; border-radius:12px;">
+            <span style="color:#1D4ED8; display:inline-flex;"><dc-import name="Icon" icon="twitter" size="22" color="#1D4ED8" hint-size="22px,22px"></dc-import></span>
+            <span style="font-family:'Hanken Grotesk'; font-size:9.5px; color:#9097A1; text-align:center; direction:ltr;">twitter</span>
+          </div>
+      </div>
+    </section>
+
+    <!-- ══ NAV + FOOTER preview ══ -->
+    <section>
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:28px;">
+        <span style="font-family:'Hanken Grotesk'; font-size:13px; font-weight:700; color:#2563EB;">10</span>
+        <h2 style="margin:0; font-family:'Cairo'; font-weight:700; font-size:24px; color:#0B1220;">شريط التنقّل والفوتر</h2>
+      </div>
+      <!-- navbar -->
+      <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px 16px 0 0; padding:14px 22px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+        <div style="display:flex; align-items:center; gap:28px;">
+          <div style="display:flex; align-items:center; gap:9px;"><div style="width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:'Hanken Grotesk'; font-size:14px;">S</div><span style="font-family:'Cairo'; font-weight:700; font-size:15px;">SoftoDev</span></div>
+          <div style="display:flex; gap:20px; font-size:13.5px; color:#4B5563; font-weight:600;"><span>المنتجات</span><span>الفئات</span><span>العروض</span><span>من نحن</span></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:200px; background:#F3F4F6; border-radius:10px; padding:8px 12px; font-size:12.5px; color:#9097A1; display:flex; align-items:center; gap:8px;"><dc-import name="Icon" icon="search" size="15" color="#9097A1" hint-size="15px,15px"></dc-import> ابحث عن اشتراك…</div>
+          <span style="font-family:'Hanken Grotesk'; font-size:12px; font-weight:700; color:#4B5563; padding:7px 10px; border:1px solid #EAECEF; border-radius:9px;">EN</span>
+          <span style="color:#4B5563; display:inline-flex;"><dc-import name="Icon" icon="heart" size="19" color="#4B5563" hint-size="19px,19px"></dc-import></span>
+          <span style="color:#4B5563; display:inline-flex;"><dc-import name="Icon" icon="cart" size="19" color="#4B5563" hint-size="19px,19px"></dc-import></span>
+          <button class="ds-btn" style="background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:8px 16px; border-radius:9px;">دخول</button>
+        </div>
+      </div>
+      <!-- footer -->
+      <div style="background:#0B1220; border-radius:0 0 16px 16px; padding:36px 28px; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:28px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;"><div style="width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-family:'Hanken Grotesk'; font-size:14px;">S</div><span style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#fff;">SoftoDev</span></div>
+          <p style="margin:0; font-size:13px; line-height:1.8; color:#9CA3AF;">أكبر متجر اشتراكات رقمية في العراق. تفعيل فوري، دفع بالدينار، ضمان كامل.</p>
+        </div>
+        <div><div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:14px;">المتجر</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#9CA3AF;"><span>كل المنتجات</span><span>العروض</span><span>الأكثر مبيعاً</span></div></div>
+        <div><div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:14px;">الدعم</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#9CA3AF;"><span>تواصل معنا</span><span>الأسئلة الشائعة</span><span>سياسة الاسترجاع</span></div></div>
+        <div><div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:14px;">تابعنا</div><div style="display:flex; gap:10px;"><span style="width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; color:#fff;">f</span><span style="width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; color:#fff;">in</span><span style="width:34px; height:34px; border-radius:10px; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; color:#fff;">✕</span></div></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

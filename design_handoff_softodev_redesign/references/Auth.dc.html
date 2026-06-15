@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction: ltr; unicode-bidi: isolate; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: background .15s, box-shadow .15s, transform .12s, color .15s, border-color .15s; }
+  .hbtn:active { transform: translateY(1px); }
+  .ul:hover { color: #2563EB !important; }
+  .ipt { width:100%; font-family:'IBM Plex Sans Arabic'; font-size:14px; padding:13px 14px 13px 42px; border:1px solid #D6DAE1; border-radius:11px; color:#111827; outline:none; background:#fff; transition:border-color .15s, box-shadow .15s; }
+  .ipt:focus { border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
+  [dir="rtl"] .ipt { padding:13px 42px 13px 14px; }
+  .home-wrap { container-type: inline-size; }
+  .auth-split { display: grid; grid-template-columns: 1fr; }
+  .auth-brand { display: none; }
+  @container (min-width: 800px) {
+    .auth-split { grid-template-columns: 1fr 1fr; }
+    .auth-brand { display: flex; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <div style="max-width:1280px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV · {{ deviceLabel }} · {{ langLabel }} · {{ modeLabel }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+      <div class="auth-split" style="min-height:600px;">
+
+        <!-- BRAND PANEL -->
+        <div class="auth-brand" style="flex-direction:column; justify-content:space-between; background:linear-gradient(160deg,#0B1220,#1E2A44); padding:44px; position:relative; overflow:hidden;">
+          <div style="position:absolute; top:-60px; inset-inline-end:-60px; width:240px; height:240px; border-radius:50%; background:radial-gradient(circle,#2563EB,transparent 70%); opacity:0.45;"></div>
+          <div style="position:relative; display:flex; align-items:center; gap:10px;">
+            <div class="hk" style="width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:16px;">S</div>
+            <span class="ca" style="font-weight:700; font-size:17px; color:#fff;">SoftoDev</span>
+          </div>
+          <div style="position:relative;">
+            <h2 class="ca" style="margin:0; font-weight:800; font-size:28px; color:#fff; line-height:1.35;">{{ tx.brandTitle }}</h2>
+            <p style="margin:14px 0 0; font-size:14px; line-height:1.85; color:#9CA3AF; max-width:340px;">{{ tx.brandSub }}</p>
+            <div style="margin-top:26px; display:flex; flex-direction:column; gap:13px;">
+              <div style="display:flex; align-items:center; gap:11px; color:#D1D5DB; font-size:13.5px;"><span style="width:30px; height:30px; border-radius:9px; background:rgba(37,99,235,0.25); display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="bolt" size="16" color="#93C5FD" hint-size="16px,16px"></dc-import></span>{{ tx.bp1 }}</div>
+              <div style="display:flex; align-items:center; gap:11px; color:#D1D5DB; font-size:13.5px;"><span style="width:30px; height:30px; border-radius:9px; background:rgba(22,163,74,0.25); display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="shield" size="16" color="#6EE7A8" hint-size="16px,16px"></dc-import></span>{{ tx.bp2 }}</div>
+              <div style="display:flex; align-items:center; gap:11px; color:#D1D5DB; font-size:13.5px;"><span style="width:30px; height:30px; border-radius:9px; background:rgba(6,182,212,0.25); display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="bank" size="16" color="#67E8F9" hint-size="16px,16px"></dc-import></span>{{ tx.bp3 }}</div>
+            </div>
+          </div>
+          <div style="position:relative; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:18px;">
+            <div style="display:flex; gap:2px; color:#F59E0B; margin-bottom:10px;"><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import></div>
+            <p style="margin:0 0 12px; font-size:13px; line-height:1.8; color:#D1D5DB;">{{ tx.quote }}</p>
+            <div style="display:flex; align-items:center; gap:10px;"><span class="hk" style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#3B82F6); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;">{{ tx.qInit }}</span><div><div class="ca" style="font-size:12.5px; font-weight:700; color:#fff;">{{ tx.qName }}</div><div class="hk" style="font-size:10.5px; color:#9097A1;">{{ tx.qMeta }}</div></div></div>
+          </div>
+        </div>
+
+        <!-- FORM PANEL -->
+        <div style="background:#fff; padding:40px 36px; display:flex; flex-direction:column; justify-content:center;">
+          <div style="max-width:360px; width:100%; margin:0 auto;">
+            <h1 class="ca" style="margin:0; font-weight:800; font-size:26px; color:#0B1220;">{{ tx.title }}</h1>
+            <p style="margin:8px 0 24px; font-size:13.5px; color:#6B7280;">{{ tx.subtitle }}</p>
+
+            <div style="display:flex; flex-direction:column; gap:15px;">
+              <!-- name (register only) -->
+              <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.name }}</label>
+                  <div style="position:relative;"><span style="position:absolute; top:50%; transform:translateY(-50%); inset-inline-start:13px; color:#9097A1; display:inline-flex;"><dc-import name="Icon" icon="user" size="18" color="#9097A1" hint-size="18px,18px"></dc-import></span><input class="ipt" value="{{ ph.name }}"></div>
+                </div>
+              </sc-if>
+              <div>
+                <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.email }}</label>
+                <div style="position:relative;"><span style="position:absolute; top:50%; transform:translateY(-50%); inset-inline-start:13px; color:#9097A1; display:inline-flex;"><dc-import name="Icon" icon="mail" size="18" color="#9097A1" hint-size="18px,18px"></dc-import></span><input class="ipt" value="{{ ph.email }}"></div>
+              </div>
+              <!-- phone (register only) -->
+              <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.phone }}</label>
+                  <div style="position:relative;"><span style="position:absolute; top:50%; transform:translateY(-50%); inset-inline-start:13px; color:#9097A1; display:inline-flex;"><dc-import name="Icon" icon="phone" size="18" color="#9097A1" hint-size="18px,18px"></dc-import></span><input class="ipt num" value="0770 123 4567"></div>
+                </div>
+              </sc-if>
+              <div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;"><label style="font-size:13px; font-weight:600; color:#374151;">{{ tx.password }}</label><sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}"><span class="ul hk" style="font-size:12px; font-weight:600; color:#2563EB; cursor:pointer;">{{ tx.forgot }}</span></sc-if></div>
+                <div style="position:relative;"><span style="position:absolute; top:50%; transform:translateY(-50%); inset-inline-start:13px; color:#9097A1; display:inline-flex;"><dc-import name="Icon" icon="lock" size="18" color="#9097A1" hint-size="18px,18px"></dc-import></span><input class="ipt" type="password" value="········"><span style="position:absolute; top:50%; transform:translateY(-50%); inset-inline-end:13px; color:#9097A1; cursor:pointer; display:inline-flex;"><dc-import name="Icon" icon="eye" size="18" color="#9097A1" hint-size="18px,18px"></dc-import></span></div>
+              </div>
+
+              <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+                <label style="display:flex; align-items:flex-start; gap:9px; font-size:12.5px; color:#4B5563; cursor:pointer; line-height:1.6;"><span style="width:19px; height:19px; min-width:19px; border-radius:6px; background:#2563EB; display:inline-flex; align-items:center; justify-content:center; margin-top:1px;"><dc-import name="Icon" icon="check" size="13" color="#fff" stroke="2.5" hint-size="13px,13px"></dc-import></span>{{ tx.agree }}</label>
+              </sc-if>
+
+              <button class="hbtn" style="width:100%; background:#2563EB; color:#fff; font-weight:700; font-size:14.5px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(37,99,235,0.28); margin-top:4px;">{{ tx.submit }}</button>
+
+              <div style="display:flex; align-items:center; gap:12px; margin:4px 0;"><span style="flex:1; height:1px; background:#EAECEF;"></span><span class="hk" style="font-size:11.5px; color:#9097A1;">{{ tx.or }}</span><span style="flex:1; height:1px; background:#EAECEF;"></span></div>
+              <button class="hbtn" style="width:100%; background:#fff; border:1px solid #D6DAE1; color:#374151; font-weight:600; font-size:13.5px; padding:12px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; gap:9px;"><span class="hk" style="font-weight:800; color:#4285F4;">G</span> {{ tx.google }}</button>
+            </div>
+
+            <div style="text-align:center; margin-top:22px; font-size:13px; color:#6B7280;">{{ tx.switchText }} <span class="ul" onClick="{{ toggleMode }}" style="font-weight:700; color:#2563EB; cursor:pointer;">{{ tx.switchCta }}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang:'ar', device:'desktop', mode:'login' };
+
+  get T() {
+    const reg = this.state.mode === 'register';
+    const ar = {
+      brandTitle:'انضم لأكبر متجر اشتراكات رقمية في العراق', brandSub:'سجّل دخولك للوصول إلى اشتراكاتك، طلباتك، ومفضلتك — كلها في مكان واحد.',
+      bp1:'تفعيل فوري خلال 30 دقيقة', bp2:'ضمان كامل على كل اشتراك', bp3:'دفع بالدينار العراقي',
+      quote:'أفضل متجر جربته — التفعيل سريع والدعم ممتاز. صرت أجدد اشتراكاتي كلها من هنا.', qInit:'س', qName:'سارة كريم', qMeta:'أربيل · عميلة موثّقة',
+      name:'الاسم الكامل', email:'البريد الإلكتروني', phone:'رقم الهاتف', password:'كلمة المرور', forgot:'نسيت كلمة المرور؟',
+      or:'أو', google:'المتابعة عبر Google', agree:'أوافق على شروط الاستخدام وسياسة الخصوصية الخاصة بـ SoftoDev.',
+      title: reg ? 'إنشاء حساب جديد' : 'مرحباً بعودتك',
+      subtitle: reg ? 'أنشئ حسابك وابدأ التسوّق خلال دقيقة.' : 'سجّل دخولك للمتابعة إلى حسابك.',
+      submit: reg ? 'إنشاء الحساب' : 'تسجيل الدخول',
+      switchText: reg ? 'لديك حساب بالفعل؟' : 'ليس لديك حساب؟',
+      switchCta: reg ? 'تسجيل الدخول' : 'أنشئ حساباً',
+    };
+    const en = {
+      brandTitle:'Join Iraq\u2019s largest digital subscriptions store', brandSub:'Sign in to access your subscriptions, orders, and wishlist — all in one place.',
+      bp1:'Instant activation within 30 min', bp2:'Full warranty on every subscription', bp3:'Pay in Iraqi Dinar',
+      quote:'Best store I\u2019ve tried — fast activation and great support. I renew all my subscriptions here now.', qInit:'S', qName:'Sara Kareem', qMeta:'Erbil · Verified buyer',
+      name:'Full name', email:'Email address', phone:'Phone number', password:'Password', forgot:'Forgot password?',
+      or:'or', google:'Continue with Google', agree:'I agree to SoftoDev\u2019s Terms of Use and Privacy Policy.',
+      title: reg ? 'Create your account' : 'Welcome back',
+      subtitle: reg ? 'Create your account and start shopping in a minute.' : 'Sign in to continue to your account.',
+      submit: reg ? 'Create account' : 'Sign in',
+      switchText: reg ? 'Already have an account?' : 'Don\u2019t have an account?',
+      switchCta: reg ? 'Sign in' : 'Create one',
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  get ph() {
+    const ar = this.state.lang === 'ar';
+    return ar ? { name:'أحمد العبيدي', email:'name@email.com' } : { name:'Ahmed Al-Obaidi', email:'name@email.com' };
+  }
+
+  toggleBtn(active) {
+    return active ? 'padding:5px 13px; border-radius:7px; font-size:12px; font-weight:700; background:#fff; color:#0B1220;' : 'padding:5px 13px; border-radius:7px; font-size:12px; font-weight:700; background:transparent; color:#9CA3AF;';
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const desk = this.state.device === 'desktop';
+    const reg = this.state.mode === 'register';
+    return {
+      dir: ar ? 'rtl' : 'ltr',
+      tx: this.T, ph: this.ph,
+      langLabel: ar ? 'AR' : 'EN',
+      deviceLabel: desk ? 'DESKTOP' : 'MOBILE',
+      modeLabel: reg ? 'REGISTER' : 'LOGIN',
+      isLogin: !reg, isRegister: reg,
+      wrapStyle: desk
+        ? 'width:100%; max-width:980px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.16); border:1px solid #E5E7EB;'
+        : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220; background:#fff;',
+      setAr: () => this.setState({ lang:'ar' }), setEn: () => this.setState({ lang:'en' }),
+      setDesktop: () => this.setState({ device:'desktop' }), setMobile: () => this.setState({ device:'mobile' }),
+      arBtnStyle: this.toggleBtn(ar), enBtnStyle: this.toggleBtn(!ar),
+      deskBtnStyle: this.toggleBtn(desk), mobBtnStyle: this.toggleBtn(!desk),
+      toggleMode: () => this.setState({ mode: reg ? 'login' : 'register' }),
+    };
+  }
+}
+</script>
+</body>
+</html>

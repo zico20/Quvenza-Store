@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction:ltr; unicode-bidi:isolate; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: box-shadow .15s, transform .12s; }
+  .hbtn:active { transform: translateY(1px); }
+  .ul:hover { color: #2563EB !important; }
+  .ipt { width:100%; font-family:'IBM Plex Sans Arabic'; font-size:13.5px; padding:11px 13px; border:1px solid #D6DAE1; border-radius:10px; color:#111827; outline:none; background:#fff; }
+  .ipt:focus { border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
+  .lbl { display:block; font-size:12.5px; font-weight:600; color:#374151; margin-bottom:7px; }
+  .home-wrap { container-type: inline-size; background:#F7F8FA; }
+  .ad-layout { display: grid; grid-template-columns: 1fr; }
+  .ad-side { display: none; }
+  .pf-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @container (min-width: 820px) {
+    .ad-layout { grid-template-columns: 232px 1fr; }
+    .ad-side { display: flex; }
+    .pf-grid { grid-template-columns: 1.6fr 1fr; gap: 18px; align-items: start; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <div style="max-width:1320px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV ADMIN · {{ deviceLabel }} · {{ langLabel }} · {{ tx.pageTag }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+      <div class="ad-layout">
+        <aside class="ad-side" style="flex-direction:column; background:#0B1220; padding:20px 14px; min-height:760px;">
+          <div style="display:flex; align-items:center; gap:9px; padding:6px 8px 22px;">
+            <div class="hk" style="width:32px; height:32px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div>
+            <div><div class="ca" style="font-weight:700; font-size:14px; color:#fff;">SoftoDev</div><div class="hk" style="font-size:10px; color:#6B7280; letter-spacing:0.05em;">ADMIN PANEL</div></div>
+          </div>
+          <nav style="display:flex; flex-direction:column; gap:3px;">
+            <span class="hk" style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#9CA3AF; font-size:13px; font-weight:600; cursor:pointer;"><dc-import name="Icon" icon="grid" size="18" color="#9CA3AF" hint-size="18px,18px"></dc-import>{{ tx.nDash }}</span>
+            <span class="hk" style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#9CA3AF; font-size:13px; font-weight:600; cursor:pointer;"><dc-import name="Icon" icon="package" size="18" color="#9CA3AF" hint-size="18px,18px"></dc-import>{{ tx.nOrders }}</span>
+            <span style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; background:#2563EB; color:#fff; font-size:13px; font-weight:700; cursor:pointer;"><dc-import name="Icon" icon="tag" size="18" color="#fff" hint-size="18px,18px"></dc-import>{{ tx.nProducts }}</span>
+            <span class="hk" style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#9CA3AF; font-size:13px; font-weight:600; cursor:pointer;"><dc-import name="Icon" icon="user" size="18" color="#9CA3AF" hint-size="18px,18px"></dc-import>{{ tx.nCustomers }}</span>
+          </nav>
+        </aside>
+
+        <div style="display:flex; flex-direction:column;">
+          <div style="background:#fff; border-bottom:1px solid #EAECEF; padding:16px 22px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>
+              <div class="hk" style="display:flex; align-items:center; gap:7px; font-size:12px; color:#9097A1; margin-bottom:8px;"><span class="ul" style="cursor:pointer;">{{ tx.nProducts }}</span><dc-import name="Icon" icon="{{ chevDir }}" size="13" color="#C4C8D0" hint-size="13px,13px"></dc-import><span style="color:#4B5563;">{{ tx.editProduct }}</span></div>
+              <h1 class="ca" style="margin:0; font-weight:800; font-size:20px; color:#0B1220;">{{ tx.editProduct }}</h1>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="hbtn" style="background:#fff; border:1px solid #D6DAE1; color:#4B5563; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px;">{{ tx.cancel }}</button>
+              <button class="hbtn" style="display:inline-flex; align-items:center; gap:7px; background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px;"><dc-import name="Icon" icon="check" size="16" color="#fff" stroke="2.4" hint-size="16px,16px"></dc-import>{{ tx.save }}</button>
+            </div>
+          </div>
+
+          <div style="padding:22px;">
+            <div class="pf-grid">
+              <!-- main fields -->
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:16px;">{{ tx.basicInfo }}</div>
+                  <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div><label class="lbl">{{ tx.name }}</label><input class="ipt" value="ChatGPT Plus"></div>
+                    <div><label class="lbl">{{ tx.slug }}</label><input class="ipt num" value="chatgpt-plus" style="direction:ltr;"></div>
+                    <div><label class="lbl">{{ tx.shortDesc }}</label><textarea class="ipt" rows="3" style="resize:none;">اشتراك ChatGPT Plus الرسمي على حسابك الخاص — تفعيل فوري وضمان كامل.</textarea></div>
+                    <div class="two">
+                      <div><label class="lbl">{{ tx.category }}</label><div class="ipt" style="display:flex; align-items:center; justify-content:space-between;">{{ tx.catAi }} <span style="color:#9097A1;">▾</span></div></div>
+                      <div><label class="lbl">{{ tx.stock }}</label><input class="ipt num" value="999"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:16px;">{{ tx.pricing }}</div>
+                  <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div style="display:flex; align-items:center; gap:13px; padding:13px; border:1px solid #F1F2F5; border-radius:12px;">
+                      <span class="ca" style="font-size:12.5px; font-weight:700; color:#0B1220; width:70px;">{{ tx.monthly }}</span>
+                      <div style="flex:1;"><label class="lbl">{{ tx.price }}</label><input class="ipt num" value="20"></div>
+                      <div style="flex:1;"><label class="lbl">{{ tx.comparePrice }}</label><input class="ipt num" value="27"></div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:13px; padding:13px; border:1px solid #F1F2F5; border-radius:12px;">
+                      <span class="ca" style="font-size:12.5px; font-weight:700; color:#0B1220; width:70px;">{{ tx.yearly }}</span>
+                      <div style="flex:1;"><label class="lbl">{{ tx.price }}</label><input class="ipt num" value="180"></div>
+                      <div style="flex:1;"><label class="lbl">{{ tx.comparePrice }}</label><input class="ipt num" value="240"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:6px;">{{ tx.seo }}</div>
+                  <p style="margin:0 0 14px; font-size:11.5px; color:#9097A1;">{{ tx.seoSub }}</p>
+                  <div style="display:flex; flex-direction:column; gap:14px;">
+                    <div><label class="lbl">{{ tx.metaTitle }}</label><input class="ipt" value="اشترِ ChatGPT Plus في العراق — تفعيل فوري"></div>
+                    <div><label class="lbl">{{ tx.metaDesc }}</label><textarea class="ipt" rows="2" style="resize:none;">اشترك في ChatGPT Plus بالدينار العراقي مع تفعيل فوري وضمان كامل.</textarea></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- side: image + flags -->
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:14px;">{{ tx.images }}</div>
+                  <div style="aspect-ratio:1/1; border-radius:14px; background:linear-gradient(135deg,#E8F0FE,#E0F7FB); display:flex; align-items:center; justify-content:center; margin-bottom:12px; position:relative;">
+                    <div class="hk" style="width:64px; height:64px; border-radius:18px; background:linear-gradient(135deg,#10A37F,#1AB68C); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:17px; box-shadow:0 10px 24px rgba(16,163,127,0.35);">GPT</div>
+                  </div>
+                  <div style="border:1.5px dashed #C7D2FE; border-radius:12px; padding:18px; text-align:center; cursor:pointer; background:#F8FAFF;">
+                    <div style="display:inline-flex; margin-bottom:8px; color:#2563EB;"><dc-import name="Icon" icon="plus" size="22" color="#2563EB" hint-size="22px,22px"></dc-import></div>
+                    <div class="ca" style="font-size:12.5px; font-weight:600; color:#2563EB;">{{ tx.uploadImage }}</div>
+                    <div class="hk" style="font-size:10.5px; color:#9097A1; margin-top:3px;">PNG · JPG · WebP</div>
+                  </div>
+                </div>
+
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:14px;">{{ tx.visibility }}</div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0;">
+                    <div><div class="ca" style="font-size:13px; font-weight:600; color:#0B1220;">{{ tx.active }}</div><div class="hk" style="font-size:11px; color:#9097A1;">{{ tx.activeSub }}</div></div>
+                    <button class="hbtn" onClick="{{ toggleActive }}" style="{{ activeTrack }}"><span style="{{ activeKnob }}"></span></button>
+                  </div>
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-top:1px solid #F1F2F5; margin-top:8px;">
+                    <div><div class="ca" style="font-size:13px; font-weight:600; color:#0B1220;">{{ tx.featured }}</div><div class="hk" style="font-size:11px; color:#9097A1;">{{ tx.featuredSub }}</div></div>
+                    <button class="hbtn" onClick="{{ toggleFeatured }}" style="{{ featTrack }}"><span style="{{ featKnob }}"></span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang:'ar', device:'desktop', active:true, featured:true };
+
+  get T() {
+    const ar = {
+      pageTag:'تعديل منتج', nDash:'لوحة التحكّم', nOrders:'الطلبات', nProducts:'المنتجات', nCustomers:'العملاء',
+      editProduct:'تعديل المنتج', cancel:'إلغاء', save:'حفظ المنتج',
+      basicInfo:'المعلومات الأساسية', name:'اسم المنتج', slug:'الرابط (slug)', shortDesc:'وصف مختصر', category:'الفئة', catAi:'أدوات الذكاء الاصطناعي', stock:'المخزون',
+      pricing:'التسعير', monthly:'شهري', yearly:'سنوي', price:'السعر ($)', comparePrice:'السعر قبل الخصم ($)',
+      seo:'تحسين محركات البحث (SEO)', seoSub:'يظهر في نتائج جوجل ووسائل التواصل', metaTitle:'عنوان الميتا', metaDesc:'وصف الميتا',
+      images:'صور المنتج', uploadImage:'رفع صورة', visibility:'الظهور', active:'نشط', activeSub:'يظهر في المتجر', featured:'مميّز', featuredSub:'يظهر في الصفحة الرئيسية'
+    };
+    const en = {
+      pageTag:'EDIT PRODUCT', nDash:'Dashboard', nOrders:'Orders', nProducts:'Products', nCustomers:'Customers',
+      editProduct:'Edit product', cancel:'Cancel', save:'Save product',
+      basicInfo:'Basic info', name:'Product name', slug:'Slug', shortDesc:'Short description', category:'Category', catAi:'AI Tools', stock:'Stock',
+      pricing:'Pricing', monthly:'Monthly', yearly:'Yearly', price:'Price ($)', comparePrice:'Compare price ($)',
+      seo:'SEO', seoSub:'Shown in Google results and social media', metaTitle:'Meta title', metaDesc:'Meta description',
+      images:'Product images', uploadImage:'Upload image', visibility:'Visibility', active:'Active', activeSub:'Visible in store', featured:'Featured', featuredSub:'Shown on homepage'
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  track(on){ return `width:42px; height:24px; border-radius:20px; background:${on?'#2563EB':'#E5E7EB'}; position:relative; flex-shrink:0;`; }
+  knob(on){ return `position:absolute; width:18px; height:18px; border-radius:50%; background:#fff; top:3px; ${on?'inset-inline-end:3px':'inset-inline-start:3px'}; box-shadow:0 1px 3px rgba(0,0,0,0.2);`; }
+  toggleBtn(a){return a?'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:#fff;color:#0B1220;':'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:transparent;color:#9CA3AF;';}
+
+  renderVals() {
+    const ar = this.state.lang === 'ar'; const desk = this.state.device === 'desktop';
+    return {
+      dir: ar?'rtl':'ltr', chevDir: ar?'chevron':'chevronL', tx:this.T,
+      langLabel: ar?'AR':'EN', deviceLabel: desk?'DESKTOP':'MOBILE',
+      activeTrack:this.track(this.state.active), activeKnob:this.knob(this.state.active),
+      featTrack:this.track(this.state.featured), featKnob:this.knob(this.state.featured),
+      toggleActive:()=>this.setState({active:!this.state.active}),
+      toggleFeatured:()=>this.setState({featured:!this.state.featured}),
+      wrapStyle: desk ? 'width:100%; max-width:1320px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;' : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      setAr:()=>this.setState({lang:'ar'}), setEn:()=>this.setState({lang:'en'}),
+      setDesktop:()=>this.setState({device:'desktop'}), setMobile:()=>this.setState({device:'mobile'}),
+      arBtnStyle:this.toggleBtn(ar), enBtnStyle:this.toggleBtn(!ar), deskBtnStyle:this.toggleBtn(desk), mobBtnStyle:this.toggleBtn(!desk),
+    };
+  }
+}
+</script>
+</body>
+</html>

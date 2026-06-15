@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cairo, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { Cairo, Hanken_Grotesk, IBM_Plex_Sans_Arabic, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -16,19 +16,21 @@ const cairo = Cairo({
   preload: true,
 });
 
-const inter = Inter({
+// Hanken Grotesk — Latin UI + numbers (Cobalt)
+const hanken = Hanken_Grotesk({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-inter',
-  preload: false,
+  variable: '--font-hanken',
+  preload: true,
 });
 
-// Space Grotesk — display/heading face (Latin) for the Voltage system
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
+// IBM Plex Sans Arabic — Arabic body (Cobalt)
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic', 'latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-  variable: '--font-space-grotesk',
+  variable: '--font-plex-ar',
   preload: true,
 });
 
@@ -121,7 +123,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#FF7A33',
+  themeColor: '#2563EB',
 };
 
 async function getNavCategories(): Promise<{ id: string; name: string; slug: string }[]> {
@@ -137,11 +139,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const navCategories = await getNavCategories();
 
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} ${hanken.variable} ${plexArabic.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="author" href="/humans.txt" />
       </head>
-      <body className="flex flex-col min-h-screen" style={{ background: '#0A0A0C', color: '#F7F7F8' }}>
+      <body className="flex flex-col min-h-screen" style={{ background: '#F7F8FA', color: '#111827' }}>
         <LangInitializer />
         <StoreChrome
           header={<Header navCategories={navCategories} />}

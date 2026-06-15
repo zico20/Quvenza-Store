@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction: ltr; unicode-bidi: isolate; font-feature-settings: 'tnum'; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: background .15s, box-shadow .15s, transform .12s, color .15s, border-color .15s; }
+  .hbtn:active { transform: translateY(1px); }
+  .ipt { width:100%; font-family:'IBM Plex Sans Arabic'; font-size:14px; padding:12px 14px; border:1px solid #D6DAE1; border-radius:10px; color:#111827; outline:none; background:#fff; transition:border-color .15s, box-shadow .15s; }
+  .ipt:focus { border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
+  .home-wrap { container-type: inline-size; background: #F7F8FA; }
+  .co-layout { display: grid; grid-template-columns: 1fr; gap: 22px; }
+  @container (min-width: 800px) {
+    .co-layout { grid-template-columns: 1fr 360px; gap: 32px; align-items: start; }
+    .co-summary { position: sticky; top: 22px; }
+    .stepLabel { display: inline !important; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <!-- control bar -->
+  <div style="max-width:1280px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV · {{ deviceLabel }} · {{ langLabel }} · {{ tx.pageTag }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+
+      <!-- minimal checkout header -->
+      <header style="background:#fff; border-bottom:1px solid #EAECEF; padding:14px 22px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:9px;">
+          <div class="hk" style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div>
+          <span class="ca" style="font-weight:700; font-size:16px; color:#0B1220;">SoftoDev</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:#15803D;"><dc-import name="Icon" icon="lock" size="15" color="#15803D" hint-size="15px,15px"></dc-import> {{ tx.secure }}</div>
+      </header>
+
+      <!-- Stepper -->
+      <div style="background:#fff; border-bottom:1px solid #EAECEF; padding:18px 22px;">
+        <div style="max-width:1140px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="{{ s.dot }}">{{ s.mark }}</span>
+              <span class="ca stepLabel" style="{{ s.label }}; display:none;">{{ s.name }}</span>
+              <span style="{{ s.bar }}"></span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:26px 22px; max-width:1140px; margin:0 auto; width:100%;">
+        <div class="co-layout">
+
+          <!-- LEFT: step content -->
+          <div>
+
+            <!-- STEP 1: CART -->
+            <sc-if value="{{ isCart }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <h1 class="ca" style="margin:0 0 18px; font-weight:800; font-size:24px; color:#0B1220;">{{ tx.cartTitle }}</h1>
+                <sc-for list="{{ items }}" as="it" hint-placeholder-count="2">
+                  <div style="display:flex; gap:14px; align-items:center; background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:16px; margin-bottom:12px;">
+                    <div class="hk" style="width:60px; height:60px; border-radius:14px; background:{{ it.icon }}; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:14px; flex-shrink:0;">{{ it.glyph }}</div>
+                    <div style="flex:1; min-width:0;">
+                      <div style="display:flex; align-items:center; gap:7px; margin-bottom:3px;"><span class="hk" style="font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#2563EB;">{{ it.cat }}</span><span class="hk" style="font-size:9px; font-weight:700; color:#6B7280; background:#F3F4F6; padding:1px 7px; border-radius:20px;">{{ it.plan }}</span></div>
+                      <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220;">{{ it.name }}</div>
+                      <div style="display:flex; align-items:center; gap:6px; margin-top:4px; color:#15803D; font-size:11px; font-weight:600;"><dc-import name="Icon" icon="bolt" size="12" color="#0E7490" hint-size="12px,12px"></dc-import> {{ tx.instant }}</div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+                      <span class="num" style="font-weight:800; font-size:16px; color:#0B1220;">{{ it.lineTotal }}</span>
+                      <div style="display:flex; align-items:center; border:1px solid #E5E7EB; border-radius:9px; overflow:hidden;">
+                        <button class="hbtn" onClick="{{ it.dec }}" style="width:30px; height:32px; background:#F7F8FA; color:#374151; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="minus" size="14" color="#374151" hint-size="14px,14px"></dc-import></button>
+                        <span class="num" style="width:30px; text-align:center; font-weight:700; font-size:13px;">{{ it.qty }}</span>
+                        <button class="hbtn" onClick="{{ it.inc }}" style="width:30px; height:32px; background:#F7F8FA; color:#374151; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="plus" size="14" color="#374151" hint-size="14px,14px"></dc-import></button>
+                      </div>
+                      <button class="hbtn" onClick="{{ it.remove }}" style="background:transparent; color:#9097A1; display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:0;"><dc-import name="Icon" icon="trash" size="13" color="#9097A1" hint-size="13px,13px"></dc-import> {{ tx.remove }}</button>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#fff; border:1px dashed #D6DAE1; border-radius:18px; padding:44px 24px; text-align:center;">
+                    <div style="width:54px; height:54px; border-radius:15px; background:#F3F4F6; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px;"><dc-import name="Icon" icon="cart" size="26" color="#9097A1" hint-size="26px,26px"></dc-import></div>
+                    <div class="ca" style="font-weight:700; font-size:16px; color:#111827;">{{ tx.cartEmpty }}</div>
+                    <p style="margin:8px 0 18px; font-size:13px; color:#6B7280;">{{ tx.cartEmptySub }}</p>
+                    <button class="hbtn" style="background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:10px 20px; border-radius:10px;">{{ tx.browse }}</button>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <!-- STEP 2: INFO -->
+            <sc-if value="{{ isInfo }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <h1 class="ca" style="margin:0 0 6px; font-weight:800; font-size:24px; color:#0B1220;">{{ tx.infoTitle }}</h1>
+                <p style="margin:0 0 20px; font-size:13.5px; color:#6B7280;">{{ tx.infoSub }}</p>
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                  <div style="grid-column:1/-1;"><label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.fullName }}</label><input class="ipt" value="{{ ph.name }}"></div>
+                  <div><label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.email }}</label><input class="ipt" value="{{ ph.email }}"></div>
+                  <div><label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.phone }}</label><input class="ipt num" value="{{ ph.phone }}"></div>
+                  <div style="grid-column:1/-1;">
+                    <label style="display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.deliverTo }}</label>
+                    <div style="display:flex; gap:10px;">
+                      <button class="hbtn" onClick="{{ delEmail }}" style="{{ delEmailStyle }}"><dc-import name="Icon" icon="mail" size="17" color="{{ delEmailColor }}" hint-size="17px,17px"></dc-import> {{ tx.viaEmail }}</button>
+                      <button class="hbtn" onClick="{{ delWa }}" style="{{ delWaStyle }}"><dc-import name="Icon" icon="chat" size="17" color="{{ delWaColor }}" hint-size="17px,17px"></dc-import> {{ tx.viaWhatsapp }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- STEP 3: PAYMENT -->
+            <sc-if value="{{ isPay }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <h1 class="ca" style="margin:0 0 6px; font-weight:800; font-size:24px; color:#0B1220;">{{ tx.payTitle }}</h1>
+                <p style="margin:0 0 20px; font-size:13.5px; color:#6B7280;">{{ tx.paySub }}</p>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  <sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="3">
+                    <button class="hbtn" onClick="{{ m.onClick }}" style="{{ m.style }}">
+                      <span style="display:flex; align-items:center; gap:13px;">
+                        <span style="{{ m.radio }}"></span>
+                        <span style="width:42px; height:30px; border-radius:7px; background:{{ m.badgeBg }}; color:{{ m.badgeColor }}; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:11px;" class="hk">{{ m.badge }}</span>
+                        <span style="text-align:start;"><span class="ca" style="display:block; font-size:14px; font-weight:700; color:#0B1220;">{{ m.name }}</span><span class="hk" style="font-size:11px; color:#6B7280;">{{ m.desc }}</span></span>
+                      </span>
+                      <dc-import name="Icon" icon="{{ m.tick }}" size="18" color="{{ m.tickColor }}" hint-size="18px,18px"></dc-import>
+                    </button>
+                  </sc-for>
+                </div>
+                <!-- card form when card selected -->
+                <sc-if value="{{ showCard }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:16px; background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div style="grid-column:1/-1;"><label style="display:block; font-size:12.5px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.cardNumber }}</label><input class="ipt num" value="4242 4242 4242 4242"></div>
+                    <div><label style="display:block; font-size:12.5px; font-weight:600; color:#374151; margin-bottom:7px;">{{ tx.expiry }}</label><input class="ipt num" value="12 / 28"></div>
+                    <div><label style="display:block; font-size:12.5px; font-weight:600; color:#374151; margin-bottom:7px;">CVC</label><input class="ipt num" value="123"></div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <!-- STEP 4: DONE -->
+            <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#fff; border:1px solid #EAECEF; border-radius:20px; padding:40px 28px; text-align:center;">
+                <div style="width:72px; height:72px; border-radius:50%; background:#E7F6EE; display:inline-flex; align-items:center; justify-content:center; margin-bottom:18px;"><dc-import name="Icon" icon="checkCircle" size="40" color="#16A34A" stroke="1.8" hint-size="40px,40px"></dc-import></div>
+                <h1 class="ca" style="margin:0; font-weight:800; font-size:24px; color:#0B1220;">{{ tx.doneTitle }}</h1>
+                <p style="margin:12px auto 0; max-width:380px; font-size:14px; line-height:1.8; color:#6B7280;">{{ tx.doneSub }}</p>
+                <div style="display:inline-flex; align-items:center; gap:8px; margin-top:18px; background:#F7F8FA; border:1px solid #EAECEF; border-radius:10px; padding:10px 16px;"><span class="hk" style="font-size:12px; color:#6B7280;">{{ tx.orderNo }}</span><span class="num" style="font-weight:800; font-size:14px; color:#0B1220;">#SD-48217</span></div>
+                <div style="margin-top:24px; display:flex; flex-direction:column; gap:12px; max-width:420px; margin-inline:auto; text-align:start;">
+                  <div style="display:flex; align-items:center; gap:12px; background:#F0F7FF; border:1px solid #DCEAFE; border-radius:12px; padding:14px;"><dc-import name="Icon" icon="clock" size="20" color="#2563EB" hint-size="20px,20px"></dc-import><span class="ca" style="font-size:13px; color:#1D4ED8; font-weight:600;">{{ tx.doneStep1 }}</span></div>
+                  <div style="display:flex; align-items:center; gap:12px; background:#F7F8FA; border:1px solid #EAECEF; border-radius:12px; padding:14px;"><dc-import name="Icon" icon="mail" size="20" color="#374151" hint-size="20px,20px"></dc-import><span class="ca" style="font-size:13px; color:#374151; font-weight:600;">{{ tx.doneStep2 }}</span></div>
+                </div>
+                <button class="hbtn" style="margin-top:24px; background:#2563EB; color:#fff; font-weight:700; font-size:14px; padding:13px 28px; border-radius:11px;">{{ tx.viewOrder }}</button>
+              </div>
+            </sc-if>
+
+            <!-- nav buttons -->
+            <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:22px; gap:12px;">
+                <button class="hbtn" onClick="{{ back }}" style="{{ backStyle }}"><dc-import name="Icon" icon="{{ chevDir }}" size="16" color="#4B5563" hint-size="16px,16px"></dc-import> {{ tx.back }}</button>
+                <button class="hbtn" onClick="{{ next }}" style="display:inline-flex; align-items:center; gap:8px; background:#2563EB; color:#fff; font-weight:700; font-size:14.5px; padding:14px 26px; border-radius:12px; box-shadow:0 8px 20px rgba(37,99,235,0.28);">{{ nextLabel }} <dc-import name="Icon" icon="{{ arrowIcon }}" size="17" color="#fff" hint-size="17px,17px"></dc-import></button>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- RIGHT: order summary -->
+          <aside class="co-summary">
+            <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:22px; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+              <div class="ca" style="font-weight:700; font-size:15px; color:#0B1220; margin-bottom:16px;">{{ tx.summary }}</div>
+              <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+                <sc-for list="{{ items }}" as="it" hint-placeholder-count="2">
+                  <div style="display:flex; align-items:center; gap:11px;">
+                    <div class="hk" style="width:38px; height:38px; border-radius:10px; background:{{ it.icon }}; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:11px; flex-shrink:0; position:relative;">{{ it.glyph }}<span class="num" style="position:absolute; top:-6px; inset-inline-end:-6px; width:17px; height:17px; border-radius:9px; background:#0B1220; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center;">{{ it.qty }}</span></div>
+                    <div style="flex:1; min-width:0;"><div class="ca" style="font-size:12.5px; font-weight:700; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ it.name }}</div><div class="hk" style="font-size:10.5px; color:#9097A1;">{{ it.plan }}</div></div>
+                    <span class="num" style="font-size:13px; font-weight:700; color:#0B1220;">{{ it.lineTotal }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <!-- promo -->
+              <div style="display:flex; gap:8px; margin-bottom:16px;">
+                <input class="ipt" style="flex:1; padding:9px 12px; font-size:12.5px;" value="{{ ph.promo }}">
+                <button class="hbtn" style="background:#F3F4F6; color:#374151; font-weight:700; font-size:12.5px; padding:9px 16px; border-radius:10px;">{{ tx.apply }}</button>
+              </div>
+              <div style="border-top:1px solid #F1F2F5; padding-top:14px; display:flex; flex-direction:column; gap:9px;">
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#6B7280;"><span>{{ tx.subtotal }}</span><span class="num">{{ subtotal }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#15803D;"><span>{{ tx.discount }}</span><span class="num">−{{ discount }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#6B7280;"><span>{{ tx.delivery }}</span><span class="ca" style="color:#15803D; font-weight:700;">{{ tx.free }}</span></div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:6px; padding-top:12px; border-top:1px solid #F1F2F5;"><span class="ca" style="font-size:15px; font-weight:800; color:#0B1220;">{{ tx.total }}</span><div style="text-align:end;"><div class="num" style="font-size:20px; font-weight:800; color:#0B1220;">{{ total }}</div><div class="num" style="font-size:11px; color:#9097A1;">{{ totalIqd }}</div></div></div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:9px; margin-top:16px; padding-top:14px; border-top:1px solid #F1F2F5;">
+                <div style="display:flex; align-items:center; gap:8px; font-size:11.5px; color:#6B7280;"><dc-import name="Icon" icon="bolt" size="14" color="#0E7490" hint-size="14px,14px"></dc-import> {{ tx.b1 }}</div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:11.5px; color:#6B7280;"><dc-import name="Icon" icon="shield" size="14" color="#15803D" hint-size="14px,14px"></dc-import> {{ tx.b2 }}</div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:11.5px; color:#6B7280;"><dc-import name="Icon" icon="lock" size="14" color="#1D4ED8" hint-size="14px,14px"></dc-import> {{ tx.b3 }}</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    lang:'ar', device:'desktop', step:1, pay:'zaincash', deliver:'email',
+    items: [
+      { id:'gpt', glyph:'GPT', cat:'AI Tools', nameAr:'ChatGPT Plus', nameEn:'ChatGPT Plus', planAr:'سنوي', planEn:'Yearly', priceN:180, qty:1, icon:'linear-gradient(135deg,#10A37F,#1AB68C)' },
+      { id:'canva', glyph:'Cv', cat:'Design', nameAr:'Canva Pro', nameEn:'Canva Pro', planAr:'سنوي', planEn:'Yearly', priceN:45, qty:1, icon:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+    ],
+  };
+
+  get T() {
+    const ar = {
+      pageTag:'الدفع', secure:'دفع آمن ومشفّر', s1:'السلة', s2:'المعلومات', s3:'الدفع', s4:'تأكيد',
+      cartTitle:'سلة التسوّق', instant:'تسليم فوري', remove:'إزالة',
+      cartEmpty:'سلتك فارغة', cartEmptySub:'لم تُضِف أي اشتراك بعد.', browse:'تصفّح المنتجات',
+      infoTitle:'معلومات التواصل', infoSub:'سنرسل رمز التفعيل إلى هذه المعلومات بعد الدفع مباشرة.',
+      fullName:'الاسم الكامل', email:'البريد الإلكتروني', phone:'رقم الهاتف', deliverTo:'طريقة استلام التفعيل', viaEmail:'بالبريد', viaWhatsapp:'واتساب',
+      payTitle:'طريقة الدفع', paySub:'كل المدفوعات بالدينار العراقي وآمنة بالكامل.',
+      cardNumber:'رقم البطاقة', expiry:'تاريخ الانتهاء',
+      doneTitle:'تم استلام طلبك بنجاح!', doneSub:'شكراً لك. جارٍ تفعيل اشتراكك الآن وسيصلك خلال دقائق.', orderNo:'رقم الطلب:',
+      doneStep1:'يتم تفعيل اشتراكك خلال 30 دقيقة كحد أقصى', doneStep2:'سيصلك رمز التفعيل على بريدك وواتساب', viewOrder:'عرض تفاصيل الطلب',
+      back:'رجوع', next:'متابعة', toPay:'الانتقال للدفع', confirm:'تأكيد الطلب',
+      summary:'ملخّص الطلب', apply:'تطبيق', subtotal:'المجموع الفرعي', discount:'الخصم', delivery:'التوصيل', free:'مجاني', total:'الإجمالي',
+      b1:'تفعيل فوري بعد الدفع', b2:'ضمان كامل على كل طلب', b3:'دفع آمن ومشفّر 100%'
+    };
+    const en = {
+      pageTag:'CHECKOUT', secure:'Secure encrypted payment', s1:'Cart', s2:'Info', s3:'Payment', s4:'Confirm',
+      cartTitle:'Shopping cart', instant:'Instant delivery', remove:'Remove',
+      cartEmpty:'Your cart is empty', cartEmptySub:'You haven\u2019t added any subscription yet.', browse:'Browse products',
+      infoTitle:'Contact details', infoSub:'We\u2019ll send your activation code to these details right after payment.',
+      fullName:'Full name', email:'Email address', phone:'Phone number', deliverTo:'Delivery method', viaEmail:'Email', viaWhatsapp:'WhatsApp',
+      payTitle:'Payment method', paySub:'All payments are in Iraqi Dinar and fully secure.',
+      cardNumber:'Card number', expiry:'Expiry',
+      doneTitle:'Order placed successfully!', doneSub:'Thank you. We\u2019re activating your subscription now — it\u2019ll arrive in minutes.', orderNo:'Order no:',
+      doneStep1:'Your subscription activates within 30 minutes max', doneStep2:'Your activation code arrives by email & WhatsApp', viewOrder:'View order details',
+      back:'Back', next:'Continue', toPay:'Go to payment', confirm:'Confirm order',
+      summary:'Order summary', apply:'Apply', subtotal:'Subtotal', discount:'Discount', delivery:'Delivery', free:'Free', total:'Total',
+      b1:'Instant activation after payment', b2:'Full warranty on every order', b3:'100% secure encrypted payment'
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  get ph() {
+    const ar = this.state.lang === 'ar';
+    return ar
+      ? { name:'أحمد العبيدي', email:'ahmed@email.com', phone:'0770 123 4567', promo:'كود الخصم', }
+      : { name:'Ahmed Al-Obaidi', email:'ahmed@email.com', phone:'0770 123 4567', promo:'Promo code' };
+  }
+
+  get itemsData() {
+    const ar = this.state.lang === 'ar';
+    return this.state.items.map(it => ({
+      glyph: it.glyph, cat: it.cat, icon: it.icon, qty: it.qty,
+      name: ar ? it.nameAr : it.nameEn,
+      plan: ar ? it.planAr : it.planEn,
+      lineTotal: '$' + (it.priceN * it.qty),
+      inc: () => this.setState({ items: this.state.items.map(x => x.id === it.id ? { ...x, qty: Math.min(9, x.qty + 1) } : x) }),
+      dec: () => this.setState({ items: this.state.items.map(x => x.id === it.id ? { ...x, qty: Math.max(1, x.qty - 1) } : x) }),
+      remove: () => this.setState({ items: this.state.items.filter(x => x.id !== it.id) }),
+    }));
+  }
+
+  get subtotalN() { return this.state.items.reduce((s, it) => s + it.priceN * it.qty, 0); }
+  get discountN() { return Math.round(this.subtotalN * 0.1); }
+
+  get stepsData() {
+    const t = this.T;
+    const names = [t.s1, t.s2, t.s3, t.s4];
+    const cur = this.state.step;
+    return names.map((n, i) => {
+      const idx = i + 1;
+      const done = idx < cur; const active = idx === cur;
+      return {
+        name: n, mark: done ? '✓' : String(idx),
+        dot: `width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:'Hanken Grotesk';font-weight:700;font-size:13px;flex-shrink:0;${(done||active)?'background:#2563EB;color:#fff;':'background:#E5E7EB;color:#9097A1;'}`,
+        label: `font-size:13px;font-weight:${active?'700':'600'};color:${(done||active)?'#0B1220':'#9097A1'};white-space:nowrap;`,
+        bar: i < 3 ? `width:34px;height:2px;border-radius:2px;background:${done?'#2563EB':'#E5E7EB'};margin:0 4px;` : 'display:none;',
+      };
+    });
+  }
+
+  get payMethodsData() {
+    const ar = this.state.lang === 'ar';
+    const defs = [
+      { k:'zaincash', name:'ZainCash', desc: ar?'محفظة زين كاش':'ZainCash wallet', badge:'ZC', badgeBg:'#FFE9D6', badgeColor:'#C2410C' },
+      { k:'asia', name:'Asia Hawala', desc: ar?'حوالة آسيا':'Asia Hawala transfer', badge:'AH', badgeBg:'#E7F6EE', badgeColor:'#15803D' },
+      { k:'card', name: ar?'بطاقة ماستركارد / فيزا':'Mastercard / Visa', desc: ar?'دفع بالبطاقة':'Pay by card', badge:'VISA', badgeBg:'#E8F0FE', badgeColor:'#1D4ED8' },
+    ];
+    return defs.map(d => {
+      const active = this.state.pay === d.k;
+      return {
+        name:d.name, desc:d.desc, badge:d.badge, badgeBg:d.badgeBg, badgeColor:d.badgeColor,
+        onClick: () => this.setState({ pay:d.k }),
+        style: active
+          ? 'display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; background:#fff; border:2px solid #2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.1); border-radius:14px; padding:15px 16px;'
+          : 'display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; background:#fff; border:1px solid #E5E7EB; border-radius:14px; padding:15px 16px;',
+        radio: active ? 'width:20px;height:20px;border-radius:50%;border:6px solid #2563EB;flex-shrink:0;' : 'width:20px;height:20px;border-radius:50%;border:2px solid #D6DAE1;flex-shrink:0;',
+        tick: active ? 'checkCircle' : 'chevron',
+        tickColor: active ? '#2563EB' : 'transparent',
+      };
+    });
+  }
+
+  toggleBtn(active) {
+    return active ? 'padding:5px 13px; border-radius:7px; font-size:12px; font-weight:700; background:#fff; color:#0B1220;' : 'padding:5px 13px; border-radius:7px; font-size:12px; font-weight:700; background:transparent; color:#9CA3AF;';
+  }
+  delBtn(active) {
+    return active
+      ? 'flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px; border-radius:11px; background:#EFF4FE; border:1.5px solid #2563EB; color:#1D4ED8; font-size:13px; font-weight:700;'
+      : 'flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px; border-radius:11px; background:#fff; border:1px solid #E5E7EB; color:#4B5563; font-size:13px; font-weight:600;';
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const desk = this.state.device === 'desktop';
+    const step = this.state.step;
+    const t = this.T;
+    const sub = this.subtotalN, disc = this.discountN, tot = sub - disc;
+    const nextLabels = { 1: t.toPay && (ar?'متابعة':'Continue'), };
+    return {
+      dir: ar ? 'rtl' : 'ltr',
+      chevDir: ar ? 'chevron' : 'chevronL',
+      arrowIcon: ar ? 'arrowLeft' : 'arrow',
+      tx: t, ph: this.ph,
+      items: this.itemsData,
+      steps: this.stepsData,
+      payMethods: this.payMethodsData,
+      langLabel: ar ? 'AR' : 'EN',
+      deviceLabel: desk ? 'DESKTOP' : 'MOBILE',
+      isCart: step === 1, isInfo: step === 2, isPay: step === 3, isDone: step === 4,
+      cartEmpty: this.state.items.length === 0,
+      showCard: this.state.pay === 'card',
+      showNav: step < 4,
+      subtotal: '$' + sub, discount: '$' + disc, total: '$' + tot,
+      totalIqd: '≈ IQD ' + (tot * 1310).toLocaleString('en-US'),
+      nextLabel: step === 1 ? t.next : step === 2 ? t.toPay : t.confirm,
+      backStyle: step === 1 ? 'visibility:hidden; padding:13px 18px;' : 'display:inline-flex; align-items:center; gap:7px; background:#fff; border:1px solid #D6DAE1; color:#4B5563; font-weight:700; font-size:13.5px; padding:13px 20px; border-radius:12px;',
+      wrapStyle: desk
+        ? 'width:100%; max-width:1280px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;'
+        : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      setAr: () => this.setState({ lang:'ar' }), setEn: () => this.setState({ lang:'en' }),
+      setDesktop: () => this.setState({ device:'desktop' }), setMobile: () => this.setState({ device:'mobile' }),
+      arBtnStyle: this.toggleBtn(ar), enBtnStyle: this.toggleBtn(!ar),
+      deskBtnStyle: this.toggleBtn(desk), mobBtnStyle: this.toggleBtn(!desk),
+      next: () => this.setState({ step: Math.min(4, step + 1) }),
+      back: () => this.setState({ step: Math.max(1, step - 1) }),
+      delEmail: () => this.setState({ deliver:'email' }), delWa: () => this.setState({ deliver:'wa' }),
+      delEmailStyle: this.delBtn(this.state.deliver === 'email'), delWaStyle: this.delBtn(this.state.deliver === 'wa'),
+      delEmailColor: this.state.deliver === 'email' ? '#1D4ED8' : '#4B5563',
+      delWaColor: this.state.deliver === 'wa' ? '#1D4ED8' : '#4B5563',
+    };
+  }
+}
+</script>
+</body>
+</html>

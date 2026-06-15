@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction:ltr; unicode-bidi:isolate; font-feature-settings:'tnum'; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: box-shadow .15s, transform .12s; }
+  .hbtn:active { transform: translateY(1px); }
+  .ul:hover { color: #2563EB !important; }
+  .ipt { width:100%; font-family:'IBM Plex Sans Arabic'; font-size:13.5px; padding:11px 13px; border:1px solid #D6DAE1; border-radius:10px; color:#111827; outline:none; background:#fff; }
+  .ipt:focus { border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
+  .home-wrap { container-type: inline-size; background:#F7F8FA; }
+  .ad-layout { display: grid; grid-template-columns: 1fr; }
+  .ad-side { display: none; }
+  .od-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @container (min-width: 820px) {
+    .ad-layout { grid-template-columns: 232px 1fr; }
+    .ad-side { display: flex; }
+    .od-grid { grid-template-columns: 1.5fr 1fr; gap: 18px; align-items: start; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <div style="max-width:1320px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV ADMIN · {{ deviceLabel }} · {{ langLabel }} · {{ tx.pageTag }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+      <div class="ad-layout">
+        <!-- sidebar (static, Orders active) -->
+        <aside class="ad-side" style="flex-direction:column; background:#0B1220; padding:20px 14px; min-height:740px;">
+          <div style="display:flex; align-items:center; gap:9px; padding:6px 8px 22px;">
+            <div class="hk" style="width:32px; height:32px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div>
+            <div><div class="ca" style="font-weight:700; font-size:14px; color:#fff;">SoftoDev</div><div class="hk" style="font-size:10px; color:#6B7280; letter-spacing:0.05em;">ADMIN PANEL</div></div>
+          </div>
+          <nav style="display:flex; flex-direction:column; gap:3px;">
+            <span class="hk" style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#9CA3AF; font-size:13px; font-weight:600; cursor:pointer;"><dc-import name="Icon" icon="grid" size="18" color="#9CA3AF" hint-size="18px,18px"></dc-import>{{ tx.nDash }}</span>
+            <span style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; background:#2563EB; color:#fff; font-size:13px; font-weight:700; cursor:pointer;"><dc-import name="Icon" icon="package" size="18" color="#fff" hint-size="18px,18px"></dc-import>{{ tx.nOrders }}</span>
+            <span class="hk" style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#9CA3AF; font-size:13px; font-weight:600; cursor:pointer;"><dc-import name="Icon" icon="tag" size="18" color="#9CA3AF" hint-size="18px,18px"></dc-import>{{ tx.nProducts }}</span>
+            <span class="hk" style="display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:11px; color:#9CA3AF; font-size:13px; font-weight:600; cursor:pointer;"><dc-import name="Icon" icon="user" size="18" color="#9CA3AF" hint-size="18px,18px"></dc-import>{{ tx.nCustomers }}</span>
+          </nav>
+        </aside>
+
+        <div style="display:flex; flex-direction:column;">
+          <div style="background:#fff; border-bottom:1px solid #EAECEF; padding:16px 22px;">
+            <div class="hk" style="display:flex; align-items:center; gap:7px; font-size:12px; color:#9097A1; margin-bottom:8px;"><span class="ul" style="cursor:pointer;">{{ tx.nOrders }}</span><dc-import name="Icon" icon="{{ chevDir }}" size="13" color="#C4C8D0" hint-size="13px,13px"></dc-import><span class="num" style="color:#4B5563;">#SD-48217</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:12px;"><h1 class="ca" style="margin:0; font-weight:800; font-size:20px; color:#0B1220;">{{ tx.orderTitle }} <span class="num">#SD-48217</span></h1><span style="{{ statusBadge }}">{{ statusLabel }}</span></div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="hk" style="font-size:12px; color:#6B7280;">{{ tx.changeStatus }}</span>
+                <div style="position:relative;">
+                  <select onChange="{{ onStatus }}" value="{{ status }}" class="ca" style="appearance:none; -webkit-appearance:none; background:#fff; border:1px solid #D6DAE1; border-radius:9px; padding:8px 30px 8px 13px; font-size:12.5px; font-weight:700; color:#111827; cursor:pointer; outline:none;">
+                    <option value="pending">{{ tx.stPending }}</option>
+                    <option value="processing">{{ tx.stProcessing }}</option>
+                    <option value="delivered">{{ tx.stDelivered }}</option>
+                    <option value="refunded">{{ tx.stRefunded }}</option>
+                  </select>
+                  <span style="position:absolute; inset-inline-end:10px; top:50%; transform:translateY(-50%); pointer-events:none; color:#9097A1; display:inline-flex;"><dc-import name="Icon" icon="chevron" size="15" color="#9097A1" hint-size="15px,15px"></dc-import></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:22px;">
+            <div class="od-grid">
+              <!-- left -->
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:14px;">{{ tx.items }}</div>
+                  <sc-for list="{{ items }}" as="it" hint-placeholder-count="2">
+                    <div style="display:flex; align-items:center; gap:13px; padding:11px 0; border-bottom:1px solid #F7F8FA;">
+                      <div class="hk" style="width:42px; height:42px; border-radius:11px; background:{{ it.icon }}; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:12px;">{{ it.glyph }}</div>
+                      <div style="flex:1;"><div class="ca" style="font-size:13px; font-weight:700; color:#0B1220;">{{ it.name }}</div><div class="hk" style="font-size:11px; color:#9097A1;">{{ it.plan }} · ×{{ it.qty }}</div></div>
+                      <span class="num" style="font-size:14px; font-weight:700; color:#0B1220;">{{ it.total }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:16px;">{{ tx.history }}</div>
+                  <sc-for list="{{ history }}" as="h" hint-placeholder-count="3">
+                    <div style="display:flex; gap:13px;">
+                      <div style="display:flex; flex-direction:column; align-items:center;"><span style="width:11px; height:11px; border-radius:50%; background:{{ h.color }}; margin-top:4px;"></span><span style="{{ h.line }}"></span></div>
+                      <div style="padding-bottom:16px;"><div class="ca" style="font-size:13px; font-weight:600; color:#0B1220;">{{ h.text }}</div><div class="hk" style="font-size:11px; color:#9097A1; margin-top:2px;">{{ h.time }} · {{ h.by }}</div></div>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:12px;">{{ tx.note }}</div>
+                  <textarea class="ipt" rows="2" placeholder="{{ tx.notePh }}" style="resize:none;"></textarea>
+                  <button class="hbtn" style="margin-top:10px; background:#2563EB; color:#fff; font-weight:700; font-size:12.5px; padding:9px 16px; border-radius:9px;">{{ tx.addNote }}</button>
+                </div>
+              </div>
+
+              <!-- right -->
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:14px;">{{ tx.customer }}</div>
+                  <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;"><span class="hk" style="width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#3B82F6); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;">{{ tx.custInit }}</span><div><div class="ca" style="font-size:14px; font-weight:700; color:#0B1220;">{{ tx.custName }}</div><div class="num" style="font-size:11.5px; color:#9097A1;">{{ tx.custMeta }}</div></div></div>
+                  <div style="display:flex; flex-direction:column; gap:9px;">
+                    <div style="display:flex; align-items:center; gap:9px; font-size:12.5px; color:#4B5563;"><dc-import name="Icon" icon="phone" size="15" color="#9097A1" hint-size="15px,15px"></dc-import><span class="num">0770 123 4567</span></div>
+                    <div style="display:flex; align-items:center; gap:9px; font-size:12.5px; color:#4B5563;"><dc-import name="Icon" icon="pin" size="15" color="#9097A1" hint-size="15px,15px"></dc-import>{{ tx.custCity }}</div>
+                  </div>
+                </div>
+
+                <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:20px;">
+                  <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:14px;">{{ tx.payment }}</div>
+                  <div style="display:flex; flex-direction:column; gap:9px;">
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#6B7280;"><span>{{ tx.subtotal }}</span><span class="num">$225</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#15803D;"><span>{{ tx.discount }}</span><span class="num">−$23</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px; color:#6B7280;"><span>{{ tx.method }}</span><span class="ca" style="font-weight:600; color:#374151;">ZainCash</span></div>
+                    <div style="display:flex; justify-content:space-between; font-size:12.5px;"><span style="color:#6B7280;">{{ tx.payStatus }}</span><span style="font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; background:#E7F6EE; color:#15803D;">{{ tx.paid }}</span></div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:6px; padding-top:10px; border-top:1px solid #F1F2F5;"><span class="ca" style="font-size:14px; font-weight:800; color:#0B1220;">{{ tx.total }}</span><span class="num" style="font-size:18px; font-weight:800; color:#0B1220;">$202</span></div>
+                  </div>
+                </div>
+
+                <button class="hbtn" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#fff; border:1px solid #D6DAE1; color:#111827; font-weight:700; font-size:13px; padding:12px; border-radius:11px;"><dc-import name="Icon" icon="package" size="16" color="#111827" hint-size="16px,16px"></dc-import> {{ tx.invoice }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang:'ar', device:'desktop', status:'delivered' };
+
+  get T() {
+    const ar = {
+      pageTag:'تفاصيل الطلب', nDash:'لوحة التحكّم', nOrders:'الطلبات', nProducts:'المنتجات', nCustomers:'العملاء',
+      orderTitle:'الطلب', changeStatus:'تغيير الحالة', items:'المنتجات', history:'سجلّ الحالة', note:'ملاحظة داخلية', notePh:'أضف ملاحظة للفريق…', addNote:'إضافة ملاحظة',
+      customer:'العميل', custName:'أحمد العبيدي', custInit:'أ', custMeta:'14 طلب · عضو منذ 2024', custCity:'الكرادة، بغداد',
+      payment:'الدفع', subtotal:'المجموع الفرعي', discount:'الخصم', method:'الطريقة', payStatus:'حالة الدفع', paid:'مدفوع', total:'الإجمالي', invoice:'تحميل الفاتورة',
+      stPending:'بانتظار الدفع', stProcessing:'قيد المعالجة', stDelivered:'مُفعّل', stRefunded:'مُسترجع',
+      h1:'تم إنشاء الطلب', h2:'تم تأكيد الدفع', h3:'تم تفعيل الاشتراكات', byCust:'بواسطة النظام', byAdmin:'بواسطة الأدمن'
+    };
+    const en = {
+      pageTag:'ORDER', nDash:'Dashboard', nOrders:'Orders', nProducts:'Products', nCustomers:'Customers',
+      orderTitle:'Order', changeStatus:'Change status', items:'Items', history:'Status history', note:'Internal note', notePh:'Add a note for the team…', addNote:'Add note',
+      customer:'Customer', custName:'Ahmed Al-Obaidi', custInit:'A', custMeta:'14 orders · member since 2024', custCity:'Karrada, Baghdad',
+      payment:'Payment', subtotal:'Subtotal', discount:'Discount', method:'Method', payStatus:'Payment status', paid:'Paid', total:'Total', invoice:'Download invoice',
+      stPending:'Pending', stProcessing:'Processing', stDelivered:'Activated', stRefunded:'Refunded',
+      h1:'Order created', h2:'Payment confirmed', h3:'Subscriptions activated', byCust:'by system', byAdmin:'by admin'
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  get itemsData() {
+    const ar = this.state.lang === 'ar';
+    return [
+      { glyph:'GPT', name:'ChatGPT Plus', plan: ar?'سنوي':'Yearly', qty:'1', total:'$180', icon:'linear-gradient(135deg,#10A37F,#1AB68C)' },
+      { glyph:'Cv', name:'Canva Pro', plan: ar?'سنوي':'Yearly', qty:'1', total:'$45', icon:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+    ];
+  }
+
+  get historyData() {
+    const t = this.T;
+    const arr = [
+      { text:t.h3, time:'14:41', by:t.byAdmin, color:'#16A34A' },
+      { text:t.h2, time:'14:33', by:t.byCust, color:'#2563EB' },
+      { text:t.h1, time:'14:32', by:t.byCust, color:'#9097A1' },
+    ];
+    return arr.map((h, i) => ({ ...h, line: i < 2 ? 'width:2px; flex:1; min-height:18px; background:#EAECEF; margin:2px 0;' : 'display:none;' }));
+  }
+
+  statusInfo(k) {
+    const t = this.T;
+    const map = {
+      pending: { label:t.stPending, bg:'#FEF3C7', color:'#B45309' },
+      processing: { label:t.stProcessing, bg:'#E8F0FE', color:'#1D4ED8' },
+      delivered: { label:t.stDelivered, bg:'#E7F6EE', color:'#15803D' },
+      refunded: { label:t.stRefunded, bg:'#FEECEC', color:'#DC2626' },
+    };
+    return map[k];
+  }
+
+  toggleBtn(a){return a?'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:#fff;color:#0B1220;':'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:transparent;color:#9CA3AF;';}
+
+  renderVals() {
+    const ar = this.state.lang === 'ar'; const desk = this.state.device === 'desktop';
+    const si = this.statusInfo(this.state.status);
+    return {
+      dir: ar?'rtl':'ltr', chevDir: ar?'chevron':'chevronL', tx:this.T,
+      items:this.itemsData, history:this.historyData, status:this.state.status,
+      statusLabel: si.label, statusBadge: `font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; background:${si.bg}; color:${si.color};`,
+      langLabel: ar?'AR':'EN', deviceLabel: desk?'DESKTOP':'MOBILE',
+      wrapStyle: desk ? 'width:100%; max-width:1320px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;' : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      onStatus: (e) => this.setState({ status: e.target.value }),
+      setAr:()=>this.setState({lang:'ar'}), setEn:()=>this.setState({lang:'en'}),
+      setDesktop:()=>this.setState({device:'desktop'}), setMobile:()=>this.setState({device:'mobile'}),
+      arBtnStyle:this.toggleBtn(ar), enBtnStyle:this.toggleBtn(!ar), deskBtnStyle:this.toggleBtn(desk), mobBtnStyle:this.toggleBtn(!desk),
+    };
+  }
+}
+</script>
+</body>
+</html>
