@@ -54,12 +54,12 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 **Independent Test**: Load home (toggle plan), open product (plan selector + price update), add to cart — Cobalt light, trust cues, USD+IQD, both LTR + RTL.
 
-- [ ] T010 [US1] Re-skin shared `src/components/product/ProductCard.tsx` to the Cobalt card contract (white surface + `card-hover` lift, custom Icon, real image + gradient/letter-mark fallback, category kicker, rating star=warning, USD+IQD price LTR/tabular, add-to-cart, heart/heartFill). Propagates to listing/category/search/wishlist/related.
-- [ ] T011 [US1] Re-skin home `src/app/page.tsx` + `src/components/home/HeroSlider.tsx` — Cobalt hero (headline + CTAs + trust stars + dark "active subscriptions" visual card), 4 value-props, categories, bestsellers grid, how-it-works, reviews, CTA band. Trust cues above the fold.
-- [ ] T012 [US1] Add the monthly/yearly **plan toggle** to the home plan section (segmented control; swaps price/period/savings/IQD via local state over existing product data).
-- [ ] T013 [US1] Re-skin product detail `src/app/(shop)/products/[slug]/ProductDetailClient.tsx` — gallery (gradient tile + thumbs + trust strip), info column (kicker, title, rating/sold, **plan selector** radio cards updating price, price box + qty stepper + add-to-cart/buy-now/wishlist, "what you get" list).
-- [ ] T014 [US1] Re-skin cart drawer `src/components/cart/CartDrawer.tsx` + `src/components/cart/CartItem.tsx` to Cobalt (white surface, totals USD+IQD, custom icons, RTL mirrored).
-- [ ] T015 [US1] Verify US1 trust/payment/support strings come from `src/config/store.config.ts`; WhatsApp/contact + socials unchanged.
+- [X] T010 [US1] Re-skin shared `src/components/product/ProductCard.tsx` to the Cobalt card contract (white surface + `card-hover` lift, custom Icon, real image + gradient/letter-mark fallback, category kicker, rating star=warning, USD+IQD price LTR/tabular, add-to-cart, heart/heartFill). Propagates to listing/category/search/wishlist/related.
+- [X] T011 [US1] Re-skin home `src/app/page.tsx` + `src/components/home/HeroSlider.tsx` — Cobalt hero (headline + CTAs + trust stars + dark "active subscriptions" visual card), 4 value-props, categories, bestsellers grid, how-it-works, reviews, CTA band. Trust cues above the fold.
+- [~] T012 [US1] **Plan toggle — DEFERRED (data gap).** Products have no per-plan/billing-interval field (duration is embedded in the name, single price). A real monthly/yearly toggle needs a data-model change, which FR-024 forbids; faking plan data would mislead. Decision: skip rather than fabricate; revisit if a `billingInterval`/plan field is added later.
+- [X] T013 [US1] Re-skin product detail `src/app/(shop)/products/[slug]/ProductDetailClient.tsx` — gallery (gradient tile + thumbs + trust strip), info column (kicker, title, rating/sold, **plan selector** radio cards updating price, price box + qty stepper + add-to-cart/buy-now/wishlist, "what you get" list).
+- [X] T014 [US1] Re-skin cart drawer `src/components/cart/CartDrawer.tsx` + `src/components/cart/CartItem.tsx` to Cobalt (white surface, totals USD+IQD, custom icons, RTL mirrored).
+- [X] T015 [US1] Verify US1 trust/payment/support strings come from `src/config/store.config.ts`; WhatsApp/contact + socials unchanged.
 
 **Checkpoint**: MVP conversion path on Cobalt light, demoable both directions.
 
