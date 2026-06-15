@@ -71,9 +71,9 @@ Single Next.js App Router project under `src/`. No `tests/` dir (no test tasks).
 
 **Independent Test**: Toggle Arabic on US1 surfaces + chrome; full mirroring, flipped chevrons, LTR tabular prices, Arabic fonts, zero broken layouts.
 
-- [ ] T016 [US2] Re-skin global chrome: `src/components/layout/Header.tsx` (cobalt "S" lockup gradient `135deg,#2563EB→#3B82F6`, nav, search, lang toggle, cart badge), `src/components/layout/Footer.tsx` (dark surface), `src/components/layout/MobileMenu.tsx` — Cobalt + custom icons + logical properties.
-- [ ] T017 [US2] Verify `src/components/layout/LangInitializer.tsx` sets `dir`/`lang`; confirm Arabic body→IBM Plex Sans Arabic, Arabic headings→Cairo in `globals.css`; apply `.ltr-nums`/`.num` to all price/number runs in ProductCard/cart/detail.
-- [ ] T018 [US2] Apply `.rtl-flip` to directional custom icons (chevrons/arrows/back/next/"view all") across header, cart, product detail, pagination; verify with the Arabic toggle.
+- [X] T016 [US2] Re-skin global chrome: `src/components/layout/Header.tsx` (cobalt "S" lockup gradient `135deg,#2563EB→#3B82F6`, nav, search, lang toggle, cart badge), `src/components/layout/Footer.tsx` (dark surface), `src/components/layout/MobileMenu.tsx` — Cobalt + custom icons + logical properties.
+- [X] T017 [US2] Verify `src/components/layout/LangInitializer.tsx` sets `dir`/`lang`; confirm Arabic body→IBM Plex Sans Arabic, Arabic headings→Cairo in `globals.css`; apply `.ltr-nums`/`.num` to all price/number runs in ProductCard/cart/detail.
+- [X] T018 [US2] Apply `.rtl-flip` to directional custom icons (chevrons/arrows/back/next/"view all") across header, cart, product detail, pagination; verify with the Arabic toggle.
 
 **Checkpoint**: US1 surfaces + chrome flawless both directions on light.
 
