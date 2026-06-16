@@ -9,14 +9,14 @@ import JsonLd from '@/components/seo/JsonLd';
 import { organizationSchema, websiteSchema, localBusinessSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  title: 'SoftoDev | اشترِ ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
+  title: 'Quvenza | اشترِ ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
   description:
     'أكبر متجر اشتراكات رقمية في العراق — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus. تفعيل فوري خلال 30 دقيقة، دفع بالدينار العراقي، ضمان كامل.',
-  alternates: { canonical: 'https://softodeviqstore.com' },
+  alternates: { canonical: 'https://quvenza.com' },
   openGraph: {
-    title: 'SoftoDev — اشتراكات ChatGPT Plus · Canva Pro في العراق',
+    title: 'Quvenza — اشتراكات ChatGPT Plus · Canva Pro في العراق',
     description: 'اشترِ ChatGPT Plus، Canva Pro، CapCut Pro بالدينار العراقي — تفعيل فوري وضمان كامل.',
-    url: 'https://softodeviqstore.com',
+    url: 'https://quvenza.com',
   },
 };
 

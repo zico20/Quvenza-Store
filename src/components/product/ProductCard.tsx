@@ -126,7 +126,7 @@ export default function ProductCard({ product }: { product: Product }) {
             color: 'var(--color-plasma)', fontFamily: 'var(--font-display)',
           }}
         >
-          {(product as any).category?.name || 'softodeviq'}
+          {(product as any).category?.name || 'quvenza'}
         </div>
 
         <div

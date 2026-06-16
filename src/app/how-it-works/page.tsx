@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, howToSchema } from '@/lib/schema';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenza.com';
 
 export const metadata: Metadata = {
   title: 'كيف يعمل المتجر — خطوات بسيطة للحصول على اشتراكك',
-  description: 'احصل على اشتراكك الرقمي في 4 خطوات بسيطة: اختر → ادفع → أرسل ايميلك → استخدم خلال 30 دقيقة. SoftoDev — أسهل طريقة للحصول على ChatGPT Plus وCanva Pro في العراق.',
+  description: 'احصل على اشتراكك الرقمي في 4 خطوات بسيطة: اختر → ادفع → أرسل ايميلك → استخدم خلال 30 دقيقة. Quvenza — أسهل طريقة للحصول على ChatGPT Plus وCanva Pro في العراق.',
   alternates: { canonical: `${BASE}/how-it-works` },
   openGraph: {
-    title: 'كيف يعمل SoftoDev',
+    title: 'كيف يعمل Quvenza',
     description: '4 خطوات بسيطة للحصول على ChatGPT Plus، Canva Pro وأكثر في العراق.',
     url: `${BASE}/how-it-works`,
-    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'SoftoDev' }],
+    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza' }],
   },
 };
 
@@ -45,8 +45,8 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   const howTo = howToSchema({
-    name: 'كيف تشتري اشتراك رقمي من SoftoDev في العراق',
-    description: 'دليل خطوة بخطوة للحصول على اشتراك ChatGPT Plus، Canva Pro، CapCut Pro أو أي اشتراك رقمي من متجر SoftoDev في العراق.',
+    name: 'كيف تشتري اشتراك رقمي من Quvenza في العراق',
+    description: 'دليل خطوة بخطوة للحصول على اشتراك ChatGPT Plus، Canva Pro، CapCut Pro أو أي اشتراك رقمي من متجر Quvenza في العراق.',
     totalTime: 'PT30M',
     estimatedCost: { value: 8000, currency: 'IQD' },
     supply: ['ايميل شخصي', 'هاتف للتواصل عبر واتساب'],

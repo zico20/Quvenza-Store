@@ -1,9 +1,9 @@
 /* TEAM */
 Founder: Ghaith
-Company: SoftoDev
+Company: Quvenza
 Location: Baghdad, Iraq
-Contact: support [at] softodeviqstore.com
-Telegram: @softodeviq
+Contact: support [at] quvenza.com
+Telegram: @quvenza
 
 /* SITE */
 Last update: 2026/04/27

@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema } from '@/lib/schema';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenza.com';
 
 export const metadata: Metadata = {
   title: 'من نحن — متجر اشتراكات رقمية موثوق في العراق',
-  description: 'SoftoDev متجر عراقي متخصص ببيع الاشتراكات الرقمية الأصلية في العراق. تعرف على قصتنا ورؤيتنا ولماذا اختارنا أكثر من 500 عميل من كل محافظات العراق.',
+  description: 'Quvenza متجر عراقي متخصص ببيع الاشتراكات الرقمية الأصلية في العراق. تعرف على قصتنا ورؤيتنا ولماذا اختارنا أكثر من 500 عميل من كل محافظات العراق.',
   alternates: { canonical: `${BASE}/about` },
   openGraph: {
-    title: 'من نحن — SoftoDev',
+    title: 'من نحن — Quvenza',
     description: 'متجر عراقي للاشتراكات الرقمية الأصلية — ChatGPT Plus، Canva Pro، CapCut، Coursera.',
     url: `${BASE}/about`,
-    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'SoftoDev' }],
+    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza' }],
   },
 };
 
@@ -30,7 +30,7 @@ export default function AboutPage() {
         </h1>
 
         <p style={{ fontSize: 18, color: '#4B5563', lineHeight: 1.8, marginBottom: 32 }}>
-          <strong style={{ color: '#111827' }}>SoftoDev</strong> هو متجر عراقي 100% متخصص في بيع الاشتراكات الرقمية الأصلية للسوق العراقي.
+          <strong style={{ color: '#111827' }}>Quvenza</strong> هو متجر عراقي 100% متخصص في بيع الاشتراكات الرقمية الأصلية للسوق العراقي.
           تأسسنا في بغداد عام 2026 بهدف واضح: إيصال أفضل الأدوات الرقمية العالمية للمستخدم العراقي بأسعار محلية وبدون أي تعقيدات.
         </p>
 
@@ -40,7 +40,7 @@ export default function AboutPage() {
         </p>
 
         {/* ── Statistics ── */}
-        <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>SoftoDev بالأرقام</h2>
+        <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>Quvenza بالأرقام</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 48 }}>
           {[
             { value: '+500',      label: 'عميل راضٍ' },
@@ -55,7 +55,7 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>لماذا SoftoDev؟</h2>
+        <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>لماذا Quvenza؟</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 32 }}>
           {[
             { icon: '✅', text: 'متجر عراقي مرخص في بغداد' },
@@ -77,7 +77,7 @@ export default function AboutPage() {
           بدأت الفكرة عندما لاحظنا أن العراقي يدفع أسعاراً أعلى مما يدفعه نظراؤه في الدول المجاورة، أو يضطر للتعامل مع وسطاء غير موثوقين على Facebook وTelegram، أو يتنازل عن استخدام أدوات الذكاء الاصطناعي والتصميم لأنها "غير متوفرة في العراق". قررنا أن نغيّر ذلك.
         </p>
         <p style={{ color: '#4B5563', lineHeight: 1.8, marginBottom: 48 }}>
-          اليوم، SoftoDev هو الخيار الأول للطلاب، صناع المحتوى، أصحاب الأعمال الصغيرة، والمصممين العراقيين الذين يريدون أدوات احترافية بثقة محلية.
+          اليوم، Quvenza هو الخيار الأول للطلاب، صناع المحتوى، أصحاب الأعمال الصغيرة، والمصممين العراقيين الذين يريدون أدوات احترافية بثقة محلية.
         </p>
 
         <div style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: 8, padding: 32, textAlign: 'center' }}>

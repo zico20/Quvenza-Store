@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenza.com';
 
 const CHANNELS = [
   { icon: '💬', name: 'WhatsApp',  desc: 'الأسرع — رد خلال دقائق',   href: 'https://wa.me/9647700000000',        label: 'ابدأ محادثة',        color: '#25D366' },
-  { icon: '✈️', name: 'Telegram',  desc: 'متاح 24/7',                 href: 'https://t.me/softodeviq',            label: 'تواصل عبر Telegram', color: '#0088cc' },
-  { icon: '📧', name: 'Email',     desc: 'للاستفسارات الرسمية',       href: 'mailto:support@softodeviqstore.com', label: 'أرسل إيميل',         color: '#2563EB' },
+  { icon: '✈️', name: 'Telegram',  desc: 'متاح 24/7',                 href: 'https://t.me/quvenza',            label: 'تواصل عبر Telegram', color: '#0088cc' },
+  { icon: '📧', name: 'Email',     desc: 'للاستفسارات الرسمية',       href: 'mailto:support@quvenza.com', label: 'أرسل إيميل',         color: '#2563EB' },
 ];
 
 const HOURS = [

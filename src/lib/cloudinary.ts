@@ -24,7 +24,7 @@ export async function uploadBuffer(
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: `softodev/${folder}`,
+        folder: `quvenza/${folder}`,
         resource_type: 'image',
         transformation: [{ quality: 'auto:good', fetch_format: 'auto' }],
         ...(filename && { public_id: filename.replace(/\.[^.]+$/, '') }),

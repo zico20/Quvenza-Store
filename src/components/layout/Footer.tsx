@@ -113,13 +113,13 @@ export default async function Footer() {
               <>
                 طُوّر بواسطة{' '}
                 <a
-                  href="https://softodeviq.com"
+                  href="https://quvenza.com"
                   target="_blank"
                   rel="noopener"
-                  title="SoftoDevIq - شركة برمجة في بغداد"
+                  title="QuvenzaIq - شركة برمجة في بغداد"
                   style={{ color: '#1D4ED8', textDecoration: 'none' }}
                 >
-                  SoftoDevIq
+                  QuvenzaIq
                 </a>
                 {' '}— شركة برمجة عراقية في بغداد
               </>
@@ -127,13 +127,13 @@ export default async function Footer() {
               <>
                 Developed by{' '}
                 <a
-                  href="https://softodeviq.com"
+                  href="https://quvenza.com"
                   target="_blank"
                   rel="noopener"
-                  title="SoftoDevIq - Software Development Company in Baghdad"
+                  title="QuvenzaIq - Software Development Company in Baghdad"
                   style={{ color: '#1D4ED8', textDecoration: 'none' }}
                 >
-                  SoftoDevIq
+                  QuvenzaIq
                 </a>
                 {' '}— Iraqi software development company
               </>
@@ -163,26 +163,26 @@ export default async function Footer() {
                 <>
                   طُوّر بواسطة{' '}
                   <a
-                    href="https://softodeviq.com"
+                    href="https://quvenza.com"
                     target="_blank"
                     rel="noopener"
-                    title="SoftoDevIq - شركة برمجة في بغداد"
+                    title="QuvenzaIq - شركة برمجة في بغداد"
                     style={{ color: '#1D4ED8', textDecoration: 'none' }}
                   >
-                    SoftoDevIq
+                    QuvenzaIq
                   </a>
                 </>
               ) : (
                 <>
                   Developed by{' '}
                   <a
-                    href="https://softodeviq.com"
+                    href="https://quvenza.com"
                     target="_blank"
                     rel="noopener"
-                    title="SoftoDevIq - Software Development Company in Baghdad"
+                    title="QuvenzaIq - Software Development Company in Baghdad"
                     style={{ color: '#1D4ED8', textDecoration: 'none' }}
                   >
-                    SoftoDevIq
+                    QuvenzaIq
                   </a>
                 </>
               )}

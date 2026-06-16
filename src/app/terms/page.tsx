@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { storeConfig } from '@/config/store.config';
 
 export const metadata: Metadata = {
-  title: 'الشروط والأحكام | SoftoDev',
-  description: 'شروط وأحكام الاستخدام لمتجر SoftoDev — قواعد الشراء والدفع والضمان وحقوق المستخدم في العراق.',
-  alternates: { canonical: 'https://softodeviqstore.com/terms' },
+  title: 'الشروط والأحكام | Quvenza',
+  description: 'شروط وأحكام الاستخدام لمتجر Quvenza — قواعد الشراء والدفع والضمان وحقوق المستخدم في العراق.',
+  alternates: { canonical: 'https://quvenza.com/terms' },
 };
 
 const SECTION: React.CSSProperties = { marginBottom: 36 };
@@ -26,7 +26,7 @@ export default function TermsPage() {
       <div style={SECTION}>
         <h2 style={H2}>١. القبول والموافقة</h2>
         <p style={P}>
-          باستخدامك موقع <strong style={{ color: '#111827' }}>softodeviqstore.com</strong> أو إتمامك أي عملية
+          باستخدامك موقع <strong style={{ color: '#111827' }}>quvenza.com</strong> أو إتمامك أي عملية
           شراء، فإنك تقرّ بأنك قرأت هذه الشروط وفهمتها ووافقت عليها بالكامل. إذا كنت تمثّل شركة أو
           مؤسسة، فإنك تؤكد صلاحيتك القانونية للموافقة باسمها.
         </p>
@@ -39,7 +39,7 @@ export default function TermsPage() {
       <div style={SECTION}>
         <h2 style={H2}>٢. طبيعة الخدمة</h2>
         <p style={P}>
-          <strong style={{ color: '#111827' }}>SoftoDev</strong> متجر عراقي متخصص في بيع الاشتراكات الرقمية الأصلية
+          <strong style={{ color: '#111827' }}>Quvenza</strong> متجر عراقي متخصص في بيع الاشتراكات الرقمية الأصلية
           (ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus وغيرها) بالدينار العراقي للمستخدمين في
           جمهورية العراق.
         </p>
@@ -115,7 +115,7 @@ export default function TermsPage() {
       <div style={SECTION}>
         <h2 style={H2}>٧. حدود المسؤولية</h2>
         <p style={P}>
-          SoftoDev وسيط بين المستخدم العراقي وشركات البرمجيات العالمية. لذلك:
+          Quvenza وسيط بين المستخدم العراقي وشركات البرمجيات العالمية. لذلك:
         </p>
         <ul style={UL}>
           <li>لا نتحمل مسؤولية أي تغيير تقوم به شركات مثل OpenAI أو Canva على منتجاتها أو سياساتها.</li>
@@ -128,7 +128,7 @@ export default function TermsPage() {
       <div style={SECTION}>
         <h2 style={H2}>٨. الملكية الفكرية</h2>
         <p style={P}>
-          جميع محتويات الموقع من نصوص وصور وتصاميم وكود برمجي هي ملك حصري لـ SoftoDev أو مرخَّصة
+          جميع محتويات الموقع من نصوص وصور وتصاميم وكود برمجي هي ملك حصري لـ Quvenza أو مرخَّصة
           لها. يُحظر نسخ أي محتوى أو إعادة استخدامه تجارياً دون إذن كتابي مسبق. الاشتراكات المُباعة
           تخضع لشروط الملكية الفكرية الخاصة بشركاتها الأم.
         </p>

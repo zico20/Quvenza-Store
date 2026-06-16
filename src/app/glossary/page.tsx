@@ -2,35 +2,35 @@ import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, faqSchema } from '@/lib/schema';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenza.com';
 
 export const metadata: Metadata = {
   title: 'قاموس مصطلحات الاشتراكات الرقمية في العراق',
   description: 'دليل شامل لكل المصطلحات المتعلقة بالاشتراكات الرقمية في العراق: ChatGPT Plus، Canva Pro، CapCut، Coursera، زين كاش، آسيا حوالة، فاست باي وأكثر.',
   alternates: { canonical: `${BASE}/glossary` },
   openGraph: {
-    title: 'قاموس المصطلحات — SoftoDev',
+    title: 'قاموس المصطلحات — Quvenza',
     description: 'تعريف كل المصطلحات الرقمية المستخدمة في سوق العراق.',
     url: `${BASE}/glossary`,
-    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'SoftoDev Glossary' }],
+    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza Glossary' }],
   },
 };
 
 const TERMS = [
-  { term: 'ChatGPT Plus', definition: 'اشتراك مدفوع من OpenAI يمنح وصول كامل لنموذج GPT-5، DALL-E 3 لتوليد الصور، Advanced Voice Mode، وتحليل الملفات. السعر العالمي 20 دولار شهرياً، وفي SoftoDev متوفر للمستخدمين العراقيين بالدينار العراقي.' },
-  { term: 'Canva Pro', definition: 'النسخة الاحترافية من منصة Canva للتصميم. توفر مليون+ قالب، Magic AI، إزالة الخلفيات، Brand Kit، و 1TB تخزين سحابي. متوفر في SoftoDev بالدينار العراقي للسنة الكاملة.' },
+  { term: 'ChatGPT Plus', definition: 'اشتراك مدفوع من OpenAI يمنح وصول كامل لنموذج GPT-5، DALL-E 3 لتوليد الصور، Advanced Voice Mode، وتحليل الملفات. السعر العالمي 20 دولار شهرياً، وفي Quvenza متوفر للمستخدمين العراقيين بالدينار العراقي.' },
+  { term: 'Canva Pro', definition: 'النسخة الاحترافية من منصة Canva للتصميم. توفر مليون+ قالب، Magic AI، إزالة الخلفيات، Brand Kit، و 1TB تخزين سحابي. متوفر في Quvenza بالدينار العراقي للسنة الكاملة.' },
   { term: 'CapCut Pro', definition: 'النسخة المدفوعة من تطبيق CapCut للمونتاج. تزيل العلامة المائية، تفتح كل الفلاتر والمؤثرات، وتسمح بتصدير 4K. مشهور بين صناع محتوى TikTok وYouTube.' },
   { term: 'Coursera Plus', definition: 'اشتراك سنوي يفتح وصول لـ 7000+ كورس وشهادة احترافية من جامعات عالمية مثل Yale و Stanford و Imperial College. يشمل Professional Certificates من Google و Meta و IBM.' },
-  { term: 'زين كاش (ZainCash)', definition: 'محفظة إلكترونية عراقية تابعة لشركة زين العراق. تسمح بالتحويلات والمدفوعات الفورية بالدينار العراقي. أحد أشهر طرق الدفع المحلية في SoftoDev.' },
-  { term: 'آسيا حوالة (AsiaHawala)', definition: 'خدمة مالية عراقية تقدم تحويلات سريعة. مقبولة في SoftoDev كطريقة دفع رئيسية لكل المحافظات.' },
-  { term: 'فاست باي (FastPay)', definition: 'نظام دفع إلكتروني عراقي للمعاملات الفورية. مقبول في SoftoDev.' },
-  { term: 'الدينار العراقي (IQD)', definition: 'العملة الرسمية لجمهورية العراق. كل أسعار SoftoDev معروضة بالدينار العراقي مباشرة، بدون تحويلات أو رسوم خفية.' },
+  { term: 'زين كاش (ZainCash)', definition: 'محفظة إلكترونية عراقية تابعة لشركة زين العراق. تسمح بالتحويلات والمدفوعات الفورية بالدينار العراقي. أحد أشهر طرق الدفع المحلية في Quvenza.' },
+  { term: 'آسيا حوالة (AsiaHawala)', definition: 'خدمة مالية عراقية تقدم تحويلات سريعة. مقبولة في Quvenza كطريقة دفع رئيسية لكل المحافظات.' },
+  { term: 'فاست باي (FastPay)', definition: 'نظام دفع إلكتروني عراقي للمعاملات الفورية. مقبول في Quvenza.' },
+  { term: 'الدينار العراقي (IQD)', definition: 'العملة الرسمية لجمهورية العراق. كل أسعار Quvenza معروضة بالدينار العراقي مباشرة، بدون تحويلات أو رسوم خفية.' },
   { term: 'GPT-5', definition: 'أحدث نموذج لغة ذكي من OpenAI. يتفوق على GPT-4 في فهم السياق والترجمة والكتابة الإبداعية وكتابة الكود. يُتاح فقط مع اشتراك ChatGPT Plus أو Pro.' },
   { term: 'DALL-E 3', definition: 'نموذج توليد الصور بالذكاء الاصطناعي من OpenAI. متاح ضمن اشتراك ChatGPT Plus. يحوّل الوصف النصي إلى صور احترافية عالية الدقة.' },
   { term: 'Magic AI (Canva)', definition: 'مجموعة أدوات الذكاء الاصطناعي المدمجة في Canva Pro. تشمل Magic Design، Magic Write، Magic Eraser (إزالة عناصر من الصور).' },
   { term: 'Brand Kit', definition: 'ميزة في Canva Pro تسمح بحفظ شعار العلامة التجارية، الألوان، والخطوط في مكان واحد لاستخدامها في كل التصاميم.' },
-  { term: 'تفعيل الاشتراك', definition: 'العملية التي يتم فيها ربط الاشتراك المدفوع بحساب المستخدم. في SoftoDev، التفعيل يتم على ايميل المستخدم الشخصي خلال 30 دقيقة من الدفع.' },
-  { term: 'كاش عند الاستلام (COD)', definition: 'طريقة دفع تسمح للعميل بدفع المبلغ نقداً عند استلام الخدمة. SoftoDev من المتاجر القليلة في العراق التي توفر هذا الخيار للاشتراكات الرقمية في بغداد.' },
+  { term: 'تفعيل الاشتراك', definition: 'العملية التي يتم فيها ربط الاشتراك المدفوع بحساب المستخدم. في Quvenza، التفعيل يتم على ايميل المستخدم الشخصي خلال 30 دقيقة من الدفع.' },
+  { term: 'كاش عند الاستلام (COD)', definition: 'طريقة دفع تسمح للعميل بدفع المبلغ نقداً عند استلام الخدمة. Quvenza من المتاجر القليلة في العراق التي توفر هذا الخيار للاشتراكات الرقمية في بغداد.' },
 ];
 
 export default function GlossaryPage() {

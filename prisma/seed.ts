@@ -20,11 +20,11 @@ async function main() {
   const customerPassword = await bcrypt.hash('Customer@2026!', 12);
 
   const admin = await prisma.user.create({
-    data: { name: 'Ghaith Admin', email: 'admin@softodeviqstore.com', password: adminPassword, role: 'ADMIN' },
+    data: { name: 'Ghaith Admin', email: 'admin@quvenza.com', password: adminPassword, role: 'ADMIN' },
   });
 
   const customer = await prisma.user.create({
-    data: { name: 'عميل تجريبي', email: 'customer@softodeviqstore.com', password: customerPassword, role: 'USER' },
+    data: { name: 'عميل تجريبي', email: 'customer@quvenza.com', password: customerPassword, role: 'USER' },
   });
 
   console.log(`✅ Users: ${admin.email}, ${customer.email}`);
@@ -59,9 +59,9 @@ async function main() {
       stock:          999,
       isFeatured:     true,
       images:         ['https://placehold.co/600x600/ff6a2b/ffffff?text=ChatGPT+Plus'],
-      imageAlts:      ['اشتراك ChatGPT Plus شهرين في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك ChatGPT Plus شهرين في العراق — Quvenza'],
       description:    'اشتراك ChatGPT Plus لمدة شهرين بسعر خاص. وصول كامل لـ GPT-4o و DALL-E 3 وتحليل الملفات.',
-      metaTitle:      'ChatGPT Plus شهرين — اشتراك في العراق | SoftoDev',
+      metaTitle:      'ChatGPT Plus شهرين — اشتراك في العراق | Quvenza',
       metaDescription:'اشترِ ChatGPT Plus لشهرين بـ 50,000 د.ع في العراق. GPT-4o + DALL-E 3. تفعيل فوري، دفع زين كاش.',
       metaKeywords:   'ChatGPT Plus العراق,اشتراك ChatGPT عراق,شراء ChatGPT العراق,ChatGPT Plus Iraq,GPT-4o عراق',
       longDescription: `## اشتراك ChatGPT Plus لشهرين في العراق
@@ -101,7 +101,7 @@ async function main() {
         { title: 'ضمان كامل', description: 'إذا لم يعمل الاشتراك نعيد لك المبلغ كاملاً', icon: '🛡️' },
       ],
       faqs: [
-        { question: 'هل ChatGPT Plus يعمل في العراق؟', answer: 'نعم، اشتراك ChatGPT Plus من SoftoDev يعمل بالكامل في العراق من أي جهاز أو متصفح.' },
+        { question: 'هل ChatGPT Plus يعمل في العراق؟', answer: 'نعم، اشتراك ChatGPT Plus من Quvenza يعمل بالكامل في العراق من أي جهاز أو متصفح.' },
         { question: 'كيف يصلني الاشتراك؟', answer: 'بعد الدفع، يصل الاشتراك إلى بريدك الإلكتروني خلال 30 دقيقة كحد أقصى. فريقنا يعمل 24/7.' },
         { question: 'ما الفرق بين ChatGPT المجاني وPlus؟', answer: 'النسخة المجانية محدودة وتستخدم GPT-3.5. Plus يمنحك GPT-4o + DALL-E 3 + بحث الويب + تحليل الملفات وأولوية الوصول بدون انقطاع.' },
         { question: 'هل يمكنني الدفع بالدينار العراقي؟', answer: 'نعم، السعر بالدينار العراقي مباشرة. ندفع بزين كاش أو آسيا حوالة أو فاست باي.' },
@@ -118,9 +118,9 @@ async function main() {
       stock:          999,
       isFeatured:     true,
       images:         ['https://placehold.co/600x600/ff6a2b/ffffff?text=ChatGPT+Plus+4M'],
-      imageAlts:      ['اشتراك ChatGPT Plus 4 أشهر في العراق — SoftoDev'],
-      description:    'اشتراك ChatGPT Plus لمدة 4 أشهر. الأكثر مبيعاً في SoftoDev — وفر أكثر مع فترة أطول.',
-      metaTitle:      'ChatGPT Plus 4 أشهر — الأكثر مبيعاً | SoftoDev العراق',
+      imageAlts:      ['اشتراك ChatGPT Plus 4 أشهر في العراق — Quvenza'],
+      description:    'اشتراك ChatGPT Plus لمدة 4 أشهر. الأكثر مبيعاً في Quvenza — وفر أكثر مع فترة أطول.',
+      metaTitle:      'ChatGPT Plus 4 أشهر — الأكثر مبيعاً | Quvenza العراق',
       metaDescription:'ChatGPT Plus لـ 4 أشهر بـ 95,000 د.ع. وفر 25,000 د.ع مقارنة بالشراء المنفصل. تفعيل فوري بالعراق.',
       metaKeywords:   'ChatGPT Plus العراق,اشتراك ChatGPT 4 اشهر,ChatGPT بالدينار العراقي,GPT-4o عراق',
       longDescription: `## ChatGPT Plus لـ 4 أشهر — الأفضل قيمة في العراق
@@ -153,7 +153,7 @@ async function main() {
       ],
       faqs: [
         { question: 'ما هو الفرق بين اشتراك شهرين و4 أشهر؟', answer: 'اشتراك 4 أشهر يوفر لك 25,000 دينار عراقي مقارنة بشراء شهرين مرتين. المميزات نفسها تماماً.' },
-        { question: 'هل يمكنني تجديد الاشتراك بعد انتهائه؟', answer: 'نعم، يمكنك الشراء مجدداً من SoftoDev عند الانتهاء بنفس الطريقة.' },
+        { question: 'هل يمكنني تجديد الاشتراك بعد انتهائه؟', answer: 'نعم، يمكنك الشراء مجدداً من Quvenza عند الانتهاء بنفس الطريقة.' },
         { question: 'هل ChatGPT Plus يعمل على الهاتف؟', answer: 'نعم، يعمل على iOS و Android عبر تطبيق ChatGPT الرسمي أو المتصفح.' },
         { question: 'كم رسالة يمكنني إرسالها يومياً؟', answer: 'مع ChatGPT Plus لا يوجد حد صارم للرسائل اليومية مع GPT-4o. الاستخدام غير محدود.' },
       ],
@@ -168,7 +168,7 @@ async function main() {
       stock:          999,
       isFeatured:     true,
       images:         ['https://placehold.co/600x600/ff6a2b/ffffff?text=ChatGPT+Plus+1Y'],
-      imageAlts:      ['اشتراك ChatGPT Plus سنة كاملة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك ChatGPT Plus سنة كاملة في العراق — Quvenza'],
       description:    'اشتراك ChatGPT Plus لسنة كاملة. أفضل سعر في العراق — وفر 60,000 دينار عراقي.',
       metaTitle:      'ChatGPT Plus سنة كاملة — أفضل سعر في العراق',
       metaDescription:'ChatGPT Plus سنة كاملة بـ 240,000 د.ع فقط. وفر 60,000 د.ع. GPT-4o + DALL-E. تفعيل فوري.',
@@ -179,7 +179,7 @@ async function main() {
 
 ### وفر 60,000 دينار عراقي
 
-السعر الكامل لـ 12 شهراً بشكل منفصل = 300,000 دينار. مع الاشتراك السنوي من SoftoDev تدفع 240,000 فقط.
+السعر الكامل لـ 12 شهراً بشكل منفصل = 300,000 دينار. مع الاشتراك السنوي من Quvenza تدفع 240,000 فقط.
 
 ### 365 يوم من قوة الذكاء الاصطناعي
 
@@ -222,9 +222,9 @@ async function main() {
       stock:          999,
       isFeatured:     true,
       images:         ['https://placehold.co/600x600/8b5cf6/ffffff?text=Canva+Pro'],
-      imageAlts:      ['اشتراك Canva Pro سنة كاملة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Canva Pro سنة كاملة في العراق — Quvenza'],
       description:    'Canva Pro لسنة كاملة. مليون+ قالب احترافي، Magic AI، Brand Kit، 1TB تخزين سحابي.',
-      metaTitle:      'Canva Pro سنة — اشتراك في العراق | SoftoDev',
+      metaTitle:      'Canva Pro سنة — اشتراك في العراق | Quvenza',
       metaDescription:'اشترِ Canva Pro سنة كاملة بـ 85,000 د.ع في العراق. Magic AI + Brand Kit + 1TB. تفعيل فوري.',
       metaKeywords:   'Canva Pro العراق,اشتراك Canva عراق,Canva Pro Iraq,Magic AI تصميم,Brand Kit عراق',
       longDescription: `## Canva Pro للسنة الكاملة في العراق
@@ -269,9 +269,9 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/eb0000/ffffff?text=Adobe+CC'],
-      imageAlts:      ['اشتراك Adobe Creative Cloud شهر في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Adobe Creative Cloud شهر في العراق — Quvenza'],
       description:    'Adobe Creative Cloud لشهر كامل. Photoshop + Illustrator + Premiere + 20+ تطبيق احترافي.',
-      metaTitle:      'Adobe Creative Cloud شهر — اشتراك العراق | SoftoDev',
+      metaTitle:      'Adobe Creative Cloud شهر — اشتراك العراق | Quvenza',
       metaDescription:'اشترِ Adobe Creative Cloud شهر بـ 45,000 د.ع في العراق. Photoshop + Premiere + 20 تطبيق. تفعيل فوري.',
       metaKeywords:   'Adobe Creative Cloud العراق,Adobe CC Iraq,Photoshop العراق,Premiere عراق,Illustrator',
       longDescription: `## Adobe Creative Cloud في العراق
@@ -301,7 +301,7 @@ async function main() {
         { title: 'دعم احترافي', description: 'Adobe تقدم دعماً فنياً على مدار الساعة', icon: '🎧' },
       ],
       faqs: [
-        { question: 'هل Adobe CC يعمل في العراق؟', answer: 'نعم، اشتراك Adobe CC من SoftoDev يعمل بالكامل في العراق على Windows وMac.' },
+        { question: 'هل Adobe CC يعمل في العراق؟', answer: 'نعم، اشتراك Adobe CC من Quvenza يعمل بالكامل في العراق على Windows وMac.' },
         { question: 'كم جهاز يمكن تفعيله؟', answer: 'يمكن تفعيل Adobe CC على جهازين في نفس الوقت.' },
         { question: 'هل يشمل اشتراك شهر واحد كل التطبيقات؟', answer: 'نعم، باقة All Apps تشمل كل تطبيقات Adobe Creative Cloud الـ 20+.' },
       ],
@@ -319,7 +319,7 @@ async function main() {
       stock:          999,
       isFeatured:     true,
       images:         ['https://placehold.co/600x600/0056d2/ffffff?text=Coursera+Plus'],
-      imageAlts:      ['اشتراك Coursera Plus سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Coursera Plus سنة في العراق — Quvenza'],
       description:    'Coursera Plus لسنة كاملة. 7000+ كورس وشهادة من Yale وStanford وGoogle وMeta وIBM.',
       metaTitle:      'Coursera Plus سنة — كورسات جامعية في العراق',
       metaDescription:'Coursera Plus سنة كاملة بـ 150,000 د.ع. 7000+ كورس من Yale وStanford وGoogle. شهادات معتمدة.',
@@ -379,7 +379,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/000000/ffffff?text=CapCut+Pro'],
-      imageAlts:      ['اشتراك CapCut Pro شهر في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك CapCut Pro شهر في العراق — Quvenza'],
       description:    'CapCut Pro لشهر واحد. أزل العلامة المائية، فلاتر حصرية، تصدير 4K. مثالي لتيك توك.',
       metaTitle:      'CapCut Pro شهر — بدون علامة مائية | العراق',
       metaDescription:'CapCut Pro شهر بـ 12,000 د.ع. أزل العلامة المائية + تصدير 4K + AI أدوات. تفعيل فوري.',
@@ -424,7 +424,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/000000/ffffff?text=CapCut+Pro+1Y'],
-      imageAlts:      ['اشتراك CapCut Pro سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك CapCut Pro سنة في العراق — Quvenza'],
       description:    'CapCut Pro لسنة كاملة بأفضل سعر. وفر 59,000 دينار مقارنة بالشراء الشهري.',
       metaTitle:      'CapCut Pro سنة كاملة — أفضل سعر في العراق',
       metaDescription:'CapCut Pro سنة كاملة بـ 85,000 د.ع. وفر 59,000 د.ع. مونتاج 4K + AI. تسليم فوري في العراق.',
@@ -466,7 +466,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/1db954/ffffff?text=Spotify+Premium'],
-      imageAlts:      ['اشتراك Spotify Premium سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Spotify Premium سنة في العراق — Quvenza'],
       description:    'Spotify Premium سنة كاملة. موسيقى بلا إعلانات، تحميل للاستماع بدون إنترنت، جودة عالية.',
       metaTitle:      'Spotify Premium سنة — استمع بدون إعلانات | العراق',
       metaDescription:'Spotify Premium سنة كاملة بـ 60,000 د.ع في العراق. بلا إعلانات + تحميل + جودة عالية. تفعيل فوري.',
@@ -492,7 +492,7 @@ async function main() {
         { title: 'iOS وAndroid', description: 'يعمل على كل الأجهزة وأجهزة الكمبيوتر', icon: '📱' },
       ],
       faqs: [
-        { question: 'هل Spotify يعمل في العراق؟', answer: 'نعم، اشتراك Spotify Premium من SoftoDev يعمل بالكامل في العراق.' },
+        { question: 'هل Spotify يعمل في العراق؟', answer: 'نعم، اشتراك Spotify Premium من Quvenza يعمل بالكامل في العراق.' },
         { question: 'كيف يتم التفعيل؟', answer: 'نفعّل الاشتراك على حسابك الشخصي أو نوفر لك حساباً جاهزاً.' },
         { question: 'كم جهاز يمكن الاستماع منه؟', answer: 'يمكن تشغيل الموسيقى على جهاز واحد في الوقت نفسه مع إمكانية الاستماع من أجهزة متعددة.' },
       ],
@@ -507,7 +507,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/ff0000/ffffff?text=YouTube+Premium'],
-      imageAlts:      ['اشتراك YouTube Premium سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك YouTube Premium سنة في العراق — Quvenza'],
       description:    'YouTube Premium سنة كاملة. بدون إعلانات، تشغيل خلفية، YouTube Music، تحميل فيديو.',
       metaTitle:      'YouTube Premium سنة — بدون إعلانات | العراق',
       metaDescription:'YouTube Premium سنة بـ 55,000 د.ع في العراق. بلا إعلانات + خلفية + YouTube Music. تفعيل فوري.',
@@ -551,7 +551,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/000000/ffffff?text=Notion+Plus+AI'],
-      imageAlts:      ['اشتراك Notion Plus AI سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Notion Plus AI سنة في العراق — Quvenza'],
       description:    'Notion Plus مع AI لسنة كاملة. مساحة غير محدودة + Notion AI لكتابة المحتوى وتلخيص الملفات.',
       metaTitle:      'Notion Plus AI سنة — إنتاجية ذكية | العراق',
       metaDescription:'Notion Plus + AI سنة بـ 70,000 د.ع في العراق. مساحة غير محدودة + Notion AI. تفعيل فوري.',
@@ -599,7 +599,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/0077b5/ffffff?text=LinkedIn+Premium'],
-      imageAlts:      ['اشتراك LinkedIn Premium شهرين في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك LinkedIn Premium شهرين في العراق — Quvenza'],
       description:    'LinkedIn Premium Career لشهرين. InMail، رؤية من شاهد ملفك، كورسات LinkedIn Learning مجانية.',
       metaTitle:      'LinkedIn Premium شهرين — اشتراك في العراق',
       metaDescription:'LinkedIn Premium شهرين بـ 80,000 د.ع في العراق. InMail + رؤية الزوار + LinkedIn Learning. تفعيل فوري.',
@@ -640,7 +640,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/15c39a/ffffff?text=Grammarly+Premium'],
-      imageAlts:      ['اشتراك Grammarly Premium سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Grammarly Premium سنة في العراق — Quvenza'],
       description:    'Grammarly Premium سنة كاملة. تصحيح القواعد، الأسلوب، وضوح الكتابة بالذكاء الاصطناعي للإنجليزية.',
       metaTitle:      'Grammarly Premium سنة — كتابة إنجليزية مثالية | العراق',
       metaDescription:'Grammarly Premium سنة بـ 65,000 د.ع في العراق. AI كتابة إنجليزية + تصحيح كامل. تفعيل فوري.',
@@ -685,7 +685,7 @@ async function main() {
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/d83b01/ffffff?text=Microsoft+365'],
-      imageAlts:      ['اشتراك Microsoft 365 Personal سنة في العراق — SoftoDev'],
+      imageAlts:      ['اشتراك Microsoft 365 Personal سنة في العراق — Quvenza'],
       description:    'Microsoft 365 Personal سنة كاملة. Word + Excel + PowerPoint + Outlook + 1TB OneDrive.',
       metaTitle:      'Microsoft 365 Personal سنة — Office كامل | العراق',
       metaDescription:'Microsoft 365 سنة بـ 90,000 د.ع في العراق. Word+Excel+PowerPoint+1TB OneDrive. تفعيل فوري.',
@@ -735,7 +735,7 @@ async function main() {
       stock:          50,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/1b2838/ffffff?text=Steam+Starter'],
-      imageAlts:      ['حساب Steam مبتدئ في العراق — SoftoDev'],
+      imageAlts:      ['حساب Steam مبتدئ في العراق — Quvenza'],
       description:    'حساب Steam جاهز بـ 10 ألعاب شائعة. مثالي للمبتدئين في عالم الألعاب PC بالعراق.',
       metaTitle:      'حساب Steam مبتدئ — 10 ألعاب PC | العراق',
       metaDescription:'حساب Steam مبتدئ بـ 35,000 د.ع. 10 ألعاب شائعة جاهزة للتشغيل. تسليم فوري في العراق.',
@@ -778,7 +778,7 @@ async function main() {
       stock:          30,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/1b2838/c7d5e0?text=Steam+Premium'],
-      imageAlts:      ['حساب Steam بريميوم في العراق — SoftoDev'],
+      imageAlts:      ['حساب Steam بريميوم في العراق — Quvenza'],
       description:    'حساب Steam بريميوم بـ 25+ لعبة شهيرة. مستوى Steam عالي، ساعات لعب، شارات.',
       metaTitle:      'حساب Steam بريميوم — 25+ لعبة | العراق',
       metaDescription:'حساب Steam بريميوم بـ 65,000 د.ع. 25+ لعبة شهيرة + مستوى عالي + شارات. تسليم فوري.',
@@ -825,9 +825,9 @@ async function main() {
       stock:          100,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/ff6a2b/000000?text=EA+FC+26'],
-      imageAlts:      ['EA FC 26 Standard في العراق — SoftoDev'],
+      imageAlts:      ['EA FC 26 Standard في العراق — Quvenza'],
       description:    'EA FC 26 نسخة Standard للـ PC أو PlayStation أو Xbox. أحدث لعبة كرة قدم من EA Sports.',
-      metaTitle:      'EA FC 26 Standard — شراء في العراق | SoftoDev',
+      metaTitle:      'EA FC 26 Standard — شراء في العراق | Quvenza',
       metaDescription:'EA FC 26 Standard بـ 75,000 د.ع في العراق. PC/PS/Xbox. تسليم الكود فورياً بعد الدفع.',
       metaKeywords:   'EA FC 26 العراق,FIFA 26 Iraq,شراء EA FC عراق,كرة قدم PS5 عراق,FC 26 Iraq',
       longDescription: `## EA FC 26 في العراق — أحدث لعبة كرة قدم
@@ -871,7 +871,7 @@ PC (EA App/Steam) — PlayStation 4/5 — Xbox One/Series X|S`,
       stock:          999,
       isFeatured:     false,
       images:         ['https://placehold.co/600x600/ffd700/000000?text=FUT+Coins+500K'],
-      imageAlts:      ['عملات EA FC 26 Ultimate Team 500K في العراق — SoftoDev'],
+      imageAlts:      ['عملات EA FC 26 Ultimate Team 500K في العراق — Quvenza'],
       description:    'عملات EA FC Ultimate Team 500,000. ابنِ فريق أحلامك بسرعة. تسليم آمن خلال 30 دقيقة.',
       metaTitle:      'عملات EA FC 26 Ultimate Team 500K | العراق',
       metaDescription:'عملات EA FC 26 FUT 500K بـ 25,000 د.ع في العراق. تسليم آمن وسريع خلال 30 دقيقة.',
@@ -960,8 +960,8 @@ PC (EA App/Steam) — PlayStation 4/5 — Xbox One/Series X|S`,
   }
 
   console.log('\n✅ Seed complete:');
-  console.log('   Admin    → admin@softodeviqstore.com / Admin@2026!');
-  console.log('   Customer → customer@softodeviqstore.com / Customer@2026!');
+  console.log('   Admin    → admin@quvenza.com / Admin@2026!');
+  console.log('   Customer → customer@quvenza.com / Customer@2026!');
   console.log('   Categories: 8');
   console.log(`   Products:   ${products.length}`);
   console.log('   Orders:     1');

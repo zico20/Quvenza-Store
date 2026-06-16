@@ -2,17 +2,17 @@ import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema } from '@/lib/schema';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenza.com';
 
 export const metadata: Metadata = {
   title: 'طرق الدفع — كاش، زين كاش، آسيا حوالة، فاست باي',
-  description: 'تعرف على كل طرق الدفع المتاحة في SoftoDev: كاش عند الاستلام في بغداد، زين كاش، آسيا حوالة، فاست باي. دفع آمن بالدينار العراقي 100% — لا حاجة لفيزا.',
+  description: 'تعرف على كل طرق الدفع المتاحة في Quvenza: كاش عند الاستلام في بغداد، زين كاش، آسيا حوالة، فاست باي. دفع آمن بالدينار العراقي 100% — لا حاجة لفيزا.',
   alternates: { canonical: `${BASE}/payment-methods` },
   openGraph: {
-    title: 'طرق الدفع — SoftoDev',
+    title: 'طرق الدفع — Quvenza',
     description: 'كاش، زين كاش، آسيا حوالة، فاست باي — بالدينار العراقي.',
     url: `${BASE}/payment-methods`,
-    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'SoftoDev' }],
+    images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza' }],
   },
 };
 

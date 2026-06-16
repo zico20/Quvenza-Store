@@ -1,8 +1,8 @@
 export const adminConfig = {
-  storeName: 'softodeviq',
-  adminTitle: 'softodeviq Admin',
+  storeName: 'quvenza',
+  adminTitle: 'quvenza Admin',
   support: {
-    email: 'support@softodeviqstore.com',
+    email: 'support@quvenza.com',
   },
   currency: 'USD',
   locale: 'en-US',

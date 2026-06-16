@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 /**
- * SoftoDev custom icon set — 40 hand-drawn line/solid SVG icons.
+ * Quvenza custom icon set — 40 hand-drawn line/solid SVG icons.
  * Stroke-based by default (1.7px, round caps), inherits `color`.
  * Ported 1:1 from the design prototypes (Icon.dc.html).
  *

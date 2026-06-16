@@ -42,13 +42,13 @@ const jetbrainsMono = JetBrains_Mono({
   preload: false,
 });
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenza.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: {
-    default: 'SoftoDev | اشتراكات ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
-    template: '%s | SoftoDev — اشتراكات رقمية العراق',
+    default: 'Quvenza | اشتراكات ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
+    template: '%s | Quvenza — اشتراكات رقمية العراق',
   },
   description:
     'أكبر متجر اشتراكات رقمية أصلية في العراق. اشترك في ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus بأسعار بالدينار العراقي — تفعيل فوري، ضمان كامل، دفع زين كاش وآسيا حوالة.',
@@ -61,12 +61,12 @@ export const metadata: Metadata = {
     'اشتراكات رقمية بغداد',
     'متجر اشتراكات العراق',
     'اشتراك شات جي بي تي عراق',
-    'softodeviqstore',
-    'سوفتوديف',
+    'quvenza',
+    'كوفينزا',
   ],
-  authors: [{ name: 'SoftoDev', url: BASE }],
-  creator: 'SoftoDev',
-  publisher: 'SoftoDev',
+  authors: [{ name: 'Quvenza', url: BASE }],
+  creator: 'Quvenza',
+  publisher: 'Quvenza',
   formatDetection: { email: false, telephone: false },
   alternates: {
     canonical: BASE,
@@ -77,14 +77,14 @@ export const metadata: Metadata = {
     locale: 'ar_IQ',
     alternateLocale: 'en_US',
     url: BASE,
-    siteName: 'SoftoDev',
-    title: 'SoftoDev — اشتراكات رقمية أصلية بأسعار عراقية',
+    siteName: 'Quvenza',
+    title: 'Quvenza — اشتراكات رقمية أصلية بأسعار عراقية',
     description: 'ChatGPT Plus، Canva Pro، CapCut Pro و أكثر — تسليم فوري، دفع بالدينار، ضمان كامل.',
-    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'SoftoDev — متجر الاشتراكات الرقمية في العراق' }],
+    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'Quvenza — متجر الاشتراكات الرقمية في العراق' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SoftoDev — اشتراكات رقمية في العراق',
+    title: 'Quvenza — اشتراكات رقمية في العراق',
     description: 'ChatGPT Plus، Canva Pro، CapCut Pro بالدينار العراقي — تفعيل فوري.',
     images: ['/og-image.svg'],
   },
