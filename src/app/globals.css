@@ -63,13 +63,10 @@
   --radius-lg: 16px;   /* cards */
   --radius-xl: 20px;   /* hero / feature panels */
 
-  /* ── Spacing (8px base) ── */
-  --spacing-xs:  4px;
-  --spacing-sm:  8px;
-  --spacing-md:  16px;
-  --spacing-lg:  24px;
-  --spacing-xl:  32px;
-  --spacing-2xl: 48px;
+  /* Spacing note: do NOT define --spacing-xs/sm/md/lg/xl/2xl here. In
+     Tailwind v4 those named keys also drive max-w / w / h utilities, so
+     overriding them silently breaks max-w-sm..2xl (collapsed containers).
+     Use the built-in 8px spacing scale (p-4, gap-6, ...) instead. */
 
   /* ── Motion ── */
   --duration-fast: 120ms;

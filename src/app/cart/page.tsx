@@ -13,7 +13,7 @@ export default function CartPage() {
   const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="w-full mx-auto px-4 py-8 max-w-2xl">
       <div className="flex items-center gap-4 mb-8">
         <Link href="/products" className="btn-ghost p-2">
           <Icon name="arrowLeft" className="h-5 w-5" size={20} />
