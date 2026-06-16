@@ -14,6 +14,19 @@ const STRINGS = {
     orders:     { en: 'Orders',     ar: 'طلباتي' },
     categories: { en: 'CATEGORIES', ar: 'الفئات' },
     all:        { en: 'All →',      ar: '→ الكل' },
+    // ── New navbar (separated two-level header) ──
+    store:          { en: 'Store',          ar: 'المتجر' },
+    offers:         { en: 'Offers',         ar: 'العروض' },
+    categoriesMenu: { en: 'Categories',     ar: 'الفئات' },
+    allCategories:  { en: 'All',            ar: 'الكل' },
+    browseAll:      { en: 'Browse all products', ar: 'تصفّح كل المنتجات' },
+    menuLabel:      { en: 'Menu',   ar: 'القائمة' },
+    // ── icon-only a11y labels ──
+    openMenu:    { en: 'Open menu',     ar: 'فتح القائمة' },
+    closeMenu:   { en: 'Close menu',    ar: 'إغلاق القائمة' },
+    openSearch:  { en: 'Open search',   ar: 'فتح البحث' },
+    closeSearch: { en: 'Close search',  ar: 'إغلاق البحث' },
+    items:       { en: 'items',         ar: 'منتج' },
     // Admin navigation keys
     overview:      { en: 'Overview',       ar: 'نظرة عامة' },
     products:      { en: 'Products',       ar: 'المنتجات' },

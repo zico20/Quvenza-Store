@@ -126,10 +126,16 @@ export const viewport: Viewport = {
   themeColor: '#2563EB',
 };
 
-async function getNavCategories(): Promise<{ id: string; name: string; slug: string }[]> {
+async function getNavCategories(): Promise<{ id: string; name: string; slug: string; count: number }[]> {
   try {
     const { getCategories } = await import('@/services/categories/category.service');
-    return await getCategories();
+    const cats = await getCategories();
+    return cats.map((c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+      count: (c as { _count?: { products?: number } })._count?.products ?? 0,
+    }));
   } catch {
     return [];
   }
