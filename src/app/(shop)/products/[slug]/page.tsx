@@ -7,19 +7,16 @@ import ProductDetailClient, { ProductNotFound } from './ProductDetailClient';
 
 const BASE = 'https://softodeviqstore.com';
 
+// Rendered on demand: product data comes from the DB and the shared layout
+// reads the language cookie, so this route must be dynamic (a static render
+// that touches cookies() throws "static to dynamic" in Next.js 16).
+export const dynamic = 'force-dynamic';
+
 async function fetchProduct(slug: string): Promise<Product | null> {
   try {
     const { getProductBySlug } = await import('@/services/products/product.service');
     return await getProductBySlug(slug) as unknown as Product;
   } catch { return null; }
-}
-
-export async function generateStaticParams() {
-  try {
-    const { getProducts } = await import('@/services/products/product.service');
-    const result = await getProducts({ page: 1, limit: 500, skip: 0 }, {});
-    return result.products.map((p) => ({ slug: p.slug }));
-  } catch { return []; }
 }
 
 // Builds description ≤ 170 chars — no USD, Arabic CTA
