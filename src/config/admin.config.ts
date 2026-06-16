@@ -2,7 +2,7 @@ export const adminConfig = {
   storeName: 'quvenza',
   adminTitle: 'quvenza Admin',
   support: {
-    email: 'support@quvenza.com',
+    email: 'support@quvenzaiq.com',
   },
   currency: 'USD',
   locale: 'en-US',

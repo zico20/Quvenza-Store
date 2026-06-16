@@ -1,4 +1,4 @@
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 const ORG_ID = `${BASE}/#organization`;
 
 export interface ProductSchemaInput {
@@ -36,11 +36,11 @@ export function organizationSchema() {
     foundingDate: '2026',
     founder: {
       '@type': 'Organization',
-      '@id': 'https://quvenza.com/#organization',
+      '@id': 'https://quvenzaiq.com/#organization',
       name: 'QuvenzaIq',
       alternateName: 'quvenza',
-      url: 'https://quvenza.com',
-      logo: 'https://quvenza.com/logo.jpeg',
+      url: 'https://quvenzaiq.com',
+      logo: 'https://quvenzaiq.com/logo.jpeg',
       description: 'شركة برمجة عراقية متخصصة في تطوير المواقع والمتاجر الإلكترونية وأنظمة ERP/CRM',
       foundingDate: '2013',
       foundingLocation: {
@@ -69,15 +69,15 @@ export function organizationSchema() {
     },
     parentOrganization: {
       '@type': 'Organization',
-      '@id': 'https://quvenza.com/#organization',
+      '@id': 'https://quvenzaiq.com/#organization',
       name: 'QuvenzaIq',
-      url: 'https://quvenza.com',
+      url: 'https://quvenzaiq.com',
     },
     creator: {
       '@type': 'Organization',
-      '@id': 'https://quvenza.com/#organization',
+      '@id': 'https://quvenzaiq.com/#organization',
       name: 'QuvenzaIq',
-      url: 'https://quvenza.com',
+      url: 'https://quvenzaiq.com',
     },
     foundingLocation: {
       '@type': 'Place',
@@ -276,7 +276,7 @@ export function localBusinessSchema() {
     logo: `${BASE}/logo.png`,
     image: `${BASE}/og-image.svg`,
     telephone: '+9647700000000',
-    email: 'support@quvenza.com',
+    email: 'support@quvenzaiq.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'بغداد',

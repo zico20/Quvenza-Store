@@ -2,7 +2,7 @@
 Founder: Ghaith
 Company: Quvenza
 Location: Baghdad, Iraq
-Contact: support [at] quvenza.com
+Contact: support [at] quvenzaiq.com
 Telegram: @quvenza
 
 /* SITE */

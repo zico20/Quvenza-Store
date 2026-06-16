@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 
 async function fetchProducts(): Promise<{ slug: string; updatedAt: string }[]> {
   try {

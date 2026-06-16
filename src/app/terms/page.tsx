@@ -5,7 +5,7 @@ import { storeConfig } from '@/config/store.config';
 export const metadata: Metadata = {
   title: 'الشروط والأحكام | Quvenza',
   description: 'شروط وأحكام الاستخدام لمتجر Quvenza — قواعد الشراء والدفع والضمان وحقوق المستخدم في العراق.',
-  alternates: { canonical: 'https://quvenza.com/terms' },
+  alternates: { canonical: 'https://quvenzaiq.com/terms' },
 };
 
 const SECTION: React.CSSProperties = { marginBottom: 36 };
@@ -26,7 +26,7 @@ export default function TermsPage() {
       <div style={SECTION}>
         <h2 style={H2}>١. القبول والموافقة</h2>
         <p style={P}>
-          باستخدامك موقع <strong style={{ color: '#111827' }}>quvenza.com</strong> أو إتمامك أي عملية
+          باستخدامك موقع <strong style={{ color: '#111827' }}>quvenzaiq.com</strong> أو إتمامك أي عملية
           شراء، فإنك تقرّ بأنك قرأت هذه الشروط وفهمتها ووافقت عليها بالكامل. إذا كنت تمثّل شركة أو
           مؤسسة، فإنك تؤكد صلاحيتك القانونية للموافقة باسمها.
         </p>

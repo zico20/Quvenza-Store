@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 
 export const metadata: Metadata = {
   title: 'اتصل بنا — تواصل مع متجر Quvenza',

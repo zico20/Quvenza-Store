@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, howToSchema } from '@/lib/schema';
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 
 export const metadata: Metadata = {
   title: 'كيف يعمل المتجر — خطوات بسيطة للحصول على اشتراكك',

@@ -5,7 +5,7 @@ import JsonLd from '@/components/seo/JsonLd';
 import { productSchema, breadcrumbSchema, faqSchema, getDefaultFAQs } from '@/lib/schema';
 import ProductDetailClient, { ProductNotFound } from './ProductDetailClient';
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 
 // Rendered on demand: product data comes from the DB and the shared layout
 // reads the language cookie, so this route must be dynamic (a static render

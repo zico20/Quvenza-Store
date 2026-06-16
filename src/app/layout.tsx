@@ -42,7 +42,7 @@ const jetbrainsMono = JetBrains_Mono({
   preload: false,
 });
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),

@@ -12,11 +12,11 @@ export const metadata: Metadata = {
   title: 'Quvenza | اشترِ ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
   description:
     'أكبر متجر اشتراكات رقمية في العراق — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus. تفعيل فوري خلال 30 دقيقة، دفع بالدينار العراقي، ضمان كامل.',
-  alternates: { canonical: 'https://quvenza.com' },
+  alternates: { canonical: 'https://quvenzaiq.com' },
   openGraph: {
     title: 'Quvenza — اشتراكات ChatGPT Plus · Canva Pro في العراق',
     description: 'اشترِ ChatGPT Plus، Canva Pro، CapCut Pro بالدينار العراقي — تفعيل فوري وضمان كامل.',
-    url: 'https://quvenza.com',
+    url: 'https://quvenzaiq.com',
   },
 };
 

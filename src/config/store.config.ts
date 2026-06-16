@@ -4,8 +4,8 @@ export const storeConfig = {
 
   // ── SEO ──────────────────────────────────────────────────────────
   seo: {
-    domain: 'quvenza.com',
-    siteUrl: 'https://quvenza.com',
+    domain: 'quvenzaiq.com',
+    siteUrl: 'https://quvenzaiq.com',
     ogImage: '/og-image.svg',
     organizationLogo: '/logo.png',
     defaultDescription:
@@ -18,7 +18,7 @@ export const storeConfig = {
     arabicName: 'كوفينزا',
     foundingDate: '2026',
     phone: '+9647700000000',
-    email: 'support@quvenza.com',
+    email: 'support@quvenzaiq.com',
     whatsapp: '+9647700000000',
     paymentMethods: ['Cash on Delivery', 'ZainCash', 'AsiaHawala', 'FastPay'] as string[],
     socialMedia: {
@@ -33,7 +33,7 @@ export const storeConfig = {
 
   // ── Support (legacy — keep for Footer/existing components) ────────
   support: {
-    email: 'support@quvenza.com',
+    email: 'support@quvenzaiq.com',
     phone: '+964 770 000 0000',
     hours: 'Sun–Thu, 9am–6pm',
   },

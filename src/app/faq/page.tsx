@@ -3,7 +3,7 @@ import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, faqSchema, speakableSpec } from '@/lib/schema';
 import type { FAQItem } from '@/lib/schema';
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 const WHATSAPP = '9647700000000';
 
 export const metadata: Metadata = {

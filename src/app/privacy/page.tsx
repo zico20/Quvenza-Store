@@ -5,7 +5,7 @@ import { storeConfig } from '@/config/store.config';
 export const metadata: Metadata = {
   title: 'سياسة الخصوصية | Quvenza',
   description: 'سياسة الخصوصية وحماية البيانات في متجر Quvenza — كيف نتعامل مع معلوماتك الشخصية وبيانات الدفع.',
-  alternates: { canonical: 'https://quvenza.com/privacy' },
+  alternates: { canonical: 'https://quvenzaiq.com/privacy' },
 };
 
 const SECTION: React.CSSProperties = { marginBottom: 36 };
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
         <p style={P}>
           يُقدّر متجر <strong style={{ color: '#111827' }}>Quvenza</strong> ثقتك الكاملة بنا، ويلتزم بحماية خصوصيتك وبياناتك
           الشخصية بأعلى معايير الأمان. تُوضّح هذه السياسة كيفية جمع معلوماتك واستخدامها وحمايتها عند استخدامك
-          موقع <strong style={{ color: '#111827' }}>quvenza.com</strong>.
+          موقع <strong style={{ color: '#111827' }}>quvenzaiq.com</strong>.
         </p>
         <p style={P}>
           باستخدامك الموقع أو إتمامك أي عملية شراء، فإنك توافق على شروط هذه السياسة. إذا كنت لا توافق على أي

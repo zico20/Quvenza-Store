@@ -20,11 +20,11 @@ async function main() {
   const customerPassword = await bcrypt.hash('Customer@2026!', 12);
 
   const admin = await prisma.user.create({
-    data: { name: 'Ghaith Admin', email: 'admin@quvenza.com', password: adminPassword, role: 'ADMIN' },
+    data: { name: 'Ghaith Admin', email: 'admin@quvenzaiq.com', password: adminPassword, role: 'ADMIN' },
   });
 
   const customer = await prisma.user.create({
-    data: { name: 'عميل تجريبي', email: 'customer@quvenza.com', password: customerPassword, role: 'USER' },
+    data: { name: 'عميل تجريبي', email: 'customer@quvenzaiq.com', password: customerPassword, role: 'USER' },
   });
 
   console.log(`✅ Users: ${admin.email}, ${customer.email}`);
@@ -960,8 +960,8 @@ PC (EA App/Steam) — PlayStation 4/5 — Xbox One/Series X|S`,
   }
 
   console.log('\n✅ Seed complete:');
-  console.log('   Admin    → admin@quvenza.com / Admin@2026!');
-  console.log('   Customer → customer@quvenza.com / Customer@2026!');
+  console.log('   Admin    → admin@quvenzaiq.com / Admin@2026!');
+  console.log('   Customer → customer@quvenzaiq.com / Customer@2026!');
   console.log('   Categories: 8');
   console.log(`   Products:   ${products.length}`);
   console.log('   Orders:     1');

@@ -6,7 +6,7 @@ import { getServerLang, t, getCategoryName } from '@/lib/i18n';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, productListSchema } from '@/lib/schema';
 
-const BASE = 'https://quvenza.com';
+const BASE = 'https://quvenzaiq.com';
 
 export const revalidate = 3600;
 

@@ -113,7 +113,7 @@ export default async function Footer() {
               <>
                 طُوّر بواسطة{' '}
                 <a
-                  href="https://quvenza.com"
+                  href="https://quvenzaiq.com"
                   target="_blank"
                   rel="noopener"
                   title="QuvenzaIq - شركة برمجة في بغداد"
@@ -127,7 +127,7 @@ export default async function Footer() {
               <>
                 Developed by{' '}
                 <a
-                  href="https://quvenza.com"
+                  href="https://quvenzaiq.com"
                   target="_blank"
                   rel="noopener"
                   title="QuvenzaIq - Software Development Company in Baghdad"
@@ -163,7 +163,7 @@ export default async function Footer() {
                 <>
                   طُوّر بواسطة{' '}
                   <a
-                    href="https://quvenza.com"
+                    href="https://quvenzaiq.com"
                     target="_blank"
                     rel="noopener"
                     title="QuvenzaIq - شركة برمجة في بغداد"
@@ -176,7 +176,7 @@ export default async function Footer() {
                 <>
                   Developed by{' '}
                   <a
-                    href="https://quvenza.com"
+                    href="https://quvenzaiq.com"
                     target="_blank"
                     rel="noopener"
                     title="QuvenzaIq - Software Development Company in Baghdad"
