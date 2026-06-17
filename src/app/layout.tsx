@@ -6,6 +6,8 @@ import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/cart/CartDrawer';
 import LangInitializer from '@/components/layout/LangInitializer';
 import StoreChrome from '@/components/layout/StoreChrome';
+import type { NavData } from '@/components/layout/header/types';
+import type { DeviceKind } from '@/types';
 
 // ── Fonts via next/font (no external CSS request, zero CLS) ──────
 const cairo = Cairo({
@@ -127,23 +129,38 @@ export const viewport: Viewport = {
   themeColor: '#2563EB',
 };
 
-async function getNavCategories(): Promise<{ id: string; name: string; slug: string; count: number }[]> {
+async function getNavData(): Promise<NavData> {
   try {
+    const { getBrands } = await import('@/services/brands/brand.service');
     const { getCategories } = await import('@/services/categories/category.service');
-    const cats = await getCategories();
-    return cats.map((c) => ({
-      id: c.id,
-      name: c.name,
-      slug: c.slug,
-      count: (c as { _count?: { products?: number } })._count?.products ?? 0,
+    const [brands, cats] = await Promise.all([getBrands(), getCategories()]);
+
+    const navBrands = brands.map((b) => ({
+      id: b.id,
+      name: b.name,
+      nameAr: b.nameAr,
+      slug: b.slug,
+      count: (b as { _count?: { products?: number } })._count?.products ?? 0,
     }));
+
+    // Aggregate product counts per device kind across all brands.
+    const kindCounts: Record<string, number> = {};
+    for (const c of cats) {
+      const kind = (c as { kind?: string }).kind;
+      const count = (c as { _count?: { products?: number } })._count?.products ?? 0;
+      if (kind) kindCounts[kind] = (kindCounts[kind] ?? 0) + count;
+    }
+    const ORDER: DeviceKind[] = ['PHONE', 'LAPTOP', 'TABLET', 'HEADPHONE'];
+    const kinds = ORDER.filter((k) => kindCounts[k]).map((k) => ({ kind: k, count: kindCounts[k] }));
+
+    return { brands: navBrands, kinds };
   } catch {
-    return [];
+    return { brands: [], kinds: [] };
   }
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const navCategories = await getNavCategories();
+  const navData = await getNavData();
 
   return (
     <html lang="ar" dir="rtl" className={`${cairo.variable} ${hanken.variable} ${plexArabic.variable} ${jetbrainsMono.variable}`}>
@@ -153,7 +170,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="flex flex-col min-h-screen" style={{ background: '#F7F8FA', color: '#111827' }}>
         <LangInitializer />
         <StoreChrome
-          header={<Header navCategories={navCategories} />}
+          header={<Header navData={navData} />}
           footer={<Footer />}
           cartDrawer={<CartDrawer />}
         >

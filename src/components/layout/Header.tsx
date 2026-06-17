@@ -13,13 +13,13 @@ import CategoriesMenu from './header/CategoriesMenu';
 import CategoryChips from './header/CategoryChips';
 import MobileDrawer from './header/MobileDrawer';
 import SearchOverlay from './header/SearchOverlay';
-import type { NavCategory } from './header/types';
+import type { NavData } from './header/types';
 
 interface HeaderProps {
-  navCategories: NavCategory[];
+  navData: NavData;
 }
 
-export default function Header({ navCategories }: HeaderProps) {
+export default function Header({ navData }: HeaderProps) {
   const pathname = usePathname();
   const { items, toggleDrawer } = useCartStore();
   const wishlistCount = useWishlistStore((s) => s.items.length);
@@ -35,10 +35,10 @@ export default function Header({ navCategories }: HeaderProps) {
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cartCount = items.reduce((s, i) => s + i.quantity, 0);
-  const cats = navCategories.slice(0, 6);
 
   const mainLinks = [
     { label: t('nav.store'),   href: '/products' },
+    { label: t('brand.title'), href: '/brands' },
     { label: t('nav.offers'),  href: '/products?tag=sale' },
     { label: t('nav.support'), href: '/contact' },
   ];
@@ -125,7 +125,7 @@ export default function Header({ navCategories }: HeaderProps) {
               {t('nav.categoriesMenu')}
               <Icon name="chevron" size={14} className={`transition-transform ${catOpen ? 'rotate-180' : ''}`} />
             </button>
-            <CategoriesMenu categories={cats} open={catOpen} onClose={() => setCatOpen(false)} triggerId={catTriggerId} />
+            <CategoriesMenu data={navData} open={catOpen} onClose={() => setCatOpen(false)} triggerId={catTriggerId} />
           </div>
 
           {/* Main links */}
@@ -197,12 +197,12 @@ export default function Header({ navCategories }: HeaderProps) {
           </div>
         </div>
 
-        {/* Mobile category chips */}
-        <CategoryChips categories={cats} />
+        {/* Mobile device-type chips */}
+        <CategoryChips data={navData} />
       </header>
 
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} mainLinks={mainLinks} />
+      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} mainLinks={mainLinks} navData={navData} />
     </>
   );
 }

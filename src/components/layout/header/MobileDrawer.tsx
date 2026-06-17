@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Icon } from '@/components/ui/Icon';
 import { useLang } from '@/hooks/useLang';
+import { localizedName, deviceKindLabel } from '@/lib/i18n';
+import { deviceKindIcon } from './categoryIcons';
+import type { NavData } from './types';
 
 interface MainLink { label: string; href: string }
 
@@ -12,11 +15,12 @@ interface Props {
   open: boolean;
   onClose: () => void;
   mainLinks: MainLink[];
+  navData: NavData;
 }
 
 /** Mobile slide-out drawer: main links + account shortcuts + language switch.
  *  Focus-trapped, Escape-closable, mirrors to the leading edge under RTL. */
-export default function MobileDrawer({ open, onClose, mainLinks }: Props) {
+export default function MobileDrawer({ open, onClose, mainLinks, navData }: Props) {
   const { t, lang, isRTL, toggleLang } = useLang();
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -79,7 +83,7 @@ export default function MobileDrawer({ open, onClose, mainLinks }: Props) {
           </Link>
         </div>
 
-        {/* Main links */}
+        {/* Main links + browse-by sections */}
         <nav className="flex-1 overflow-y-auto py-2">
           {mainLinks.map((item) => {
             const active = pathname === item.href.split('?')[0];
@@ -99,6 +103,48 @@ export default function MobileDrawer({ open, onClose, mainLinks }: Props) {
               </Link>
             );
           })}
+
+          {/* Browse by device type */}
+          {navData.kinds.length > 0 && (
+            <div className="px-5 pt-5 pb-2">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-text-muted mb-2.5">{t('brand.deviceTypes')}</p>
+              <div className="grid grid-cols-2 gap-2">
+                {navData.kinds.map(({ kind }) => (
+                  <Link
+                    key={kind}
+                    href={`/products?kind=${kind}`}
+                    onClick={onClose}
+                    className="flex items-center gap-2 rounded-lg bg-bg-elevated px-3 py-2.5 text-sm font-medium text-text-secondary"
+                  >
+                    <Icon name={deviceKindIcon(kind)} size={16} className="text-accent" />
+                    {deviceKindLabel(kind, lang)}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Browse by brand */}
+          {navData.brands.length > 0 && (
+            <div className="px-5 pt-3 pb-4">
+              <div className="flex items-center justify-between mb-2.5">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-text-muted">{t('brand.shopBy')}</p>
+                <Link href="/brands" onClick={onClose} className="text-xs font-semibold text-accent">{t('brand.allBrands')}</Link>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {navData.brands.slice(0, 10).map((b) => (
+                  <Link
+                    key={b.id}
+                    href={`/brands/${b.slug}`}
+                    onClick={onClose}
+                    className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-text-secondary"
+                  >
+                    {localizedName(b.name, b.nameAr, lang)}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </nav>
 
         {/* Language switch */}
