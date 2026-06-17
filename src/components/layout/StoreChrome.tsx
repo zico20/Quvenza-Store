@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import CompareBar from '@/components/compare/CompareBar';
 
 interface StoreChromeProps {
   header: ReactNode;
@@ -29,6 +30,7 @@ export default function StoreChrome({
       <main className="flex-1">{children}</main>
       {footer}
       {cartDrawer}
+      <CompareBar />
     </>
   );
 }
