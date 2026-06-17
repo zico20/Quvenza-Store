@@ -14,7 +14,7 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
 
 export async function createOrder(data: {
   userId: string;
-  items: { productId: string; quantity: number }[];
+  items: { productId: string; quantity: number; variantId?: string }[];
   shippingAddress: object;
   paymentMethod: string;
 }) {
@@ -25,26 +25,50 @@ export async function createOrder(data: {
   });
   if (products.length !== data.items.length) throw new AppError('One or more products unavailable.', 400);
 
-  const orderItems = data.items.map((item) => ({
-    productId: item.productId,
-    quantity: item.quantity,
-    price: products.find((pr) => pr.id === item.productId)!.price,
-  }));
+  // Fetch any referenced variants for price + name snapshot + stock decrement.
+  const variantIds = data.items.map((i) => i.variantId).filter((v): v is string => !!v);
+  const variants = variantIds.length
+    ? await prisma.variant.findMany({ where: { id: { in: variantIds } } })
+    : [];
+  if (variants.length !== variantIds.length) throw new AppError('One or more variants unavailable.', 400);
+
+  const orderItems = data.items.map((item) => {
+    const variant = item.variantId ? variants.find((v) => v.id === item.variantId)! : undefined;
+    return {
+      productId: item.productId,
+      variantId: item.variantId ?? null,
+      variantName: variant?.name ?? null,
+      quantity: item.quantity,
+      // Variant price takes precedence; fall back to the product base price.
+      price: variant ? variant.price : products.find((pr) => pr.id === item.productId)!.price,
+    };
+  });
   const total = orderItems.reduce((s, i) => s + Number(i.price) * i.quantity, 0);
 
   const lowStockProducts: Array<{ id: string; name: string; stock: number }> = [];
 
   const order = await prisma.$transaction(async (tx) => {
     // Atomic stock decrement: the WHERE clause acts as an optimistic lock.
-    // If stock drops below the required quantity concurrently, updateMany returns 0 and we abort.
+    // Decrement variant stock when a variant is chosen, else product stock.
     for (const item of data.items) {
-      const updated = await tx.product.updateMany({
-        where: { id: item.productId, stock: { gte: item.quantity }, isActive: true },
-        data: { stock: { decrement: item.quantity } },
-      });
-      if (updated.count === 0) {
-        const prod = products.find((p) => p.id === item.productId)!;
-        throw new AppError(`"${prod.name}" is out of stock or has insufficient quantity.`, 409);
+      if (item.variantId) {
+        const updated = await tx.variant.updateMany({
+          where: { id: item.variantId, stock: { gte: item.quantity } },
+          data: { stock: { decrement: item.quantity } },
+        });
+        if (updated.count === 0) {
+          const prod = products.find((p) => p.id === item.productId)!;
+          throw new AppError(`"${prod.name}" is out of stock or has insufficient quantity.`, 409);
+        }
+      } else {
+        const updated = await tx.product.updateMany({
+          where: { id: item.productId, stock: { gte: item.quantity }, isActive: true },
+          data: { stock: { decrement: item.quantity } },
+        });
+        if (updated.count === 0) {
+          const prod = products.find((p) => p.id === item.productId)!;
+          throw new AppError(`"${prod.name}" is out of stock or has insufficient quantity.`, 409);
+        }
       }
       const updatedProduct = await tx.product.findUnique({ where: { id: item.productId } });
       if (updatedProduct && updatedProduct.stock <= 5) {
@@ -178,10 +202,18 @@ export async function updateOrderStatus(
       });
       if (orderWithItems) {
         for (const item of orderWithItems.items) {
-          await tx.product.update({
-            where: { id: item.productId },
-            data: { stock: { increment: item.quantity } },
-          });
+          // Restore to the variant when the line was variant-specific, else the product.
+          if (item.variantId) {
+            await tx.variant.update({
+              where: { id: item.variantId },
+              data: { stock: { increment: item.quantity } },
+            });
+          } else {
+            await tx.product.update({
+              where: { id: item.productId },
+              data: { stock: { increment: item.quantity } },
+            });
+          }
         }
       }
     }

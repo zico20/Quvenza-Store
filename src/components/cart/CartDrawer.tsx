@@ -13,7 +13,7 @@ export default function CartDrawer() {
   const { items, isOpen, toggleDrawer } = useCartStore();
   const { t, isRTL } = useLang();
   const { currency, formatPrice } = useCurrency();
-  const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
+  const total = items.reduce((s, i) => s + Number(i.variant?.price ?? i.product.price) * i.quantity, 0);
   const itemCount = items.reduce((s, i) => s + i.quantity, 0);
   // Secondary currency line (always show the other of USD/IQD as a trust cue)
   const secondary = fmt(total, currency === 'USD' ? 'IQD' : 'USD', storeConfig.exchangeRates.IQD_PER_USD);
@@ -70,7 +70,7 @@ export default function CartDrawer() {
             </div>
           ) : (
             <div>
-              {items.map((item) => <CartItem key={item.productId} item={item} />)}
+              {items.map((item) => <CartItem key={`${item.productId}:${item.variantId ?? ''}`} item={item} />)}
             </div>
           )}
         </div>

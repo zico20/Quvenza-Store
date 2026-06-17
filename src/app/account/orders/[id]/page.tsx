@@ -86,16 +86,13 @@ export default function OrderDetailPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-text-primary truncate">{item.product?.name ?? '—'}</p>
-                  <p className="text-[11px] text-text-muted">× {item.quantity}</p>
+                  {item.variantName && <p className="text-[10px] text-text-muted truncate">{item.variantName}</p>}
+                  <p className="text-[11px] text-text-muted ltr-nums">× {item.quantity}</p>
                 </div>
                 <p className="text-xs font-semibold text-text-primary flex-shrink-0 ltr-nums">
                   {formatPrice(Number(item.price) * item.quantity)}
                 </p>
               </div>
-              {/* Digital delivery: activation code (shown once the order is delivered) */}
-              {order.status === 'DELIVERED' && (
-                <ActivationCode orderId={order.id} itemId={item.id} t={t} />
-              )}
             </div>
           ))}
         </div>
@@ -148,48 +145,6 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-    </div>
-  );
-}
-
-// Digital activation code — masked by default, with reveal/hide + copy.
-// No credential is persisted on OrderItem; the displayed token is a derived
-// reference and the note points users to their real delivery channel.
-function ActivationCode({ orderId, itemId, t }: { orderId: string; itemId: string; t: (k: string) => string }) {
-  const [revealed, setRevealed] = useState(false);
-  const [copied, setCopied] = useState(false);
-  // Derived, deterministic display token (not a real secret) in XXXX-XXXX-XXXX form.
-  const seed = (orderId + itemId).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-  const code = `${seed.slice(0, 4)}-${seed.slice(4, 8)}-${seed.slice(8, 12)}`.padEnd(14, 'X');
-
-  function copy() {
-    navigator.clipboard?.writeText(code).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    });
-  }
-
-  return (
-    <div className="mt-2 ml-11 rounded-lg border border-border bg-bg-elevated px-3 py-2">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] uppercase tracking-wide text-text-muted font-semibold">
-          {t('orders.activationCode') !== 'orders.activationCode' ? t('orders.activationCode') : 'كود التفعيل'}
-        </span>
-        <div className="flex items-center gap-1.5">
-          <button onClick={() => setRevealed((r) => !r)} className="text-text-muted hover:text-accent transition-colors" aria-label="reveal">
-            <Icon name="eye" size={15} />
-          </button>
-          <button onClick={copy} className="text-text-muted hover:text-accent transition-colors" aria-label="copy">
-            <Icon name={copied ? 'check' : 'file'} size={15} />
-          </button>
-        </div>
-      </div>
-      <code className="mono ltr-nums block mt-1 text-sm font-semibold text-text-primary tracking-wider">
-        {revealed ? code : '••••-••••-••••'}
-      </code>
-      <p className="text-[10px] text-text-muted mt-1">
-        {t('orders.codeSentNote') !== 'orders.codeSentNote' ? t('orders.codeSentNote') : 'أُرسل أيضاً إلى بريدك / واتساب'}
-      </p>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function CartPage() {
   const { items } = useCartStore();
   const { t } = useLang();
   const { formatPrice } = useCurrency();
-  const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
+  const total = items.reduce((s, i) => s + Number(i.variant?.price ?? i.product.price) * i.quantity, 0);
 
   return (
     <div className="w-full mx-auto px-4 py-8 max-w-2xl">
@@ -31,7 +31,7 @@ export default function CartPage() {
       ) : (
         <div>
           <div className="bg-bg-surface rounded-lg border border-border p-4 mb-6">
-            {items.map((i) => <CartItem key={i.productId} item={i} />)}
+            {items.map((i) => <CartItem key={`${i.productId}:${i.variantId ?? ''}`} item={i} />)}
           </div>
           <div className="bg-bg-surface rounded-lg border border-border p-4">
             <div className="flex justify-between items-center mb-4">

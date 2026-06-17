@@ -62,7 +62,7 @@ export const cartApi = {
 };
 
 export const orders = {
-  create: (data: { items: { productId: string; quantity: number }[]; shippingAddress: Address; paymentMethod: string }) =>
+  create: (data: { items: { productId: string; quantity: number; variantId?: string }[]; shippingAddress: Address; paymentMethod: string }) =>
     apiClient.post<ApiResponse<Order>>('/orders', data).then((r) => r.data),
   getAll: (params?: Record<string, unknown>) =>
     apiClient.get<PaginatedResponse<Order>>('/orders', { params }).then((r) => r.data),

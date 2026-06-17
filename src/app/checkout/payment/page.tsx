@@ -13,7 +13,7 @@ export default function PaymentPage() {
   const { items, clearCart } = useCartStore();
   const { t } = useLang();
   const { formatPrice } = useCurrency();
-  const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
+  const total = items.reduce((s, i) => s + Number(i.variant?.price ?? i.product.price) * i.quantity, 0);
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -34,7 +34,7 @@ export default function PaymentPage() {
       }
 
       const response = await orders.create({
-        items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
+        items: items.map((i) => ({ productId: i.productId, quantity: i.quantity, variantId: i.variantId })),
         shippingAddress: shippingAddress as Address,
         paymentMethod,
       });
