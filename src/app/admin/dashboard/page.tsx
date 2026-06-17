@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { TrendingUp, ShoppingBag, Package, Users, AlertTriangle } from 'lucide-react';
 import StatsCard from '@/components/admin/dashboard/StatsCard';
 import RevenueChart from '@/components/admin/dashboard/RevenueChart';
 import RecentOrders from '@/components/admin/dashboard/RecentOrders';

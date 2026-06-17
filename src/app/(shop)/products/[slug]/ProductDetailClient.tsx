@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Product } from '@/types';
-import { Heart, ShoppingCart, ArrowLeft } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { showToast } from '@/lib/toast';
@@ -42,7 +42,7 @@ export function ProductNotFound() {
         <h2 className="text-xl font-semibold text-text-primary mb-2">{t('product.notFound')}</h2>
         <p className="text-text-muted mb-6">{t('product.notFoundSub')}</p>
         <button onClick={() => router.back()} className="btn-primary flex items-center gap-2 mx-auto">
-          <ArrowLeft size={16} className="rtl-flip" /> {t('product.goBack')}
+          <Icon name="arrowLeft" size={16} className="rtl-flip" /> {t('product.goBack')}
         </button>
       </div>
     </div>
@@ -183,7 +183,7 @@ export default function ProductDetailClient({ product }: Props) {
                 {adding ? (
                   <><div className="w-4 h-4 border-2 border-bg-base/30 border-t-bg-base rounded-full animate-spin" />{t('product.addingToCart')}</>
                 ) : (
-                  <><ShoppingCart size={18} />{t('common.addToCart')}</>
+                  <><Icon name="cart" size={18} />{t('common.addToCart')}</>
                 )}
               </button>
               <button
@@ -191,28 +191,31 @@ export default function ProductDetailClient({ product }: Props) {
                 aria-label={inWishlist ? t('wishlist.remove') : t('wishlist.add')}
                 className={`btn-secondary px-4 py-3 rounded-md border transition-all ${inWishlist ? 'border-error/40 text-error hover:bg-error/10' : 'border-border hover:border-border-strong'}`}
               >
-                <Heart size={20} className={inWishlist ? 'fill-error' : ''} />
+                <Icon name={inWishlist ? 'heartFill' : 'heart'} size={20} className={inWishlist ? 'fill-error' : ''} />
               </button>
             </div>
 
             {/* Trust signals — the four conversion cues */}
             <div className="grid grid-cols-2 gap-2 pt-2">
-              {[
-                { icon: '⚡', text: 'تفعيل خلال 30 دقيقة' },
-                { icon: '✅', text: 'اشتراك أصلي 100%' },
-                { icon: '🛡️', text: 'ضمان كامل' },
-                { icon: '💳', text: 'دفع بالدينار العراقي' },
-              ].map((item) => (
+              {([
+                { icon: 'bolt', text: 'تفعيل خلال 30 دقيقة' },
+                { icon: 'checkCircle', text: 'اشتراك أصلي 100%' },
+                { icon: 'shield', text: 'ضمان كامل' },
+                { icon: 'bank', text: 'دفع بالدينار العراقي' },
+              ] as const).map((item) => (
                 <div
                   key={item.text}
                   className="flex items-center gap-2 rounded-lg border border-border bg-bg-surface px-3 py-2.5 text-xs text-text-secondary"
                 >
-                  <span className="text-sm">{item.icon}</span> {item.text}
+                  <Icon name={item.icon} size={16} className="text-accent shrink-0" /> {item.text}
                 </div>
               ))}
             </div>
           </div>
         </div>
+
+        {/* ── Tabs: Description / Features / FAQ / Reviews ── */}
+        <ProductTabs product={product} t={t} />
       </div>
 
       {/* Spacer so the sticky bar never covers content on mobile */}
@@ -228,10 +231,96 @@ export default function ProductDetailClient({ product }: Props) {
           disabled={product.stock === 0 || adding}
           className="btn-accent flex-1 py-3 min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          <ShoppingCart size={18} />
+          <Icon name="cart" size={18} />
           {product.stock === 0 ? t('common.outOfStock') : t('common.addToCart')}
         </button>
       </div>
+    </div>
+  );
+}
+
+// ── Product tabs (Description / Features / FAQ / Reviews) with FAQ accordion ──
+function ProductTabs({ product, t }: { product: Product; t: (k: string) => string }) {
+  const tabs = [
+    { id: 'description', label: t('product.tabs.description') !== 'product.tabs.description' ? t('product.tabs.description') : 'الوصف' },
+    { id: 'features', label: t('product.tabs.features') !== 'product.tabs.features' ? t('product.tabs.features') : 'المميزات' },
+    { id: 'faq', label: t('product.tabs.faq') !== 'product.tabs.faq' ? t('product.tabs.faq') : 'الأسئلة الشائعة' },
+    { id: 'reviews', label: t('product.tabs.reviews') !== 'product.tabs.reviews' ? t('product.tabs.reviews') : 'التقييمات' },
+  ] as const;
+  const [active, setActive] = useState<typeof tabs[number]['id']>('description');
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  const features = [
+    'تفعيل فوري خلال 30 دقيقة من تأكيد الطلب',
+    'اشتراك أصلي 100% مع ضمان كامل طوال المدة',
+    'دعم فني عبر واتساب وتيليجرام على مدار الساعة',
+    'دفع بالدينار العراقي — زين كاش، آسيا حوالة، أو عند الاستلام',
+  ];
+  const faqs = [
+    { q: 'كم يستغرق التفعيل؟', a: 'يتم التفعيل عادة خلال 30 دقيقة من تأكيد الدفع، وقد يصل فوراً.' },
+    { q: 'هل الاشتراك أصلي؟', a: 'نعم، جميع اشتراكاتنا أصلية 100% ومضمونة طوال فترة الاشتراك.' },
+    { q: 'ماذا لو واجهت مشكلة؟', a: 'دعمنا متاح على مدار الساعة عبر واتساب وتيليجرام لحل أي مشكلة فوراً.' },
+  ];
+
+  return (
+    <div className="mt-10 border-t border-border pt-6">
+      <div className="flex gap-1 border-b border-border mb-5 overflow-x-auto">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActive(tab.id)}
+            className={`px-4 py-2.5 text-sm font-semibold whitespace-nowrap border-b-2 -mb-px transition-colors ${
+              active === tab.id ? 'border-accent text-accent' : 'border-transparent text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {active === 'description' && (
+        <p className="text-text-secondary leading-relaxed text-sm sm:text-base max-w-3xl">{product.description}</p>
+      )}
+
+      {active === 'features' && (
+        <ul className="space-y-2.5 max-w-3xl">
+          {features.map((f) => (
+            <li key={f} className="flex items-start gap-2.5 text-sm text-text-secondary">
+              <Icon name="checkCircle" size={18} className="text-success shrink-0 mt-px" /> {f}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {active === 'faq' && (
+        <div className="max-w-3xl divide-y divide-border rounded-xl border border-border bg-bg-surface">
+          {faqs.map((item, i) => (
+            <div key={item.q}>
+              <button
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-start"
+                aria-expanded={openFaq === i}
+              >
+                <span className="text-sm font-semibold text-text-primary">{item.q}</span>
+                <Icon name="chevron" size={18} className={`text-text-muted shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+              </button>
+              <div className={`overflow-hidden transition-all ${openFaq === i ? 'max-h-40' : 'max-h-0'}`}>
+                <p className="px-4 pb-4 text-sm text-text-secondary leading-relaxed">{item.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {active === 'reviews' && (
+        <div className="max-w-3xl flex items-center gap-3 text-sm text-text-secondary">
+          <div style={{ display: 'inline-flex', gap: 2 }}>
+            {[1, 2, 3, 4, 5].map((i) => <Icon key={i} name="star" size={16} stroke={0} color="#F59E0B" />)}
+          </div>
+          <span className="ltr-nums font-semibold text-text-primary">4.8</span>
+          <span className="text-text-muted">· {t('product.reviewsCount') !== 'product.reviewsCount' ? t('product.reviewsCount') : 'تقييمات موثّقة'}</span>
+        </div>
+      )}
     </div>
   );
 }

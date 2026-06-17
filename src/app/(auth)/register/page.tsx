@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { registerSchema, type RegisterInput } from '@/lib/validators/auth.validator';
 import { auth } from '@/lib/api';
 import { useAuthStore } from '@/store/auth.store';
@@ -71,7 +71,7 @@ export default function RegisterPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <Icon name="eye" className="h-4 w-4" size={16} /> : <Icon name="eye" className="h-4 w-4" size={16} />}
                 </button>
               </div>
               {errors.password && <p className="text-error text-xs mt-1">{errors.password.message}</p>}
@@ -96,7 +96,7 @@ export default function RegisterPage() {
           <div className="relative my-6">
             <div className="divider" />
             <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center">
-              <span className="px-3 text-text-muted text-xs" style={{ backgroundColor: '#111113' }}>or</span>
+              <span className="px-3 text-text-muted text-xs" style={{ backgroundColor: '#FFFFFF' }}>or</span>
             </span>
           </div>
 

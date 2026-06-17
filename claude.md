@@ -1341,28 +1341,35 @@ backend is running. The middleware checks for a valid token via the auth store.
 <!-- SPECKIT START -->
 ## Active Spec-Kit Feature
 
-- **Feature**: Voltage Storefront & Admin Redesign — **implemented** (branch `001-voltage-storefront-redesign`)
-- **Plan**: `specs/001-voltage-storefront-redesign/plan.md` · **Tasks**: `specs/001-voltage-storefront-redesign/tasks.md`
-- **Note**: Live project is a single Next.js 16 / React 19 / Tailwind v4 app under `src/` (not the legacy monorepo described above). Treat `src/` as ground truth. Redesign is presentation-layer only — no routes/API/data-model/enum changes.
+- **Feature**: Cobalt Light Storefront & Admin Redesign — **implemented** (branch `002-cobalt-light-redesign`)
+- **Plan**: `specs/002-cobalt-light-redesign/plan.md` · **Tasks**: `specs/002-cobalt-light-redesign/tasks.md`
+- **Note**: Live project is a single Next.js 16 / React 19 / Tailwind v4 app under `src/`. Treat `src/` as ground truth. Redesign is presentation-layer only — no routes/API/data-model/enum changes. Cobalt **replaces** the dark Voltage theme (feature 001).
 
-### Voltage design system (current visual layer)
+### Cobalt design system (current visual layer)
 
-- **Tokens** live in `src/app/globals.css` `@theme`. Two intentional, permanent name sets:
-  the **canonical** names (`--color-bg-base`, `--color-bg-surface`, `--color-text-primary`,
-  `--color-accent`, …) repointed to Voltage values and used by most screens via utility
-  classes (`bg-bg-base`, `text-text-primary`); and the **Voltage** names
-  (`--color-surface`, `--color-elevated-2`, `--color-text`, `--color-accent-hi`,
-  `--color-plasma`) used by `src/components/ui/*` primitives (`bg-surface`, `text-plasma`).
-- **Palette**: bg `#0A0A0C` · surface `#121216` · elevated `#1A1A20` · border `#26262E` ·
-  text `#F7F7F8`/`#A6A6AE`/`#6C6C76` · accent `#FF7A33` (hi `#FF9357`) · plasma `#19D4E8` ·
-  success `#34D399` · warning `#FBBF24` · error `#FB7185`.
-- **Fonts** (via `next/font` in `src/app/layout.tsx`): Space Grotesk (display, `--font-display`),
-  Inter (Latin body), Cairo (Arabic). Headings use the display face.
-- **Shared primitives**: `src/components/ui/{Button,EmptyState,Skeleton,Toast}.tsx`.
-- **Helpers in globals.css**: `.ltr-nums` (keep prices LTR in RTL), `.rtl-flip` (mirror
-  directional icons under RTL), `:focus-visible` ring, and a `prefers-reduced-motion` guard.
-- **Status pills**: `src/components/orders/StatusBadge.tsx` (+ admin variant) map UPPERCASE
-  enum codes → Voltage colors (PROCESSING/SHIPPED = plasma); codes stay UPPERCASE.
-- Do **not** reintroduce arbitrary hex; use tokens. Brand strings stay in `src/config/*`.
+- **Tokens** live in `src/app/globals.css` `@theme` (light theme). Canonical token names
+  (`--color-bg-base`, `--color-bg-surface`, `--color-text-primary`, `--color-accent`, `--color-border`, …)
+  are used by most screens via utility classes (`bg-bg-base`, `text-text-primary`); Voltage-era
+  alias names (`--color-surface`, `--color-elevated`, `--color-text`, `--color-accent-hi`,
+  `--color-plasma`→cyan) are kept for `src/components/ui/*` primitives.
+- **Palette (light)**: bg `#F7F8FA` · surface `#FFFFFF` · elevated `#F3F4F6` · border `#EAECEF` /
+  `#D6DAE1` · text `#111827` (headings `#0B1220`) / `#4B5563` / `#9097A1` · accent cobalt `#2563EB`
+  (hover `#1D4ED8`, subtle `#E8F0FE`) · cyan `#06B6D4` · success `#16A34A` · warning/star `#F59E0B` ·
+  error `#EF4444`. Dark surfaces reserved for footer / admin sidebar / brand panels.
+- **Fonts** (via `next/font` in `src/app/layout.tsx`): Hanken Grotesk (`--font-hanken`, Latin+numbers),
+  IBM Plex Sans Arabic (`--font-plex-ar`, Arabic body), Cairo (`--font-cairo`, Arabic headings),
+  JetBrains Mono (`--font-mono`, codes/SKUs).
+- **Icons**: single custom set at `src/components/ui/Icon.tsx` — `<Icon name="…" />` (typed `IconName`,
+  ~56 glyphs). **lucide-react is no longer used in the app.** Add new glyphs to Icon.tsx, don't reintroduce lucide.
+- **Shared primitives**: `src/components/ui/{Button,EmptyState,Skeleton,Toast,Icon}.tsx`.
+- **Helpers in globals.css**: `.ltr-nums`/`.num` (prices LTR + tabular in RTL), `.rtl-flip` (mirror
+  directional icons under RTL), `.skeleton` shimmer, `:focus-visible` ring, `prefers-reduced-motion` guard.
+- **Status pills**: `src/components/orders/StatusBadge.tsx` (+ admin variant) map UPPERCASE enum codes →
+  Cobalt colors (PROCESSING/SHIPPED = cyan); codes stay UPPERCASE.
+- **New interactions** (presentation-only, local state over existing data): product tabs + FAQ accordion
+  (`ProductDetailClient`), 4-step `CheckoutSteps` (Cart→Info→Payment→Confirmation), activation-code reveal
+  on delivered order detail. **Plan toggle was deferred** — products have no per-plan/billing field; a real
+  toggle needs a data-model change (out of scope). Revisit if a `billingInterval` field is added.
+- Do **not** reintroduce arbitrary dark hex or Voltage colors; use Cobalt tokens. Brand strings stay in `src/config/*`.
 <!-- SPECKIT END -->
 

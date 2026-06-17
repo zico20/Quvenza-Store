@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import ProductGrid from '@/components/product/ProductGrid';
 import { useProducts } from '@/hooks/useProducts';
 import { useLang } from '@/hooks/useLang';
@@ -32,7 +32,7 @@ export default function ProductsPage() {
         <div className="flex items-center gap-3">
           <span className="text-text-muted text-sm">{`${pagination.total} ${t('shop.products')}`}</span>
           <button className="md:hidden btn-secondary gap-2 px-3 py-2 text-sm" onClick={() => setSidebarOpen(true)}>
-            <SlidersHorizontal className="h-4 w-4" /> {t('shop.filters')}
+            <Icon name="filter" className="h-4 w-4" size={16} /> {t('shop.filters')}
           </button>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function ProductsPage() {
           <div className="absolute right-0 top-0 h-full w-[85vw] max-w-sm bg-bg-surface border-l border-border p-5">
             <div className="flex items-center justify-between mb-6">
               <span className="text-text-primary font-semibold">{t('shop.filters')}</span>
-              <button onClick={() => setSidebarOpen(false)} className="btn-ghost p-1"><X className="h-5 w-5" /></button>
+              <button onClick={() => setSidebarOpen(false)} className="btn-ghost p-1"><Icon name="x" className="h-5 w-5" size={20} /></button>
             </div>
             <div>
               <p className="text-text-muted text-xs uppercase tracking-wider mb-2">{t('shop.sortBy')}</p>

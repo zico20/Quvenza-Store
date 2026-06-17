@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { X, ShoppingBag } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useCartStore } from '@/store/cart.store';
 import CartItem from './CartItem';
 import { useCurrency } from '@/hooks/useCurrency';
@@ -54,14 +54,14 @@ export default function CartDrawer() {
             )}
           </div>
           <button onClick={toggleDrawer} className="btn-ghost p-1.5" aria-label={t('common.close') !== 'common.close' ? t('common.close') : 'Close'}>
-            <X className="h-5 w-5" />
+            <Icon name="x" className="h-5 w-5" size={20} />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center py-16">
-              <ShoppingBag className="h-12 w-12 text-text-muted mb-4" />
+              <Icon name="cart" className="h-12 w-12 text-text-muted mb-4" size={48} />
               <p className="text-text-primary font-semibold">{t('cart.empty')}</p>
               <p className="text-text-muted text-sm mt-1 mb-6">{t('cart.emptyBody')}</p>
               <Link href="/products" onClick={toggleDrawer} className="btn-primary">

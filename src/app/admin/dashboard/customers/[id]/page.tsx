@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ShoppingBag, DollarSign, Calendar, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import Topbar from '@/components/admin/layout/Topbar';
 import { adminCustomers } from '@/lib/admin/api';
 import { formatPrice, formatDate } from '@/lib/utils';
@@ -76,7 +76,7 @@ export default function CustomerDetailPage() {
         {/* Back + Header */}
         <div className="flex items-center justify-between">
           <Link href="/admin/dashboard/customers" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors">
-            <ArrowLeft className="h-4 w-4" />
+            <Icon name="arrowLeft" className="h-4 w-4" size={16} />
             Back to Customers
           </Link>
           <button
@@ -88,7 +88,7 @@ export default function CustomerDetailPage() {
                 : 'bg-green-500/10 text-green-400 hover:bg-green-500/20'
             }`}
           >
-            {customer.isActive ? <ToggleRight className="h-4 w-4" /> : <ToggleLeft className="h-4 w-4" />}
+            {customer.isActive ? <Icon name="toggle" className="h-4 w-4" size={16} /> : <Icon name="toggle" className="h-4 w-4" size={16} />}
             {customer.isActive ? 'Disable Account' : 'Enable Account'}
           </button>
         </div>
@@ -119,21 +119,21 @@ export default function CustomerDetailPage() {
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-bg-surface border border-border rounded-lg p-4 flex items-center gap-3">
-            <div className="p-2 bg-bg-elevated rounded-md text-success"><DollarSign className="h-5 w-5" /></div>
+            <div className="p-2 bg-bg-elevated rounded-md text-success"><Icon name="dollar" className="h-5 w-5" size={20} /></div>
             <div>
               <p className="text-xs text-text-muted uppercase tracking-wider">Total Spent</p>
               <p className="text-lg font-bold text-text-primary">{formatPrice(customer.totalSpent)}</p>
             </div>
           </div>
           <div className="bg-bg-surface border border-border rounded-lg p-4 flex items-center gap-3">
-            <div className="p-2 bg-bg-elevated rounded-md text-accent"><ShoppingBag className="h-5 w-5" /></div>
+            <div className="p-2 bg-bg-elevated rounded-md text-accent"><Icon name="cart" className="h-5 w-5" size={20} /></div>
             <div>
               <p className="text-xs text-text-muted uppercase tracking-wider">Total Orders</p>
               <p className="text-lg font-bold text-text-primary">{customer.totalOrders}</p>
             </div>
           </div>
           <div className="bg-bg-surface border border-border rounded-lg p-4 flex items-center gap-3">
-            <div className="p-2 bg-bg-elevated rounded-md text-warning"><Calendar className="h-5 w-5" /></div>
+            <div className="p-2 bg-bg-elevated rounded-md text-warning"><Icon name="calendar" className="h-5 w-5" size={20} /></div>
             <div>
               <p className="text-xs text-text-muted uppercase tracking-wider">Last Order</p>
               <p className="text-lg font-bold text-text-primary">

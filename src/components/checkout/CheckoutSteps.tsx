@@ -1,13 +1,15 @@
 'use client';
 import { useLang } from '@/hooks/useLang';
+import { Icon } from '@/components/ui/Icon';
 
 export default function CheckoutSteps({ currentStep }: { currentStep: number }) {
   const { t } = useLang();
 
   const STEPS = [
-    { id: 1, label: t('checkout.steps.shipping') },
-    { id: 2, label: t('checkout.steps.payment') },
-    { id: 3, label: t('checkout.steps.confirmation') },
+    { id: 1, label: t('checkout.steps.cart') !== 'checkout.steps.cart' ? t('checkout.steps.cart') : 'السلة' },
+    { id: 2, label: t('checkout.steps.shipping') },
+    { id: 3, label: t('checkout.steps.payment') },
+    { id: 4, label: t('checkout.steps.confirmation') },
   ];
 
   return (
@@ -24,7 +26,7 @@ export default function CheckoutSteps({ currentStep }: { currentStep: number }) 
                     : 'bg-bg-subtle text-text-muted border border-border'
               }`}
             >
-              {step.id < currentStep ? '✓' : step.id}
+              {step.id < currentStep ? <Icon name="check" size={16} /> : step.id}
             </div>
             <span className={`text-xs mt-1 font-medium ${step.id <= currentStep ? 'text-text-primary' : 'text-text-muted'}`}>
               {step.label}

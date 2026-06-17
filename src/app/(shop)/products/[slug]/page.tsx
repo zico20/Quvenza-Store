@@ -5,7 +5,12 @@ import JsonLd from '@/components/seo/JsonLd';
 import { productSchema, breadcrumbSchema, faqSchema, getDefaultFAQs } from '@/lib/schema';
 import ProductDetailClient, { ProductNotFound } from './ProductDetailClient';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenzaiq.com';
+
+// Rendered on demand: product data comes from the DB and the shared layout
+// reads the language cookie, so this route must be dynamic (a static render
+// that touches cookies() throws "static to dynamic" in Next.js 16).
+export const dynamic = 'force-dynamic';
 
 async function fetchProduct(slug: string): Promise<Product | null> {
   try {
@@ -14,20 +19,12 @@ async function fetchProduct(slug: string): Promise<Product | null> {
   } catch { return null; }
 }
 
-export async function generateStaticParams() {
-  try {
-    const { getProducts } = await import('@/services/products/product.service');
-    const result = await getProducts({ page: 1, limit: 500, skip: 0 }, {});
-    return result.products.map((p) => ({ slug: p.slug }));
-  } catch { return []; }
-}
-
 // Builds description ≤ 170 chars — no USD, Arabic CTA
 function buildProductDescription(product: Product): string {
   if ((product as any).metaDescription) {
     return (product as any).metaDescription.slice(0, 170);
   }
-  const cta = ' — تفعيل فوري، دفع بالدينار العراقي، ضمان كامل من SoftoDev.';
+  const cta = ' — تفعيل فوري، دفع بالدينار العراقي، ضمان كامل من Quvenza.';
   const base = (product as any).shortDescription || product.description || product.name;
   const maxBase = 170 - cta.length;
   const trimmed = base.length > maxBase ? base.slice(0, maxBase - 3) + '...' : base;
@@ -41,12 +38,12 @@ export async function generateMetadata(
   const product = await fetchProduct(slug);
   if (!product) return { title: 'المنتج غير موجود' };
 
-  // Title: no manual suffix — layout template adds "| SoftoDev — اشتراكات رقمية العراق"
+  // Title: no manual suffix — layout template adds "| Quvenza — اشتراكات رقمية العراق"
   const title = (product as any).metaTitle || `${product.name} — اشتراك في العراق`;
   const description = buildProductDescription(product);
   const ogImage = product.images?.length
     ? { url: product.images[0], width: 800, height: 800, alt: product.name }
-    : { url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'SoftoDev' };
+    : { url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza' };
 
   return {
     title,

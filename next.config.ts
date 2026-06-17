@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // === Docker / self-host: emit a minimal standalone server bundle ===
+  output: 'standalone',
+
   // === Security & Trust ===
   poweredByHeader: false,
   compress: true,
@@ -19,7 +22,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'placehold.co' },
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: '**.cloudinary.com' },
-      { protocol: 'https', hostname: '**.softodeviqstore.com' },
+      { protocol: 'https', hostname: '**.quvenzaiq.com' },
     ],
   },
 

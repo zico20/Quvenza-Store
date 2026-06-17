@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import { Shield, User, Key, Plus, Trash2, RotateCcw, Eye, EyeOff, X, Check } from 'lucide-react';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import Topbar from '@/components/admin/layout/Topbar';
 import { useLang } from '@/hooks/admin/useLang';
 import { useAdminAuthStore } from '@/store/admin/auth.store';
@@ -11,10 +11,10 @@ function getStrength(pwd: string): { score: number; label: string; color: string
   const checks = [/[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/, /.{8}/];
   const score = checks.filter(r => r.test(pwd)).length;
   const map = [
-    { label: 'Weak',   color: '#f87171' },
-    { label: 'Fair',   color: '#fbbf24' },
-    { label: 'Good',   color: '#fbbf24' },
-    { label: 'Strong', color: '#4ade80' },
+    { label: 'Weak',   color: '#EF4444' },
+    { label: 'Fair',   color: '#F59E0B' },
+    { label: 'Good',   color: '#F59E0B' },
+    { label: 'Strong', color: '#16A34A' },
   ];
   return { score, ...map[Math.max(0, score - 1)] ?? map[0] };
 }
@@ -28,7 +28,7 @@ function PasswordStrengthBar({ password }: { password: string }) {
         {[1, 2, 3, 4].map(i => (
           <div key={i} style={{
             flex: 1, height: 3, borderRadius: 2,
-            background: i <= score ? color : '#26262E',
+            background: i <= score ? color : '#EAECEF',
             transition: 'background 0.2s',
           }} />
         ))}
@@ -51,7 +51,7 @@ function Field({
   const inputType = isPassword && show ? 'text' : type;
   return (
     <label style={{ display: 'block' }}>
-      <div className="mono" style={{ fontSize: 10, color: '#A6A6AE', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
+      <div className="mono" style={{ fontSize: 10, color: '#4B5563', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{label}</div>
       <div style={{ position: 'relative' }}>
         <input
           type={inputType}
@@ -61,24 +61,24 @@ function Field({
           disabled={disabled}
           style={{
             width: '100%', padding: isPassword ? '11px 42px 11px 14px' : '11px 14px',
-            background: disabled ? '#1a1a1d' : '#0A0A0C',
-            border: `1px solid ${error ? '#f87171' : '#26262E'}`, borderRadius: 4,
-            color: disabled ? '#6C6C76' : '#F7F7F8', fontFamily: 'inherit', fontSize: 14,
+            background: disabled ? '#F3F4F6' : '#F7F8FA',
+            border: `1px solid ${error ? '#EF4444' : '#EAECEF'}`, borderRadius: 4,
+            color: disabled ? '#9097A1' : '#111827', fontFamily: 'inherit', fontSize: 14,
             outline: 'none', boxSizing: 'border-box' as const,
           }}
-          onFocus={e => !disabled && (e.currentTarget.style.borderColor = '#FF7A33')}
-          onBlur={e => !disabled && (e.currentTarget.style.borderColor = error ? '#f87171' : '#26262E')}
+          onFocus={e => !disabled && (e.currentTarget.style.borderColor = '#2563EB')}
+          onBlur={e => !disabled && (e.currentTarget.style.borderColor = error ? '#EF4444' : '#EAECEF')}
         />
         {isPassword && onToggleShow && (
           <button type="button" onClick={onToggleShow} style={{
             position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
-            background: 'none', border: 'none', color: '#6C6C76', cursor: 'pointer', padding: 0,
+            background: 'none', border: 'none', color: '#9097A1', cursor: 'pointer', padding: 0,
           }}>
-            {show ? <EyeOff size={15} strokeWidth={1.6} /> : <Eye size={15} strokeWidth={1.6} />}
+            {show ? <Icon name="eye" size={15} stroke={1.6} /> : <Icon name="eye" size={15} stroke={1.6} />}
           </button>
         )}
       </div>
-      {error && <p style={{ color: '#f87171', fontSize: 11, marginTop: 4, fontFamily: 'JetBrains Mono, monospace' }}>{error}</p>}
+      {error && <p style={{ color: '#EF4444', fontSize: 11, marginTop: 4, fontFamily: 'JetBrains Mono, monospace' }}>{error}</p>}
     </label>
   );
 }
@@ -94,7 +94,7 @@ function useToast() {
 }
 
 // ── Avatar ──────────────────────────────────────────────────────
-const COLORS = ['#FF7A33','#4ade80','#60a5fa','#a78bfa','#fbbf24'];
+const COLORS = ['#2563EB','#16A34A','#60a5fa','#a78bfa','#F59E0B'];
 function avatar(name: string) {
   let h = 0; for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffffff;
   return { color: COLORS[Math.abs(h) % COLORS.length], initials: name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() };
@@ -104,11 +104,11 @@ function avatar(name: string) {
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}>
-      <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 8, padding: 28, width: '100%', maxWidth: 460, margin: 16, boxShadow: '0 24px 64px rgba(0,0,0,0.7)' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 8, padding: 28, width: '100%', maxWidth: 460, margin: 16, boxShadow: '0 24px 64px rgba(0,0,0,0.7)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#F7F7F8' }}>{title}</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#6C6C76', cursor: 'pointer', padding: 4 }}>
-            <X size={18} strokeWidth={1.6} />
+          <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#111827' }}>{title}</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#9097A1', cursor: 'pointer', padding: 4 }}>
+            <Icon name="x" size={18} stroke={1.6} />
           </button>
         </div>
         {children}
@@ -255,21 +255,21 @@ export default function SettingsPage() {
     } catch (e: any) { show(e.response?.data?.message ?? 'Failed', false); }
   }
 
-  const TABS: { key: Tab; icon: React.ElementType; label: string }[] = [
-    { key: 'account', icon: User,   label: t('settings.myAccount') },
-    { key: 'users',   icon: Shield, label: t('settings.adminUsers') },
+  const TABS: { key: Tab; icon: IconName; label: string }[] = [
+    { key: 'account', icon: 'user',   label: t('settings.myAccount') },
+    { key: 'users',   icon: 'shield', label: t('settings.adminUsers') },
   ];
 
   const btnOrange: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-    padding: '11px 20px', background: '#FF7A33', color: '#fff',
+    padding: '11px 20px', background: '#2563EB', color: '#fff',
     border: 'none', borderRadius: 4, fontSize: 13, fontWeight: 600,
     cursor: 'pointer', fontFamily: 'inherit', transition: 'opacity 0.15s',
   };
   const btnGhost: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-    padding: '9px 16px', background: 'transparent', color: '#A6A6AE',
-    border: '1px solid #26262E', borderRadius: 4, fontSize: 13, fontWeight: 500,
+    padding: '9px 16px', background: 'transparent', color: '#4B5563',
+    border: '1px solid #EAECEF', borderRadius: 4, fontSize: 13, fontWeight: 500,
     cursor: 'pointer', fontFamily: 'inherit',
   };
 
@@ -282,30 +282,30 @@ export default function SettingsPage() {
         <div style={{
           position: 'fixed', top: 20, right: 24, zIndex: 100,
           padding: '12px 20px', borderRadius: 6, fontSize: 13, fontWeight: 500,
-          background: toast.ok ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)',
-          border: `1px solid ${toast.ok ? 'rgba(74,222,128,0.3)' : 'rgba(248,113,113,0.3)'}`,
-          color: toast.ok ? '#4ade80' : '#f87171',
+          background: toast.ok ? 'rgba(52,211,153,0.15)' : 'rgba(251,113,133,0.15)',
+          border: `1px solid ${toast.ok ? 'rgba(52,211,153,0.3)' : 'rgba(251,113,133,0.3)'}`,
+          color: toast.ok ? '#16A34A' : '#EF4444',
           display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(8px)',
         }}>
-          {toast.ok ? <Check size={14} /> : <X size={14} />} {toast.msg}
+          {toast.ok ? <Icon name="check" size={14} /> : <Icon name="x" size={14} />} {toast.msg}
         </div>
       )}
 
       <div style={{ padding: 32, display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32, alignItems: 'start' }}>
         {/* Sidebar Tabs */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {TABS.map(({ key, icon: Icon, label }) => (
+          {TABS.map(({ key, icon, label }) => (
             <button key={key} onClick={() => setTab(key)} style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '10px 12px', borderRadius: 5, textAlign: 'left',
-              background: tab === key ? '#1A1A20' : 'transparent',
-              borderLeft: `2px solid ${tab === key ? '#FF7A33' : 'transparent'}`,
-              border: `1px solid ${tab === key ? '#26262E' : 'transparent'}`,
-              color: tab === key ? '#F7F7F8' : '#A6A6AE',
+              background: tab === key ? '#F3F4F6' : 'transparent',
+              borderLeft: `2px solid ${tab === key ? '#2563EB' : 'transparent'}`,
+              border: `1px solid ${tab === key ? '#EAECEF' : 'transparent'}`,
+              color: tab === key ? '#111827' : '#4B5563',
               fontSize: 13, fontWeight: tab === key ? 600 : 500,
               cursor: 'pointer', fontFamily: 'inherit',
             }}>
-              <Icon size={15} strokeWidth={1.6} />
+              <Icon name={icon} size={15} stroke={1.6} />
               {label}
             </button>
           ))}
@@ -318,8 +318,8 @@ export default function SettingsPage() {
           {tab === 'account' && (
             <>
               {/* Profile Card */}
-              <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 24 }}>
-                <div className="mono" style={{ fontSize: 11, color: '#6C6C76', marginBottom: 20, textTransform: 'uppercase' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, padding: 24 }}>
+                <div className="mono" style={{ fontSize: 11, color: '#9097A1', marginBottom: 20, textTransform: 'uppercase' }}>
                   {t('settings.profile')}
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
@@ -332,8 +332,8 @@ export default function SettingsPage() {
               </div>
 
               {/* Change Password Card */}
-              <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, padding: 24 }}>
-                <div className="mono" style={{ fontSize: 11, color: '#6C6C76', marginBottom: 20, textTransform: 'uppercase' }}>
+              <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, padding: 24 }}>
+                <div className="mono" style={{ fontSize: 11, color: '#9097A1', marginBottom: 20, textTransform: 'uppercase' }}>
                   {t('settings.changePwd')}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 20 }}>
@@ -354,7 +354,7 @@ export default function SettingsPage() {
                     error={pwdErrors.conf} />
                 </div>
                 <button onClick={handleChangePwd} disabled={pwdSaving} style={{ ...btnOrange, opacity: pwdSaving ? 0.6 : 1 }}>
-                  <Key size={14} strokeWidth={1.6} />
+                  <Icon name="key" size={14} stroke={1.6} />
                   {pwdSaving ? '…' : t('settings.updatePwd')}
                 </button>
               </div>
@@ -363,66 +363,66 @@ export default function SettingsPage() {
 
           {/* ── ADMIN USERS ── */}
           {tab === 'users' && (
-            <div style={{ background: '#121216', border: '1px solid #26262E', borderRadius: 6, overflow: 'hidden' }}>
+            <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 6, overflow: 'hidden' }}>
               {/* Header */}
-              <div style={{ padding: '16px 20px', borderBottom: '1px solid #26262E', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div className="mono" style={{ fontSize: 11, color: '#6C6C76', textTransform: 'uppercase' }}>
+              <div style={{ padding: '16px 20px', borderBottom: '1px solid #EAECEF', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div className="mono" style={{ fontSize: 11, color: '#9097A1', textTransform: 'uppercase' }}>
                   {t('settings.adminUsers')}
                 </div>
                 <button onClick={() => setShowAddModal(true)} style={btnOrange}>
-                  <Plus size={14} strokeWidth={2} />
+                  <Icon name="plus" size={14} stroke={2} />
                   {t('settings.addAdmin')}
                 </button>
               </div>
 
               {/* Table header */}
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr 120px 100px', padding: '10px 20px', background: '#1A1A20', borderBottom: '1px solid #26262E', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr 120px 100px', padding: '10px 20px', background: '#F3F4F6', borderBottom: '1px solid #EAECEF', gap: 12 }}>
                 {['Admin', 'Email', t('settings.joinedLabel'), ''].map((h, i) => (
-                  <div key={i} className="mono" style={{ fontSize: 10, color: '#6C6C76' }}>{h}</div>
+                  <div key={i} className="mono" style={{ fontSize: 10, color: '#9097A1' }}>{h}</div>
                 ))}
               </div>
 
               {/* Rows */}
               {loadingAdmins ? (
-                <div style={{ padding: 32, textAlign: 'center', color: '#6C6C76', fontSize: 13 }}>Loading…</div>
+                <div style={{ padding: 32, textAlign: 'center', color: '#9097A1', fontSize: 13 }}>Loading…</div>
               ) : admins.length === 0 ? (
-                <div style={{ padding: 32, textAlign: 'center', color: '#6C6C76', fontSize: 13 }}>{t('settings.noAdmins')}</div>
+                <div style={{ padding: 32, textAlign: 'center', color: '#9097A1', fontSize: 13 }}>{t('settings.noAdmins')}</div>
               ) : admins.map(a => {
                 const { color, initials } = avatar(a.name);
                 const isMe = a.id === user?.id;
                 const joined = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).format(new Date(a.createdAt));
                 return (
-                  <div key={a.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr 120px 100px', padding: '14px 20px', borderBottom: '1px solid #1A1A20', alignItems: 'center', gap: 12 }}>
+                  <div key={a.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr 120px 100px', padding: '14px 20px', borderBottom: '1px solid #F3F4F6', alignItems: 'center', gap: 12 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{ width: 32, height: 32, borderRadius: 16, background: color + '22', color, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace', flexShrink: 0 }}>
                         {initials}
                       </div>
                       <div>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: '#F7F7F8' }}>{a.name}</div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{a.name}</div>
                         {isMe && (
-                          <span className="mono" style={{ fontSize: 9, padding: '2px 6px', background: 'rgba(255,106,43,0.12)', color: '#FF7A33', borderRadius: 3 }}>
+                          <span className="mono" style={{ fontSize: 9, padding: '2px 6px', background: 'rgba(37,99,235,0.12)', color: '#2563EB', borderRadius: 3 }}>
                             {t('settings.youBadge')}
                           </span>
                         )}
                       </div>
                     </div>
-                    <div style={{ fontSize: 12, color: '#A6A6AE', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.email}</div>
-                    <div className="mono" style={{ fontSize: 11, color: '#6C6C76' }}>{joined}</div>
+                    <div style={{ fontSize: 12, color: '#4B5563', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.email}</div>
+                    <div className="mono" style={{ fontSize: 11, color: '#9097A1' }}>{joined}</div>
                     <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
                       <button
                         onClick={() => { setResetTarget(a); setResetPwd(''); setResetConf(''); }}
                         title={t('settings.resetPwd')}
-                        style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #26262E', color: '#A6A6AE', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                        style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #EAECEF', color: '#4B5563', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                       >
-                        <RotateCcw size={13} strokeWidth={1.6} />
+                        <Icon name="refresh" size={13} stroke={1.6} />
                       </button>
                       <button
                         onClick={() => !isMe && setDeleteTarget(a)}
                         disabled={isMe}
                         title={isMe ? 'Cannot delete yourself' : t('settings.deleteAdmin')}
-                        style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #26262E', color: isMe ? '#36363F' : '#f87171', cursor: isMe ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isMe ? 0.4 : 1 }}
+                        style={{ width: 30, height: 30, borderRadius: 4, background: 'transparent', border: '1px solid #EAECEF', color: isMe ? '#D6DAE1' : '#EF4444', cursor: isMe ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isMe ? 0.4 : 1 }}
                       >
-                        <Trash2 size={13} strokeWidth={1.6} />
+                        <Icon name="trash" size={13} stroke={1.6} />
                       </button>
                     </div>
                   </div>
@@ -467,7 +467,7 @@ export default function SettingsPage() {
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 24 }}>
             <button onClick={() => setResetTarget(null)} style={btnGhost}>{t('common.cancel')}</button>
             <button onClick={handleResetPwd} disabled={resetSaving} style={{ ...btnOrange, opacity: resetSaving ? 0.6 : 1 }}>
-              <Key size={14} strokeWidth={1.6} />
+              <Icon name="key" size={14} stroke={1.6} />
               {resetSaving ? '…' : t('settings.resetPwd')}
             </button>
           </div>
@@ -477,13 +477,13 @@ export default function SettingsPage() {
       {/* ── Delete Confirm Modal ── */}
       {deleteTarget && (
         <Modal title={t('settings.deleteAdmin')} onClose={() => setDeleteTarget(null)}>
-          <p style={{ color: '#A6A6AE', fontSize: 13, margin: '0 0 24px' }}>
-            {t('settings.confirmDelete')}: <strong style={{ color: '#F7F7F8' }}>{deleteTarget.name}</strong>?
+          <p style={{ color: '#4B5563', fontSize: 13, margin: '0 0 24px' }}>
+            {t('settings.confirmDelete')}: <strong style={{ color: '#111827' }}>{deleteTarget.name}</strong>?
           </p>
           <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
             <button onClick={() => setDeleteTarget(null)} style={btnGhost}>{t('common.cancel')}</button>
-            <button onClick={handleDelete} style={{ ...btnOrange, background: '#f87171' }}>
-              <Trash2 size={14} strokeWidth={1.6} />
+            <button onClick={handleDelete} style={{ ...btnOrange, background: '#EF4444' }}>
+              <Icon name="trash" size={14} stroke={1.6} />
               {t('settings.deleteAdmin')}
             </button>
           </div>

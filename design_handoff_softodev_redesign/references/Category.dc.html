@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction:ltr; unicode-bidi:isolate; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: box-shadow .15s, transform .12s, color .15s; }
+  .hbtn:active { transform: translateY(1px); }
+  .lift { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .lift:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(16,24,40,0.10); border-color: #D6DAE1; }
+  .ul:hover { color: #2563EB !important; }
+  .home-wrap { container-type: inline-size; background:#fff; }
+  .cq-nav-links { display: none; }
+  .pgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @container (min-width: 760px) {
+    .cq-nav-links { display: flex; }
+    .pgrid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <div style="max-width:1280px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV · {{ deviceLabel }} · {{ langLabel }} · {{ tx.pageTag }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+      <header style="border-bottom:1px solid #EAECEF; padding:14px 22px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:26px;">
+          <div style="display:flex; align-items:center; gap:9px;"><div class="hk" style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div><span class="ca" style="font-weight:700; font-size:16px; color:#0B1220;">SoftoDev</span></div>
+          <nav class="cq-nav-links" style="gap:22px; font-size:14px; color:#4B5563; font-weight:600;"><span class="ul" style="cursor:pointer;">{{ tx.navProducts }}</span><span class="ul" style="cursor:pointer; color:#2563EB;">{{ tx.navCats }}</span><span class="ul" style="cursor:pointer;">{{ tx.navDeals }}</span></nav>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;"><span style="position:relative; cursor:pointer; color:#4B5563; display:inline-flex;"><dc-import name="Icon" icon="cart" size="20" color="#4B5563" hint-size="20px,20px"></dc-import></span><button class="hbtn" style="background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:9px 16px; border-radius:9px;">{{ tx.login }}</button></div>
+      </header>
+
+      <!-- category hero -->
+      <div style="padding:22px 22px 0; max-width:1180px; margin:0 auto; width:100%;">
+        <div class="hk" style="display:flex; align-items:center; gap:7px; font-size:12px; color:#9097A1; margin-bottom:16px;"><span class="ul" style="cursor:pointer;">{{ tx.home }}</span><dc-import name="Icon" icon="{{ chevDir }}" size="13" color="#C4C8D0" hint-size="13px,13px"></dc-import><span class="ul" style="cursor:pointer;">{{ tx.navCats }}</span><dc-import name="Icon" icon="{{ chevDir }}" size="13" color="#C4C8D0" hint-size="13px,13px"></dc-import><span style="color:#4B5563;">{{ cat.name }}</span></div>
+        <div style="border-radius:22px; padding:34px; background:{{ cat.heroBg }}; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
+          <div style="position:relative;">
+            <div style="display:flex; align-items:center; gap:13px; margin-bottom:12px;"><span style="width:54px; height:54px; border-radius:15px; background:#fff; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(16,24,40,0.12);"><dc-import name="Icon" icon="{{ cat.icon }}" size="26" color="{{ cat.color }}" hint-size="26px,26px"></dc-import></span><div><h1 class="ca" style="margin:0; font-weight:800; font-size:clamp(24px,3.4cqw,32px); color:#0B1220;">{{ cat.name }}</h1><div class="num" style="font-size:12.5px; color:#4B5563; margin-top:3px;">{{ cat.count }} {{ tx.products }}</div></div></div>
+            <p style="margin:0; max-width:460px; font-size:14px; line-height:1.8; color:#374151;">{{ cat.desc }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- category chips + sort -->
+      <div style="padding:20px 22px 0; max-width:1180px; margin:0 auto; width:100%;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div style="display:flex; gap:8px; overflow-x:auto;">
+            <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+              <button class="hbtn" onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+            </sc-for>
+          </div>
+          <div style="position:relative; flex-shrink:0;">
+            <select onChange="{{ onSort }}" value="{{ sort }}" class="ca" style="appearance:none; -webkit-appearance:none; background:#fff; border:1px solid #D6DAE1; border-radius:10px; padding:9px 34px 9px 14px; font-size:13px; font-weight:600; color:#111827; cursor:pointer; outline:none;">
+              <option value="popular">{{ tx.sortPopular }}</option>
+              <option value="priceLow">{{ tx.sortPriceLow }}</option>
+              <option value="priceHigh">{{ tx.sortPriceHigh }}</option>
+            </select>
+            <span style="position:absolute; inset-inline-end:11px; top:50%; transform:translateY(-50%); pointer-events:none; color:#9097A1; display:inline-flex;"><dc-import name="Icon" icon="chevron" size="16" color="#9097A1" hint-size="16px,16px"></dc-import></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- grid -->
+      <div style="padding:18px 22px 44px; max-width:1180px; margin:0 auto; width:100%;">
+        <div class="pgrid">
+          <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+            <div class="lift" style="background:#fff; border:1px solid #EAECEF; border-radius:16px; overflow:hidden; cursor:pointer;">
+              <div style="aspect-ratio:1/1; background:{{ p.bg }}; display:flex; align-items:center; justify-content:center; position:relative;">
+                <div class="hk" style="width:58px; height:58px; border-radius:16px; background:{{ p.icon }}; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px; box-shadow:0 8px 20px rgba(16,24,40,0.18);">{{ p.glyph }}</div>
+                <span class="hk" style="position:absolute; top:10px; inset-inline-start:10px; display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px; background:#fff; color:#0E7490;"><dc-import name="Icon" icon="bolt" size="11" color="#0E7490" hint-size="11px,11px"></dc-import> {{ tx.instant }}</span>
+                <button class="hbtn" style="position:absolute; top:9px; inset-inline-end:9px; width:32px; height:32px; border-radius:50%; background:#fff; border:1px solid #EAECEF; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="heart" size="15" color="#9097A1" hint-size="15px,15px"></dc-import></button>
+              </div>
+              <div style="padding:14px;">
+                <div class="hk" style="font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">{{ p.tag }}</div>
+                <div class="ca" style="font-weight:700; font-size:14px; color:#111827; margin:5px 0 8px; line-height:1.4;">{{ p.name }}</div>
+                <div style="display:flex; align-items:center; gap:4px; margin-bottom:10px; color:#F59E0B;"><dc-import name="Icon" icon="star" size="12" hint-size="12px,12px"></dc-import><span class="num" style="font-size:11px; color:#9097A1; margin-inline-start:2px;">{{ p.rating }}</span></div>
+                <div style="display:flex; align-items:center; justify-content:space-between;"><span class="num" style="font-weight:800; font-size:18px; color:#111827;">{{ p.price }}</span><button class="hbtn" style="background:#2563EB; color:#fff; font-weight:700; font-size:11.5px; padding:8px 13px; border-radius:9px;">{{ tx.add }}</button></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang:'ar', device:'desktop', cat:'ai', sort:'popular' };
+
+  get T() {
+    const ar = { pageTag:'فئة', navProducts:'المنتجات', navCats:'الفئات', navDeals:'العروض', login:'دخول', home:'الرئيسية', products:'منتج', instant:'فوري', add:'أضف', sortPopular:'الأكثر رواجاً', sortPriceLow:'السعر: الأقل', sortPriceHigh:'السعر: الأعلى' };
+    const en = { pageTag:'CATEGORY', navProducts:'Products', navCats:'Categories', navDeals:'Deals', login:'Sign in', home:'Home', products:'products', instant:'instant', add:'Add', sortPopular:'Most popular', sortPriceLow:'Price: low', sortPriceHigh:'Price: high' };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  get catInfo() {
+    const ar = this.state.lang === 'ar';
+    const map = {
+      ai: { name: ar?'أدوات الذكاء الاصطناعي':'AI Tools', icon:'sparkle', color:'#2563EB', count:28, heroBg:'linear-gradient(140deg,#EAF1FE,#E0F7FB)', desc: ar?'أقوى أدوات الذكاء الاصطناعي — ChatGPT، Claude، Midjourney والمزيد، بتفعيل فوري وأسعار بالدينار.':'The most powerful AI tools — ChatGPT, Claude, Midjourney and more, with instant activation in IQD.' },
+      design: { name: ar?'التصميم':'Design', icon:'layers', color:'#7C3AED', count:19, heroBg:'linear-gradient(140deg,#F3EEFE,#EAF1FE)', desc: ar?'كل أدوات التصميم الاحترافية — Canva، Adobe وغيرها لصنّاع المحتوى والمصممين.':'All pro design tools — Canva, Adobe and more for creators and designers.' },
+      video: { name: ar?'الفيديو والمونتاج':'Video & Editing', icon:'video', color:'#0EA5E9', count:14, heroBg:'linear-gradient(140deg,#E0F7FB,#EAF1FE)', desc: ar?'اشتراكات المونتاج والبث — CapCut، Netflix وغيرها بأفضل الأسعار.':'Editing & streaming subscriptions — CapCut, Netflix and more at the best prices.' },
+      learn: { name: ar?'التعلّم والكورسات':'Learning & Courses', icon:'book', color:'#16A34A', count:22, heroBg:'linear-gradient(140deg,#E7F6EE,#EAF1FE)', desc: ar?'منصّات التعلّم — Coursera، Duolingo وغيرها لتطوير مهاراتك.':'Learning platforms — Coursera, Duolingo and more to grow your skills.' },
+    };
+    return map[this.state.cat];
+  }
+
+  get allProducts() {
+    const ar = this.state.lang === 'ar';
+    return [
+      { key:'ai', glyph:'GPT', tag:'ChatGPT', name:'ChatGPT Plus', rating:'4.9', priceN:20, price:'$20', bg:'linear-gradient(140deg,#E8F0FE,#E0F7FB)', icon:'linear-gradient(135deg,#10A37F,#1AB68C)' },
+      { key:'ai', glyph:'Cl', tag:'Anthropic', name:'Claude Pro', rating:'4.9', priceN:20, price:'$20', bg:'linear-gradient(140deg,#FBEFE6,#FDF6EE)', icon:'linear-gradient(135deg,#D97757,#E89B7E)' },
+      { key:'ai', glyph:'Mj', tag:'Midjourney', name:'Midjourney', rating:'4.7', priceN:30, price:'$30', bg:'linear-gradient(140deg,#EAE8FE,#E8F0FE)', icon:'linear-gradient(135deg,#4F46E5,#7C6FF0)' },
+      { key:'ai', glyph:'Pe', tag:'Perplexity', name:'Perplexity Pro', rating:'4.7', priceN:18, price:'$18', bg:'linear-gradient(140deg,#E0F7FB,#E8F0FE)', icon:'linear-gradient(135deg,#0E7490,#0EA5E9)' },
+      { key:'design', glyph:'Cv', tag:'Canva', name:'Canva Pro', rating:'4.8', priceN:45, price:'$45', bg:'linear-gradient(140deg,#EDE9FE,#E8F0FE)', icon:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+      { key:'design', glyph:'Ai', tag:'Adobe', name:'Adobe Creative Cloud', rating:'4.8', priceN:52, price:'$52', bg:'linear-gradient(140deg,#FDE8EC,#F3EEFE)', icon:'linear-gradient(135deg,#DA1F26,#F0474E)' },
+      { key:'design', glyph:'Fg', tag:'Figma', name:'Figma Pro', rating:'4.9', priceN:25, price:'$25', bg:'linear-gradient(140deg,#F3EEFE,#FDE8EC)', icon:'linear-gradient(135deg,#A259FF,#F24E1E)' },
+      { key:'video', glyph:'CC', tag:'CapCut', name:'CapCut Pro', rating:'4.6', priceN:12, price:'$12', bg:'linear-gradient(140deg,#E0F7FB,#E8F0FE)', icon:'linear-gradient(135deg,#0EA5E9,#06B6D4)' },
+      { key:'video', glyph:'N', tag:'Netflix', name:'Netflix Premium', rating:'4.5', priceN:15, price:'$15', bg:'linear-gradient(140deg,#FCE8E8,#FDF0F0)', icon:'linear-gradient(135deg,#E50914,#F6121D)' },
+      { key:'learn', glyph:'Co', tag:'Coursera', name:'Coursera Plus', rating:'4.9', priceN:59, price:'$59', bg:'linear-gradient(140deg,#E7F6EE,#E8F0FE)', icon:'linear-gradient(135deg,#2563EB,#3B82F6)' },
+      { key:'learn', glyph:'Dn', tag:'Duolingo', name:'Duolingo Super', rating:'4.6', priceN:7, price:'$7', bg:'linear-gradient(140deg,#E7F6EE,#EAFBEF)', icon:'linear-gradient(135deg,#58CC02,#76D93C)' },
+      { key:'learn', glyph:'Sk', tag:'Skillshare', name:'Skillshare', rating:'4.5', priceN:14, price:'$14', bg:'linear-gradient(140deg,#E7F6EE,#FDF6EE)', icon:'linear-gradient(135deg,#00FF84,#16A34A)' },
+    ];
+  }
+
+  get filtered() {
+    let list = this.allProducts.filter(p => p.key === this.state.cat);
+    const s = this.state.sort;
+    list = [...list].sort((a,b) => s==='priceLow' ? a.priceN-b.priceN : s==='priceHigh' ? b.priceN-a.priceN : 0);
+    return list;
+  }
+
+  get chipsData() {
+    const t = this.T;
+    const defs = [ {k:'ai', l:t==null?'':(this.state.lang==='ar'?'ذكاء اصطناعي':'AI Tools')}, {k:'design', l:this.state.lang==='ar'?'تصميم':'Design'}, {k:'video', l:this.state.lang==='ar'?'فيديو':'Video'}, {k:'learn', l:this.state.lang==='ar'?'تعلّم':'Learning'} ];
+    return defs.map(d => {
+      const active = this.state.cat === d.k;
+      return {
+        label:d.l, onClick: () => this.setState({ cat:d.k }),
+        style: active ? 'flex-shrink:0; padding:9px 16px; border-radius:10px; background:#2563EB; color:#fff; font-size:12.5px; font-weight:700;' : 'flex-shrink:0; padding:9px 16px; border-radius:10px; background:#F3F4F6; color:#4B5563; font-size:12.5px; font-weight:600;',
+      };
+    });
+  }
+
+  toggleBtn(a){return a?'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:#fff;color:#0B1220;':'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:transparent;color:#9CA3AF;';}
+
+  renderVals() {
+    const ar = this.state.lang === 'ar'; const desk = this.state.device === 'desktop';
+    return {
+      dir: ar?'rtl':'ltr', chevDir: ar?'chevron':'chevronL', tx:this.T,
+      cat:this.catInfo, products:this.filtered, chips:this.chipsData, sort:this.state.sort,
+      langLabel: ar?'AR':'EN', deviceLabel: desk?'DESKTOP':'MOBILE',
+      wrapStyle: desk ? 'width:100%; max-width:1240px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;' : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      onSort: (e) => this.setState({ sort: e.target.value }),
+      setAr:()=>this.setState({lang:'ar'}), setEn:()=>this.setState({lang:'en'}),
+      setDesktop:()=>this.setState({device:'desktop'}), setMobile:()=>this.setState({device:'mobile'}),
+      arBtnStyle:this.toggleBtn(ar), enBtnStyle:this.toggleBtn(!ar), deskBtnStyle:this.toggleBtn(desk), mobBtnStyle:this.toggleBtn(!desk),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,74 +1,72 @@
 @import "tailwindcss";
-/* Fonts loaded via next/font in layout.tsx — no @import needed here */
+/* ════════════════════════════════════════════════════════════════
+   Quvenza — COBALT (light) design system.
+   Drop-in replacement for the old dark "Voltage" theme.
+   The canonical token NAMES below are kept identical to your current
+   globals.css, so every existing utility class (bg-bg-base,
+   text-text-primary, border-border, btn-accent, .input, .tag …)
+   keeps working — it just renders the new light Cobalt palette.
+   Fonts are loaded via next/font in layout.tsx (see README).
+   ════════════════════════════════════════════════════════════════ */
 
-/* Drawer slide-in (works LTR + RTL: pinned to the correct edge, fades+nudges in) */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+@keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 @theme {
-  /* ════════════════════════════════════════════════════════════════
-     VOLTAGE — deep-tech dark system (near-black + electric orange + plasma)
-     Canonical token names below are kept stable so existing utility
-     classes (bg-bg-base, text-text-primary, border-border, …) keep
-     working while now rendering the Voltage palette. New Voltage-named
-     aliases are added alongside for components migrating to them.
-     ════════════════════════════════════════════════════════════════ */
+  /* ── Core neutrals (light) ── */
+  --color-bg-base:      #F7F8FA;   /* page canvas */
+  --color-bg-surface:   #FFFFFF;   /* cards, panels */
+  --color-bg-elevated:  #F3F4F6;   /* hover, chips */
+  --color-bg-subtle:    #FFFFFF;   /* menus, popovers */
 
-  /* ── Core neutrals (canonical) ── */
-  --color-bg-base:      #0A0A0C;   /* page canvas */
-  --color-bg-surface:   #121216;   /* cards, panels, inputs */
-  --color-bg-elevated:  #1A1A20;   /* raised surfaces, chips, hover */
-  --color-bg-subtle:    #232329;   /* elevated-2: menus, popovers */
+  --color-text-primary:   #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-muted:     #9097A1;
 
-  --color-text-primary:   #F7F7F8;
-  --color-text-secondary: #A6A6AE;
-  --color-text-muted:     #6C6C76;
+  /* ── Brand: Cobalt ── */
+  --color-accent:        #2563EB;  /* cobalt blue */
+  --color-accent-hover:  #1D4ED8;
+  --color-accent-subtle: rgba(37,99,235,0.10);
+  --color-accent-text:   #FFFFFF;  /* text on accent fills */
 
-  --color-accent:        #FF7A33;  /* electric orange */
-  --color-accent-hover:  #FF9357;  /* accent-hi */
-  --color-accent-subtle: rgba(255,122,51,0.12);
-  --color-accent-text:   #0A0A0C;  /* near-black text on accent fills */
+  --color-cyan:          #06B6D4;  /* supporting cyan (was --color-plasma) */
+  --color-plasma:        #06B6D4;  /* alias kept for back-compat */
 
-  --color-plasma:        #19D4E8;  /* plasma-cyan — tech/trust cue */
+  --color-border:        #EAECEF;
+  --color-border-strong: #D6DAE1;
 
-  --color-border:        #26262E;
-  --color-border-strong: #36363F;
+  --color-success: #16A34A;
+  --color-warning: #F59E0B;   /* also the rating-star color */
+  --color-error:   #EF4444;
 
-  --color-success: #34D399;
-  --color-warning: #FBBF24;
-  --color-error:   #FB7185;
+  /* ── Voltage-named aliases (used by ui/* primitives) ── */
+  --color-surface:        #FFFFFF;
+  --color-elevated:       #F3F4F6;
+  --color-elevated-2:     #F7F8FA;
+  --color-text:           #111827;
+  --color-accent-hi:      #1D4ED8;
 
-  /* ── Voltage-named tokens (used by ui/* primitives: bg-surface, text-plasma, …) ──
-     Both this set and the canonical set above are intentional and permanent —
-     screens use the canonical names, primitives use the Voltage names. ── */
-  --color-surface:        #121216;
-  --color-elevated:       #1A1A20;
-  --color-elevated-2:     #232329;
-  --color-text:           #F7F7F8;
-  --color-accent-hi:      #FF9357;
-
-  /* ── Elevation ── */
-  --shadow-sm:     0 1px 2px rgba(0,0,0,0.4);
-  --shadow-md:     0 6px 18px rgba(0,0,0,0.45);
-  --shadow-lg:     0 16px 40px rgba(0,0,0,0.55);
-  --shadow-accent: 0 0 24px rgba(255,122,51,0.15);
-  --shadow-glow:   0 0 24px rgba(255,122,51,0.5);
+  /* ── Elevation (soft light shadows) ── */
+  --shadow-sm:     0 1px 2px rgba(16,24,40,0.04);
+  --shadow-md:     0 4px 14px rgba(16,24,40,0.08);
+  --shadow-lg:     0 14px 36px rgba(16,24,40,0.12);
+  --shadow-accent: 0 8px 20px rgba(37,99,235,0.28);
+  --shadow-ring:   0 0 0 3px rgba(37,99,235,0.16);
 
   /* ── Radius ── */
-  --radius-sm: 6px;   /* inputs, chips */
-  --radius-md: 10px;  /* buttons */
-  --radius-lg: 16px;  /* cards */
-  --radius-xl: 20px;  /* hero / feature panels */
+  --radius-sm: 8px;    /* inputs, chips */
+  --radius-md: 10px;   /* buttons */
+  --radius-lg: 16px;   /* cards */
+  --radius-xl: 20px;   /* hero / feature panels */
 
-  /* ── Spacing (8px base) ── */
-  --spacing-xs:  4px;
-  --spacing-sm:  8px;
-  --spacing-md:  16px;
-  --spacing-lg:  24px;
-  --spacing-xl:  32px;
-  --spacing-2xl: 48px;
+  /* Spacing note: do NOT define --spacing-xs/sm/md/lg/xl/2xl here. In
+     Tailwind v4 those named keys also drive max-w / w / h utilities, so
+     overriding them silently breaks max-w-sm..2xl (collapsed containers).
+     Use the built-in 8px spacing scale (p-4, gap-6, ...) instead. */
 
   /* ── Motion ── */
   --duration-fast: 120ms;
@@ -77,39 +75,36 @@
   --ease-out:    cubic-bezier(.16,1,.3,1);
   --ease-spring: cubic-bezier(.34,1.56,.64,1);
 
-  /* ── Type ── */
-  --font-display: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
-  --font-sans: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
-  --font-arabic: var(--font-cairo), system-ui, sans-serif;
-  --font-mono: var(--font-mono), 'Fira Code', monospace;
+  /* ── Type ──
+     Latin + numbers: Hanken Grotesk. Arabic body: IBM Plex Sans Arabic.
+     Arabic headings: Cairo. (Load these via next/font — see README.) */
+  --font-display: var(--font-hanken), var(--font-cairo), system-ui, sans-serif;
+  --font-sans:    var(--font-plex-ar), var(--font-hanken), system-ui, sans-serif;
+  --font-arabic:  var(--font-cairo), var(--font-plex-ar), system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 }
 
 @layer base {
   * { box-sizing: border-box; }
-
-  html {
-    -webkit-font-smoothing: antialiased;
-  }
+  html { -webkit-font-smoothing: antialiased; }
 
   body {
-    background-color: #0A0A0C;
-    color: #F7F7F8;
-    font-family: var(--font-inter), var(--font-cairo), system-ui, sans-serif;
+    background-color: #F7F8FA;
+    color: #111827;
+    font-family: var(--font-plex-ar), var(--font-hanken), system-ui, sans-serif;
     font-size: 14.5px;
     font-weight: 450;
-    line-height: 1.65;
-    letter-spacing: 0.01em;
+    line-height: 1.7;
     overflow-x: hidden;
   }
 
-  /* Latin headings use the Space Grotesk display face */
   h1, h2, h3, h4 {
-    font-family: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-family: var(--font-cairo), var(--font-hanken), system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0B1220;
   }
 
-  /* Respect reduced-motion: kill decorative animation/transition */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
@@ -119,184 +114,98 @@
     }
   }
 
-  /* Arabic: Cairo — heavier weight for dark-bg readability */
-  :lang(ar) body,
-  [dir="rtl"] body {
-    font-family: var(--font-cairo), var(--font-inter), system-ui, sans-serif;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 1.85;
-  }
+  /* Arabic — slightly heavier for readability */
+  :lang(ar) body, [dir="rtl"] body { font-weight: 500; line-height: 1.85; }
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4 { font-weight: 800; letter-spacing: 0; }
 
-  /* Arabic headings — one step bolder */
-  [dir="rtl"] h1, [dir="rtl"] h2,
-  [dir="rtl"] h3, [dir="rtl"] h4 {
-    font-weight: 700;
-    letter-spacing: 0;
-  }
-
-  /* ── RTL layout overrides ── */
-  [dir="rtl"] .badge-dot {
-    right: auto;
-    left: -2px;
-  }
-
-  [dir="rtl"] .mono {
-    /* Arabic text doesn't use letter-spacing */
-    letter-spacing: 0;
-  }
-
-  /* RTL-aware text alignment for forms and content */
-  [dir="rtl"] input,
-  [dir="rtl"] textarea,
-  [dir="rtl"] select {
-    text-align: right;
-  }
-
-  /* Ensure footer links align correctly in RTL */
-  [dir="rtl"] .footer-link {
-    text-align: right;
-  }
-
-  ::selection { background: rgba(255,122,51,0.3); color: #F7F7F8; }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #0A0A0C; }
-  ::-webkit-scrollbar-thumb { background: #26262E; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #36363F; }
-
-  /* Visible keyboard focus ring (accent) across interactive elements */
-  :focus-visible {
-    outline: 2px solid #FF7A33;
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-
-  /* Prices / numeric runs stay LTR even inside RTL layouts */
-  .ltr-nums { direction: ltr; unicode-bidi: isolate; }
-
-  /* Mirror directional icons (back/next/prev chevrons & arrows) under RTL */
+  /* Prices / numeric runs stay LTR + tabular even inside RTL */
+  .ltr-nums, .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
   [dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+
+  ::selection { background: rgba(37,99,235,0.18); color: #111827; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #F3F4F6; }
+  ::-webkit-scrollbar-thumb { background: #D6DAE1; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #C4C8D0; }
+
+  :focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; border-radius: 4px; }
 }
 
 @layer components {
   /* ── Buttons ── */
-  .btn-primary {
+  .btn-accent {                 /* primary CTA */
     @apply inline-flex items-center justify-center gap-2
-           bg-text-primary text-bg-base
-           px-5 py-2.5 rounded text-sm font-semibold
-           transition-opacity duration-150
-           disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-  .btn-primary:hover:not(:disabled) { opacity: 0.88; }
-
-  .btn-accent {
-    @apply inline-flex items-center justify-center gap-2
-           px-5 py-2.5 rounded-md text-sm font-semibold
+           px-5 py-2.5 rounded-md text-sm font-bold
            transition-all duration-150
            disabled:opacity-50 disabled:cursor-not-allowed;
-    background: linear-gradient(135deg, #FF7A33, #FF5C1A);
-    color: #0A0A0C;
-    box-shadow: 0 6px 18px rgba(255,122,51,0.30);
+    background: #2563EB;
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(37,99,235,0.30);
   }
-  .btn-accent:hover:not(:disabled) { box-shadow: 0 8px 24px rgba(255,122,51,0.45); filter: brightness(1.05); }
+  .btn-accent:hover:not(:disabled) { background: #1D4ED8; box-shadow: 0 6px 16px rgba(37,99,235,0.30); }
 
-  .btn-secondary {
+  .btn-primary {                /* dark/neutral button */
     @apply inline-flex items-center justify-center gap-2
-           bg-transparent border border-border text-text-primary
-           px-5 py-2.5 rounded text-sm font-semibold
-           transition-colors duration-150;
+           px-5 py-2.5 rounded-md text-sm font-bold
+           transition-colors duration-150
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    background: #0B1220; color: #FFFFFF;
   }
-  .btn-secondary:hover { @apply bg-bg-elevated border-border-strong; }
+  .btn-primary:hover:not(:disabled) { background: #1F2937; }
+
+  .btn-secondary {              /* outlined */
+    @apply inline-flex items-center justify-center gap-2
+           bg-white border text-text-primary
+           px-5 py-2.5 rounded-md text-sm font-bold
+           transition-colors duration-150;
+    border-color: #D6DAE1;
+  }
+  .btn-secondary:hover { background: #F7F8FA; border-color: #C4C8D0; }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2
            bg-transparent text-text-secondary
-           px-3 py-2 rounded text-sm
+           px-3 py-2 rounded-md text-sm font-semibold
            transition-colors duration-150;
   }
-  .btn-ghost:hover { @apply bg-bg-elevated text-text-primary; }
+  .btn-ghost:hover { background: #F3F4F6; color: #111827; }
 
   /* ── Cards ── */
-  .card {
-    @apply bg-bg-surface border border-border rounded transition-colors duration-200;
-  }
+  .card { @apply bg-white border rounded-2xl transition-all duration-200; border-color: #EAECEF; box-shadow: 0 1px 2px rgba(16,24,40,0.04); }
+  .card-hover:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(16,24,40,0.10); border-color: #D6DAE1; }
 
   /* ── Inputs ── */
   .input {
-    @apply bg-bg-surface border border-border rounded
-           px-4 py-2.5 text-text-primary text-sm
-           outline-none transition-colors duration-150 w-full;
+    @apply bg-white border rounded-md
+           px-4 py-3 text-text-primary text-sm
+           outline-none transition-all duration-150 w-full;
+    border-color: #D6DAE1;
   }
-  .input::placeholder { color: #6C6C76; }
-  .input:focus { border-color: #FF7A33; box-shadow: 0 0 0 3px rgba(255,122,51,0.15); }
+  .input::placeholder { color: #9097A1; }
+  .input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.16); }
 
-  /* ── Mono label (brand/SKU/kickers) ── */
-  .mono {
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
+  /* ── Mono label (SKU / kicker) ── */
+  .mono { font-family: var(--font-mono); letter-spacing: 0.06em; }
 
   /* ── Tag chips ── */
-  .tag {
-    @apply inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: #1A1A20;
-    color: #A6A6AE;
-  }
-  .tag-new  { background: #FF7A33; color: #0A0A0C; }
-  .tag-sale { background: #FB7185; color: #0A0A0C; }
-  .tag-best { background: #F7F7F8; color: #0A0A0C; }
+  .tag { @apply inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold; background: #F3F4F6; color: #4B5563; }
+  .tag-new  { background: #E8F0FE; color: #1D4ED8; }
+  .tag-sale { background: #FEECEC; color: #DC2626; }
+  .tag-best { background: #E7F6EE; color: #15803D; }
+  .tag-instant { background: #E0F7FB; color: #0E7490; }
 
-  /* ── Header icon button ── */
-  .nav-icon-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-width: 40px; min-height: 40px;
-    padding: 9px; border-radius: 8px;
-    color: #F7F7F8; background: transparent; text-decoration: none;
-    position: relative; transition: background 0.15s;
-  }
-  .nav-icon-btn:hover { background: #1A1A20; }
-
-  /* ── Nav category link hover ── */
-  .nav-cat-link {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 4px 0;
-    font-size: 13px;
-    font-family: inherit;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: color 0.15s;
-  }
-  .nav-cat-link:hover { color: #F7F7F8 !important; }
-
-  /* ── Category / product card hover border ── */
-  .hover-accent-border { transition: border-color 0.2s; }
-  .hover-accent-border:hover { border-color: #FF7A33 !important; }
-
-  /* ── Footer link hover ── */
-  .footer-link { color: #A6A6AE; font-size: 13px; text-decoration: none; transition: color 0.15s; }
-  .footer-link:hover { color: #F7F7F8; }
-
-  .section-title {
-    @apply text-2xl font-semibold text-text-primary tracking-tight;
-    letter-spacing: -0.01em;
-  }
-  .divider { @apply border-t border-border; }
-
-  /* ── Badge (notification dot) ── */
+  /* ── Notification dot ── */
   .badge-dot {
-    @apply absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full
-           flex items-center justify-center
-           text-[10px] font-bold;
-    font-family: 'JetBrains Mono', monospace;
-    background: #FF7A33;
-    color: #0A0A0C;
-    box-shadow: 0 0 10px rgba(255,122,51,0.6);
+    @apply absolute -top-1.5 -right-2 min-w-4 h-4 px-1 rounded-full
+           flex items-center justify-center text-[9px] font-bold;
+    font-family: var(--font-mono);
+    background: #2563EB; color: #FFFFFF;
   }
+  [dir="rtl"] .badge-dot { right: auto; left: -0.5rem; }
+
+  .section-title { @apply text-2xl font-bold tracking-tight; color: #0B1220; }
+  .divider { @apply border-t; border-color: #EAECEF; }
+
+  /* ── Skeleton shimmer ── */
+  .skeleton { background: linear-gradient(90deg,#F3F4F6 25%,#E9EBEF 37%,#F3F4F6 63%); background-size: 400% 100%; animation: skeleton 1.4s ease infinite; }
 }

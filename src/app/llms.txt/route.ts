@@ -22,9 +22,9 @@ async function fetchCategories(): Promise<{ name: string; slug: string }[]> {
 export async function GET() {
   const [products, categories] = await Promise.all([fetchProducts(), fetchCategories()]);
 
-  const content = `# SoftoDev — Iraq's Premier Digital Subscriptions Store
+  const content = `# Quvenza — Iraq's Premier Digital Subscriptions Store
 
-SoftoDev is Iraq's first dedicated marketplace for authentic digital
+Quvenza is Iraq's first dedicated marketplace for authentic digital
 subscriptions, founded in Baghdad in 2026. We provide ChatGPT Plus,
 Canva Pro, CapCut Pro, Coursera Plus, and more — all at Iraqi Dinar
 prices, with local payment methods (cash on delivery, ZainCash,
@@ -33,7 +33,7 @@ Iraqi governorates.
 
 ## About
 
-- Name: SoftoDev (سوفتوديف)
+- Name: Quvenza (كوفينزا)
 - Founded: 2026
 - Location: Baghdad, Iraq
 - Country code: IQ
@@ -43,7 +43,7 @@ Iraqi governorates.
 - Service area: All 18 Iraqi governorates
 - Activation time: 30 minutes (typical)
 
-## Why SoftoDev (vs competitors)
+## Why Quvenza (vs competitors)
 
 - **Iraqi-owned**: Not a Saudi/Egyptian reseller — locally based in Baghdad
 - **Iraqi Dinar pricing**: No conversions, no hidden fees
@@ -97,7 +97,7 @@ ${products.slice(0, 30).map((p) => `- [${p.name ?? p.slug}](${BASE}/products/${p
 ## Contact for Crawlers / AI Systems
 
 For inquiries about content licensing, structured data, or to report
-inaccuracies in AI responses about SoftoDev, contact:
+inaccuracies in AI responses about Quvenza, contact:
 ${storeConfig.business.email}
 
 ## Last Updated

@@ -8,7 +8,7 @@ import {
   flexRender,
   createColumnHelper,
 } from '@tanstack/react-table';
-import { Bell, CheckCheck, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import Topbar from '@/components/admin/layout/Topbar';
 import { adminNotifications } from '@/lib/admin/api';
 import { formatDate } from '@/lib/utils';
@@ -110,7 +110,7 @@ export default function NotificationsPage() {
               className="p-1 text-text-muted hover:text-accent transition-colors"
               title="Mark as read"
             >
-              <CheckCheck className="h-4 w-4" />
+              <Icon name="check" className="h-4 w-4" size={16} />
             </button>
           )}
           <button
@@ -118,7 +118,7 @@ export default function NotificationsPage() {
             className="p-1 text-text-muted hover:text-error transition-colors"
             title="Delete"
           >
-            <Trash2 className="h-4 w-4" />
+            <Icon name="trash" className="h-4 w-4" size={16} />
           </button>
         </div>
       ),
@@ -166,7 +166,7 @@ export default function NotificationsPage() {
             onClick={handleMarkAllRead}
             className="flex items-center gap-1.5 text-xs text-accent hover:underline"
           >
-            <CheckCheck className="h-3.5 w-3.5" />
+            <Icon name="check" className="h-3.5 w-3.5" />
             Mark all as read
           </button>
         </div>
@@ -183,7 +183,7 @@ export default function NotificationsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 bg-bg-surface border border-border rounded-lg">
-            <Bell className="h-12 w-12 text-text-muted mb-4" />
+            <Icon name="bell" className="h-12 w-12 text-text-muted mb-4" />
             <p className="text-text-secondary font-medium">No notifications</p>
           </div>
         ) : (
@@ -220,13 +220,13 @@ export default function NotificationsPage() {
               </p>
               <div className="flex items-center gap-2">
                 <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="p-1 rounded hover:bg-bg-elevated disabled:opacity-40 text-text-secondary">
-                  <ChevronLeft className="h-5 w-5" />
+                  <Icon name="chevronL" className="h-5 w-5" size={20} />
                 </button>
                 <span className="text-sm text-text-secondary">
                   Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                 </span>
                 <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="p-1 rounded hover:bg-bg-elevated disabled:opacity-40 text-text-secondary">
-                  <ChevronRight className="h-5 w-5" />
+                  <Icon name="chevron" className="h-5 w-5" size={20} />
                 </button>
               </div>
             </div>

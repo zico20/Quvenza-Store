@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction:ltr; unicode-bidi:isolate; font-feature-settings:'tnum'; }
+  .mono { font-family: 'JetBrains Mono', monospace; direction:ltr; unicode-bidi:isolate; letter-spacing:0.04em; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: box-shadow .15s, transform .12s, color .15s; }
+  .hbtn:active { transform: translateY(1px); }
+  .ul:hover { color: #2563EB !important; }
+  .home-wrap { container-type: inline-size; background:#F7F8FA; }
+  .cq-nav-links { display: none; }
+  .od-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @container (min-width: 800px) {
+    .cq-nav-links { display: flex; }
+    .od-layout { grid-template-columns: 1fr 320px; gap: 26px; align-items: start; }
+    .od-side { position: sticky; top: 22px; }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <div style="max-width:1280px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV · {{ deviceLabel }} · {{ langLabel }} · {{ tx.pageTag }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+      <header style="background:#fff; border-bottom:1px solid #EAECEF; padding:14px 22px; display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:26px;">
+          <div style="display:flex; align-items:center; gap:9px;"><div class="hk" style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div><span class="ca" style="font-weight:700; font-size:16px; color:#0B1220;">SoftoDev</span></div>
+          <nav class="cq-nav-links" style="gap:22px; font-size:14px; color:#4B5563; font-weight:600;"><span class="ul" style="cursor:pointer;">{{ tx.navProducts }}</span><span class="ul" style="cursor:pointer;">{{ tx.navCats }}</span></nav>
+        </div>
+        <span class="hk" style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#2563EB,#3B82F6); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;">{{ tx.avatar }}</span>
+      </header>
+
+      <div style="padding:24px 22px; max-width:1180px; margin:0 auto; width:100%;">
+        <!-- breadcrumb + back -->
+        <div class="hk" style="display:flex; align-items:center; gap:7px; font-size:12px; color:#9097A1; margin-bottom:16px;">
+          <span class="ul" style="cursor:pointer;">{{ tx.account }}</span><dc-import name="Icon" icon="{{ chevDir }}" size="13" color="#C4C8D0" hint-size="13px,13px"></dc-import><span class="ul" style="cursor:pointer;">{{ tx.orders }}</span><dc-import name="Icon" icon="{{ chevDir }}" size="13" color="#C4C8D0" hint-size="13px,13px"></dc-import><span class="num" style="color:#4B5563;">#SD-48217</span>
+        </div>
+
+        <!-- order header -->
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:22px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <h1 class="ca" style="margin:0; font-weight:800; font-size:clamp(22px,3cqw,28px); color:#0B1220;">{{ tx.orderTitle }} <span class="num">#SD-48217</span></h1>
+              <span style="display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:5px 11px; border-radius:20px; background:#E7F6EE; color:#15803D;"><dc-import name="Icon" icon="check" size="13" color="#15803D" stroke="2.4" hint-size="13px,13px"></dc-import> {{ tx.activated }}</span>
+            </div>
+            <div class="hk" style="font-size:12.5px; color:#9097A1; margin-top:6px;">{{ tx.placedOn }} · <span class="num">12 May 2026, 14:32</span></div>
+          </div>
+          <button class="hbtn" style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #D6DAE1; color:#111827; font-weight:700; font-size:13px; padding:11px 18px; border-radius:11px;"><dc-import name="Icon" icon="package" size="16" color="#111827" hint-size="16px,16px"></dc-import> {{ tx.invoice }}</button>
+        </div>
+
+        <div class="od-layout">
+          <div>
+            <!-- timeline -->
+            <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:22px; margin-bottom:16px;">
+              <div class="ca" style="font-size:15px; font-weight:700; color:#0B1220; margin-bottom:18px;">{{ tx.timeline }}</div>
+              <div style="display:flex; flex-direction:column;">
+                <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+                  <div style="display:flex; gap:14px;">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                      <span style="{{ s.dot }}"><dc-import name="Icon" icon="check" size="13" color="#fff" stroke="2.6" hint-size="13px,13px"></dc-import></span>
+                      <span style="{{ s.line }}"></span>
+                    </div>
+                    <div style="padding-bottom:18px;"><div class="ca" style="font-size:13.5px; font-weight:700; color:#0B1220;">{{ s.title }}</div><div class="hk" style="font-size:11.5px; color:#9097A1; margin-top:2px;">{{ s.time }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- items with activation -->
+            <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:22px;">
+              <div class="ca" style="font-size:15px; font-weight:700; color:#0B1220; margin-bottom:16px;">{{ tx.itemsTitle }}</div>
+              <div style="display:flex; flex-direction:column; gap:14px;">
+                <sc-for list="{{ items }}" as="it" hint-placeholder-count="2">
+                  <div style="border:1px solid #F1F2F5; border-radius:14px; padding:16px;">
+                    <div style="display:flex; align-items:center; gap:13px;">
+                      <div class="hk" style="width:46px; height:46px; border-radius:12px; background:{{ it.icon }}; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:13px; flex-shrink:0;">{{ it.glyph }}</div>
+                      <div style="flex:1; min-width:0;"><div class="ca" style="font-size:14px; font-weight:700; color:#0B1220;">{{ it.name }}</div><div class="hk" style="font-size:11.5px; color:#9097A1; margin-top:2px;">{{ it.plan }} · {{ tx.qty }} {{ it.qty }}</div></div>
+                      <span class="num" style="font-weight:800; font-size:16px; color:#0B1220;">{{ it.total }}</span>
+                    </div>
+                    <div style="margin-top:14px; padding-top:14px; border-top:1px dashed #E5E7EB; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+                      <div style="display:flex; align-items:center; gap:9px;"><span style="width:30px; height:30px; border-radius:8px; background:#E7F6EE; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="bolt" size="15" color="#15803D" hint-size="15px,15px"></dc-import></span><div><div class="hk" style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:#9097A1;">{{ tx.activationCode }}</div><div class="mono" style="font-size:13.5px; font-weight:700; color:#0B1220;">{{ it.code }}</div></div></div>
+                      <button class="hbtn" onClick="{{ it.onReveal }}" style="display:inline-flex; align-items:center; gap:6px; background:#E8F0FE; color:#1D4ED8; font-weight:700; font-size:12px; padding:8px 14px; border-radius:9px;"><dc-import name="Icon" icon="{{ it.revealIcon }}" size="14" color="#1D4ED8" hint-size="14px,14px"></dc-import> {{ it.revealLabel }}</button>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex; align-items:center; gap:9px; margin-top:16px; padding:12px 14px; background:#F0F7FF; border:1px solid #DCEAFE; border-radius:12px;"><dc-import name="Icon" icon="mail" size="17" color="#2563EB" hint-size="17px,17px"></dc-import><span class="ca" style="font-size:12.5px; color:#1D4ED8; font-weight:600;">{{ tx.sentTo }}</span></div>
+            </div>
+          </div>
+
+          <!-- summary side -->
+          <aside class="od-side">
+            <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:22px; margin-bottom:14px;">
+              <div class="ca" style="font-size:15px; font-weight:700; color:#0B1220; margin-bottom:16px;">{{ tx.summary }}</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#6B7280;"><span>{{ tx.subtotal }}</span><span class="num">$225</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#15803D;"><span>{{ tx.discount }}</span><span class="num">−$23</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; color:#6B7280;"><span>{{ tx.payMethod }}</span><span class="ca" style="font-weight:600; color:#374151;">{{ tx.zaincash }}</span></div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:8px; padding-top:12px; border-top:1px solid #F1F2F5;"><span class="ca" style="font-size:15px; font-weight:800; color:#0B1220;">{{ tx.total }}</span><div style="text-align:end;"><div class="num" style="font-size:20px; font-weight:800; color:#0B1220;">$202</div><div class="num" style="font-size:11px; color:#9097A1;">≈ IQD 264,620</div></div></div>
+              </div>
+            </div>
+            <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:20px;">
+              <div class="ca" style="font-size:14px; font-weight:700; color:#0B1220; margin-bottom:6px;">{{ tx.needHelp }}</div>
+              <p style="margin:0 0 14px; font-size:12.5px; line-height:1.7; color:#6B7280;">{{ tx.needHelpSub }}</p>
+              <button class="hbtn" style="width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#0B1220; color:#fff; font-weight:700; font-size:13px; padding:12px; border-radius:11px;"><dc-import name="Icon" icon="chat" size="16" color="#fff" hint-size="16px,16px"></dc-import> {{ tx.contactSupport }}</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang:'ar', device:'desktop', revealed:{} };
+
+  get T() {
+    const ar = {
+      pageTag:'تفاصيل الطلب', navProducts:'المنتجات', navCats:'الفئات', avatar:'أ',
+      account:'حسابي', orders:'طلباتي', orderTitle:'الطلب', activated:'مُفعّل', placedOn:'تم الطلب في', invoice:'تحميل الفاتورة',
+      timeline:'مسار الطلب', itemsTitle:'المنتجات ورموز التفعيل', qty:'الكمية', activationCode:'رمز التفعيل',
+      sentTo:'أُرسلت رموز التفعيل إلى بريدك وواتساب', summary:'ملخّص الطلب', subtotal:'المجموع الفرعي', discount:'الخصم', payMethod:'طريقة الدفع', zaincash:'زين كاش', total:'الإجمالي',
+      needHelp:'تحتاج مساعدة؟', needHelpSub:'فريقنا جاهز لمساعدتك في أي مشكلة تخص هذا الطلب على مدار الساعة.', contactSupport:'تواصل مع الدعم',
+      st1:'تم استلام الطلب', st1t:'12 مايو 2026، 14:32', st2:'تم تأكيد الدفع', st2t:'12 مايو 2026، 14:33', st3:'تم تفعيل الاشتراكات', st3t:'12 مايو 2026، 14:41',
+      reveal:'إظهار', hide:'إخفاء'
+    };
+    const en = {
+      pageTag:'ORDER', navProducts:'Products', navCats:'Categories', avatar:'A',
+      account:'My account', orders:'My orders', orderTitle:'Order', activated:'Activated', placedOn:'Placed on', invoice:'Download invoice',
+      timeline:'Order timeline', itemsTitle:'Items & activation codes', qty:'Qty', activationCode:'Activation code',
+      sentTo:'Activation codes were sent to your email & WhatsApp', summary:'Order summary', subtotal:'Subtotal', discount:'Discount', payMethod:'Payment method', zaincash:'ZainCash', total:'Total',
+      needHelp:'Need help?', needHelpSub:'Our team is ready to help with anything about this order, around the clock.', contactSupport:'Contact support',
+      st1:'Order received', st1t:'May 12, 2026, 14:32', st2:'Payment confirmed', st2t:'May 12, 2026, 14:33', st3:'Subscriptions activated', st3t:'May 12, 2026, 14:41',
+      reveal:'Show', hide:'Hide'
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  get stepsData() {
+    const t = this.T;
+    const arr = [ {title:t.st1, time:t.st1t}, {title:t.st2, time:t.st2t}, {title:t.st3, time:t.st3t} ];
+    return arr.map((s, i) => ({
+      title:s.title, time:s.time,
+      dot:'width:26px; height:26px; border-radius:50%; background:#16A34A; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;',
+      line: i < 2 ? 'width:2px; flex:1; min-height:26px; background:#BBF7D0; margin:2px 0;' : 'display:none;',
+    }));
+  }
+
+  get itemsData() {
+    const ar = this.state.lang === 'ar'; const t = this.T;
+    const base = [
+      { id:'gpt', glyph:'GPT', name:'ChatGPT Plus', plan: ar?'سنوي':'Yearly', qty:'1', total:'$180', real:'GPT9-2K4M-77XQ', icon:'linear-gradient(135deg,#10A37F,#1AB68C)' },
+      { id:'canva', glyph:'Cv', name:'Canva Pro', plan: ar?'سنوي':'Yearly', qty:'1', total:'$45', real:'CNVA-8821-LP3Z', icon:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+    ];
+    return base.map(it => {
+      const shown = !!this.state.revealed[it.id];
+      return {
+        glyph:it.glyph, name:it.name, plan:it.plan, qty:it.qty, total:it.total, icon:it.icon,
+        code: shown ? it.real : '••••-••••-••••',
+        revealLabel: shown ? t.hide : t.reveal,
+        revealIcon: shown ? 'x' : 'eye',
+        onReveal: () => this.setState({ revealed: { ...this.state.revealed, [it.id]: !shown } }),
+      };
+    });
+  }
+
+  toggleBtn(a){return a?'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:#fff;color:#0B1220;':'padding:5px 13px;border-radius:7px;font-size:12px;font-weight:700;background:transparent;color:#9CA3AF;';}
+
+  renderVals() {
+    const ar = this.state.lang === 'ar'; const desk = this.state.device === 'desktop';
+    return {
+      dir: ar?'rtl':'ltr', chevDir: ar?'chevron':'chevronL', tx:this.T,
+      steps:this.stepsData, items:this.itemsData,
+      langLabel: ar?'AR':'EN', deviceLabel: desk?'DESKTOP':'MOBILE',
+      wrapStyle: desk ? 'width:100%; max-width:1180px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;' : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      setAr:()=>this.setState({lang:'ar'}), setEn:()=>this.setState({lang:'en'}),
+      setDesktop:()=>this.setState({device:'desktop'}), setMobile:()=>this.setState({device:'mobile'}),
+      arBtnStyle:this.toggleBtn(ar), enBtnStyle:this.toggleBtn(!ar), deskBtnStyle:this.toggleBtn(desk), mobBtnStyle:this.toggleBtn(!desk),
+    };
+  }
+}
+</script>
+</body>
+</html>

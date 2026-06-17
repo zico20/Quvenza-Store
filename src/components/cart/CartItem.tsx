@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { Trash2, Minus, Plus } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { CartItem as CartItemType } from '@/types';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useCartStore } from '@/store/cart.store';
@@ -31,14 +31,14 @@ export default function CartItem({ item }: { item: CartItemType }) {
             onClick={() => updateQuantity(item.productId, item.quantity - 1)}
             className="h-8 w-8 rounded border border-border bg-bg-elevated hover:bg-bg-subtle text-text-secondary flex items-center justify-center transition-colors"
           >
-            <Minus className="h-3.5 w-3.5" />
+            <Icon name="minus" className="h-3.5 w-3.5" />
           </button>
           <span className="text-text-primary text-sm font-medium w-7 text-center">{item.quantity}</span>
           <button
             onClick={() => updateQuantity(item.productId, item.quantity + 1)}
             className="h-8 w-8 rounded border border-border bg-bg-elevated hover:bg-bg-subtle text-text-secondary flex items-center justify-center transition-colors"
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Icon name="plus" className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function CartItem({ item }: { item: CartItemType }) {
           className="text-text-muted hover:text-error transition-colors p-1"
           aria-label={t('common.removeItem')}
         >
-          <Trash2 className="h-4 w-4" />
+          <Icon name="trash" className="h-4 w-4" size={16} />
         </button>
       </div>
     </div>

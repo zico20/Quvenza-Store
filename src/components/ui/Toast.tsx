@@ -1,16 +1,16 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { CheckCircle2, XCircle, AlertTriangle, Info, X } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { cn } from '@/lib/utils';
 
 export type ToastVariant = 'success' | 'error' | 'warning' | 'info';
 
 const config: Record<ToastVariant, { icon: ReactNode; ring: string; text: string }> = {
-  success: { icon: <CheckCircle2 className="h-5 w-5" />, ring: 'border-success/40 bg-success/10', text: 'text-success' },
-  error: { icon: <XCircle className="h-5 w-5" />, ring: 'border-error/40 bg-error/10', text: 'text-error' },
-  warning: { icon: <AlertTriangle className="h-5 w-5" />, ring: 'border-warning/40 bg-warning/10', text: 'text-warning' },
-  info: { icon: <Info className="h-5 w-5" />, ring: 'border-plasma/40 bg-plasma/10', text: 'text-plasma' },
+  success: { icon: <Icon name="checkCircle" className="h-5 w-5" size={20} />, ring: 'border-success/40 bg-success/10', text: 'text-success' },
+  error: { icon: <Icon name="x" className="h-5 w-5" size={20} />, ring: 'border-error/40 bg-error/10', text: 'text-error' },
+  warning: { icon: <Icon name="alert" className="h-5 w-5" size={20} />, ring: 'border-warning/40 bg-warning/10', text: 'text-warning' },
+  info: { icon: <Icon name="info" className="h-5 w-5" size={20} />, ring: 'border-plasma/40 bg-plasma/10', text: 'text-plasma' },
 };
 
 interface ToastProps {
@@ -45,7 +45,7 @@ export default function Toast({ variant = 'info', title, description, onClose, c
           aria-label="Close"
           className="shrink-0 text-text-muted hover:text-text-primary transition-colors"
         >
-          <X className="h-4 w-4" />
+          <Icon name="x" className="h-4 w-4" size={16} />
         </button>
       )}
     </div>

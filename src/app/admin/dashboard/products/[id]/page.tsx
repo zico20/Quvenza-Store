@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ArrowLeft, Trash2, Upload, X, Save } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Product, Category, ApiResponse } from '@/types';
 import { adminProducts, adminOrders } from '@/lib/admin/api';
 import adminApiClient from '@/lib/admin/api';
@@ -206,7 +206,7 @@ export default function EditProductPage() {
 
       <div className="p-4 max-w-2xl">
         <button onClick={() => router.push('/admin/dashboard/products')} className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text-primary mb-4 transition-colors">
-          <ArrowLeft className="h-3.5 w-3.5" /> {t('products.backToProducts')}
+          <Icon name="arrowLeft" className="h-3.5 w-3.5" /> {t('products.backToProducts')}
         </button>
 
         <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-3">
@@ -278,7 +278,7 @@ export default function EditProductPage() {
                     <img src={url} alt="Product" className="w-full h-full object-cover" />
                     <button type="button" onClick={() => removeExistingImage(url)}
                       className="absolute top-0.5 right-0.5 bg-error text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <X className="h-2.5 w-2.5" />
+                      <Icon name="x" className="h-2.5 w-2.5" />
                     </button>
                   </div>
                 ))}
@@ -287,7 +287,7 @@ export default function EditProductPage() {
                     <img src={src} alt={`New ${i + 1}`} className="w-full h-full object-cover" />
                     <button type="button" onClick={() => removeNewImage(i)}
                       className="absolute top-0.5 right-0.5 bg-error text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <X className="h-2.5 w-2.5" />
+                      <Icon name="x" className="h-2.5 w-2.5" />
                     </button>
                     <span className="absolute bottom-0.5 left-0.5 bg-accent text-white text-[10px] px-1 rounded">New</span>
                   </div>
@@ -295,7 +295,7 @@ export default function EditProductPage() {
               </div>
             )}
             <label className="flex items-center gap-3 border border-dashed border-border rounded-lg p-3 cursor-pointer hover:border-border-strong transition-colors">
-              <Upload className="h-4 w-4 text-text-muted flex-shrink-0" />
+              <Icon name="upload" className="h-4 w-4 text-text-muted flex-shrink-0" size={16} />
               <div>
                 <span className="text-xs text-text-secondary">{t('products.uploadImages')}</span>
                 <span className="text-xs text-text-muted ml-2">PNG, JPG, WebP</span>
@@ -308,10 +308,10 @@ export default function EditProductPage() {
           <div className="flex items-center justify-between pb-2">
             <button type="button" onClick={() => setShowDeleteConfirm(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-error border border-error/20 rounded-md hover:bg-error/10 transition-colors">
-              <Trash2 className="h-3.5 w-3.5" /> {t('products.deleteProduct')}
+              <Icon name="trash" className="h-3.5 w-3.5" /> {t('products.deleteProduct')}
             </button>
             <button type="submit" disabled={saving} className="btn-primary text-sm disabled:opacity-50">
-              <Save className="h-3.5 w-3.5" />
+              <Icon name="save" className="h-3.5 w-3.5" />
               {saving ? t('products.saving') : t('products.saveChanges')}
             </button>
           </div>

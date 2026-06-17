@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Package, FileText, Settings2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Order } from '@/types';
 import { adminOrders } from '@/lib/admin/api';
 import StatusBadge from '@/components/admin/orders/StatusBadge';
@@ -160,7 +160,7 @@ export default function OrderDetailPage() {
           onClick={() => router.push('/admin/dashboard/orders')}
           className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary mb-6 transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" /> {t('orders.backToOrders')}
+          <Icon name="arrowLeft" className="h-4 w-4" size={16} /> {t('orders.backToOrders')}
         </button>
 
         {/* Header row */}
@@ -177,7 +177,7 @@ export default function OrderDetailPage() {
               onClick={() => setShowStatusModal(true)}
               className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border bg-bg-surface text-text-secondary hover:bg-bg-elevated text-sm font-medium transition-colors"
             >
-              <Settings2 className="h-4 w-4" />
+              <Icon name="settings" className="h-4 w-4" size={16} />
               {t('orders.changeStatus')}
             </button>
             <button
@@ -185,7 +185,7 @@ export default function OrderDetailPage() {
               disabled={downloadingInvoice}
               className="flex items-center gap-2 btn-primary text-sm disabled:opacity-50"
             >
-              <FileText className="h-4 w-4" />
+              <Icon name="file" className="h-4 w-4" size={16} />
               {downloadingInvoice ? t('orders.generating') : t('orders.printInvoice')}
             </button>
           </div>
@@ -219,7 +219,7 @@ export default function OrderDetailPage() {
                               <img src={item.product.images[0]} alt={item.product.name} className="h-full w-full object-cover" />
                             ) : (
                               <div className="h-full w-full flex items-center justify-center">
-                                <Package className="h-4 w-4 text-text-muted" />
+                                <Icon name="package" className="h-4 w-4 text-text-muted" size={16} />
                               </div>
                             )}
                           </div>

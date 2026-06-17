@@ -6,7 +6,7 @@ import { getServerLang, t, getCategoryName } from '@/lib/i18n';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, productListSchema } from '@/lib/schema';
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenzaiq.com';
 
 export const revalidate = 3600;
 
@@ -27,13 +27,9 @@ async function getCategoryWithProducts(slug: string): Promise<{ name: string; pr
   }
 }
 
-export async function generateStaticParams() {
-  try {
-    const { getCategories } = await import('@/services/categories/category.service');
-    const cats = await getCategories();
-    return cats.map((c) => ({ slug: c.slug }));
-  } catch { return []; }
-}
+// Dynamic: reads the language cookie via getServerLang() + DB-backed; a
+// static render touching cookies() throws "static to dynamic" in Next.js 16.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }

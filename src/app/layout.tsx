@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cairo, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { Cairo, Hanken_Grotesk, IBM_Plex_Sans_Arabic, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -16,19 +16,21 @@ const cairo = Cairo({
   preload: true,
 });
 
-const inter = Inter({
+// Hanken Grotesk — Latin UI + numbers (Cobalt)
+const hanken = Hanken_Grotesk({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-inter',
-  preload: false,
+  variable: '--font-hanken',
+  preload: true,
 });
 
-// Space Grotesk — display/heading face (Latin) for the Voltage system
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
+// IBM Plex Sans Arabic — Arabic body (Cobalt)
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic', 'latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-  variable: '--font-space-grotesk',
+  variable: '--font-plex-ar',
   preload: true,
 });
 
@@ -40,13 +42,13 @@ const jetbrainsMono = JetBrains_Mono({
   preload: false,
 });
 
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenzaiq.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
   title: {
-    default: 'SoftoDev | اشتراكات ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
-    template: '%s | SoftoDev — اشتراكات رقمية العراق',
+    default: 'Quvenza | اشتراكات ChatGPT Plus · Canva Pro · CapCut · Coursera في العراق',
+    template: '%s | Quvenza — اشتراكات رقمية العراق',
   },
   description:
     'أكبر متجر اشتراكات رقمية أصلية في العراق. اشترك في ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus بأسعار بالدينار العراقي — تفعيل فوري، ضمان كامل، دفع زين كاش وآسيا حوالة.',
@@ -59,12 +61,12 @@ export const metadata: Metadata = {
     'اشتراكات رقمية بغداد',
     'متجر اشتراكات العراق',
     'اشتراك شات جي بي تي عراق',
-    'softodeviqstore',
-    'سوفتوديف',
+    'quvenza',
+    'كوفينزا',
   ],
-  authors: [{ name: 'SoftoDev', url: BASE }],
-  creator: 'SoftoDev',
-  publisher: 'SoftoDev',
+  authors: [{ name: 'Quvenza', url: BASE }],
+  creator: 'Quvenza',
+  publisher: 'Quvenza',
   formatDetection: { email: false, telephone: false },
   alternates: {
     canonical: BASE,
@@ -75,14 +77,14 @@ export const metadata: Metadata = {
     locale: 'ar_IQ',
     alternateLocale: 'en_US',
     url: BASE,
-    siteName: 'SoftoDev',
-    title: 'SoftoDev — اشتراكات رقمية أصلية بأسعار عراقية',
+    siteName: 'Quvenza',
+    title: 'Quvenza — اشتراكات رقمية أصلية بأسعار عراقية',
     description: 'ChatGPT Plus، Canva Pro، CapCut Pro و أكثر — تسليم فوري، دفع بالدينار، ضمان كامل.',
-    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'SoftoDev — متجر الاشتراكات الرقمية في العراق' }],
+    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'Quvenza — متجر الاشتراكات الرقمية في العراق' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SoftoDev — اشتراكات رقمية في العراق',
+    title: 'Quvenza — اشتراكات رقمية في العراق',
     description: 'ChatGPT Plus، Canva Pro، CapCut Pro بالدينار العراقي — تفعيل فوري.',
     images: ['/og-image.svg'],
   },
@@ -121,13 +123,19 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#FF7A33',
+  themeColor: '#2563EB',
 };
 
-async function getNavCategories(): Promise<{ id: string; name: string; slug: string }[]> {
+async function getNavCategories(): Promise<{ id: string; name: string; slug: string; count: number }[]> {
   try {
     const { getCategories } = await import('@/services/categories/category.service');
-    return await getCategories();
+    const cats = await getCategories();
+    return cats.map((c) => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+      count: (c as { _count?: { products?: number } })._count?.products ?? 0,
+    }));
   } catch {
     return [];
   }
@@ -137,11 +145,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const navCategories = await getNavCategories();
 
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} ${hanken.variable} ${plexArabic.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="author" href="/humans.txt" />
       </head>
-      <body className="flex flex-col min-h-screen" style={{ background: '#0A0A0C', color: '#F7F7F8' }}>
+      <body className="flex flex-col min-h-screen" style={{ background: '#F7F8FA', color: '#111827' }}>
         <LangInitializer />
         <StoreChrome
           header={<Header navCategories={navCategories} />}

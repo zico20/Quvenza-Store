@@ -1,0 +1,31 @@
+# ---- VCS / IDE ----
+.git
+.gitignore
+.vscode
+.idea
+
+# ---- deps & build output (rebuilt inside the image) ----
+node_modules
+.next
+out
+dist
+build
+
+# ---- env & secrets (never bake into the image) ----
+.env
+.env.*
+!.env.docker.example
+
+# ---- caches / logs / misc ----
+*.log
+*.tsbuildinfo
+.turbo
+coverage
+.DS_Store
+Thumbs.db
+
+# ---- project docs / specs not needed at runtime ----
+specs
+docs
+README.md
+DESIGN_PROMPT.md

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { useCartStore } from '@/store/cart.store';
 import CartItem from '@/components/cart/CartItem';
 import { useCurrency } from '@/hooks/useCurrency';
@@ -13,10 +13,10 @@ export default function CartPage() {
   const total = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="w-full mx-auto px-4 py-8 max-w-2xl">
       <div className="flex items-center gap-4 mb-8">
         <Link href="/products" className="btn-ghost p-2">
-          <ArrowLeft className="h-5 w-5" />
+          <Icon name="arrowLeft" className="h-5 w-5" size={20} />
         </Link>
         <h1 className="text-2xl font-bold text-text-primary">{t('cart.title')}</h1>
       </div>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Star, ShoppingCart, Check } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import type { Product } from '@/types';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
@@ -12,9 +12,9 @@ import { useCurrency } from '@/hooks/useCurrency';
 
 function StarRow({ value }: { value: number }) {
   return (
-    <div style={{ display: 'inline-flex', gap: 1, color: '#FF9357' }}>
+    <div style={{ display: 'inline-flex', gap: 1, color: '#1D4ED8' }}>
       {[1, 2, 3, 4, 5].map(i => (
-        <Star key={i} size={11} strokeWidth={0} fill={i <= Math.round(value) ? '#FF9357' : 'rgba(255,147,87,0.2)'} />
+        <Icon key={i} name="star" size={11} stroke={0} color={i <= Math.round(value) ? '#1D4ED8' : 'rgba(29,78,216,0.2)'} />
       ))}
     </div>
   );
@@ -54,7 +54,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const hue = hues[(product.id?.charCodeAt(product.id.length - 1) ?? 0) % hues.length];
   const placeholderBg = `
     radial-gradient(circle at 30% 25%, oklch(0.45 0.12 ${hue} / 0.5), transparent 60%),
-    linear-gradient(160deg, #16161b, #0a0a0c)
+    linear-gradient(160deg, #FFFFFF, #F7F8FA)
   `;
 
   return (
@@ -84,7 +84,7 @@ export default function ProductCard({ product }: { product: Product }) {
               className="mono"
               style={{
                 position: 'absolute', bottom: 12, insetInlineStart: 12,
-                fontSize: 10, color: 'rgba(247,247,248,0.35)',
+                fontSize: 10, color: 'rgba(17,24,39,0.45)',
               }}
             >
               {(product as any).category?.name || 'product shot'}
@@ -105,14 +105,16 @@ export default function ProductCard({ product }: { product: Product }) {
           style={{
             position: 'absolute', top: 10, insetInlineEnd: 10,
             width: 36, height: 36, borderRadius: 18,
-            background: 'rgba(10,10,12,0.85)', border: '1px solid var(--color-border)',
-            color: inWishlist ? '#FB7185' : '#F7F7F8',
+            background: 'rgba(255,255,255,0.9)', border: '1px solid var(--color-border)',
+            color: inWishlist ? '#EF4444' : '#4B5563',
             cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             backdropFilter: 'blur(6px)',
           }}
           aria-label={inWishlist ? t('wishlist.remove') : t('wishlist.add')}
         >
-          <Heart size={15} strokeWidth={1.6} fill={inWishlist ? '#FB7185' : 'none'} />
+          {inWishlist
+            ? <Icon name="heartFill" size={15} stroke={1.6} />
+            : <Icon name="heart" size={15} stroke={1.6} />}
         </button>
       </div>
 
@@ -124,7 +126,7 @@ export default function ProductCard({ product }: { product: Product }) {
             color: 'var(--color-plasma)', fontFamily: 'var(--font-display)',
           }}
         >
-          {(product as any).category?.name || 'softodeviq'}
+          {(product as any).category?.name || 'quvenza'}
         </div>
 
         <div
@@ -154,11 +156,11 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* Stock status */}
         {product.stock === 0 ? (
-          <div style={{ fontSize: 10, color: '#FB7185' }}>{t('common.outOfStock')}</div>
+          <div style={{ fontSize: 10, color: '#EF4444' }}>{t('common.outOfStock')}</div>
         ) : product.stock <= 10 ? (
-          <div style={{ fontSize: 10, color: '#FBBF24' }}>{`${t('common.lowStock')} — ${product.stock}`}</div>
+          <div style={{ fontSize: 10, color: '#F59E0B' }}>{`${t('common.lowStock')} — ${product.stock}`}</div>
         ) : (
-          <div style={{ fontSize: 10, color: '#34D399' }}>{t('common.inStock')}</div>
+          <div style={{ fontSize: 10, color: '#16A34A' }}>{t('common.inStock')}</div>
         )}
 
         {/* CTA */}
@@ -168,11 +170,11 @@ export default function ProductCard({ product }: { product: Product }) {
           style={{
             marginTop: 6, width: '100%', minHeight: 44,
             padding: '11px 8px', fontSize: 12, fontWeight: 700,
-            background: product.stock === 0 ? 'var(--color-bg-elevated)' : 'linear-gradient(135deg,#FF7A33,#FF5C1A)',
-            color: product.stock === 0 ? 'var(--color-text-muted)' : '#0A0A0C',
+            background: product.stock === 0 ? 'var(--color-bg-elevated)' : 'linear-gradient(135deg,#2563EB,#1D4ED8)',
+            color: product.stock === 0 ? 'var(--color-text-muted)' : '#FFFFFF',
             border: 'none', borderRadius: 10, cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-            boxShadow: product.stock === 0 ? 'none' : '0 6px 16px rgba(255,122,51,0.28)',
+            boxShadow: product.stock === 0 ? 'none' : '0 6px 16px rgba(37,99,235,0.28)',
             transition: 'filter 0.15s, box-shadow 0.15s',
             fontFamily: 'inherit',
           }}
@@ -180,9 +182,9 @@ export default function ProductCard({ product }: { product: Product }) {
           onMouseLeave={(e: any) => { e.currentTarget.style.filter = 'none'; }}
         >
           {added ? (
-            <><Check size={13} /> {t('common.addedToCart')}</>
+            <><Icon name="check" size={13} /> {t('common.addedToCart')}</>
           ) : (
-            <><ShoppingCart size={13} strokeWidth={1.8} /> {t('common.addToCart')}</>
+            <><Icon name="cart" size={13} stroke={1.8} /> {t('common.addToCart')}</>
           )}
         </button>
       </div>

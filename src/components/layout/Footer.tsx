@@ -5,7 +5,7 @@ import { getServerLang, t } from '@/lib/i18n';
 function ColTitle({ text, isRTL }: { text: string; isRTL: boolean }) {
   return (
     <div style={{
-      fontSize: 11, fontWeight: 700, color: '#F7F7F8', marginBottom: 14,
+      fontSize: 11, fontWeight: 700, color: '#111827', marginBottom: 14,
       fontFamily: isRTL ? 'Cairo, sans-serif' : 'JetBrains Mono, monospace',
       letterSpacing: isRTL ? 0 : '0.1em',
       textTransform: isRTL ? 'none' : 'uppercase',
@@ -57,29 +57,29 @@ export default async function Footer() {
   ];
 
   return (
-    <footer className="border-t border-[#26262E] mt-16" style={{ background: '#121216' }}>
+    <footer className="border-t border-[#EAECEF] mt-16" style={{ background: '#FFFFFF' }}>
       <div className="max-w-[1440px] mx-auto px-5 sm:px-6 md:px-8 pt-10 md:pt-16 pb-8 md:pb-10">
 
         {/* ── MOBILE layout (< md) ── */}
         <div className="md:hidden flex flex-col">
 
           {/* Brand block */}
-          <div style={{ paddingBottom: 24, marginBottom: 24, borderBottom: '1px solid #26262E' }}>
+          <div style={{ paddingBottom: 24, marginBottom: 24, borderBottom: '1px solid #EAECEF' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 10 }}>
-              <span style={{ fontSize: 22, fontWeight: 700, color: '#F7F7F8', letterSpacing: '-0.02em' }}>
+              <span style={{ fontSize: 22, fontWeight: 700, color: '#111827', letterSpacing: '-0.02em' }}>
                 {storeConfig.name}
               </span>
-              <span className="mono" style={{ fontSize: 9, color: '#FF7A33', letterSpacing: '0.15em' }}>store</span>
+              <span className="mono" style={{ fontSize: 9, color: '#2563EB', letterSpacing: '0.15em' }}>store</span>
             </div>
-            <p style={{ color: '#A6A6AE', fontSize: 13, lineHeight: 1.65, margin: '0 0 12px' }}>
+            <p style={{ color: '#4B5563', fontSize: 13, lineHeight: 1.65, margin: '0 0 12px' }}>
               {t('footer.tagline', lang)}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <a href={`mailto:${storeConfig.support.email}`}
-                style={{ color: '#6C6C76', fontSize: 12, textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace' }}>
+                style={{ color: '#9097A1', fontSize: 12, textDecoration: 'none', fontFamily: 'JetBrains Mono, monospace' }}>
                 {storeConfig.support.email}
               </a>
-              <span style={{ color: '#6C6C76', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>
+              <span style={{ color: '#9097A1', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>
                 {storeConfig.support.phone}
               </span>
             </div>
@@ -92,7 +92,7 @@ export default async function Footer() {
           </div>
 
           {/* Company — horizontal pill links */}
-          <div style={{ paddingTop: 20, paddingBottom: 20, borderTop: '1px solid #26262E', borderBottom: '1px solid #26262E', marginBottom: 20 }}>
+          <div style={{ paddingTop: 20, paddingBottom: 20, borderTop: '1px solid #EAECEF', borderBottom: '1px solid #EAECEF', marginBottom: 20 }}>
             <ColTitle text={t('footer.cols.company', lang)} isRTL={isRTL} />
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px 20px' }}>
               {COMPANY_LINKS.map(l => (
@@ -104,22 +104,22 @@ export default async function Footer() {
           </div>
 
           {/* Copyright */}
-          <div className="mono" style={{ fontSize: 10, color: '#6C6C76', textAlign: 'center' }}>
+          <div className="mono" style={{ fontSize: 10, color: '#9097A1', textAlign: 'center' }}>
             {storeConfig.copyright}
           </div>
           {/* Development attribution */}
-          <div style={{ marginTop: 8, fontSize: 11, color: '#6C6C76', textAlign: 'center' }}>
+          <div style={{ marginTop: 8, fontSize: 11, color: '#9097A1', textAlign: 'center' }}>
             {lang === 'ar' ? (
               <>
                 طُوّر بواسطة{' '}
                 <a
-                  href="https://softodeviq.com"
+                  href="https://quvenzaiq.com"
                   target="_blank"
                   rel="noopener"
-                  title="SoftoDevIq - شركة برمجة في بغداد"
-                  style={{ color: '#FF9357', textDecoration: 'none' }}
+                  title="QuvenzaIq - شركة برمجة في بغداد"
+                  style={{ color: '#1D4ED8', textDecoration: 'none' }}
                 >
-                  SoftoDevIq
+                  QuvenzaIq
                 </a>
                 {' '}— شركة برمجة عراقية في بغداد
               </>
@@ -127,13 +127,13 @@ export default async function Footer() {
               <>
                 Developed by{' '}
                 <a
-                  href="https://softodeviq.com"
+                  href="https://quvenzaiq.com"
                   target="_blank"
                   rel="noopener"
-                  title="SoftoDevIq - Software Development Company in Baghdad"
-                  style={{ color: '#FF9357', textDecoration: 'none' }}
+                  title="QuvenzaIq - Software Development Company in Baghdad"
+                  style={{ color: '#1D4ED8', textDecoration: 'none' }}
                 >
-                  SoftoDevIq
+                  QuvenzaIq
                 </a>
                 {' '}— Iraqi software development company
               </>
@@ -144,45 +144,45 @@ export default async function Footer() {
         {/* ── DESKTOP layout (md+) ── */}
         <div className="hidden md:grid md:grid-cols-4 md:gap-12">
           <div>
-            <div style={{ fontSize: 20, fontWeight: 700, color: '#F7F7F8', marginBottom: 12, letterSpacing: '-0.01em' }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#111827', marginBottom: 12, letterSpacing: '-0.01em' }}>
               {storeConfig.name}
             </div>
-            <p style={{ color: '#A6A6AE', fontSize: 13, lineHeight: 1.6, maxWidth: 320, margin: 0 }}>
+            <p style={{ color: '#4B5563', fontSize: 13, lineHeight: 1.6, maxWidth: 320, margin: 0 }}>
               {t('footer.tagline', lang)}
             </p>
-            <div style={{ marginTop: 16, fontSize: 13, color: '#A6A6AE' }}>
+            <div style={{ marginTop: 16, fontSize: 13, color: '#4B5563' }}>
               <div>{storeConfig.support.email}</div>
               <div style={{ marginTop: 4 }}>{storeConfig.support.phone}</div>
             </div>
-            <div className="mono" style={{ marginTop: 24, fontSize: 10, color: '#6C6C76' }}>
+            <div className="mono" style={{ marginTop: 24, fontSize: 10, color: '#9097A1' }}>
               {storeConfig.copyright}
             </div>
             {/* Development attribution */}
-            <div style={{ marginTop: 8, fontSize: 11, color: '#6C6C76' }}>
+            <div style={{ marginTop: 8, fontSize: 11, color: '#9097A1' }}>
               {lang === 'ar' ? (
                 <>
                   طُوّر بواسطة{' '}
                   <a
-                    href="https://softodeviq.com"
+                    href="https://quvenzaiq.com"
                     target="_blank"
                     rel="noopener"
-                    title="SoftoDevIq - شركة برمجة في بغداد"
-                    style={{ color: '#FF9357', textDecoration: 'none' }}
+                    title="QuvenzaIq - شركة برمجة في بغداد"
+                    style={{ color: '#1D4ED8', textDecoration: 'none' }}
                   >
-                    SoftoDevIq
+                    QuvenzaIq
                   </a>
                 </>
               ) : (
                 <>
                   Developed by{' '}
                   <a
-                    href="https://softodeviq.com"
+                    href="https://quvenzaiq.com"
                     target="_blank"
                     rel="noopener"
-                    title="SoftoDevIq - Software Development Company in Baghdad"
-                    style={{ color: '#FF9357', textDecoration: 'none' }}
+                    title="QuvenzaIq - Software Development Company in Baghdad"
+                    style={{ color: '#1D4ED8', textDecoration: 'none' }}
                   >
-                    SoftoDevIq
+                    QuvenzaIq
                   </a>
                 </>
               )}

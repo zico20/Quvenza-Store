@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Heart, Trash2 } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import ProductCard from '@/components/product/ProductCard';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { useLang } from '@/hooks/useLang';
@@ -16,7 +16,7 @@ export default function WishlistPage() {
         <h1 className="text-2xl font-bold text-text-primary">{t('account.tabs.wishlist')}</h1>
         {items.length > 0 && (
           <button onClick={clearWishlist} className="btn-ghost px-3 py-2 text-sm">
-            <Trash2 className="h-4 w-4" />
+            <Icon name="trash" className="h-4 w-4" size={16} />
             {t('account.wishlist.clear')}
           </button>
         )}
@@ -24,7 +24,7 @@ export default function WishlistPage() {
 
       {items.length === 0 ? (
         <div className="bg-bg-surface border border-border rounded-lg py-16 px-6 text-center">
-          <Heart className="h-12 w-12 text-text-muted mx-auto mb-4" />
+          <Icon name="heart" className="h-12 w-12 text-text-muted mx-auto mb-4" size={48} />
           <h2 className="text-text-primary text-lg font-semibold mb-2">{t('account.wishlist.empty')}</h2>
           <p className="text-text-muted text-sm mb-6">{t('account.wishlist.emptySub')}</p>
           <Link href="/products" className="btn-primary">

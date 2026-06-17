@@ -4,13 +4,14 @@ import { formatPrice, formatDate } from '@/lib/utils';
 import type { DashboardStats, OrderStatus } from '@/types';
 import { useLang } from '@/hooks/admin/useLang';
 
+// Voltage semantic palette (matches StatusBadge: in-progress = plasma)
 const STATUS_STYLES: Record<OrderStatus, string> = {
-  PENDING:    'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-  PROCESSING: 'bg-[rgba(255,106,43,0.1)] text-[#FF7A33] border-[rgba(255,106,43,0.2)]',
-  SHIPPED:    'bg-purple-500/10 text-purple-400 border-purple-500/20',
-  DELIVERED:  'bg-green-500/10 text-green-400 border-green-500/20',
-  CANCELLED:  'bg-red-500/10 text-red-400 border-red-500/20',
-  REFUNDED:   'bg-orange-500/10 text-orange-400 border-orange-500/20',
+  PENDING:    'bg-warning/10 text-warning border-warning/20',
+  PROCESSING: 'bg-plasma/10 text-plasma border-plasma/20',
+  SHIPPED:    'bg-plasma/10 text-plasma border-plasma/20',
+  DELIVERED:  'bg-success/10 text-success border-success/20',
+  CANCELLED:  'bg-error/10 text-error border-error/20',
+  REFUNDED:   'bg-bg-elevated text-text-muted border-border',
 };
 
 type RecentOrder = DashboardStats['recentOrders'][number];

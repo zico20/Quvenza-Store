@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { AlertTriangle } from 'lucide-react';
+import { Icon } from '@/components/ui/Icon';
 import { adminProducts } from '@/lib/admin/api';
 import type { Product } from '@/types';
 import { useLang } from '@/hooks/admin/useLang';
@@ -21,7 +21,7 @@ export default function LowStockAlert() {
   return (
     <div className="bg-bg-surface border border-border rounded-lg p-5 shadow-md">
       <div className="flex items-center gap-2 mb-4">
-        <AlertTriangle className="h-4 w-4 text-warning" />
+        <Icon name="alert" className="h-4 w-4 text-warning" size={16} />
         <h3 className="text-base font-semibold text-text-primary">{t('dashboard.lowStock')}</h3>
       </div>
       {loading ? (

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #EEF0F4; }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction: ltr; unicode-bidi: isolate; font-feature-settings: 'tnum'; }
+  .hk { font-family: 'Hanken Grotesk', sans-serif; }
+  .ca { font-family: 'Cairo', sans-serif; }
+  .hbtn { cursor: pointer; border: none; font-family: 'Cairo', sans-serif; transition: background .15s, box-shadow .15s, transform .12s, color .15s; }
+  .hbtn:active { transform: translateY(1px); }
+  .lift { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .lift:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(16,24,40,0.10); border-color: #D6DAE1; }
+  .ul:hover { color: #2563EB !important; }
+  .home-wrap { container-type: inline-size; background: #fff; }
+  .cq-nav-links { display: none; }
+  .cq-nav-search { display: none; }
+  .cq-hero { display: grid; grid-template-columns: 1fr; gap: 36px; align-items: center; }
+  .cq-hero-visual { display: none; }
+  .pgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .cgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .sgrid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .vgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .rgrid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .footgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .plan-split { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @container (min-width: 720px) {
+    .cq-nav-links { display: flex; }
+    .cq-nav-search { display: flex; }
+    .cq-hero { grid-template-columns: 1.05fr 0.95fr; gap: 48px; }
+    .cq-hero-visual { display: block; }
+    .pgrid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .cgrid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .sgrid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .vgrid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .rgrid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .footgrid { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 28px; }
+    .plan-split { grid-template-columns: 0.9fr 1.1fr; gap: 40px; }
+  }
+  @container (max-width: 719px) { .hide-mobile { display: none !important; } }
+</style>
+</helmet>
+<div style="min-height:100vh; background:#EEF0F4; font-family:'IBM Plex Sans Arabic',sans-serif; padding:14px;">
+
+  <!-- Prototype control bar -->
+  <div style="max-width:1280px; margin:0 auto 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:#0B1220; border-radius:14px; padding:10px 16px;">
+    <div class="hk" style="color:#9CA3AF; font-size:12px; font-weight:600; letter-spacing:0.04em;">SOFTODEV · {{ deviceLabel }} · {{ langLabel }}</div>
+    <div style="display:flex; gap:8px;">
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setAr }}" style="{{ arBtnStyle }}">عربي</button>
+        <button class="hbtn hk" onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+      </div>
+      <div style="display:flex; background:rgba(255,255,255,0.08); border-radius:9px; padding:3px;">
+        <button class="hbtn hk" onClick="{{ setDesktop }}" style="{{ deskBtnStyle }}">Desktop</button>
+        <button class="hbtn hk" onClick="{{ setMobile }}" style="{{ mobBtnStyle }}">Mobile</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:center;">
+    <div class="home-wrap" dir="{{ dir }}" style="{{ wrapStyle }}">
+
+      <!-- Announcement bar -->
+      <div class="hk" style="background:#0B1220; color:#fff; display:flex; align-items:center; justify-content:center; gap:20px; padding:9px 16px; font-size:12px; font-weight:600; flex-wrap:wrap;">
+        <span style="display:inline-flex; align-items:center; gap:6px;"><dc-import name="Icon" icon="bolt" size="14" color="#FBBF24" hint-size="14px,14px"></dc-import> {{ tx.ann1 }}</span>
+        <span class="hide-mobile" style="opacity:0.3;">·</span>
+        <span class="hide-mobile" style="display:inline-flex; align-items:center; gap:6px;"><dc-import name="Icon" icon="bank" size="14" color="#93C5FD" hint-size="14px,14px"></dc-import> {{ tx.ann2 }}</span>
+        <span style="opacity:0.3;">·</span>
+        <span style="display:inline-flex; align-items:center; gap:6px;"><dc-import name="Icon" icon="shield" size="14" color="#4ADE80" hint-size="14px,14px"></dc-import> {{ tx.ann3 }}</span>
+      </div>
+
+      <!-- Header -->
+      <header style="position:sticky; top:0; z-index:30; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); border-bottom:1px solid #EAECEF; padding:14px 22px; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+        <div style="display:flex; align-items:center; gap:26px;">
+          <div style="display:flex; align-items:center; gap:9px;">
+            <div class="hk" style="width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px;">S</div>
+            <span class="ca" style="font-weight:700; font-size:16px; color:#0B1220;">SoftoDev</span>
+          </div>
+          <nav class="cq-nav-links" style="gap:22px; font-size:14px; color:#4B5563; font-weight:600;">
+            <span class="ul" style="cursor:pointer; transition:color .15s;">{{ tx.navProducts }}</span>
+            <span class="ul" style="cursor:pointer; transition:color .15s;">{{ tx.navCats }}</span>
+            <span class="ul" style="cursor:pointer; transition:color .15s;">{{ tx.navDeals }}</span>
+            <span class="ul" style="cursor:pointer; transition:color .15s;">{{ tx.navAbout }}</span>
+          </nav>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="cq-nav-search" style="align-items:center; gap:8px; background:#F3F4F6; border-radius:10px; padding:9px 13px; width:210px; color:#9097A1; font-size:13px;"><dc-import name="Icon" icon="search" size="16" color="#9097A1" hint-size="16px,16px"></dc-import> {{ tx.search }}</div>
+          <span class="ul" style="cursor:pointer; color:#4B5563; display:inline-flex;"><dc-import name="Icon" icon="heart" size="20" color="#4B5563" hint-size="20px,20px"></dc-import></span>
+          <span style="position:relative; cursor:pointer; color:#4B5563; display:inline-flex;"><dc-import name="Icon" icon="cart" size="20" color="#4B5563" hint-size="20px,20px"></dc-import><span class="num" style="position:absolute; top:-7px; inset-inline-end:-8px; background:#2563EB; color:#fff; font-size:9px; font-weight:700; min-width:16px; height:16px; border-radius:9px; display:inline-flex; align-items:center; justify-content:center; padding:0 3px;">2</span></span>
+          <button class="hbtn" style="background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:9px 16px; border-radius:9px;">{{ tx.login }}</button>
+        </div>
+      </header>
+
+      <!-- HERO -->
+      <section style="padding:56px 22px 44px; background:radial-gradient(120% 90% at 90% 0%, #EAF1FE 0%, rgba(234,241,254,0) 55%), radial-gradient(90% 80% at 5% 10%, #E6F8FC 0%, rgba(230,248,252,0) 50%), #fff;">
+        <div class="cq-hero" style="max-width:1180px; margin:0 auto;">
+          <div>
+            <div class="hk" style="display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid #E1E8F5; border-radius:20px; padding:6px 13px; font-size:12px; font-weight:700; color:#1D4ED8; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+              <span style="width:7px; height:7px; border-radius:50%; background:#16A34A; box-shadow:0 0 0 3px rgba(22,163,74,0.18);"></span>{{ tx.heroKicker }}
+            </div>
+            <h1 class="ca" style="margin:20px 0 0; font-weight:800; font-size:clamp(32px,5.4cqw,52px); line-height:1.16; letter-spacing:-0.01em; color:#0B1220;">{{ tx.heroT1 }}<br><span style="color:#2563EB;">{{ tx.heroT2 }}</span></h1>
+            <p style="margin:18px 0 0; max-width:480px; font-size:16px; line-height:1.85; color:#4B5563;">{{ tx.heroSub }}</p>
+            <div style="margin-top:26px; display:flex; gap:12px; flex-wrap:wrap;">
+              <button class="hbtn" style="display:inline-flex; align-items:center; gap:8px; background:#2563EB; color:#fff; font-weight:700; font-size:15px; padding:14px 26px; border-radius:11px; box-shadow:0 8px 20px rgba(37,99,235,0.28);">{{ tx.heroCta1 }} <dc-import name="Icon" icon="{{ arrowIcon }}" size="18" color="#fff" hint-size="18px,18px"></dc-import></button>
+              <button class="hbtn" style="background:#fff; color:#111827; font-weight:700; font-size:15px; padding:14px 24px; border-radius:11px; border:1px solid #D6DAE1;">{{ tx.heroCta2 }}</button>
+            </div>
+            <div style="margin-top:30px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;">
+              <div style="display:flex;">
+                <span class="hk" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10A37F,#1AB68C);border:2px solid #fff;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">G</span>
+                <span class="hk" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#A855F7);border:2px solid #fff;margin-inline-start:-10px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">C</span>
+                <span class="hk" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#06B6D4);border:2px solid #fff;margin-inline-start:-10px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">C</span>
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:5px; color:#F59E0B;"><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><span class="num" style="font-size:13px; font-weight:700; color:#111827; margin-inline-start:4px;">4.9</span></div>
+                <div style="font-size:12px; color:#6B7280; margin-top:2px;">{{ tx.heroTrust }}</div>
+              </div>
+            </div>
+          </div>
+          <!-- Hero visual -->
+          <div class="cq-hero-visual">
+            <div style="position:relative; background:linear-gradient(160deg,#0B1220,#1E2A44); border-radius:24px; padding:26px; box-shadow:0 30px 60px rgba(11,18,32,0.28); overflow:hidden;">
+              <div style="position:absolute; top:-40px; inset-inline-end:-40px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,#2563EB,transparent 70%); opacity:0.5;"></div>
+              <div style="position:relative; display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+                <span class="hk" style="color:#9CA3AF; font-size:11px; font-weight:700; letter-spacing:0.1em;">{{ tx.heroCardLabel }}</span>
+                <span class="hk" style="display:inline-flex; align-items:center; gap:6px; background:rgba(22,163,74,0.18); color:#4ADE80; font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px;"><span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;"></span>{{ tx.heroLive }}</span>
+              </div>
+              <div style="position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
+                <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px; text-align:center;"><div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#10A37F,#1AB68C);margin:0 auto 9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;" class="hk">GPT</div><div style="color:#fff;font-size:11px;font-weight:600;">ChatGPT</div><div class="num" style="color:#7DD3FC;font-size:11px;font-weight:700;">$20</div></div>
+                <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px; text-align:center;"><div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#7C3AED,#A855F7);margin:0 auto 9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;" class="hk">Cv</div><div style="color:#fff;font-size:11px;font-weight:600;">Canva Pro</div><div class="num" style="color:#7DD3FC;font-size:11px;font-weight:700;">$45</div></div>
+                <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px; text-align:center;"><div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0EA5E9,#06B6D4);margin:0 auto 9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;" class="hk">CC</div><div style="color:#fff;font-size:11px;font-weight:600;">CapCut</div><div class="num" style="color:#7DD3FC;font-size:11px;font-weight:700;">$12</div></div>
+              </div>
+              <div style="position:relative; margin-top:14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px;">
+                <span style="width:36px;height:36px;border-radius:10px;background:rgba(37,99,235,0.25);display:inline-flex;align-items:center;justify-content:center;"><dc-import name="Icon" icon="bolt" size="18" color="#93C5FD" hint-size="18px,18px"></dc-import></span>
+                <div><div style="color:#fff; font-size:12.5px; font-weight:700;">{{ tx.heroCardTitle }}</div><div style="color:#9CA3AF; font-size:11px;">{{ tx.heroCardSub }}</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VALUE PROPS -->
+      <section style="padding:0 22px;">
+        <div class="vgrid" style="max-width:1180px; margin:0 auto; transform:translateY(-22px);">
+          <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:18px; display:flex; gap:13px; align-items:center; box-shadow:0 4px 18px rgba(16,24,40,0.06);"><span style="width:42px;height:42px;border-radius:12px;background:#E0F7FB;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><dc-import name="Icon" icon="bolt" size="20" color="#0E7490" hint-size="20px,20px"></dc-import></span><div><div class="ca" style="font-size:14px;font-weight:700;color:#111827;">{{ tx.vp1t }}</div><div style="font-size:12px;color:#6B7280;margin-top:2px;">{{ tx.vp1s }}</div></div></div>
+          <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:18px; display:flex; gap:13px; align-items:center; box-shadow:0 4px 18px rgba(16,24,40,0.06);"><span style="width:42px;height:42px;border-radius:12px;background:#E8F0FE;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><dc-import name="Icon" icon="bank" size="20" color="#1D4ED8" hint-size="20px,20px"></dc-import></span><div><div class="ca" style="font-size:14px;font-weight:700;color:#111827;">{{ tx.vp2t }}</div><div style="font-size:12px;color:#6B7280;margin-top:2px;">{{ tx.vp2s }}</div></div></div>
+          <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:18px; display:flex; gap:13px; align-items:center; box-shadow:0 4px 18px rgba(16,24,40,0.06);"><span style="width:42px;height:42px;border-radius:12px;background:#E7F6EE;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><dc-import name="Icon" icon="shield" size="20" color="#15803D" hint-size="20px,20px"></dc-import></span><div><div class="ca" style="font-size:14px;font-weight:700;color:#111827;">{{ tx.vp3t }}</div><div style="font-size:12px;color:#6B7280;margin-top:2px;">{{ tx.vp3s }}</div></div></div>
+          <div style="background:#fff; border:1px solid #EAECEF; border-radius:16px; padding:18px; display:flex; gap:13px; align-items:center; box-shadow:0 4px 18px rgba(16,24,40,0.06);"><span style="width:42px;height:42px;border-radius:12px;background:#F3F4F6;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><dc-import name="Icon" icon="chat" size="20" color="#374151" hint-size="20px,20px"></dc-import></span><div><div class="ca" style="font-size:14px;font-weight:700;color:#111827;">{{ tx.vp4t }}</div><div style="font-size:12px;color:#6B7280;margin-top:2px;">{{ tx.vp4s }}</div></div></div>
+        </div>
+      </section>
+
+      <!-- CATEGORIES -->
+      <section style="padding:26px 22px 10px;">
+        <div style="max-width:1180px; margin:0 auto;">
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px;">
+            <div>
+              <div class="hk" style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563EB; margin-bottom:7px;">{{ tx.catsKicker }}</div>
+              <h2 class="ca" style="margin:0; font-weight:700; font-size:clamp(22px,3cqw,28px); color:#0B1220;">{{ tx.catsTitle }}</h2>
+            </div>
+            <span class="ul" style="display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:700; color:#2563EB; cursor:pointer;">{{ tx.viewAll }} <dc-import name="Icon" icon="{{ arrowIcon }}" size="15" color="#2563EB" hint-size="15px,15px"></dc-import></span>
+          </div>
+          <div class="cgrid">
+            <div class="lift" style="background:linear-gradient(160deg,#EAF1FE,#fff); border:1px solid #EAECEF; border-radius:18px; padding:20px; cursor:pointer; min-height:140px; display:flex; flex-direction:column; justify-content:space-between;"><span style="width:46px;height:46px;border-radius:13px;background:#fff;box-shadow:0 4px 12px rgba(37,99,235,0.16);display:inline-flex;align-items:center;justify-content:center;"><dc-import name="Icon" icon="sparkle" size="24" color="#2563EB" hint-size="24px,24px"></dc-import></span><div><div class="ca" style="font-size:15px;font-weight:700;color:#0B1220;">{{ tx.cat1 }}</div><div class="num" style="font-size:12px;color:#6B7280;margin-top:3px;">28 {{ tx.products }}</div></div></div>
+            <div class="lift" style="background:linear-gradient(160deg,#F3EEFE,#fff); border:1px solid #EAECEF; border-radius:18px; padding:20px; cursor:pointer; min-height:140px; display:flex; flex-direction:column; justify-content:space-between;"><span style="width:46px;height:46px;border-radius:13px;background:#fff;box-shadow:0 4px 12px rgba(124,58,237,0.16);display:inline-flex;align-items:center;justify-content:center;"><dc-import name="Icon" icon="layers" size="24" color="#7C3AED" hint-size="24px,24px"></dc-import></span><div><div class="ca" style="font-size:15px;font-weight:700;color:#0B1220;">{{ tx.cat2 }}</div><div class="num" style="font-size:12px;color:#6B7280;margin-top:3px;">19 {{ tx.products }}</div></div></div>
+            <div class="lift" style="background:linear-gradient(160deg,#E6F8FC,#fff); border:1px solid #EAECEF; border-radius:18px; padding:20px; cursor:pointer; min-height:140px; display:flex; flex-direction:column; justify-content:space-between;"><span style="width:46px;height:46px;border-radius:13px;background:#fff;box-shadow:0 4px 12px rgba(14,165,233,0.16);display:inline-flex;align-items:center;justify-content:center;"><dc-import name="Icon" icon="video" size="24" color="#0EA5E9" hint-size="24px,24px"></dc-import></span><div><div class="ca" style="font-size:15px;font-weight:700;color:#0B1220;">{{ tx.cat3 }}</div><div class="num" style="font-size:12px;color:#6B7280;margin-top:3px;">14 {{ tx.products }}</div></div></div>
+            <div class="lift" style="background:linear-gradient(160deg,#E7F6EE,#fff); border:1px solid #EAECEF; border-radius:18px; padding:20px; cursor:pointer; min-height:140px; display:flex; flex-direction:column; justify-content:space-between;"><span style="width:46px;height:46px;border-radius:13px;background:#fff;box-shadow:0 4px 12px rgba(22,163,74,0.16);display:inline-flex;align-items:center;justify-content:center;"><dc-import name="Icon" icon="book" size="24" color="#16A34A" hint-size="24px,24px"></dc-import></span><div><div class="ca" style="font-size:15px;font-weight:700;color:#0B1220;">{{ tx.cat4 }}</div><div class="num" style="font-size:12px;color:#6B7280;margin-top:3px;">22 {{ tx.products }}</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BESTSELLERS -->
+      <section style="padding:34px 22px 10px;">
+        <div style="max-width:1180px; margin:0 auto;">
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px;">
+            <div>
+              <div class="hk" style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563EB; margin-bottom:7px;">{{ tx.bestKicker }}</div>
+              <h2 class="ca" style="margin:0; font-weight:700; font-size:clamp(22px,3cqw,28px); color:#0B1220;">{{ tx.bestTitle }}</h2>
+            </div>
+            <span class="ul" style="display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:700; color:#2563EB; cursor:pointer;">{{ tx.viewAll }} <dc-import name="Icon" icon="{{ arrowIcon }}" size="15" color="#2563EB" hint-size="15px,15px"></dc-import></span>
+          </div>
+          <div class="pgrid">
+            <sc-for list="{{ products }}" as="p" hint-placeholder-count="4">
+              <div class="lift" style="background:#fff; border:1px solid #EAECEF; border-radius:16px; overflow:hidden; cursor:pointer;">
+                <div style="aspect-ratio:1/1; background:{{ p.bg }}; display:flex; align-items:center; justify-content:center; position:relative;">
+                  <div class="hk" style="width:58px; height:58px; border-radius:16px; background:{{ p.icon }}; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px; box-shadow:0 8px 20px rgba(16,24,40,0.18);">{{ p.glyph }}</div>
+                  <span class="hk" style="position:absolute; top:10px; inset-inline-start:10px; display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px; background:#fff; color:#0E7490;"><dc-import name="Icon" icon="bolt" size="11" color="#0E7490" hint-size="11px,11px"></dc-import> {{ tx.instant }}</span>
+                  <button class="hbtn" style="position:absolute; top:9px; inset-inline-end:9px; width:32px; height:32px; border-radius:50%; background:#fff; border:1px solid #EAECEF; display:inline-flex; align-items:center; justify-content:center;"><dc-import name="Icon" icon="heart" size="15" color="#9097A1" hint-size="15px,15px"></dc-import></button>
+                </div>
+                <div style="padding:14px;">
+                  <div class="hk" style="font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">{{ p.cat }}</div>
+                  <div class="ca" style="font-weight:700; font-size:14px; color:#111827; margin:5px 0 8px; line-height:1.4;">{{ p.name }}</div>
+                  <div style="display:flex; align-items:center; gap:4px; margin-bottom:10px; color:#F59E0B;"><dc-import name="Icon" icon="star" size="12" hint-size="12px,12px"></dc-import><span class="num" style="font-size:11px; color:#9097A1; margin-inline-start:2px;">{{ p.rating }}</span></div>
+                  <div style="display:flex; align-items:baseline; gap:6px; margin-bottom:12px;"><span class="num" style="font-weight:800; font-size:19px; color:#111827;">{{ p.price }}</span><span class="num" style="font-size:12px; color:#9097A1; text-decoration:line-through;">{{ p.compare }}</span></div>
+                  <button class="hbtn" style="width:100%; background:#2563EB; color:#fff; font-weight:700; font-size:13px; padding:11px; border-radius:10px;">{{ tx.addToCart }}</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section style="padding:48px 22px;">
+        <div style="max-width:1180px; margin:0 auto;">
+          <div style="text-align:center; margin-bottom:32px;">
+            <div class="hk" style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563EB; margin-bottom:9px;">{{ tx.stepsKicker }}</div>
+            <h2 class="ca" style="margin:0; font-weight:700; font-size:clamp(22px,3.2cqw,30px); color:#0B1220;">{{ tx.stepsTitle }}</h2>
+          </div>
+          <div class="sgrid">
+            <div style="background:#F7F8FA; border:1px solid #EAECEF; border-radius:18px; padding:26px; text-align:center;"><div style="width:48px;height:48px;border-radius:14px;background:#E8F0FE;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;"><dc-import name="Icon" icon="search" size="22" color="#2563EB" hint-size="22px,22px"></dc-import></div><div class="ca" style="font-size:16px;font-weight:700;color:#0B1220;margin-bottom:7px;">{{ tx.step1t }}</div><p style="margin:0;font-size:13.5px;line-height:1.75;color:#6B7280;">{{ tx.step1s }}</p></div>
+            <div style="background:#F7F8FA; border:1px solid #EAECEF; border-radius:18px; padding:26px; text-align:center;"><div style="width:48px;height:48px;border-radius:14px;background:#E8F0FE;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;"><dc-import name="Icon" icon="bank" size="22" color="#2563EB" hint-size="22px,22px"></dc-import></div><div class="ca" style="font-size:16px;font-weight:700;color:#0B1220;margin-bottom:7px;">{{ tx.step2t }}</div><p style="margin:0;font-size:13.5px;line-height:1.75;color:#6B7280;">{{ tx.step2s }}</p></div>
+            <div style="background:#F7F8FA; border:1px solid #EAECEF; border-radius:18px; padding:26px; text-align:center;"><div style="width:48px;height:48px;border-radius:14px;background:#E8F0FE;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;"><dc-import name="Icon" icon="bolt" size="22" color="#2563EB" hint-size="22px,22px"></dc-import></div><div class="ca" style="font-size:16px;font-weight:700;color:#0B1220;margin-bottom:7px;">{{ tx.step3t }}</div><p style="margin:0;font-size:13.5px;line-height:1.75;color:#6B7280;">{{ tx.step3s }}</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLANS -->
+      <section style="padding:10px 22px 48px;">
+        <div class="plan-split" style="max-width:1180px; margin:0 auto; background:linear-gradient(160deg,#0B1220,#1E2A44); border-radius:24px; padding:36px; align-items:center;">
+          <div>
+            <div class="hk" style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7DD3FC; margin-bottom:12px;">{{ tx.plansKicker }}</div>
+            <h2 class="ca" style="margin:0; font-weight:700; font-size:clamp(22px,3.2cqw,30px); color:#fff; line-height:1.3;">{{ tx.plansTitle }}</h2>
+            <p style="margin:14px 0 0; font-size:14.5px; line-height:1.8; color:#9CA3AF;">{{ tx.plansSub }}</p>
+            <div style="margin-top:22px; display:flex; flex-direction:column; gap:11px;">
+              <div style="display:flex; align-items:center; gap:10px; color:#D1D5DB; font-size:13.5px;"><dc-import name="Icon" icon="check" size="17" color="#4ADE80" hint-size="17px,17px"></dc-import> {{ tx.planFeat1 }}</div>
+              <div style="display:flex; align-items:center; gap:10px; color:#D1D5DB; font-size:13.5px;"><dc-import name="Icon" icon="check" size="17" color="#4ADE80" hint-size="17px,17px"></dc-import> {{ tx.planFeat2 }}</div>
+              <div style="display:flex; align-items:center; gap:10px; color:#D1D5DB; font-size:13.5px;"><dc-import name="Icon" icon="check" size="17" color="#4ADE80" hint-size="17px,17px"></dc-import> {{ tx.planFeat3 }}</div>
+            </div>
+          </div>
+          <div style="background:#fff; border-radius:20px; padding:24px; box-shadow:0 24px 50px rgba(0,0,0,0.3);">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+              <div class="hk" style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#10A37F,#1AB68C);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;">GPT</div>
+              <div><div class="ca" style="font-size:16px;font-weight:700;color:#0B1220;">ChatGPT Plus</div><div style="font-size:12px;color:#6B7280;">{{ tx.planProductSub }}</div></div>
+            </div>
+            <div style="display:flex; background:#F3F4F6; border-radius:11px; padding:4px; margin-bottom:18px;">
+              <button class="hbtn hk" onClick="{{ planMonthly }}" style="{{ planMonthlyStyle }}">{{ tx.planMonthly }}</button>
+              <button class="hbtn hk" onClick="{{ planYearly }}" style="{{ planYearlyStyle }}">{{ tx.planYearly }}</button>
+            </div>
+            <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:6px;">
+              <div style="display:flex; align-items:baseline; gap:8px;"><span class="num" style="font-weight:800; font-size:34px; color:#0B1220;">{{ planPrice }}</span><span class="num" style="font-size:13px; color:#6B7280;">{{ planPeriod }}</span></div>
+              <span class="hk" style="font-size:11px; font-weight:700; background:#E7F6EE; color:#15803D; padding:5px 10px; border-radius:20px;">{{ planSave }}</span>
+            </div>
+            <div class="num" style="font-size:12.5px; color:#9097A1; margin-bottom:18px;">{{ planIqd }}</div>
+            <button class="hbtn" style="width:100%; background:#2563EB; color:#fff; font-weight:700; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(37,99,235,0.3);">{{ tx.planCta }}</button>
+            <div style="display:flex; align-items:center; justify-content:center; gap:7px; margin-top:13px; font-size:12px; color:#6B7280;"><dc-import name="Icon" icon="lock" size="14" color="#6B7280" hint-size="14px,14px"></dc-import> {{ tx.planSecure }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REVIEWS -->
+      <section style="padding:10px 22px 52px;">
+        <div style="max-width:1180px; margin:0 auto;">
+          <div style="text-align:center; margin-bottom:30px;">
+            <div class="hk" style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563EB; margin-bottom:9px;">{{ tx.revKicker }}</div>
+            <h2 class="ca" style="margin:0; font-weight:700; font-size:clamp(22px,3.2cqw,30px); color:#0B1220;">{{ tx.revTitle }}</h2>
+          </div>
+          <div class="rgrid">
+            <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+              <div style="background:#fff; border:1px solid #EAECEF; border-radius:18px; padding:24px; box-shadow:0 1px 2px rgba(16,24,40,0.04);">
+                <div style="display:flex; gap:2px; color:#F59E0B; margin-bottom:12px;"><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import><dc-import name="Icon" icon="star" size="14" hint-size="14px,14px"></dc-import></div>
+                <p style="margin:0 0 18px; font-size:14px; line-height:1.85; color:#374151;">{{ r.quote }}</p>
+                <div style="display:flex; align-items:center; gap:11px;">
+                  <span class="hk" style="width:38px;height:38px;border-radius:50%;background:{{ r.bg }};color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">{{ r.initial }}</span>
+                  <div><div class="ca" style="font-size:13.5px; font-weight:700; color:#111827;">{{ r.name }}</div><div style="font-size:11.5px; color:#9097A1;">{{ r.meta }}</div></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA band -->
+      <section style="padding:0 22px 52px;">
+        <div style="max-width:1180px; margin:0 auto; background:linear-gradient(135deg,#2563EB,#3B82F6); border-radius:24px; padding:48px 32px; text-align:center; position:relative; overflow:hidden;">
+          <div style="position:absolute; inset:0; background:radial-gradient(60% 100% at 50% 0%, rgba(255,255,255,0.18), transparent 60%);"></div>
+          <h2 class="ca" style="position:relative; margin:0; font-weight:800; font-size:clamp(24px,3.6cqw,34px); color:#fff; line-height:1.3;">{{ tx.ctaTitle }}</h2>
+          <p style="position:relative; margin:14px auto 0; max-width:440px; font-size:15px; line-height:1.8; color:rgba(255,255,255,0.92);">{{ tx.ctaSub }}</p>
+          <button class="hbtn" style="position:relative; display:inline-flex; align-items:center; gap:8px; margin-top:26px; background:#fff; color:#1D4ED8; font-weight:800; font-size:15px; padding:15px 32px; border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,0.18);">{{ tx.ctaBtn }} <dc-import name="Icon" icon="{{ arrowIcon }}" size="18" color="#1D4ED8" hint-size="18px,18px"></dc-import></button>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer style="background:#0B1220; padding:44px 22px 28px;">
+        <div class="footgrid" style="max-width:1180px; margin:0 auto;">
+          <div>
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;"><div class="hk" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#2563EB,#3B82F6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;">S</div><span class="ca" style="font-weight:700; font-size:16px; color:#fff;">SoftoDev</span></div>
+            <p style="margin:0; max-width:280px; font-size:13px; line-height:1.85; color:#9CA3AF;">{{ tx.footAbout }}</p>
+          </div>
+          <div><div class="ca" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:14px;">{{ tx.footShop }}</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#9CA3AF;"><span class="ul" style="cursor:pointer;">{{ tx.footAll }}</span><span class="ul" style="cursor:pointer;">{{ tx.navDeals }}</span><span class="ul" style="cursor:pointer;">{{ tx.bestTitle }}</span></div></div>
+          <div><div class="ca" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:14px;">{{ tx.footSupport }}</div><div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#9CA3AF;"><span class="ul" style="cursor:pointer;">{{ tx.footContact }}</span><span class="ul" style="cursor:pointer;">{{ tx.footFaq }}</span><span class="ul" style="cursor:pointer;">{{ tx.footReturns }}</span></div></div>
+          <div><div class="ca" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:14px;">{{ tx.footFollow }}</div><div style="display:flex; gap:9px;"><span class="ul" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;"><dc-import name="Icon" icon="facebook" size="17" color="#fff" hint-size="17px,17px"></dc-import></span><span class="ul" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;"><dc-import name="Icon" icon="instagram" size="17" color="#fff" hint-size="17px,17px"></dc-import></span><span class="ul" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;"><dc-import name="Icon" icon="twitter" size="17" color="#fff" hint-size="17px,17px"></dc-import></span></div></div>
+        </div>
+        <div style="max-width:1180px; margin:28px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <span class="num" style="font-size:12px; color:#6B7280;">© 2026 SoftoDev. {{ tx.footRights }}</span>
+          <span class="num" style="font-size:12px; color:#6B7280;">{{ tx.footPay }}</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang: 'ar', device: 'desktop', plan: 'yearly' };
+
+  get T() {
+    const ar = {
+      ann1:'تفعيل فوري خلال 30 دقيقة', ann2:'دفع بالدينار العراقي', ann3:'ضمان كامل',
+      navProducts:'المنتجات', navCats:'الفئات', navDeals:'العروض', navAbout:'من نحن',
+      search:'ابحث عن اشتراك…', login:'تسجيل الدخول',
+      heroKicker:'اشتراكات رقمية أصلية 100%',
+      heroT1:'كل اشتراكاتك الرقمية', heroT2:'بمكان واحد، وبالدينار',
+      heroSub:'ChatGPT Plus، Canva Pro، CapCut، Coursera والمزيد — تفعيل فوري، أسعار بالدينار العراقي، وضمان كامل على كل طلب.',
+      heroCta1:'تصفّح الكتالوج', heroCta2:'كيف يعمل؟',
+      heroTrust:'أكثر من 4,800 عميل سعيد',
+      heroCardLabel:'الاشتراكات النشطة', heroLive:'مباشر',
+      heroCardTitle:'تفعيل فوري بعد الدفع', heroCardSub:'يصلك رمز التفعيل تلقائياً',
+      vp1t:'تفعيل فوري', vp1s:'خلال 30 دقيقة كحد أقصى', vp2t:'دفع بالدينار', vp2s:'زين كاش، آسيا، ماستر',
+      vp3t:'ضمان كامل', vp3s:'استبدال فوري عند أي مشكلة', vp4t:'دعم 24/7', vp4s:'فريق عراقي يرد بسرعة',
+      catsKicker:'تصفّح', catsTitle:'تسوّق حسب الفئة', viewAll:'عرض الكل', products:'منتج',
+      cat1:'أدوات الذكاء الاصطناعي', cat2:'التصميم', cat3:'الفيديو والمونتاج', cat4:'التعلّم والكورسات',
+      bestKicker:'الأكثر طلباً', bestTitle:'الأكثر مبيعاً هذا الأسبوع', instant:'فوري', addToCart:'أضف للسلة',
+      stepsKicker:'بثلاث خطوات', stepsTitle:'من الطلب إلى التفعيل خلال دقائق',
+      step1t:'اختر اشتراكك', step1s:'تصفّح الكتالوج واختر الخطة المناسبة لك — شهرية أو سنوية.',
+      step2t:'ادفع بالدينار', step2s:'ادفع بأمان عبر زين كاش أو آسيا حوالة أو البطاقة — بالدينار العراقي.',
+      step3t:'فعّل فوراً', step3s:'يصلك رمز التفعيل أو الحساب تلقائياً خلال دقائق مع ضمان كامل.',
+      plansKicker:'خطط مرنة', plansTitle:'اختر الخطة التي تناسبك ووفّر أكثر', plansSub:'كل المنتجات تأتي بخطة شهرية وأخرى سنوية. ادفع لما تحتاجه فقط، ووفّر حتى 25% مع الخطة السنوية.',
+      planFeat1:'تفعيل فوري وضمان طوال مدة الاشتراك', planFeat2:'إمكانية الترقية أو التغيير في أي وقت', planFeat3:'دعم فني عراقي على مدار الساعة',
+      planProductSub:'اشتراك رسمي — حسابك الخاص', planMonthly:'شهري', planYearly:'سنوي',
+      planCta:'اشترك الآن', planSecure:'دفع آمن ومشفّر بالكامل',
+      revKicker:'آراء حقيقية', revTitle:'موثوق من آلاف العملاء في العراق',
+      ctaTitle:'ابدأ اشتراكك الرقمي اليوم', ctaSub:'انضم لأكثر من 4,800 عميل واحصل على اشتراكاتك المفضّلة بالدينار وبتفعيل فوري.', ctaBtn:'تصفّح كل المنتجات',
+      footAbout:'أكبر متجر اشتراكات رقمية في العراق. تفعيل فوري، دفع بالدينار العراقي، وضمان كامل على كل طلب.',
+      footShop:'المتجر', footAll:'كل المنتجات', footSupport:'الدعم', footContact:'تواصل معنا', footFaq:'الأسئلة الشائعة', footReturns:'سياسة الاسترجاع', footFollow:'تابعنا',
+      footRights:'جميع الحقوق محفوظة.', footPay:'زين كاش · آسيا · ماستركارد · فيزا'
+    };
+    const en = {
+      ann1:'Instant activation within 30 min', ann2:'Pay in Iraqi Dinar', ann3:'Full warranty',
+      navProducts:'Products', navCats:'Categories', navDeals:'Deals', navAbout:'About',
+      search:'Search subscriptions…', login:'Sign in',
+      heroKicker:'100% authentic subscriptions',
+      heroT1:'All your digital subscriptions', heroT2:'in one place, paid in IQD',
+      heroSub:'ChatGPT Plus, Canva Pro, CapCut, Coursera and more — instant activation, prices in Iraqi Dinar, and a full warranty on every order.',
+      heroCta1:'Browse catalog', heroCta2:'How it works',
+      heroTrust:'Over 4,800 happy customers',
+      heroCardLabel:'ACTIVE SUBSCRIPTIONS', heroLive:'live',
+      heroCardTitle:'Instant activation after payment', heroCardSub:'Your activation code arrives automatically',
+      vp1t:'Instant activation', vp1s:'Within 30 minutes max', vp2t:'Pay in IQD', vp2s:'ZainCash, Asia, Mastercard',
+      vp3t:'Full warranty', vp3s:'Instant replacement on issues', vp4t:'24/7 support', vp4s:'Local team, fast replies',
+      catsKicker:'Browse', catsTitle:'Shop by category', viewAll:'View all', products:'products',
+      cat1:'AI Tools', cat2:'Design', cat3:'Video & Editing', cat4:'Learning & Courses',
+      bestKicker:'Most wanted', bestTitle:'Bestsellers this week', instant:'instant', addToCart:'Add to cart',
+      stepsKicker:'Three steps', stepsTitle:'From order to activation in minutes',
+      step1t:'Choose your plan', step1s:'Browse the catalog and pick the plan that fits — monthly or yearly.',
+      step2t:'Pay in Dinar', step2s:'Pay securely via ZainCash, Asia Hawala, or card — in Iraqi Dinar.',
+      step3t:'Activate instantly', step3s:'Your code or account arrives automatically within minutes, fully warrantied.',
+      plansKicker:'Flexible plans', plansTitle:'Pick the plan that fits and save more', plansSub:'Every product comes with a monthly and a yearly plan. Pay only for what you need, and save up to 25% with yearly.',
+      planFeat1:'Instant activation & warranty for the full term', planFeat2:'Upgrade or switch anytime', planFeat3:'Local 24/7 technical support',
+      planProductSub:'Official subscription — your own account', planMonthly:'Monthly', planYearly:'Yearly',
+      planCta:'Subscribe now', planSecure:'Fully secure, encrypted payment',
+      revKicker:'Real reviews', revTitle:'Trusted by thousands across Iraq',
+      ctaTitle:'Start your digital subscription today', ctaSub:'Join 4,800+ customers and get your favorite subscriptions in IQD with instant activation.', ctaBtn:'Browse all products',
+      footAbout:'Iraq\u2019s largest digital subscriptions store. Instant activation, payment in Iraqi Dinar, and a full warranty on every order.',
+      footShop:'Shop', footAll:'All products', footSupport:'Support', footContact:'Contact us', footFaq:'FAQ', footReturns:'Return policy', footFollow:'Follow us',
+      footRights:'All rights reserved.', footPay:'ZainCash · Asia · Mastercard · Visa'
+    };
+    return this.state.lang === 'ar' ? ar : en;
+  }
+
+  get productsData() {
+    const ar = this.state.lang === 'ar';
+    return [
+      { id:'gpt', cat:'AI Tools', name: ar?'ChatGPT Plus — شهري':'ChatGPT Plus — Monthly', rating:'4.9', price:'$20', compare:'$27', glyph:'GPT', bg:'linear-gradient(140deg,#E8F0FE,#E0F7FB)', icon:'linear-gradient(135deg,#10A37F,#1AB68C)' },
+      { id:'canva', cat:'Design', name: ar?'Canva Pro — سنوي':'Canva Pro — Yearly', rating:'4.8', price:'$45', compare:'$60', glyph:'Cv', bg:'linear-gradient(140deg,#EDE9FE,#E8F0FE)', icon:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+      { id:'capcut', cat:'Video', name: ar?'CapCut Pro — شهري':'CapCut Pro — Monthly', rating:'4.6', price:'$12', compare:'$16', glyph:'CC', bg:'linear-gradient(140deg,#E0F7FB,#E8F0FE)', icon:'linear-gradient(135deg,#0EA5E9,#06B6D4)' },
+      { id:'coursera', cat:'Learning', name: ar?'Coursera Plus — سنوي':'Coursera Plus — Yearly', rating:'4.9', price:'$59', compare:'$79', glyph:'Co', bg:'linear-gradient(140deg,#E7F6EE,#E8F0FE)', icon:'linear-gradient(135deg,#2563EB,#3B82F6)' },
+    ];
+  }
+
+  get reviewsData() {
+    const ar = this.state.lang === 'ar';
+    return ar ? [
+      { quote:'طلبت ChatGPT Plus ووصلني التفعيل خلال 10 دقائق فعلاً. تجربة سلسة والدفع بالدينار وفّر عليّ كثير.', name:'أحمد العبيدي', meta:'بغداد · عميل موثّق', initial:'أ', bg:'linear-gradient(135deg,#2563EB,#3B82F6)' },
+      { quote:'أفضل متجر اشتراكات جربته بالعراق. الأسعار واضحة والدعم يرد بسرعة. اشتركت بـ Canva Pro السنوي.', name:'سارة كريم', meta:'أربيل · عميلة موثّقة', initial:'س', bg:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+      { quote:'الضمان حقيقي — صار عندي مشكلة بحساب وتم استبداله فوراً بدون أي تعقيد. أنصح فيه بقوة.', name:'مصطفى حسن', meta:'البصرة · عميل موثّق', initial:'م', bg:'linear-gradient(135deg,#0EA5E9,#06B6D4)' },
+    ] : [
+      { quote:'Ordered ChatGPT Plus and activation arrived in 10 minutes. Smooth experience, and paying in IQD saved me a lot.', name:'Ahmed Al-Obaidi', meta:'Baghdad · Verified buyer', initial:'A', bg:'linear-gradient(135deg,#2563EB,#3B82F6)' },
+      { quote:'Best subscription store I\u2019ve tried in Iraq. Clear prices and fast support. Got Canva Pro yearly.', name:'Sara Kareem', meta:'Erbil · Verified buyer', initial:'S', bg:'linear-gradient(135deg,#7C3AED,#A855F7)' },
+      { quote:'The warranty is real — I had an account issue and it was replaced instantly, no hassle. Highly recommend.', name:'Mustafa Hasan', meta:'Basra · Verified buyer', initial:'M', bg:'linear-gradient(135deg,#0EA5E9,#06B6D4)' },
+    ];
+  }
+
+  get planInfo() {
+    const ar = this.state.lang === 'ar';
+    const map = {
+      monthly: { price:'$20', period: ar?'/شهر':'/mo', save: ar?'مرن':'flexible', iqd:'≈ IQD 26,000' },
+      yearly:  { price:'$180', period: ar?'/سنة':'/yr', save: ar?'وفّر 25%':'save 25%', iqd:'≈ IQD 235,000' },
+    };
+    return map[this.state.plan];
+  }
+
+  segBtn(active) {
+    return active
+      ? 'flex:1; padding:9px 6px; border-radius:9px; font-size:12.5px; font-weight:700; background:#fff; color:#0B1220; box-shadow:0 1px 3px rgba(16,24,40,0.12);'
+      : 'flex:1; padding:9px 6px; border-radius:9px; font-size:12.5px; font-weight:700; background:transparent; color:#6B7280;';
+  }
+  toggleBtn(active) {
+    return active
+      ? 'padding:5px 13px; border-radius:7px; font-size:12px; font-weight:700; background:#fff; color:#0B1220;'
+      : 'padding:5px 13px; border-radius:7px; font-size:12px; font-weight:700; background:transparent; color:#9CA3AF;';
+  }
+
+  renderVals() {
+    const ar = this.state.lang === 'ar';
+    const desk = this.state.device === 'desktop';
+    const pi = this.planInfo;
+    return {
+      dir: ar ? 'rtl' : 'ltr',
+      arrowIcon: ar ? 'arrowLeft' : 'arrow',
+      tx: this.T,
+      products: this.productsData,
+      reviews: this.reviewsData,
+      langLabel: ar ? 'AR' : 'EN',
+      deviceLabel: desk ? 'DESKTOP' : 'MOBILE',
+      wrapStyle: desk
+        ? 'width:100%; max-width:1280px; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.14); border:1px solid #E5E7EB;'
+        : 'width:414px; border-radius:30px; overflow:hidden; box-shadow:0 20px 60px rgba(16,24,40,0.18); border:8px solid #0B1220;',
+      setAr: () => this.setState({ lang: 'ar' }),
+      setEn: () => this.setState({ lang: 'en' }),
+      setDesktop: () => this.setState({ device: 'desktop' }),
+      setMobile: () => this.setState({ device: 'mobile' }),
+      arBtnStyle: this.toggleBtn(ar),
+      enBtnStyle: this.toggleBtn(!ar),
+      deskBtnStyle: this.toggleBtn(desk),
+      mobBtnStyle: this.toggleBtn(!desk),
+      planMonthly: () => this.setState({ plan: 'monthly' }),
+      planYearly: () => this.setState({ plan: 'yearly' }),
+      planMonthlyStyle: this.segBtn(this.state.plan === 'monthly'),
+      planYearlyStyle: this.segBtn(this.state.plan === 'yearly'),
+      planPrice: pi.price, planPeriod: pi.period, planSave: pi.save, planIqd: pi.iqd,
+    };
+  }
+}
+</script>
+</body>
+</html>

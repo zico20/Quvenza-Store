@@ -1,4 +1,4 @@
-const BASE = 'https://softodeviqstore.com';
+const BASE = 'https://quvenzaiq.com';
 const ORG_ID = `${BASE}/#organization`;
 
 export interface ProductSchemaInput {
@@ -22,8 +22,8 @@ export function organizationSchema() {
     '@context': 'https://schema.org',
     '@type': ['Organization', 'OnlineStore'],
     '@id': ORG_ID,
-    name: 'SoftoDev',
-    alternateName: ['سوفتوديف', 'SoftoDev Iraq', 'softodeviq'],
+    name: 'Quvenza',
+    alternateName: ['كوفينزا', 'Quvenza Iraq', 'quvenza'],
     url: BASE,
     logo: {
       '@type': 'ImageObject',
@@ -36,11 +36,11 @@ export function organizationSchema() {
     foundingDate: '2026',
     founder: {
       '@type': 'Organization',
-      '@id': 'https://softodeviq.com/#organization',
-      name: 'SoftoDevIq',
-      alternateName: 'softodeviq',
-      url: 'https://softodeviq.com',
-      logo: 'https://softodeviq.com/logo.jpeg',
+      '@id': 'https://quvenzaiq.com/#organization',
+      name: 'QuvenzaIq',
+      alternateName: 'quvenza',
+      url: 'https://quvenzaiq.com',
+      logo: 'https://quvenzaiq.com/logo.jpeg',
       description: 'شركة برمجة عراقية متخصصة في تطوير المواقع والمتاجر الإلكترونية وأنظمة ERP/CRM',
       foundingDate: '2013',
       foundingLocation: {
@@ -62,22 +62,22 @@ export function organizationSchema() {
       ],
       sameAs: [
         'https://www.facebook.com/profile.php?id=61577521469419',
-        'https://www.instagram.com/softodeviq/',
-        'https://www.linkedin.com/company/softodeviq/',
+        'https://www.instagram.com/quvenza/',
+        'https://www.linkedin.com/company/quvenza/',
         'https://www.wikidata.org/wiki/Q139558058',
       ],
     },
     parentOrganization: {
       '@type': 'Organization',
-      '@id': 'https://softodeviq.com/#organization',
-      name: 'SoftoDevIq',
-      url: 'https://softodeviq.com',
+      '@id': 'https://quvenzaiq.com/#organization',
+      name: 'QuvenzaIq',
+      url: 'https://quvenzaiq.com',
     },
     creator: {
       '@type': 'Organization',
-      '@id': 'https://softodeviq.com/#organization',
-      name: 'SoftoDevIq',
-      url: 'https://softodeviq.com',
+      '@id': 'https://quvenzaiq.com/#organization',
+      name: 'QuvenzaIq',
+      url: 'https://quvenzaiq.com',
     },
     foundingLocation: {
       '@type': 'Place',
@@ -106,9 +106,9 @@ export function organizationSchema() {
       },
     ],
     sameAs: [
-      'https://www.facebook.com/softodeviq',
-      'https://www.instagram.com/softodeviq',
-      'https://t.me/softodeviq',
+      'https://www.facebook.com/quvenza',
+      'https://www.instagram.com/quvenza',
+      'https://t.me/quvenza',
     ],
     // E-E-A-T & knowledge graph hints
     knowsAbout: [
@@ -134,7 +134,7 @@ export function organizationSchema() {
       { '@type': 'AdministrativeArea', name: 'Mosul Governorate' },
       { '@type': 'AdministrativeArea', name: 'Najaf Governorate' },
     ],
-    brand: { '@type': 'Brand', name: 'SoftoDev', slogan: 'اشتراكات رقمية أصلية بأسعار عراقية' },
+    brand: { '@type': 'Brand', name: 'Quvenza', slogan: 'اشتراكات رقمية أصلية بأسعار عراقية' },
     paymentAccepted: ['Cash on Delivery', 'ZainCash', 'AsiaHawala', 'FastPay'],
     currenciesAccepted: 'IQD',
     priceRange: '$$',
@@ -148,7 +148,7 @@ export function websiteSchema() {
     '@type': 'WebSite',
     '@id': `${BASE}/#website`,
     url: BASE,
-    name: 'SoftoDev',
+    name: 'Quvenza',
     description: 'متجر الاشتراكات الرقمية في العراق',
     inLanguage: 'ar-IQ',
     publisher: { '@id': ORG_ID },
@@ -173,7 +173,7 @@ export function productSchema(p: ProductSchemaInput) {
     image: p.images.map(img => img.startsWith('http') ? img : `${BASE}${img}`),
     sku: p.slug,
     url: `${BASE}/products/${p.slug}`,
-    brand: { '@type': 'Brand', name: 'SoftoDev' },
+    brand: { '@type': 'Brand', name: 'Quvenza' },
     ...(p.category && { category: p.category.name }),
     offers: {
       '@type': 'Offer',
@@ -269,14 +269,14 @@ export function localBusinessSchema() {
     '@context': 'https://schema.org',
     '@type': ['LocalBusiness', 'Store'],
     '@id': `${BASE}/#localbusiness`,
-    name: 'SoftoDev',
-    alternateName: 'سوفتوديف',
+    name: 'Quvenza',
+    alternateName: 'كوفينزا',
     description: 'متجر عراقي متخصص ببيع الاشتراكات الرقمية الأصلية — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus.',
     url: BASE,
     logo: `${BASE}/logo.png`,
     image: `${BASE}/og-image.svg`,
     telephone: '+9647700000000',
-    email: 'support@softodeviqstore.com',
+    email: 'support@quvenzaiq.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'بغداد',
@@ -388,7 +388,7 @@ export function getDefaultFAQs(productName: string): FAQItem[] {
   return [
     {
       question: `هل ${productName} أصلي 100%؟`,
-      answer: `نعم، جميع اشتراكاتنا في SoftoDev أصلية 100% ومباشرة من الشركة المطورة مع ضمان كامل طوال فترة الاشتراك.`,
+      answer: `نعم، جميع اشتراكاتنا في Quvenza أصلية 100% ومباشرة من الشركة المطورة مع ضمان كامل طوال فترة الاشتراك.`,
     },
     {
       question: `كم وقت يستغرق تفعيل ${productName}؟`,

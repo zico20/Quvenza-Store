@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  @keyframes briefIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .num { font-family: 'Hanken Grotesk', sans-serif; direction: ltr; unicode-bidi: isolate; font-feature-settings: 'tnum'; }
+</style>
+</helmet>
+<div dir="rtl" style="min-height: 100vh; background: #F7F8FA; font-family: 'IBM Plex Sans Arabic', sans-serif; color: #1A1A2E; padding: 0 0 80px 0; -webkit-font-smoothing: antialiased;">
+
+  <!-- Top bar -->
+  <div style="position: sticky; top: 0; z-index: 10; background: rgba(247,248,250,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid #ECEDF1; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg,#5B54E8,#8B6FF0); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-family: 'Hanken Grotesk'; font-size: 15px;">S</div>
+      <span style="font-weight: 700; font-size: 15px; font-family: 'Cairo';">SoftoDev</span>
+      <span style="color: #8A8C9B; font-size: 13px;">— مقترح إعادة التصميم</span>
+    </div>
+    <span style="font-family: 'Hanken Grotesk'; font-size: 12px; color: #8A8C9B; letter-spacing: 0.08em; text-transform: uppercase;">المرحلة ١ · التحليل والهوية</span>
+  </div>
+
+  <div style="max-width: 1100px; margin: 0 auto; padding: 0 24px;">
+
+    <!-- HERO -->
+    <section style="padding: 72px 0 56px; text-align: center;">
+      <div style="font-family: 'Hanken Grotesk'; font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #5B54E8; margin-bottom: 20px;">Redesign Brief · 2026</div>
+      <h1 style="margin: 0 auto; max-width: 760px; font-family: 'Cairo'; font-weight: 800; font-size: clamp(30px, 6vw, 52px); line-height: 1.18; letter-spacing: -0.01em; color: #14142B;">من ثيم داكن مزدحم<br>إلى هوية فاتحة وأنيقة</h1>
+      <p style="margin: 22px auto 0; max-width: 560px; font-size: 16px; line-height: 1.8; color: #5A5B6A;">تحليل كامل للمتجر الحالي، خطة إعادة التصميم، و٣ لوحات ألوان فاتحة مستوحاة من Stripe و Setapp — كل واحدة مُطبّقة على بطاقة منتج حقيقية لتختار بثقة.</p>
+    </section>
+
+    <!-- ANALYSIS: current state -->
+    <section style="margin-top: 24px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
+        <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 700; color: #5B54E8;">01</span>
+        <h2 style="margin: 0; font-family: 'Cairo'; font-weight: 700; font-size: 24px; color: #14142B;">الوضع الحالي</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px;">
+        <!-- Stack card -->
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 18px; padding: 26px; box-shadow: 0 1px 2px rgba(20,20,43,0.04);">
+          <div style="font-family: 'Hanken Grotesk'; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8A8C9B; margin-bottom: 16px;">التقنيات — تبقى كما هي</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 600; padding: 7px 13px; background: #F3F3FB; color: #4942D6; border-radius: 9px;">Next.js 16</span>
+            <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 600; padding: 7px 13px; background: #F4F5F7; color: #4B4D5C; border-radius: 9px;">React 19</span>
+            <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 600; padding: 7px 13px; background: #F4F5F7; color: #4B4D5C; border-radius: 9px;">Tailwind v4</span>
+            <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 600; padding: 7px 13px; background: #F4F5F7; color: #4B4D5C; border-radius: 9px;">Prisma</span>
+            <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 600; padding: 7px 13px; background: #F4F5F7; color: #4B4D5C; border-radius: 9px;">Zustand</span>
+            <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 600; padding: 7px 13px; background: #F4F5F7; color: #4B4D5C; border-radius: 9px;">lucide-react</span>
+          </div>
+          <p style="margin: 18px 0 0; font-size: 13.5px; line-height: 1.75; color: #5A5B6A;">متجر اشتراكات رقمية عراقي (ChatGPT Plus، Canva Pro، CapCut، Coursera). ثنائي اللغة عربي/إنجليزي مع دعم RTL، تسعير بالدولار والدينار، تفعيل فوري. <b style="color:#14142B;">لن نغيّر أي تقنية أو منطق — فقط طبقة التصميم.</b></p>
+        </div>
+        <!-- Pages inventory -->
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 18px; padding: 26px; box-shadow: 0 1px 2px rgba(20,20,43,0.04);">
+          <div style="font-family: 'Hanken Grotesk'; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8A8C9B; margin-bottom: 16px;">جرد الصفحات — ٢٠+ شاشة</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 7px 14px; font-size: 13px; color: #4B4D5C;">
+            <span>الرئيسية</span><span>قائمة المنتجات</span>
+            <span>تفاصيل المنتج</span><span>الفئات</span>
+            <span>البحث</span><span>السلة + الدفع</span>
+            <span>تسجيل الدخول/حساب جديد</span><span>لوحة الحساب</span>
+            <span>الطلبات + تفاصيلها</span><span>العناوين</span>
+            <span>المفضلة</span><span>من نحن</span>
+            <span>الأخطاء/الحالات الفارغة</span><span>لوحة الأدمن</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WEAKNESSES -->
+    <section style="margin-top: 48px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
+        <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 700; color: #5B54E8;">02</span>
+        <h2 style="margin: 0; font-family: 'Cairo'; font-weight: 700; font-size: 24px; color: #14142B;">نقاط ضعف التصميم الحالي</h2>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 16px; padding: 22px;">
+          <div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B; margin-bottom:8px;">ثيم داكن متعب</div>
+          <p style="margin:0; font-size:13px; line-height:1.7; color:#5A5B6A;">خلفية شبه سوداء وبرتقالي كهربائي وهجٌ نيون — مرهق للعين وأقرب لمتجر مفاتيح ألعاب من متجر اشتراكات راقٍ.</p>
+        </div>
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 16px; padding: 22px;">
+          <div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B; margin-bottom:8px;">كثافة بصرية وحدود قاسية</div>
+          <p style="margin:0; font-size:13px; line-height:1.7; color:#5A5B6A;">حدود رمادية على كل عنصر، تباعد ضيق، وعناوين كثيرة بنمط mono — تشتيت يقلّل التركيز على المنتج والشراء.</p>
+        </div>
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 16px; padding: 22px;">
+          <div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B; margin-bottom:8px;">إشارات ثقة وCTA ضعيفة</div>
+          <p style="margin:0; font-size:13px; line-height:1.7; color:#5A5B6A;">لا تظهر بوضوح: التقييمات، التسليم الفوري، أمان الدفع. زر الشراء يضيع وسط الضجيج، ومسار الدفع غير مُحسَّن للتحويل.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAN -->
+    <section style="margin-top: 48px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
+        <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 700; color: #5B54E8;">03</span>
+        <h2 style="margin: 0; font-family: 'Cairo'; font-weight: 700; font-size: 24px; color: #14142B;">خطة إعادة التصميم</h2>
+      </div>
+      <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 18px; padding: 8px 28px; box-shadow: 0 1px 2px rgba(20,20,43,0.04);">
+        <div style="display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid #F1F2F5;">
+          <div style="font-family:'Hanken Grotesk'; font-weight:800; font-size:18px; color:#D6D7E0; min-width: 28px;">01</div>
+          <div><div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B;">نظام تصميم موحّد فاتح</div><p style="margin:4px 0 0; font-size:13.5px; line-height:1.7; color:#5A5B6A;">توكنز للألوان والمسافات والخطوط والحواف والظلال، ومكتبة مكوّنات: أزرار، حقول، بطاقات، شريط تنقّل، فوتر، نوافذ، تنبيهات، حالات فارغة وتحميل وأخطاء.</p></div>
+        </div>
+        <div style="display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid #F1F2F5;">
+          <div style="font-family:'Hanken Grotesk'; font-weight:800; font-size:18px; color:#D6D7E0; min-width: 28px;">02</div>
+          <div><div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B;">رفع التحويل والمبيعات</div><p style="margin:4px 0 0; font-size:13.5px; line-height:1.7; color:#5A5B6A;">بطاقات منتج قوية، CTA واضح، إشارات ثقة (تقييم، تسليم فوري، أمان دفع)، ومسار دفع متعدد الخطوات سلس ومنخفض الاحتكاك.</p></div>
+        </div>
+        <div style="display: flex; gap: 18px; padding: 20px 0; border-bottom: 1px solid #F1F2F5;">
+          <div style="font-family:'Hanken Grotesk'; font-weight:800; font-size:18px; color:#D6D7E0; min-width: 28px;">03</div>
+          <div><div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B;">موبايل أولاً وأداء عالٍ</div><p style="margin:4px 0 0; font-size:13.5px; line-height:1.7; color:#5A5B6A;">تصميم خفيف، أزرار مريحة للإبهام، CTA ثابت أسفل الشاشة عند الحاجة، صور كسولة التحميل، واعتماد CSS بدل مكتبات حركة ثقيلة.</p></div>
+        </div>
+        <div style="display: flex; gap: 18px; padding: 20px 0;">
+          <div style="font-family:'Hanken Grotesk'; font-weight:800; font-size:18px; color:#D6D7E0; min-width: 28px;">04</div>
+          <div><div style="font-family:'Cairo'; font-weight:700; font-size:15px; color:#14142B;">تغطية كل الصفحات</div><p style="margin:4px 0 0; font-size:13.5px; line-height:1.7; color:#5A5B6A;">إعادة تصميم كل شاشة بنفس الهوية مع الحفاظ على الروابط والمنطق والبيانات — لا نترك أي صفحة بالتصميم القديم.</p></div>
+        </div>
+      </div>
+      <p style="margin: 14px 4px 0; font-size: 12.5px; line-height: 1.7; color: #8A8C9B;">ملاحظة: أُسلّم التصميم كنماذج تفاعلية عالية الدقة (HTML) مطابقة ١:١ لمساراتك ومكوّناتك — جاهزة لنقلها إلى الكود في Next.js / Tailwind دون تغيير المنطق.</p>
+    </section>
+
+    <!-- PALETTES -->
+    <section style="margin-top: 56px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
+        <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 700; color: #5B54E8;">04</span>
+        <h2 style="margin: 0; font-family: 'Cairo'; font-weight: 700; font-size: 24px; color: #14142B;">٣ لوحات ألوان فاتحة — اختر واحدة</h2>
+      </div>
+      <p style="margin: 0 0 28px 26px; font-size: 14px; color: #5A5B6A;">كل لوحة مطبّقة على بطاقة منتج حقيقية + أزرار + شارات. كلها فاتحة ومريحة للعين ومختلفة تماماً عن البرتقالي الحالي.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+
+        <!-- PALETTE A: Indigo -->
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(20,20,43,0.05);">
+          <div style="padding: 20px 20px 16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="font-family:'Cairo'; font-weight:800; font-size:17px; color:#14142B;">أ · إنديغو</div>
+              <span style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B54E8; background:#EEEDFD; padding:4px 9px; border-radius:7px;">Stripe</span>
+            </div>
+            <p style="margin:6px 0 14px; font-size:12px; color:#8A8C9B;">عصري، تقني، موثوق — بنفسجي راقٍ مع رماديات باردة.</p>
+            <div style="display:flex; gap:7px;">
+              <div style="flex:1.4; height:34px; border-radius:8px; background:#5B54E8;"></div>
+              <div style="flex:1; height:34px; border-radius:8px; background:#12B5A4;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#EEEDFD;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#F4F5F7; border:1px solid #ECEDF1;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#14142B;"></div>
+            </div>
+          </div>
+          <div style="background:#F7F8FA; border-top:1px solid #ECEDF1; padding:20px;">
+            <div style="background:#fff; border:1px solid #ECEDF1; border-radius:14px; overflow:hidden;">
+              <div style="aspect-ratio:16/10; background:linear-gradient(140deg,#EEEDFD,#E3F6F3); display:flex; align-items:center; justify-content:center; position:relative;">
+                <div style="width:54px; height:54px; border-radius:15px; background:linear-gradient(135deg,#5B54E8,#8B6FF0); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:19px; box-shadow:0 8px 20px rgba(91,84,232,0.35);">AI</div>
+                <span style="position:absolute; top:10px; inset-inline-start:10px; font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; color:#12B5A4; background:#fff; padding:3px 8px; border-radius:20px;">تسليم فوري</span>
+              </div>
+              <div style="padding:14px;">
+                <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#5B54E8;">AI Tools</div>
+                <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#14142B; margin:5px 0;">ChatGPT Plus — شهري</div>
+                <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+                  <span style="color:#F5A524; font-size:12px;">★★★★★</span>
+                  <span class="num" style="font-size:11px; color:#8A8C9B;">4.9 (320)</span>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span class="num" style="font-weight:800; font-size:18px; color:#14142B;">$20</span>
+                  <button style="border:none; cursor:pointer; background:#5B54E8; color:#fff; font-family:'Cairo'; font-weight:700; font-size:12.5px; padding:9px 16px; border-radius:10px;">اشترك</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PALETTE B: Emerald -->
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(20,20,43,0.05);">
+          <div style="padding: 20px 20px 16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="font-family:'Cairo'; font-weight:800; font-size:17px; color:#14211B;">ب · إيميرالد</div>
+              <span style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#08926B; background:#E4F5EE; padding:4px 9px; border-radius:7px;">Setapp</span>
+            </div>
+            <p style="margin:6px 0 14px; font-size:12px; color:#8E948D;">منعش، نظيف، يبعث الثقة — أخضر زمردي مع رماديات دافئة.</p>
+            <div style="display:flex; gap:7px;">
+              <div style="flex:1.4; height:34px; border-radius:8px; background:#08926B;"></div>
+              <div style="flex:1; height:34px; border-radius:8px; background:#E8A33D;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#E4F5EE;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#F4F4F1; border:1px solid #ECEBE6;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#1B2420;"></div>
+            </div>
+          </div>
+          <div style="background:#FAFAF8; border-top:1px solid #ECEBE6; padding:20px;">
+            <div style="background:#fff; border:1px solid #ECEBE6; border-radius:14px; overflow:hidden;">
+              <div style="aspect-ratio:16/10; background:linear-gradient(140deg,#E4F5EE,#FBF1DD); display:flex; align-items:center; justify-content:center; position:relative;">
+                <div style="width:54px; height:54px; border-radius:15px; background:linear-gradient(135deg,#08926B,#23B888); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:19px; box-shadow:0 8px 20px rgba(8,146,107,0.32);">AI</div>
+                <span style="position:absolute; top:10px; inset-inline-start:10px; font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; color:#08926B; background:#fff; padding:3px 8px; border-radius:20px;">تسليم فوري</span>
+              </div>
+              <div style="padding:14px;">
+                <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#08926B;">AI Tools</div>
+                <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#1B2420; margin:5px 0;">ChatGPT Plus — شهري</div>
+                <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+                  <span style="color:#E8A33D; font-size:12px;">★★★★★</span>
+                  <span class="num" style="font-size:11px; color:#8E948D;">4.9 (320)</span>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span class="num" style="font-weight:800; font-size:18px; color:#1B2420;">$20</span>
+                  <button style="border:none; cursor:pointer; background:#08926B; color:#fff; font-family:'Cairo'; font-weight:700; font-size:12.5px; padding:9px 16px; border-radius:10px;">اشترك</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PALETTE C: Cobalt -->
+        <div style="background: #fff; border: 1px solid #ECEDF1; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(20,20,43,0.05);">
+          <div style="padding: 20px 20px 16px;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="font-family:'Cairo'; font-weight:800; font-size:17px; color:#111827;">ج · كوبالت</div>
+              <span style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#2563EB; background:#E8F0FE; padding:4px 9px; border-radius:7px;">SaaS</span>
+            </div>
+            <p style="margin:6px 0 14px; font-size:12px; color:#9097A1;">واضح، احترافي، جريء بهدوء — أزرق كوبالت مع رماديات محايدة.</p>
+            <div style="display:flex; gap:7px;">
+              <div style="flex:1.4; height:34px; border-radius:8px; background:#2563EB;"></div>
+              <div style="flex:1; height:34px; border-radius:8px; background:#06B6D4;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#E8F0FE;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#F3F4F6; border:1px solid #EAECEF;"></div>
+              <div style="flex:0.6; height:34px; border-radius:8px; background:#111827;"></div>
+            </div>
+          </div>
+          <div style="background:#F9FAFB; border-top:1px solid #EAECEF; padding:20px;">
+            <div style="background:#fff; border:1px solid #EAECEF; border-radius:14px; overflow:hidden;">
+              <div style="aspect-ratio:16/10; background:linear-gradient(140deg,#E8F0FE,#E0F7FB); display:flex; align-items:center; justify-content:center; position:relative;">
+                <div style="width:54px; height:54px; border-radius:15px; background:linear-gradient(135deg,#2563EB,#3B82F6); display:flex; align-items:center; justify-content:center; color:#fff; font-family:'Hanken Grotesk'; font-weight:800; font-size:19px; box-shadow:0 8px 20px rgba(37,99,235,0.32);">AI</div>
+                <span style="position:absolute; top:10px; inset-inline-start:10px; font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; color:#2563EB; background:#fff; padding:3px 8px; border-radius:20px;">تسليم فوري</span>
+              </div>
+              <div style="padding:14px;">
+                <div style="font-family:'Hanken Grotesk'; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#2563EB;">AI Tools</div>
+                <div style="font-family:'Cairo'; font-weight:700; font-size:14px; color:#111827; margin:5px 0;">ChatGPT Plus — شهري</div>
+                <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+                  <span style="color:#F59E0B; font-size:12px;">★★★★★</span>
+                  <span class="num" style="font-size:11px; color:#9097A1;">4.9 (320)</span>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <span class="num" style="font-weight:800; font-size:18px; color:#111827;">$20</span>
+                  <button style="border:none; cursor:pointer; background:#2563EB; color:#fff; font-family:'Cairo'; font-weight:700; font-size:12.5px; padding:9px 16px; border-radius:10px;">اشترك</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section style="margin-top: 56px;">
+      <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
+        <span style="font-family: 'Hanken Grotesk'; font-size: 13px; font-weight: 700; color: #5B54E8;">05</span>
+        <h2 style="margin: 0; font-family: 'Cairo'; font-weight: 700; font-size: 24px; color: #14142B;">الطباعة المقترحة</h2>
+      </div>
+      <div style="background:#fff; border:1px solid #ECEDF1; border-radius:18px; padding:28px; box-shadow:0 1px 2px rgba(20,20,43,0.04); display:grid; grid-template-columns:1fr 1fr; gap:28px;">
+        <div style="border-inline-end:1px solid #F1F2F5; padding-inline-end:28px;">
+          <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#8A8C9B; margin-bottom:14px;">عربي — Cairo + IBM Plex Sans Arabic</div>
+          <div style="font-family:'Cairo'; font-weight:800; font-size:30px; color:#14142B; line-height:1.3;">اشتراكاتك الرقمية</div>
+          <div style="font-family:'IBM Plex Sans Arabic'; font-size:14.5px; color:#5A5B6A; line-height:1.85; margin-top:8px;">عناوين بخط Cairo الواضح، ونصوص بخط IBM Plex Sans Arabic المريح للقراءة على خلفية فاتحة.</div>
+        </div>
+        <div>
+          <div style="font-family:'Hanken Grotesk'; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#8A8C9B; margin-bottom:14px;">لاتيني وأرقام — Hanken Grotesk</div>
+          <div style="font-family:'Hanken Grotesk'; font-weight:800; font-size:30px; color:#14142B; line-height:1.3; direction:ltr;">Instant&nbsp;delivery</div>
+          <div class="num" style="font-size:14.5px; color:#5A5B6A; line-height:1.85; margin-top:8px; text-align:left;">$20.00 · IQD 26,000 · 4.9★ · 1,240 sold — أرقام واضحة بنمط tabular.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT -->
+    <section style="margin-top: 48px;">
+      <div style="background:linear-gradient(135deg,#14142B,#26264A); border-radius:22px; padding:40px; text-align:center; color:#fff;">
+        <div style="font-family:'Hanken Grotesk'; font-size:12px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#A39CF5; margin-bottom:14px;">الخطوة التالية</div>
+        <h3 style="margin:0 auto; max-width:480px; font-family:'Cairo'; font-weight:700; font-size:24px; line-height:1.4;">اختر لوحة الألوان وأجب عن أسئلة سريعة</h3>
+        <p style="margin:14px auto 0; max-width:480px; font-size:14px; line-height:1.8; color:#C7C8D8;">بمجرد اختيارك، أبني نظام التصميم الكامل + الصفحة الرئيسية كأول نموذج، ثم بقية الصفحات بنفس الهوية.</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

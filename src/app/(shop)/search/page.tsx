@@ -24,7 +24,7 @@ function SearchResults() {
 export default function SearchPage() {
   const { t } = useLang();
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="w-full mx-auto px-4 py-8">
       <Suspense fallback={<div>{t('common.loading')}</div>}>
         <SearchResults />
       </Suspense>
