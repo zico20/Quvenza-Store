@@ -1,35 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
-import type { Product } from '@/types';
+import type { Product, Variant } from '@/types';
 import { Icon } from '@/components/ui/Icon';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
+import { useCompareStore } from '@/store/compare.store';
 import { showToast } from '@/lib/toast';
-import { useCategoryName } from '@/hooks/useCategoryName';
 import { useLang } from '@/hooks/useLang';
 import { useCurrency } from '@/hooks/useCurrency';
+import { localizedName } from '@/lib/i18n';
+import ProductCard from '@/components/product/ProductCard';
 
-interface Props { product: Product }
+interface ReviewLite {
+  id: string;
+  rating: number;
+  comment?: string | null;
+  authorName?: string | null;
+  createdAt?: string | Date;
+}
 
-function ProductDetailSkeleton() {
-  return (
-    <div className="min-h-screen bg-bg-base pt-4 sm:pt-8 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="h-4 w-48 bg-bg-elevated rounded animate-pulse mb-8" />
-        <div className="grid lg:grid-cols-2 gap-12">
-          <div className="aspect-[4/3] lg:aspect-auto lg:h-[400px] bg-bg-elevated rounded-xl animate-pulse" />
-          <div className="flex flex-col gap-4">
-            <div className="h-6 w-24 bg-bg-elevated rounded animate-pulse" />
-            <div className="h-10 w-3/4 bg-bg-elevated rounded animate-pulse" />
-            <div className="h-8 w-1/3 bg-bg-elevated rounded animate-pulse" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+interface Props {
+  product: Product & { reviews?: ReviewLite[] };
+  related?: Product[];
 }
 
 export function ProductNotFound() {
@@ -49,63 +45,125 @@ export function ProductNotFound() {
   );
 }
 
-export default function ProductDetailClient({ product }: Props) {
+// Star row helper
+function Stars({ value, size = 16 }: { value: number; size?: number }) {
+  return (
+    <span style={{ display: 'inline-flex', gap: 2 }}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Icon key={i} name="star" size={size} stroke={0} color={i <= Math.round(value) ? '#F59E0B' : 'rgba(245,158,11,0.25)'} />
+      ))}
+    </span>
+  );
+}
+
+export default function ProductDetailClient({ product, related = [] }: Props) {
   const router = useRouter();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { formatPrice } = useCurrency();
+
+  const variants = useMemo<Variant[]>(() => product.variants ?? [], [product.variants]);
+  const defaultVariant = useMemo(
+    () => variants.find((v) => v.isDefault) ?? variants[0],
+    [variants]
+  );
+  const [selectedVariant, setSelectedVariant] = useState<Variant | undefined>(defaultVariant);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+
   const { addItem } = useCartStore();
-  const { toggleItem, isInWishlist } = useWishlistStore();
-  const categoryName = useCategoryName(product.category?.slug ?? '', product.category?.name ?? '');
+  const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
+  const { toggleItem: toggleCompare, isInCompare } = useCompareStore();
+
+  // Active price/stock come from the selected variant if any, else the product.
+  const activePrice = selectedVariant ? selectedVariant.price : product.price;
+  const activeCompare = selectedVariant?.comparePrice ?? product.comparePrice;
+  const activeStock = selectedVariant ? selectedVariant.stock : product.stock;
+
+  const name = localizedName(product.name, product.nameAr, lang);
+  const description = localizedName(product.description, product.descriptionAr, lang);
+  const brandName = product.brand ? localizedName(product.brand.name, product.brand.nameAr, lang) : null;
 
   const inWishlist = isInWishlist(product.id);
-  const savingsAmount = product.comparePrice
-    ? Number(product.comparePrice) - Number(product.price)
-    : null;
+  const inCompare = isInCompare(product.id);
+  const savingsAmount = activeCompare ? Number(activeCompare) - Number(activePrice) : null;
+
+  // Group variant options so we can render distinct selector rows (storage / color / ram).
+  const storageOptions = useMemo(
+    () => Array.from(new Set(variants.map((v) => v.storage).filter(Boolean))) as string[],
+    [variants]
+  );
+  const colorOptions = useMemo(
+    () => variants.filter((v) => v.color).map((v) => ({ color: v.color!, colorHex: v.colorHex, id: v.id })),
+    [variants]
+  );
+
+  const reviews = product.reviews ?? [];
+  const avgRating = product.rating ?? 0;
 
   function handleAddToCart() {
+    if (activeStock === 0) return;
+    if (variants.length > 0 && !selectedVariant) {
+      showToast(t('product.selectVariant'));
+      return;
+    }
     setAdding(true);
-    addItem({ productId: product.id, product, quantity });
+    addItem({
+      productId: product.id,
+      product,
+      quantity,
+      variantId: selectedVariant?.id,
+      variant: selectedVariant,
+    });
     setTimeout(() => setAdding(false), 1500);
   }
 
   function handleToggleWishlist() {
-    toggleItem(product);
+    toggleWishlist(product);
     showToast(inWishlist ? t('wishlist.removed') : t('wishlist.added'));
   }
+
+  function handleToggleCompare() {
+    const result = toggleCompare(product);
+    if (result === 'full') showToast(t('compare.full'));
+    else showToast(result === 'added' ? t('compare.added') : t('compare.removed'));
+  }
+
+  // Build a typed-ordered spec list from product.specs based on device kind.
+  const specEntries = useMemo(() => buildSpecEntries(product, t), [product, t]);
 
   return (
     <div className="min-h-screen bg-bg-base pt-4 sm:pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
-        <div className="hidden sm:flex items-center gap-2 text-sm text-text-muted mb-6">
+        <nav className="hidden sm:flex items-center gap-2 text-sm text-text-muted mb-6">
           <button onClick={() => router.push('/')} className="hover:text-text-primary transition-colors">{t('product.home')}</button>
           <span>/</span>
-          <button onClick={() => router.push('/products')} className="hover:text-text-primary transition-colors">{t('product.products')}</button>
-          <span>/</span>
-          <span className="text-text-secondary truncate max-w-[160px]">{product.name}</span>
-        </div>
+          {product.brand && (
+            <>
+              <Link href={`/brands/${product.brand.slug}`} className="hover:text-text-primary transition-colors">{brandName}</Link>
+              <span>/</span>
+            </>
+          )}
+          <span className="text-text-secondary truncate max-w-[200px]">{name}</span>
+        </nav>
 
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 lg:items-start">
           {/* Image gallery */}
-          <div className="flex flex-col gap-3">
-            <div className="aspect-[4/3] lg:aspect-auto lg:h-[400px] bg-bg-elevated rounded-xl overflow-hidden border border-border shadow-lg">
+          <div className="flex flex-col gap-3 lg:sticky lg:top-24">
+            <div className="aspect-square bg-bg-surface rounded-2xl overflow-hidden border border-border shadow-sm flex items-center justify-center">
               {product.images?.[selectedImage] ? (
                 <Image
                   src={product.images[selectedImage]}
-                  alt={`${product.name} — صورة ${selectedImage + 1}`}
+                  alt={`${name} — ${selectedImage + 1}`}
                   width={800}
                   height={800}
                   priority={selectedImage === 0}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  unoptimized={product.images[selectedImage].startsWith('http://localhost')}
+                  className="w-full h-full object-contain p-6 hover:scale-[1.03] transition-transform duration-500"
+                  unoptimized={product.images[selectedImage].startsWith('http://localhost') || product.images[selectedImage].includes('placehold.co')}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-6xl font-bold text-text-muted">
-                  {product.name[0]}
-                </div>
+                <div className="w-full h-full flex items-center justify-center text-6xl font-bold text-text-muted">{name[0]}</div>
               )}
             </div>
             {product.images && product.images.length > 1 && (
@@ -114,18 +172,16 @@ export default function ProductDetailClient({ product }: Props) {
                   <button
                     key={img}
                     onClick={() => setSelectedImage(i)}
-                    aria-label={`صورة ${i + 1}`}
-                    className={`w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
-                      i === selectedImage ? 'border-accent' : 'border-border hover:border-border-strong'
-                    }`}
+                    aria-label={`${name} ${i + 1}`}
+                    className={`w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 bg-bg-surface transition-all ${i === selectedImage ? 'border-accent' : 'border-border hover:border-border-strong'}`}
                   >
                     <Image
                       src={img}
-                      alt={`${product.name} — صورة ${i + 1}`}
+                      alt={`${name} ${i + 1}`}
                       width={80}
                       height={80}
-                      className="w-full h-full object-cover"
-                      unoptimized={img.startsWith('http://localhost')}
+                      className="w-full h-full object-contain p-1"
+                      unoptimized={img.startsWith('http://localhost') || img.includes('placehold.co')}
                     />
                   </button>
                 ))}
@@ -136,54 +192,145 @@ export default function ProductDetailClient({ product }: Props) {
           {/* Product info */}
           <div className="flex flex-col gap-5">
             <div>
-              {product.category?.name && (
-                <span className="mb-3 inline-block text-[11px] font-bold uppercase tracking-[0.08em] text-plasma font-[family-name:var(--font-display)]">{categoryName}</span>
+              {brandName && (
+                <Link href={`/brands/${product.brand!.slug}`} className="mb-3 inline-block text-[11px] font-bold uppercase tracking-[0.08em] text-accent font-[family-name:var(--font-display)] hover:underline">
+                  {brandName}
+                </Link>
               )}
-              <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-3 font-[family-name:var(--font-display)]">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-text-primary tracking-tight mb-3 font-[family-name:var(--font-display)]">{name}</h1>
+
+              {/* Rating summary */}
+              {avgRating > 0 && (
+                <button
+                  onClick={() => document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="flex items-center gap-2 mb-3 text-sm"
+                >
+                  <Stars value={avgRating} size={15} />
+                  <span className="ltr-nums font-semibold text-text-primary">{avgRating.toFixed(1)}</span>
+                  {reviews.length > 0 && <span className="text-text-muted">· {reviews.length} {t('product.reviews')}</span>}
+                </button>
+              )}
+
               <div className="flex flex-wrap items-baseline gap-3 ltr-nums">
-                <span className="text-2xl sm:text-3xl font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(product.price)}</span>
-                {product.comparePrice && (
+                <span className="text-2xl sm:text-3xl font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(activePrice)}</span>
+                {activeCompare && Number(activeCompare) > Number(activePrice) && (
                   <>
-                    <span className="text-lg text-text-muted line-through">{formatPrice(product.comparePrice)}</span>
-                    <span className="text-sm bg-success/10 text-success px-2 py-0.5 rounded-full font-medium">
-                      {t('product.saveN').replace('{n}', savingsAmount ? formatPrice(savingsAmount) : '')}
-                    </span>
+                    <span className="text-lg text-text-muted line-through">{formatPrice(activeCompare)}</span>
+                    {savingsAmount && savingsAmount > 0 && (
+                      <span className="text-sm bg-success/10 text-success px-2 py-0.5 rounded-full font-medium">
+                        {t('product.saveN').replace('{n}', formatPrice(savingsAmount))}
+                      </span>
+                    )}
                   </>
                 )}
               </div>
             </div>
 
             <div className="divider" />
-            <p className="text-text-secondary leading-relaxed text-sm sm:text-base">{product.description}</p>
 
-            {product.stock <= 10 && product.stock > 0 && (
-              <p className="text-warning text-sm font-medium">{t('product.lowStockN').replace('{n}', String(product.stock))}</p>
+            {/* Storage selector */}
+            {storageOptions.length > 1 && (
+              <div>
+                <p className="text-sm font-semibold text-text-primary mb-2">{t('product.storage')}</p>
+                <div className="flex flex-wrap gap-2">
+                  {storageOptions.map((s) => {
+                    const v = variants.find((x) => x.storage === s && (!selectedVariant?.color || x.color === selectedVariant.color)) ?? variants.find((x) => x.storage === s)!;
+                    const isSel = selectedVariant?.storage === s;
+                    return (
+                      <button
+                        key={s}
+                        onClick={() => setSelectedVariant(v)}
+                        className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ltr-nums ${isSel ? 'border-accent bg-accent-subtle text-accent' : 'border-border text-text-secondary hover:border-border-strong'}`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             )}
-            {product.stock === 0 && (
-              <p className="text-error text-sm font-medium">{t('common.outOfStock')}</p>
+
+            {/* Color selector */}
+            {colorOptions.length > 1 && (
+              <div>
+                <p className="text-sm font-semibold text-text-primary mb-2">
+                  {t('product.color')}{selectedVariant?.color ? <span className="text-text-muted font-normal"> — {selectedVariant.color}</span> : null}
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {colorOptions.map((c) => {
+                    const isSel = selectedVariant?.id === c.id;
+                    const v = variants.find((x) => x.id === c.id)!;
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedVariant(v)}
+                        aria-label={c.color}
+                        title={c.color}
+                        className={`h-9 w-9 rounded-full border-2 transition-all ${isSel ? 'border-accent ring-2 ring-accent/30' : 'border-border hover:border-border-strong'}`}
+                        style={{ background: c.colorHex || '#888' }}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
             )}
+
+            {/* Generic variant fallback (e.g. RAM/config) when no storage/color split */}
+            {storageOptions.length <= 1 && colorOptions.length <= 1 && variants.length > 1 && (
+              <div>
+                <p className="text-sm font-semibold text-text-primary mb-2">{t('product.configuration')}</p>
+                <div className="flex flex-wrap gap-2">
+                  {variants.map((v) => {
+                    const isSel = selectedVariant?.id === v.id;
+                    return (
+                      <button
+                        key={v.id}
+                        onClick={() => setSelectedVariant(v)}
+                        className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${isSel ? 'border-accent bg-accent-subtle text-accent' : 'border-border text-text-secondary hover:border-border-strong'}`}
+                      >
+                        {localizedName(v.name, v.nameAr, lang)}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Stock + SKU */}
+            <div className="flex items-center gap-3 text-sm">
+              {activeStock === 0 ? (
+                <span className="text-error font-medium">{t('common.outOfStock')}</span>
+              ) : activeStock <= 10 ? (
+                <span className="text-warning font-medium">{t('product.lowStockN').replace('{n}', String(activeStock))}</span>
+              ) : (
+                <span className="text-success font-medium">{t('common.inStock')}</span>
+              )}
+              {selectedVariant?.sku && (
+                <span className="text-text-muted mono text-xs">{t('product.sku')}: {selectedVariant.sku}</span>
+              )}
+            </div>
 
             {/* Quantity */}
             <div className="flex items-center gap-3">
               <span className="text-text-secondary text-sm">{t('product.quantity')}</span>
-              <div className="flex items-center bg-bg-subtle border border-border rounded-md overflow-hidden">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2 sm:px-4 sm:py-2.5 text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-all text-lg">−</button>
-                <span className="px-4 py-2 sm:px-5 sm:py-2.5 text-text-primary font-medium border-x border-border min-w-[40px] text-center">{quantity}</span>
-                <button onClick={() => setQuantity(Math.min(product.stock || 1, quantity + 1))} className="px-3 py-2 sm:px-4 sm:py-2.5 text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-all text-lg">+</button>
+              <div className="flex items-center bg-bg-surface border border-border rounded-md overflow-hidden">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2 sm:px-4 sm:py-2.5 text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-all text-lg" aria-label="−">−</button>
+                <span className="px-4 py-2 sm:px-5 sm:py-2.5 text-text-primary font-medium border-x border-border min-w-[40px] text-center ltr-nums">{quantity}</span>
+                <button onClick={() => setQuantity(Math.min(activeStock || 1, quantity + 1))} className="px-3 py-2 sm:px-4 sm:py-2.5 text-text-secondary hover:text-text-primary hover:bg-bg-elevated transition-all text-lg" aria-label="+">+</button>
               </div>
             </div>
 
-            {/* CTA */}
+            {/* CTAs */}
             <div className="flex gap-3">
               <button
                 onClick={handleAddToCart}
-                disabled={product.stock === 0 || adding}
-                className="btn-accent flex-1 py-3 flex items-center justify-center gap-2"
+                disabled={activeStock === 0 || adding}
+                className="btn-accent flex-1 py-3 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {adding ? (
-                  <><div className="w-4 h-4 border-2 border-bg-base/30 border-t-bg-base rounded-full animate-spin" />{t('product.addingToCart')}</>
+                  <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{t('product.addingToCart')}</>
                 ) : (
-                  <><Icon name="cart" size={18} />{t('common.addToCart')}</>
+                  <><Icon name="cart" size={18} />{activeStock === 0 ? t('common.outOfStock') : t('common.addToCart')}</>
                 )}
               </button>
               <button
@@ -191,22 +338,27 @@ export default function ProductDetailClient({ product }: Props) {
                 aria-label={inWishlist ? t('wishlist.remove') : t('wishlist.add')}
                 className={`btn-secondary px-4 py-3 rounded-md border transition-all ${inWishlist ? 'border-error/40 text-error hover:bg-error/10' : 'border-border hover:border-border-strong'}`}
               >
-                <Icon name={inWishlist ? 'heartFill' : 'heart'} size={20} className={inWishlist ? 'fill-error' : ''} />
+                <Icon name={inWishlist ? 'heartFill' : 'heart'} size={20} />
+              </button>
+              <button
+                onClick={handleToggleCompare}
+                aria-label={t('product.addToCompare')}
+                className={`btn-secondary px-4 py-3 rounded-md border transition-all ${inCompare ? 'border-accent text-accent bg-accent-subtle' : 'border-border hover:border-border-strong'}`}
+                title={inCompare ? t('product.inCompare') : t('product.addToCompare')}
+              >
+                <Icon name="scale" size={20} />
               </button>
             </div>
 
-            {/* Trust signals — the four conversion cues */}
+            {/* Trust signals — physical commerce */}
             <div className="grid grid-cols-2 gap-2 pt-2">
               {([
-                { icon: 'bolt', text: 'تفعيل خلال 30 دقيقة' },
-                { icon: 'checkCircle', text: 'اشتراك أصلي 100%' },
-                { icon: 'shield', text: 'ضمان كامل' },
-                { icon: 'bank', text: 'دفع بالدينار العراقي' },
+                { icon: 'truck', text: lang === 'ar' ? 'توصيل سريع لكل العراق' : 'Fast delivery across Iraq' },
+                { icon: 'shield', text: lang === 'ar' ? 'ضمان رسمي للجهاز' : 'Official device warranty' },
+                { icon: 'checkCircle', text: lang === 'ar' ? 'منتج أصلي 100%' : '100% authentic product' },
+                { icon: 'bank', text: lang === 'ar' ? 'دفع بالدينار العراقي' : 'Pay in Iraqi dinar' },
               ] as const).map((item) => (
-                <div
-                  key={item.text}
-                  className="flex items-center gap-2 rounded-lg border border-border bg-bg-surface px-3 py-2.5 text-xs text-text-secondary"
-                >
+                <div key={item.text} className="flex items-center gap-2 rounded-lg border border-border bg-bg-surface px-3 py-2.5 text-xs text-text-secondary">
                   <Icon name={item.icon} size={16} className="text-accent shrink-0" /> {item.text}
                 </div>
               ))}
@@ -214,8 +366,26 @@ export default function ProductDetailClient({ product }: Props) {
           </div>
         </div>
 
-        {/* ── Tabs: Description / Features / FAQ / Reviews ── */}
-        <ProductTabs product={product} t={t} />
+        {/* ── Tabs: Description / Specs / Reviews ── */}
+        <ProductTabs
+          product={product}
+          description={description}
+          specEntries={specEntries}
+          reviews={reviews}
+          avgRating={avgRating}
+          t={t}
+          lang={lang}
+        />
+
+        {/* Related / alternatives */}
+        {related.length > 0 && (
+          <section className="mt-14">
+            <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-5 font-[family-name:var(--font-display)]">{t('product.relatedProducts')}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {related.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Spacer so the sticky bar never covers content on mobile */}
@@ -224,101 +394,137 @@ export default function ProductDetailClient({ product }: Props) {
       {/* Mobile sticky add-to-cart bar */}
       <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-bg-surface/95 backdrop-blur px-4 py-3 flex items-center gap-3" style={{ boxShadow: 'var(--shadow-lg)' }}>
         <div className="ltr-nums shrink-0">
-          <div className="text-lg font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(product.price)}</div>
+          <div className="text-lg font-bold text-text-primary font-[family-name:var(--font-display)]">{formatPrice(activePrice)}</div>
         </div>
         <button
           onClick={handleAddToCart}
-          disabled={product.stock === 0 || adding}
+          disabled={activeStock === 0 || adding}
           className="btn-accent flex-1 py-3 min-h-[48px] disabled:opacity-50 flex items-center justify-center gap-2"
         >
           <Icon name="cart" size={18} />
-          {product.stock === 0 ? t('common.outOfStock') : t('common.addToCart')}
+          {activeStock === 0 ? t('common.outOfStock') : t('common.addToCart')}
         </button>
       </div>
     </div>
   );
 }
 
-// ── Product tabs (Description / Features / FAQ / Reviews) with FAQ accordion ──
-function ProductTabs({ product, t }: { product: Product; t: (k: string) => string }) {
-  const tabs = [
-    { id: 'description', label: t('product.tabs.description') !== 'product.tabs.description' ? t('product.tabs.description') : 'الوصف' },
-    { id: 'features', label: t('product.tabs.features') !== 'product.tabs.features' ? t('product.tabs.features') : 'المميزات' },
-    { id: 'faq', label: t('product.tabs.faq') !== 'product.tabs.faq' ? t('product.tabs.faq') : 'الأسئلة الشائعة' },
-    { id: 'reviews', label: t('product.tabs.reviews') !== 'product.tabs.reviews' ? t('product.tabs.reviews') : 'التقييمات' },
-  ] as const;
-  const [active, setActive] = useState<typeof tabs[number]['id']>('description');
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+// Ordered spec list driven by device kind. Returns [{ label, value }].
+function buildSpecEntries(product: Product, t: (k: string) => string): Array<{ label: string; value: string }> {
+  const specs = product.specs;
+  if (!specs) return [];
+  const kind = product.category?.kind;
+  const order: Record<string, string[]> = {
+    PHONE: ['screen', 'chip', 'camera', 'battery', 'os'],
+    LAPTOP: ['cpu', 'ram', 'storage', 'gpu', 'screen', 'battery'],
+    TABLET: ['screen', 'chip', 'storage', 'battery', 'os'],
+    HEADPHONE: ['type', 'anc', 'batteryLife', 'connectivity'],
+  };
+  const keys = kind && order[kind] ? order[kind] : Object.keys(specs);
+  const seen = new Set(keys);
+  // append any extra spec keys not in the canonical order
+  const allKeys = [...keys, ...Object.keys(specs).filter((k) => !seen.has(k))];
+  return allKeys
+    .map((k) => {
+      const value = specs[k];
+      if (!value) return null;
+      const label = t(`specs.${k}`) !== `specs.${k}` ? t(`specs.${k}`) : k;
+      return { label, value };
+    })
+    .filter((x): x is { label: string; value: string } => x !== null);
+}
 
-  const features = [
-    'تفعيل فوري خلال 30 دقيقة من تأكيد الطلب',
-    'اشتراك أصلي 100% مع ضمان كامل طوال المدة',
-    'دعم فني عبر واتساب وتيليجرام على مدار الساعة',
-    'دفع بالدينار العراقي — زين كاش، آسيا حوالة، أو عند الاستلام',
+// ── Tabs (Description / Specifications / Reviews) ──
+function ProductTabs({
+  product,
+  description,
+  specEntries,
+  reviews,
+  avgRating,
+  t,
+  lang,
+}: {
+  product: Product;
+  description: string;
+  specEntries: Array<{ label: string; value: string }>;
+  reviews: ReviewLite[];
+  avgRating: number;
+  t: (k: string) => string;
+  lang: string;
+}) {
+  const tabs = [
+    { id: 'description' as const, label: t('product.description') },
+    { id: 'specs' as const, label: t('product.specs') },
+    { id: 'reviews' as const, label: t('product.reviews') },
   ];
-  const faqs = [
-    { q: 'كم يستغرق التفعيل؟', a: 'يتم التفعيل عادة خلال 30 دقيقة من تأكيد الدفع، وقد يصل فوراً.' },
-    { q: 'هل الاشتراك أصلي؟', a: 'نعم، جميع اشتراكاتنا أصلية 100% ومضمونة طوال فترة الاشتراك.' },
-    { q: 'ماذا لو واجهت مشكلة؟', a: 'دعمنا متاح على مدار الساعة عبر واتساب وتيليجرام لحل أي مشكلة فوراً.' },
-  ];
+  const [active, setActive] = useState<'description' | 'specs' | 'reviews'>('description');
 
   return (
-    <div className="mt-10 border-t border-border pt-6">
+    <div id="reviews" className="mt-12 border-t border-border pt-6">
       <div className="flex gap-1 border-b border-border mb-5 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActive(tab.id)}
-            className={`px-4 py-2.5 text-sm font-semibold whitespace-nowrap border-b-2 -mb-px transition-colors ${
-              active === tab.id ? 'border-accent text-accent' : 'border-transparent text-text-secondary hover:text-text-primary'
-            }`}
+            className={`px-4 py-2.5 text-sm font-semibold whitespace-nowrap border-b-2 -mb-px transition-colors ${active === tab.id ? 'border-accent text-accent' : 'border-transparent text-text-secondary hover:text-text-primary'}`}
           >
-            {tab.label}
+            {tab.label}{tab.id === 'reviews' && reviews.length > 0 ? ` (${reviews.length})` : ''}
           </button>
         ))}
       </div>
 
       {active === 'description' && (
-        <p className="text-text-secondary leading-relaxed text-sm sm:text-base max-w-3xl">{product.description}</p>
+        <p className="text-text-secondary leading-relaxed text-sm sm:text-base max-w-3xl whitespace-pre-line">{description}</p>
       )}
 
-      {active === 'features' && (
-        <ul className="space-y-2.5 max-w-3xl">
-          {features.map((f) => (
-            <li key={f} className="flex items-start gap-2.5 text-sm text-text-secondary">
-              <Icon name="checkCircle" size={18} className="text-success shrink-0 mt-px" /> {f}
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {active === 'faq' && (
-        <div className="max-w-3xl divide-y divide-border rounded-xl border border-border bg-bg-surface">
-          {faqs.map((item, i) => (
-            <div key={item.q}>
-              <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-start"
-                aria-expanded={openFaq === i}
-              >
-                <span className="text-sm font-semibold text-text-primary">{item.q}</span>
-                <Icon name="chevron" size={18} className={`text-text-muted shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
-              </button>
-              <div className={`overflow-hidden transition-all ${openFaq === i ? 'max-h-40' : 'max-h-0'}`}>
-                <p className="px-4 pb-4 text-sm text-text-secondary leading-relaxed">{item.a}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      {active === 'specs' && (
+        specEntries.length > 0 ? (
+          <div className="max-w-3xl overflow-hidden rounded-xl border border-border">
+            <table className="w-full text-sm">
+              <tbody>
+                {specEntries.map((row, i) => (
+                  <tr key={row.label} className={i % 2 === 0 ? 'bg-bg-surface' : 'bg-bg-elevated'}>
+                    <th scope="row" className="text-start font-medium text-text-secondary px-4 py-3 w-2/5 align-top">{row.label}</th>
+                    <td className="text-text-primary px-4 py-3">{row.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-text-muted text-sm">{product.description}</p>
+        )
       )}
 
       {active === 'reviews' && (
-        <div className="max-w-3xl flex items-center gap-3 text-sm text-text-secondary">
-          <div style={{ display: 'inline-flex', gap: 2 }}>
-            {[1, 2, 3, 4, 5].map((i) => <Icon key={i} name="star" size={16} stroke={0} color="#F59E0B" />)}
-          </div>
-          <span className="ltr-nums font-semibold text-text-primary">4.8</span>
-          <span className="text-text-muted">· {t('product.reviewsCount') !== 'product.reviewsCount' ? t('product.reviewsCount') : 'تقييمات موثّقة'}</span>
+        <div className="max-w-3xl">
+          {avgRating > 0 && (
+            <div className="flex items-center gap-3 mb-5">
+              <span className="text-3xl font-bold text-text-primary ltr-nums">{avgRating.toFixed(1)}</span>
+              <div>
+                <Stars value={avgRating} size={16} />
+                {reviews.length > 0 && (
+                  <p className="text-text-muted text-xs mt-0.5">{t('product.basedOnN').replace('{n}', String(reviews.length))}</p>
+                )}
+              </div>
+            </div>
+          )}
+          {reviews.length === 0 ? (
+            <p className="text-text-muted text-sm">{t('product.noReviews')}</p>
+          ) : (
+            <ul className="space-y-4">
+              {reviews.map((r) => (
+                <li key={r.id} className="rounded-xl border border-border bg-bg-surface p-4">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="font-semibold text-text-primary text-sm">{r.authorName || (lang === 'ar' ? 'عميل' : 'Customer')}</span>
+                    <Stars value={r.rating} size={13} />
+                  </div>
+                  <p className="text-[11px] text-accent mb-2">{t('product.verifiedBuyer')}</p>
+                  {r.comment && <p className="text-text-secondary text-sm leading-relaxed">{r.comment}</p>}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>

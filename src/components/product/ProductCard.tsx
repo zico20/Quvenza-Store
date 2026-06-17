@@ -1,14 +1,15 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Icon } from '@/components/ui/Icon';
-import type { Product } from '@/types';
+import type { Product, Variant } from '@/types';
 import { useCartStore } from '@/store/cart.store';
 import { useWishlistStore } from '@/store/wishlist.store';
 import { showToast } from '@/lib/toast';
 import { useLang } from '@/hooks/useLang';
 import { useCurrency } from '@/hooks/useCurrency';
+import { localizedName } from '@/lib/i18n';
 
 function StarRow({ value }: { value: number }) {
   return (
@@ -23,17 +24,35 @@ function StarRow({ value }: { value: number }) {
 export default function ProductCard({ product }: { product: Product }) {
   const addItem = useCartStore(s => s.addItem);
   const { toggleItem, isInWishlist } = useWishlistStore();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { formatPrice } = useCurrency();
   const [added, setAdded] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  // Hydration-safe wishlist read via useSyncExternalStore: the server snapshot
+  // is always `false` (persisted store is empty on the server), avoiding a
+  // hydration mismatch; the client subscribes to live changes.
+  const inWishlist = useSyncExternalStore(
+    useWishlistStore.subscribe,
+    () => useWishlistStore.getState().items.some((i) => i.id === product.id),
+    () => false
+  );
 
-  useEffect(() => setMounted(true), []);
+  // A product with 2+ variants must be configured on its detail page —
+  // the card must never silently add a default. The CTA becomes a plain
+  // link navigation (no preventDefault) in that case.
+  const variants = product.variants ?? [];
+  const needsChoice = variants.length > 1;
+  const singleVariant: Variant | undefined = variants.length === 1 ? variants[0] : undefined;
 
   function handleAddToCart(e: React.MouseEvent) {
+    // Multi-variant: let the <Link> navigate to the product page to choose.
+    if (needsChoice) return;
     e.preventDefault();
     if (product.stock === 0) return;
-    addItem({ productId: product.id, product, quantity: 1 });
+    if (singleVariant) {
+      addItem({ productId: product.id, product, quantity: 1, variantId: singleVariant.id, variant: singleVariant });
+    } else {
+      addItem({ productId: product.id, product, quantity: 1 });
+    }
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   }
@@ -45,9 +64,17 @@ export default function ProductCard({ product }: { product: Product }) {
     showToast(was ? t('wishlist.removed') : t('wishlist.added'));
   }
 
-  const inWishlist = mounted ? isInWishlist(product.id) : false;
   const hasDiscount = product.comparePrice && Number(product.comparePrice) > Number(product.price);
   const discountPct = hasDiscount ? Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) : 0;
+
+  const brandLabel = product.brand
+    ? localizedName(product.brand.name, product.brand.nameAr, lang)
+    : product.category
+      ? localizedName(product.category.name, product.category.nameAr, lang)
+      : 'quvenza';
+
+  const rating = Number(product.rating ?? 0);
+  const hasRating = rating > 0;
 
   // Tone hue for placeholder (cycle based on id chars)
   const hues = [18, 220, 280, 140, 40, 320];
@@ -72,7 +99,7 @@ export default function ProductCard({ product }: { product: Product }) {
         {product.images?.[0] ? (
           <Image
             src={product.images[0]}
-            alt={product.name}
+            alt={localizedName(product.name, product.nameAr, lang)}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
             sizes="(max-width: 768px) 50vw, 25vw"
@@ -87,7 +114,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 fontSize: 10, color: 'rgba(17,24,39,0.45)',
               }}
             >
-              {(product as any).category?.name || 'product shot'}
+              {brandLabel}
             </span>
           </div>
         )}
@@ -126,7 +153,7 @@ export default function ProductCard({ product }: { product: Product }) {
             color: 'var(--color-plasma)', fontFamily: 'var(--font-display)',
           }}
         >
-          {(product as any).category?.name || 'quvenza'}
+          {brandLabel}
         </div>
 
         <div
@@ -135,14 +162,16 @@ export default function ProductCard({ product }: { product: Product }) {
             fontFamily: 'var(--font-display)',
           }}
         >
-          {product.name}
+          {localizedName(product.name, product.nameAr, lang)}
         </div>
 
-        {/* Rating */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--color-text-secondary)', fontSize: 10 }}>
-          <StarRow value={4.5} />
-          <span style={{ color: 'var(--color-text-muted)' }}>(—)</span>
-        </div>
+        {/* Rating — hidden when product has no rating */}
+        {hasRating && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--color-text-secondary)', fontSize: 10 }}>
+            <StarRow value={rating} />
+            <span className="num" style={{ color: 'var(--color-text-muted)' }}>{rating.toFixed(1)}</span>
+          </div>
+        )}
 
         {/* Price (USD + IQD), kept LTR */}
         <div className="ltr-nums" style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 'auto', paddingTop: 6 }}>
@@ -178,10 +207,12 @@ export default function ProductCard({ product }: { product: Product }) {
             transition: 'filter 0.15s, box-shadow 0.15s',
             fontFamily: 'inherit',
           }}
-          onMouseEnter={(e: any) => { if (product.stock > 0) e.currentTarget.style.filter = 'brightness(1.05)'; }}
-          onMouseLeave={(e: any) => { e.currentTarget.style.filter = 'none'; }}
+          onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => { if (product.stock > 0) e.currentTarget.style.filter = 'brightness(1.05)'; }}
+          onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.filter = 'none'; }}
         >
-          {added ? (
+          {needsChoice ? (
+            <><Icon name="settings" size={13} stroke={1.8} /> {t('product.selectVariant')}</>
+          ) : added ? (
             <><Icon name="check" size={13} /> {t('common.addedToCart')}</>
           ) : (
             <><Icon name="cart" size={13} stroke={1.8} /> {t('common.addToCart')}</>

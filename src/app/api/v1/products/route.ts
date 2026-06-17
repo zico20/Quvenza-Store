@@ -10,8 +10,17 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const pagination = parsePaginationParams(searchParams);
+    const minPrice = searchParams.get('minPrice');
+    const maxPrice = searchParams.get('maxPrice');
+    const kind = searchParams.get('kind');
     const result = await getProducts(pagination, {
       categoryId: searchParams.get('categoryId') ?? undefined,
+      brandId: searchParams.get('brandId') ?? undefined,
+      brandSlug: searchParams.get('brandSlug') ?? undefined,
+      kind: kind === 'PHONE' || kind === 'LAPTOP' || kind === 'TABLET' || kind === 'HEADPHONE' ? kind : undefined,
+      minPrice: minPrice != null ? Number(minPrice) : undefined,
+      maxPrice: maxPrice != null ? Number(maxPrice) : undefined,
+      featured: searchParams.get('featured') === 'true' ? true : undefined,
       search: searchParams.get('search') ?? undefined,
       sort: searchParams.get('sort') ?? undefined,
     });

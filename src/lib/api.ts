@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { User, AuthTokens, Product, Cart, Order, ApiResponse, PaginatedResponse, Address } from '@/types';
+import type { User, AuthTokens, Product, Cart, Order, ApiResponse, PaginatedResponse, Address, Brand } from '@/types';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? '/api/v1',
@@ -44,6 +44,11 @@ export const products = {
     apiClient.get<PaginatedResponse<Product>>('/products', { params }).then((r) => r.data),
   getBySlug: (slug: string) =>
     apiClient.get<ApiResponse<Product>>(`/products/${slug}`).then((r) => r.data),
+};
+
+export const brandsApi = {
+  getAll: (params?: Record<string, unknown>) =>
+    apiClient.get<ApiResponse<Brand[]>>('/brands', { params }).then((r) => r.data),
 };
 
 export const cartApi = {

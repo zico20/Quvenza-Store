@@ -285,7 +285,7 @@ const STRINGS = {
     specs:           { en: 'Specifications',     ar: 'المواصفات' },
     reviews:         { en: 'Reviews',            ar: 'التقييمات' },
     shippingReturns: { en: 'Shipping & Returns', ar: 'الشحن والإرجاع' },
-    relatedProducts: { en: 'Related Products',   ar: 'منتجات ذات صلة' },
+    relatedProducts: { en: 'You may also like',  ar: 'قد يعجبك أيضاً' },
     home:            { en: 'Home',               ar: 'الرئيسية' },
     products:        { en: 'Products',           ar: 'المنتجات' },
     notFound:        { en: 'Product not found',  ar: 'المنتج غير موجود' },
@@ -295,6 +295,79 @@ const STRINGS = {
     lowStockN:       { en: 'Only {n} left in stock', ar: 'المتبقي {n} فقط' },
     saveN:           { en: 'Save ${n}',          ar: 'وفّر ${n}' },
     goBack:          { en: 'Go Back',            ar: 'رجوع' },
+    // ── Electronics product detail ──
+    storage:         { en: 'Storage',             ar: 'السعة التخزينية' },
+    color:           { en: 'Color',               ar: 'اللون' },
+    memory:          { en: 'Memory',              ar: 'الذاكرة' },
+    configuration:   { en: 'Configuration',       ar: 'الإصدار' },
+    keySpecs:        { en: 'Key specifications',   ar: 'أبرز المواصفات' },
+    fullSpecs:       { en: 'Full specifications',  ar: 'المواصفات الكاملة' },
+    addToCompare:    { en: 'Add to compare',       ar: 'أضف للمقارنة' },
+    inCompare:       { en: 'In compare',           ar: 'في المقارنة' },
+    buyNow:          { en: 'Buy now',              ar: 'اشترِ الآن' },
+    customerReviews: { en: 'Customer reviews',     ar: 'تقييمات العملاء' },
+    noReviews:       { en: 'No reviews yet',       ar: 'لا توجد تقييمات بعد' },
+    basedOnN:        { en: 'Based on {n} reviews', ar: 'بناءً على {n} تقييم' },
+    verifiedBuyer:   { en: 'Verified buyer',       ar: 'مشترٍ موثّق' },
+    selectVariant:   { en: 'Please select an option', ar: 'يرجى اختيار الإصدار' },
+    sku:             { en: 'SKU',                  ar: 'رمز المنتج' },
+    brand:           { en: 'Brand',               ar: 'الماركة' },
+    ratingN:         { en: '{n} out of 5',         ar: '{n} من 5' },
+  },
+  specs: {
+    // phone
+    screen:       { en: 'Display',       ar: 'الشاشة' },
+    chip:         { en: 'Chipset',       ar: 'المعالج' },
+    camera:       { en: 'Camera',        ar: 'الكاميرا' },
+    battery:      { en: 'Battery',       ar: 'البطارية' },
+    os:           { en: 'OS',            ar: 'نظام التشغيل' },
+    // laptop
+    cpu:          { en: 'Processor',     ar: 'المعالج' },
+    ram:          { en: 'RAM',           ar: 'الذاكرة العشوائية' },
+    storage:      { en: 'Storage',       ar: 'التخزين' },
+    gpu:          { en: 'Graphics',      ar: 'كرت الشاشة' },
+    // headphone
+    type:         { en: 'Type',          ar: 'النوع' },
+    anc:          { en: 'Noise cancel.', ar: 'عزل الضوضاء' },
+    batteryLife:  { en: 'Battery life',  ar: 'عمر البطارية' },
+    connectivity: { en: 'Connectivity',  ar: 'الاتصال' },
+  },
+  brand: {
+    title:        { en: 'Brands',              ar: 'الماركات' },
+    shopBy:       { en: 'Shop by brand',       ar: 'تسوّق حسب الماركة' },
+    allBrands:    { en: 'All brands',          ar: 'كل الماركات' },
+    products:     { en: 'products',            ar: 'منتج' },
+    browseAll:    { en: 'Browse all {brand} products', ar: 'تصفّح كل منتجات {brand}' },
+    deviceTypes:  { en: 'Device types',        ar: 'أنواع الأجهزة' },
+    notFound:     { en: 'Brand not found',     ar: 'الماركة غير موجودة' },
+    featured:     { en: 'Featured brands',     ar: 'ماركات مميزة' },
+  },
+  device: {
+    PHONE:     { en: 'Phones',     ar: 'الهواتف' },
+    LAPTOP:    { en: 'Laptops',    ar: 'اللابتوبات' },
+    TABLET:    { en: 'Tablets',    ar: 'الأجهزة اللوحية' },
+    HEADPHONE: { en: 'Headphones', ar: 'السماعات' },
+    allPhones:     { en: 'All Phones',     ar: 'كل الهواتف' },
+    allLaptops:    { en: 'All Laptops',    ar: 'كل اللابتوبات' },
+    allTablets:    { en: 'All Tablets',    ar: 'كل الأجهزة اللوحية' },
+    allHeadphones: { en: 'All Headphones', ar: 'كل السماعات' },
+  },
+  compare: {
+    title:       { en: 'Compare',             ar: 'المقارنة' },
+    compareTitle:{ en: 'Compare devices',     ar: 'قارن بين الأجهزة' },
+    empty:       { en: 'Nothing to compare',  ar: 'لا يوجد ما تقارنه' },
+    emptySub:    { en: 'Add devices from any product page to compare them side by side.', ar: 'أضف أجهزة من أي صفحة منتج لمقارنتها جنباً إلى جنب.' },
+    browse:      { en: 'Browse products',     ar: 'تصفّح المنتجات' },
+    remove:      { en: 'Remove',              ar: 'إزالة' },
+    clearAll:    { en: 'Clear all',           ar: 'مسح الكل' },
+    addMore:     { en: 'Add device',          ar: 'أضف جهازاً' },
+    added:       { en: 'Added to compare',    ar: 'أُضيف للمقارنة' },
+    removed:     { en: 'Removed from compare',ar: 'أُزيل من المقارنة' },
+    full:        { en: 'Compare is full (max 4)', ar: 'المقارنة ممتلئة (4 كحد أقصى)' },
+    viewCompare: { en: 'Compare ({n})',       ar: 'قارن ({n})' },
+    price:       { en: 'Price',               ar: 'السعر' },
+    rating:      { en: 'Rating',              ar: 'التقييم' },
+    addToCart:   { en: 'Add to cart',         ar: 'أضف للسلة' },
   },
   shop: {
     allProducts:  { en: 'All Products',      ar: 'كل المنتجات' },
@@ -550,16 +623,13 @@ const STRINGS = {
     adminDeleted:  { en: 'Admin deleted',      ar: 'تم حذف المسؤول' },
   },
 
-  // Category names keyed by slug — DB stores Arabic only, translations live here
+  // Cross-brand device-type listing names, keyed by the virtual slug used in
+  // /products?kind=… links. Per-brand DB categories carry their own nameAr.
   categoryNames: {
-    'ai-tools':       { en: 'AI Tools',                    ar: 'أدوات الذكاء الاصطناعي' },
-    'design':         { en: 'Design & Creative',           ar: 'التصميم والإبداع' },
-    'education':      { en: 'Education & Certificates',    ar: 'التعليم والشهادات' },
-    'video-editing':  { en: 'Video Editing',               ar: 'المونتاج والفيديو' },
-    'entertainment':  { en: 'Entertainment & Music',       ar: 'الترفيه والموسيقى' },
-    'productivity':   { en: 'Productivity & Work',         ar: 'الإنتاجية والعمل' },
-    'gaming-accounts':{ en: 'Gaming Accounts',             ar: 'حسابات الألعاب' },
-    'gaming-coins':   { en: 'Gaming Coins',                ar: 'عملات الألعاب' },
+    'all-phones':     { en: 'All Phones',     ar: 'كل الهواتف' },
+    'all-laptops':    { en: 'All Laptops',    ar: 'كل اللابتوبات' },
+    'all-tablets':    { en: 'All Tablets',    ar: 'كل الأجهزة اللوحية' },
+    'all-headphones': { en: 'All Headphones', ar: 'كل السماعات' },
   },
 } as const;
 
@@ -582,11 +652,29 @@ const CATEGORY_NAMES = (STRINGS as unknown as {
 
 /**
  * Returns the translated category name for the given slug + language.
- * Falls back to the original DB name when slug not in map.
+ * Falls back to the original DB name when the slug isn't in the map.
+ * For per-brand DB categories, prefer localizedName(name, nameAr, lang).
  */
 export function getCategoryName(slug: string, fallback: string, lang: Lang): string {
   const entry = CATEGORY_NAMES?.[slug];
   return entry?.[lang] ?? fallback;
+}
+
+/**
+ * Picks the Arabic field when present and lang is 'ar', else the base field.
+ * Used for DB-stored bilingual names (Product.nameAr, Category.nameAr, Brand.nameAr).
+ */
+export function localizedName(
+  base: string,
+  ar: string | null | undefined,
+  lang: Lang
+): string {
+  return lang === 'ar' && ar ? ar : base;
+}
+
+/** Localized device-kind label (Phones / Laptops / Tablets / Headphones). */
+export function deviceKindLabel(kind: string, lang: Lang): string {
+  return t(`device.${kind}`, lang);
 }
 
 // Server-side only — reads lang cookie from next/headers

@@ -19,7 +19,9 @@ export type IconName =
   // Extras added for the lucide→Icon migration (same line style):
   | 'download' | 'upload' | 'save' | 'refresh' | 'toggle' | 'dollar'
   | 'file' | 'settings' | 'alert' | 'bell' | 'calendar' | 'trending'
-  | 'dashboard' | 'key' | 'truck' | 'spinner';
+  | 'dashboard' | 'key' | 'truck' | 'spinner'
+  // ── Electronics device types + compare (same line style) ──
+  | 'laptop' | 'tablet' | 'headphones' | 'cpu' | 'scale';
 
 type El = ['path' | 'circle' | 'rect', Record<string, string | number>];
 type Def = { filled?: boolean; els: El[] };
@@ -84,6 +86,12 @@ const ICONS: Record<IconName, Def> = {
   key:       { els: [['circle', { cx: 8, cy: 8, r: 4 }], ['path', { d: 'M11 11 L20 20' }], ['path', { d: 'M17 17 L19 15' }]] },
   truck:     { els: [['rect', { x: 3, y: 7, width: 11, height: 9 }], ['path', { d: 'M14 10 H18 L21 13 V16 H14 Z' }], ['circle', { cx: 7, cy: 18, r: 1.6 }], ['circle', { cx: 17, cy: 18, r: 1.6 }]] },
   spinner:   { els: [['path', { d: 'M12 3 A9 9 0 0 1 21 12' }]] },
+  // ── Electronics device types ──
+  laptop:     { els: [['rect', { x: 5, y: 5, width: 14, height: 10, rx: 1.5 }], ['path', { d: 'M3 18.5 H21' }]] },
+  tablet:     { els: [['rect', { x: 6, y: 3.5, width: 12, height: 17, rx: 2 }], ['path', { d: 'M10.5 17.5 H13.5' }]] },
+  headphones: { els: [['path', { d: 'M5 14 V12 A7 7 0 0 1 19 12 V14' }], ['rect', { x: 4, y: 13.5, width: 3.5, height: 6, rx: 1.5 }], ['rect', { x: 16.5, y: 13.5, width: 3.5, height: 6, rx: 1.5 }]] },
+  cpu:        { els: [['rect', { x: 7, y: 7, width: 10, height: 10, rx: 1.5 }], ['rect', { x: 10, y: 10, width: 4, height: 4 }], ['path', { d: 'M10 4 V7' }], ['path', { d: 'M14 4 V7' }], ['path', { d: 'M10 17 V20' }], ['path', { d: 'M14 17 V20' }], ['path', { d: 'M4 10 H7' }], ['path', { d: 'M4 14 H7' }], ['path', { d: 'M17 10 H20' }], ['path', { d: 'M17 14 H20' }]] },
+  scale:      { els: [['path', { d: 'M12 4 V20' }], ['path', { d: 'M7 20 H17' }], ['path', { d: 'M6 7 H18' }], ['path', { d: 'M6 7 L3.5 13 H8.5 Z' }], ['path', { d: 'M18 7 L15.5 13 H20.5 Z' }]] },
 };
 
 export interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, 'name' | 'stroke'> {

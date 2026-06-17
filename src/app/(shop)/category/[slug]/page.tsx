@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { Product } from '@/types';
 import ProductGrid from '@/components/product/ProductGrid';
-import { getServerLang, t, getCategoryName } from '@/lib/i18n';
+import { getServerLang, t, localizedName } from '@/lib/i18n';
 import JsonLd from '@/components/seo/JsonLd';
 import { breadcrumbSchema, productListSchema } from '@/lib/schema';
 
@@ -10,7 +10,7 @@ const BASE = 'https://quvenzaiq.com';
 
 export const revalidate = 3600;
 
-async function getCategoryWithProducts(slug: string): Promise<{ name: string; products: Product[] } | null> {
+async function getCategoryWithProducts(slug: string): Promise<{ name: string; nameAr: string | null; products: Product[] } | null> {
   try {
     const { getCategoryBySlug } = await import('@/services/categories/category.service');
     const { getProducts } = await import('@/services/products/product.service');
@@ -20,8 +20,13 @@ async function getCategoryWithProducts(slug: string): Promise<{ name: string; pr
       ...p,
       price: Number(p.price),
       comparePrice: p.comparePrice != null ? Number(p.comparePrice) : null,
+      variants: (p.variants ?? []).map((v: any) => ({
+        ...v,
+        price: Number(v.price),
+        comparePrice: v.comparePrice != null ? Number(v.comparePrice) : null,
+      })),
     })) as Product[];
-    return { name: category.name, products };
+    return { name: category.name, nameAr: (category as any).nameAr ?? null, products };
   } catch {
     return null;
   }
@@ -38,13 +43,14 @@ export async function generateMetadata(
   const result = await getCategoryWithProducts(slug);
   if (!result) return { title: 'الفئة غير موجودة' };
 
-  const title = `${result.name} — اشتراكات في العراق`;
-  const description = `اشترِ أفضل ${result.name} في العراق بأسعار بالدينار العراقي — تفعيل فوري، ضمان كامل. ${result.products.length} منتج متاح.`;
+  const display = result.nameAr ?? result.name;
+  const title = `${display} — في العراق`;
+  const description = `اشترِ أفضل ${display} في العراق بأسعار بالدينار العراقي — توصيل سريع، ضمان رسمي. ${result.products.length} منتج متاح.`;
 
   return {
     title,
     description,
-    keywords: [`${result.name} العراق`, `اشتراكات ${result.name}`, `${result.name} Iraq`, 'اشتراكات رقمية عراق'],
+    keywords: [`${display} العراق`, `${result.name} ${display}`, `${result.name} Iraq`, 'إلكترونيات العراق'],
     alternates: { canonical: `${BASE}/category/${slug}` },
     openGraph: {
       title,
@@ -68,6 +74,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const result = await getCategoryWithProducts(slug);
   if (!result) notFound();
 
+  const display = localizedName(result.name, result.nameAr, lang);
+  const countLabel = lang === 'ar'
+    ? `${result.products.length} منتج متاح في العراق`
+    : `${result.products.length} ${t('shop.products', lang)} available in Iraq`;
+
   return (
     <>
       <JsonLd data={breadcrumbSchema([
@@ -78,17 +89,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       <JsonLd data={productListSchema(result.products, result.name, `${BASE}/category/${slug}`)} />
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
-        <h1 className="text-xl sm:text-2xl font-bold text-text-primary mb-2">{getCategoryName(slug, result.name, lang)}</h1>
-        <p className="text-text-muted text-sm mb-8">{result.products.length} منتج متاح في العراق</p>
-        {result.products.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="text-text-muted text-5xl mb-4">📦</div>
-            <p className="text-text-primary font-semibold">{t('shop.noProducts', lang)}</p>
-            <p className="text-text-muted text-sm mt-1">{t('shop.checkBack', lang)}</p>
-          </div>
-        ) : (
-          <ProductGrid products={result.products} />
-        )}
+        <h1 className="text-xl sm:text-2xl font-bold text-text-primary mb-2">{display}</h1>
+        <p className="text-text-muted text-sm mb-8 ltr-nums">{countLabel}</p>
+        <ProductGrid
+          products={result.products}
+          emptyTitle={t('shop.noProducts', lang)}
+          emptySub={t('shop.checkBack', lang)}
+        />
       </div>
     </>
   );
