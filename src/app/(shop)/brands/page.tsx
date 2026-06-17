@@ -73,15 +73,15 @@ export default async function BrandsPage() {
                 href={`/brands/${brand.slug}`}
                 className="card card-hover group flex flex-col items-center text-center p-5 sm:p-6"
               >
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-4 flex items-center justify-center rounded-xl bg-bg-elevated overflow-hidden">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-4 flex items-center justify-center rounded-xl bg-white border border-border overflow-hidden">
                   {brand.logo ? (
                     <Image
                       src={brand.logo}
                       alt={localizedName(brand.name, brand.nameAr, lang)}
                       fill
-                      className="object-contain p-2 transition-transform duration-300 group-hover:scale-[1.05]"
+                      className="object-contain p-3.5 transition-transform duration-300 group-hover:scale-[1.05]"
                       sizes="96px"
-                      unoptimized={brand.logo.startsWith('http://localhost') || brand.logo.includes('placehold.co')}
+                      unoptimized={brand.logo.endsWith('.svg') || brand.logo.startsWith('http://localhost') || brand.logo.includes('placehold.co')}
                     />
                   ) : (
                     <span className="text-2xl font-bold text-text-muted">

@@ -1151,15 +1151,18 @@ async function main() {
   let variantCount = 0;
 
   for (const b of CATALOG) {
+    const brandSlug = kebab(b.name);
     const brand = await prisma.brand.create({
       data: {
         name: b.name,
         nameAr: b.nameAr,
-        slug: kebab(b.name),
+        slug: brandSlug,
         description: b.description,
         isActive: true,
         isFeatured: b.isFeatured ?? false,
-        logo: img(`${b.name} logo`),
+        // Real monochrome brand mark shipped in public/brands/<slug>.svg
+        // (Simple Icons, open). Falls back to a text placeholder if missing.
+        logo: `/brands/${brandSlug}.svg`,
       },
     });
     brandCount++;

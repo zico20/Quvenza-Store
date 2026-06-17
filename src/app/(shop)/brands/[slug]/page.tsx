@@ -104,15 +104,15 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8 sm:py-10">
         {/* Brand header */}
         <div className="flex items-center gap-4 sm:gap-5 mb-8">
-          <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center rounded-xl bg-bg-elevated border border-border overflow-hidden">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center rounded-xl bg-white border border-border overflow-hidden">
             {brand.logo ? (
               <Image
                 src={brand.logo}
                 alt={name}
                 fill
-                className="object-contain p-2"
+                className="object-contain p-3"
                 sizes="80px"
-                unoptimized={brand.logo.startsWith('http://localhost') || brand.logo.includes('placehold.co')}
+                unoptimized={brand.logo.endsWith('.svg') || brand.logo.startsWith('http://localhost') || brand.logo.includes('placehold.co')}
               />
             ) : (
               <span className="text-2xl font-bold text-text-muted">{name.charAt(0)}</span>

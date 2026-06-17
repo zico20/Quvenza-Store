@@ -43,7 +43,13 @@ export async function POST(
       data: { images: newImages },
     });
 
-    return sendSuccess({ product: updated, uploaded: uploadResults }, 'Images uploaded', 201);
+    // `images` = the product's full image list after upload (the edit page reads
+    // `data.images` to merge); `uploaded` = just this batch's Cloudinary results.
+    return sendSuccess(
+      { product: updated, images: updated.images, uploaded: uploadResults },
+      'Images uploaded',
+      201
+    );
   } catch (error) {
     return handleApiError(error);
   }
