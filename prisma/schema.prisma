@@ -36,6 +36,14 @@ enum NotificationType {
   ORDER_STATUS_CHANGED
 }
 
+// Physical electronics device kinds (drives type-shaped specs + "All X" listings)
+enum DeviceKind {
+  PHONE
+  LAPTOP
+  TABLET
+  HEADPHONE
+}
+
 model User {
   id           String    @id @default(cuid())
   name         String
@@ -51,52 +59,122 @@ model User {
   cart         Cart?
 }
 
-model Category {
-  id        String    @id @default(cuid())
-  name      String
-  slug      String    @unique
-  image     String?
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  products  Product[]
+// ── Brand (Apple, Samsung, Sony, Dell, …) ──
+model Brand {
+  id          String     @id @default(cuid())
+  name        String
+  nameAr      String?
+  slug        String     @unique
+  logo        String?
+  description String?    @db.Text
+  isActive    Boolean    @default(true)
+  isFeatured  Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  products    Product[]
+  categories  Category[]
+
+  @@index([slug])
 }
 
+// ── Device type / category (Phones, Laptops, Tablets, Headphones) ──
+// A category belongs to a brand (e.g. "Apple iPhones") AND carries a kind
+// so cross-brand "All Phones / All Laptops" listings work via `kind`.
+model Category {
+  id        String      @id @default(cuid())
+  name      String
+  nameAr    String?
+  slug      String      @unique
+  kind      DeviceKind  @default(PHONE)
+  image     String?
+  icon      String?
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  brandId   String?
+  brand     Brand?      @relation(fields: [brandId], references: [id])
+  products  Product[]
+
+  @@index([slug])
+  @@index([kind, isActive])
+  @@index([brandId])
+}
+
+// ── Product = a device model (e.g. "iPhone 15 Pro") ──
 model Product {
   id              String      @id @default(cuid())
   name            String
+  nameAr          String?
   slug            String      @unique
   description     String      @db.Text
-  price           Decimal     @db.Decimal(10, 2)
+  descriptionAr   String?     @db.Text
+  price           Decimal     @db.Decimal(10, 2)   // base price (cheapest variant)
   comparePrice    Decimal?    @db.Decimal(10, 2)
-  stock           Int         @default(0)
+  stock           Int         @default(0)          // total stock (sum of variants when present)
   images          String[]
   imageAlts       String[]    @default([])
   isActive        Boolean     @default(true)
   isFeatured      Boolean     @default(false)
+  rating          Float       @default(0)
+
+  brandId         String?
   categoryId      String
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  // Type-shaped technical specs (shape depends on category.kind):
+  //  phone:     { screen, chip, camera, battery, os, ... }
+  //  laptop:    { cpu, ram, storage, screen, gpu, ... }
+  //  headphone: { type, anc, batteryLife, connectivity, ... }
+  specs           Json?
 
   // ── SEO fields ──
   metaTitle       String?     @db.VarChar(70)
   metaDescription String?     @db.VarChar(170)
   metaKeywords    String?
   longDescription String?     @db.Text
-  faqs            Json?       // [{ question: string, answer: string }]
-  features        Json?       // [{ title: string, description: string, icon?: string }]
+  faqs            Json?       // [{ question, answer }]
+  features        Json?       // [{ title, description, icon? }]
 
   // ── Stats ──
   viewCount       Int         @default(0)
   salesCount      Int         @default(0)
 
+  brand           Brand?      @relation(fields: [brandId], references: [id])
   category        Category    @relation(fields: [categoryId], references: [id])
+  variants        Variant[]
   orderItems      OrderItem[]
   cartItems       CartItem[]
   reviews         Review[]
 
   @@index([slug])
   @@index([categoryId, isActive])
+  @@index([brandId, isActive])
   @@index([isActive, isFeatured])
+}
+
+// ── Variant (storage / color / RAM) with its own price, stock, SKU ──
+model Variant {
+  id         String      @id @default(cuid())
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name       String      // e.g. "256GB · Natural Titanium"
+  nameAr     String?
+  sku        String      @unique
+  // option axes (any may be null per device type)
+  storage    String?     // "256GB"
+  color      String?     // "Natural Titanium"
+  colorHex   String?     // "#C2BCB2" for swatches
+  ram        String?     // "16GB"
+  price      Decimal     @db.Decimal(10, 2)
+  comparePrice Decimal?  @db.Decimal(10, 2)
+  stock      Int         @default(0)
+  image      String?
+  isDefault  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@index([productId])
 }
 
 model Review {
@@ -132,7 +210,7 @@ model BlogPost {
   categoryId      String
   category        BlogCategory @relation(fields: [categoryId], references: [id])
   tags            String[]     @default([])
-  authorName      String       @default("SoftoDev")
+  authorName      String       @default("Quvenza")
   metaTitle       String?      @db.VarChar(70)
   metaDescription String?      @db.VarChar(170)
   isPublished     Boolean      @default(false)
@@ -155,14 +233,17 @@ model Cart {
 }
 
 model CartItem {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   cartId    String
   productId String
+  variantId String?
   quantity  Int
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+  variant   Variant? @relation(fields: [variantId], references: [id])
 
-  @@unique([cartId, productId])
+  // one row per (cart, product, variant) so different variants of the same model coexist
+  @@unique([cartId, productId, variantId])
 }
 
 model Order {
@@ -181,13 +262,16 @@ model Order {
 }
 
 model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  productId String
-  quantity  Int
-  price     Decimal @db.Decimal(10, 2)
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id])
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String
+  variantId   String?
+  variantName String?  // snapshot of the chosen variant at purchase time
+  quantity    Int
+  price       Decimal  @db.Decimal(10, 2)
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id])
+  variant     Variant? @relation(fields: [variantId], references: [id])
 }
 
 model OrderStatusHistory {

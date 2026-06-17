@@ -11,34 +11,96 @@ export interface AuthTokens {
   refreshToken: string;
 }
 
+export type DeviceKind = 'PHONE' | 'LAPTOP' | 'TABLET' | 'HEADPHONE';
+
+export interface Brand {
+  id: string;
+  name: string;
+  nameAr?: string;
+  slug: string;
+  logo?: string;
+  description?: string;
+  isFeatured?: boolean;
+}
+
+/** Type-shaped technical specs (keys depend on the device kind). */
+export interface ProductSpecs {
+  // phone
+  screen?: string;
+  chip?: string;
+  camera?: string;
+  battery?: string;
+  os?: string;
+  // laptop
+  cpu?: string;
+  ram?: string;
+  storage?: string;
+  gpu?: string;
+  // headphone
+  type?: string;
+  anc?: string;
+  batteryLife?: string;
+  connectivity?: string;
+  // free-form extras
+  [key: string]: string | undefined;
+}
+
+export interface Variant {
+  id: string;
+  productId: string;
+  name: string;
+  nameAr?: string;
+  sku: string;
+  storage?: string;
+  color?: string;
+  colorHex?: string;
+  ram?: string;
+  price: number;
+  comparePrice?: number;
+  stock: number;
+  image?: string;
+  isDefault?: boolean;
+}
+
 export interface Product {
   id: string;
   name: string;
+  nameAr?: string;
   slug: string;
   description: string;
+  descriptionAr?: string;
   price: number;
   comparePrice?: number;
   stock: number;
   images: string[];
+  rating?: number;
+  brandId?: string;
+  brand?: Brand;
   categoryId: string;
-  category?: {
-    id: string;
-    name: string;
-    slug: string;
-  };
+  category?: Category;
+  variants?: Variant[];
+  specs?: ProductSpecs;
   isActive: boolean;
+  isFeatured?: boolean;
   createdAt: string;
 }
 
 export interface Category {
   id: string;
   name: string;
+  nameAr?: string;
   slug: string;
+  kind?: DeviceKind;
   image?: string;
+  icon?: string;
+  brandId?: string;
+  brand?: Brand;
 }
 
 export interface CartItem {
   productId: string;
+  variantId?: string;
+  variant?: Variant;
   product: Product;
   quantity: number;
 }
@@ -61,6 +123,8 @@ export type PaymentStatus = 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
 export interface OrderItem {
   id: string;
   productId: string;
+  variantId?: string;
+  variantName?: string;
   product: Product;
   quantity: number;
   price: number;

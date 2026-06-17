@@ -59,11 +59,21 @@ export async function addItemToCart(
 
   const cart = await getOrCreateCart(userId);
 
-  const item = await prisma.cartItem.upsert({
-    where: { cartId_productId: { cartId: cart.id, productId } },
-    create: { cartId: cart.id, productId, quantity },
-    update: { quantity: { increment: quantity } },
+  // variantId is part of the composite unique key (null = no variant selected yet).
+  // Prisma types a nullable field in a compound key as non-null, so we use
+  // findFirst + create/update instead of upsert. Full variant-aware add-to-cart
+  // is handled in the electronics-revamp cart phase.
+  const existing = await prisma.cartItem.findFirst({
+    where: { cartId: cart.id, productId, variantId: null },
   });
+  const item = existing
+    ? await prisma.cartItem.update({
+        where: { id: existing.id },
+        data: { quantity: { increment: quantity } },
+      })
+    : await prisma.cartItem.create({
+        data: { cartId: cart.id, productId, quantity },
+      });
 
   if (item.quantity > product.stock) {
     await prisma.cartItem.update({
