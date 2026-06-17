@@ -1,972 +1,1290 @@
-import { PrismaClient } from '@prisma/client';
+/**
+ * Quvenza — Premium Physical Electronics Store seed.
+ *
+ * Catalog: Apple, Samsung, Sony, Dell, HP, Lenovo, Asus, Bose, JBL, Sennheiser.
+ * Each brand has one or more device-type categories (phones / laptops / tablets /
+ * headphones), each category holds real device models, and each model has 2-4
+ * variants (storage·color / RAM·storage / color). Bilingual (EN + AR) content.
+ *
+ * Run:
+ *   npx tsx prisma/seed.ts
+ */
+import { PrismaClient, DeviceKind } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+// ── Types ──────────────────────────────────────────────────────────────────
+type PhoneSpecs = { screen: string; chip: string; camera: string; battery: string; os: string };
+type LaptopSpecs = { cpu: string; ram: string; storage: string; screen: string; gpu: string };
+type TabletSpecs = { screen: string; chip: string; storage: string; battery: string; os: string };
+type HeadphoneSpecs = { type: string; anc: string; batteryLife: string; connectivity: string };
+type Specs = PhoneSpecs | LaptopSpecs | TabletSpecs | HeadphoneSpecs;
+
+interface Feature {
+  title: string;
+  description: string;
+  icon?: string;
+}
+interface Faq {
+  question: string;
+  answer: string;
+}
+
+interface VariantInput {
+  name: string;
+  nameAr?: string;
+  sku: string;
+  storage?: string;
+  color?: string;
+  colorHex?: string;
+  ram?: string;
+  price: number;
+  comparePrice?: number;
+  stock: number;
+  isDefault?: boolean;
+}
+
+interface ProductInput {
+  name: string;
+  nameAr: string;
+  slug: string;
+  description: string;
+  descriptionAr: string;
+  comparePrice?: number;
+  rating: number;
+  isFeatured?: boolean;
+  specs: Specs;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+  longDescription: string;
+  features: Feature[];
+  faqs: Faq[];
+  variants: VariantInput[];
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+const img = (model: string, i = 1) =>
+  `https://placehold.co/800x800/EEE/111?text=${encodeURIComponent(`${model} ${i}`)}`;
+
+const images = (model: string, count = 4) =>
+  Array.from({ length: count }, (_, i) => img(model, i + 1));
+
+const imageAlts = (modelEn: string, modelAr: string, count = 4) =>
+  Array.from({ length: count }, (_, i) =>
+    i === 0 ? `${modelEn} — ${modelAr} | Quvenza` : `${modelEn} — صورة ${i + 1}`,
+  );
+
+const kebab = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/['’"]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+// Builds Product create-data (with nested variants) from a ProductInput.
+function buildProduct(p: ProductInput, brandId: string, categoryId: string) {
+  const minPrice = Math.min(...p.variants.map((v) => v.price));
+  const totalStock = p.variants.reduce((sum, v) => sum + v.stock, 0);
+  const flagged = p.variants.filter((v) => v.isDefault);
+  // Exactly one default — fall back to the first variant if none/many flagged.
+  const defaultSku = flagged.length === 1 ? flagged[0].sku : p.variants[0].sku;
+
+  return {
+    name: p.name,
+    nameAr: p.nameAr,
+    slug: p.slug,
+    description: p.description,
+    descriptionAr: p.descriptionAr,
+    price: minPrice,
+    comparePrice: p.comparePrice,
+    stock: totalStock,
+    images: images(p.name),
+    imageAlts: imageAlts(p.name, p.nameAr),
+    isActive: true,
+    isFeatured: p.isFeatured ?? false,
+    rating: p.rating,
+    brandId,
+    categoryId,
+    specs: p.specs as unknown as object,
+    metaTitle: p.metaTitle.slice(0, 70),
+    metaDescription: p.metaDescription.slice(0, 170),
+    metaKeywords: p.metaKeywords,
+    longDescription: p.longDescription,
+    features: p.features as unknown as object,
+    faqs: p.faqs as unknown as object,
+    variants: {
+      create: p.variants.map((v) => ({
+        name: v.name,
+        nameAr: v.nameAr,
+        sku: v.sku,
+        storage: v.storage,
+        color: v.color,
+        colorHex: v.colorHex,
+        ram: v.ram,
+        price: v.price,
+        comparePrice: v.comparePrice,
+        stock: v.stock,
+        image: img(`${p.name} ${v.color ?? v.storage ?? v.ram ?? ''}`.trim()),
+        isDefault: v.sku === defaultSku,
+      })),
+    },
+  };
+}
+
+// ── Reusable bilingual content blocks ────────────────────────────────────────
+const phoneFeatures = (modelAr: string): Feature[] => [
+  { title: 'Brilliant Display', description: `شاشة مذهلة بألوان حية ودقة عالية على ${modelAr}.`, icon: 'phone' },
+  { title: 'Pro Camera System', description: 'نظام كاميرا احترافي لصور وفيديو بجودة استثنائية.', icon: 'camera' },
+  { title: 'All-Day Battery', description: 'بطارية تدوم طوال اليوم مع دعم الشحن السريع.', icon: 'battery' },
+];
+
+const phoneFaqs = (modelAr: string): Faq[] => [
+  { question: `هل ${modelAr} أصلي وبضمان؟`, answer: 'نعم، جميع أجهزتنا أصلية 100% وتأتي بضمان رسمي.' },
+  { question: 'هل التوصيل متاح لكل محافظات العراق؟', answer: 'نعم، نوصل لجميع المحافظات مع إمكانية الدفع عند الاستلام في بغداد.' },
+  { question: 'هل يدعم الجهاز اللغة العربية؟', answer: 'نعم، يدعم العربية بالكامل مع لوحة مفاتيح عربية وواجهة RTL.' },
+];
+
+const laptopFeatures = (modelAr: string): Feature[] => [
+  { title: 'Powerful Performance', description: `أداء قوي يلبي احتياجات العمل والإبداع على ${modelAr}.`, icon: 'laptop' },
+  { title: 'Stunning Display', description: 'شاشة عالية الدقة بألوان دقيقة مثالية للتصميم والترفيه.', icon: 'monitor' },
+  { title: 'Long Battery Life', description: 'بطارية تدوم لساعات طويلة من الإنتاجية المتنقلة.', icon: 'battery' },
+];
+
+const laptopFaqs = (modelAr: string): Faq[] => [
+  { question: `هل ${modelAr} مناسب للألعاب والتصميم؟`, answer: 'يعتمد على الموديل، لكن جميع أجهزتنا مذكورة مواصفاتها بدقة لتختار الأنسب لك.' },
+  { question: 'هل يأتي اللابتوب بضمان؟', answer: 'نعم، جميع اللابتوبات أصلية وبضمان رسمي.' },
+  { question: 'هل النظام مثبّت مسبقاً؟', answer: 'نعم، يأتي الجهاز بنظام تشغيل أصلي مثبّت وجاهز للاستخدام.' },
+];
+
+const tabletFeatures = (modelAr: string): Feature[] => [
+  { title: 'Immersive Display', description: `شاشة غامرة بألوان نابضة مثالية للمحتوى على ${modelAr}.`, icon: 'tablet' },
+  { title: 'Powerful Chip', description: 'معالج قوي يتعامل مع تعدد المهام والتطبيقات الثقيلة بسلاسة.', icon: 'cpu' },
+  { title: 'Portable & Light', description: 'تصميم نحيف وخفيف يرافقك أينما ذهبت.', icon: 'feather' },
+];
+
+const tabletFaqs = (modelAr: string): Faq[] => [
+  { question: `هل يدعم ${modelAr} القلم الإلكتروني؟`, answer: 'معظم الأجهزة اللوحية المتقدمة لدينا تدعم القلم — راجع المواصفات لكل موديل.' },
+  { question: 'هل الجهاز اللوحي يدعم شرائح الاتصال؟', answer: 'تتوفر إصدارات Wi-Fi وأخرى بدعم الشريحة (Cellular) حسب الموديل.' },
+  { question: 'هل يأتي بضمان رسمي؟', answer: 'نعم، جميع الأجهزة أصلية وبضمان رسمي.' },
+];
+
+const headphoneFeatures = (modelAr: string): Feature[] => [
+  { title: 'Premium Sound', description: `صوت نقي وغني بتفاصيل عالية على ${modelAr}.`, icon: 'headphones' },
+  { title: 'Active Noise Cancelling', description: 'إلغاء ضوضاء نشط يعزلك عن العالم ويغمرك بالموسيقى.', icon: 'volume' },
+  { title: 'Long Battery Life', description: 'ساعات طويلة من الاستماع المتواصل مع شحن سريع.', icon: 'battery' },
+];
+
+const headphoneFaqs = (modelAr: string): Faq[] => [
+  { question: `هل ${modelAr} يدعم البلوتوث؟`, answer: 'نعم، جميع السماعات اللاسلكية لدينا تدعم بلوتوث مستقر مع اتصال متعدد الأجهزة.' },
+  { question: 'هل تعمل السماعة مع الآيفون والأندرويد؟', answer: 'نعم، تعمل مع iOS وAndroid وأجهزة الكمبيوتر بسلاسة.' },
+  { question: 'هل تأتي بضمان؟', answer: 'نعم، جميع السماعات أصلية وبضمان رسمي.' },
+];
+
+// SEO helper to keep meta strings consistent (truncated to schema limits later).
+const meta = (en: string, ar: string, kind: string) => ({
+  metaTitle: `${en} — ${kind} | Quvenza`,
+  metaDescription: `اشترِ ${ar} (${en}) الأصلي في العراق من Quvenza. ضمان رسمي وتوصيل لكل المحافظات.`,
+  metaKeywords: `${en} العراق,${ar} عراق,${en} Iraq,شراء ${ar},${en} price Iraq,Quvenza`,
+});
+
+const longDesc = (en: string, ar: string) =>
+  `## ${ar} (${en})\n\n` +
+  `**${en}** متوفر الآن في العراق من Quvenza بسعر منافس وضمان رسمي. ` +
+  `جهاز أصلي 100% مع توصيل سريع لجميع المحافظات وإمكانية الدفع عند الاستلام في بغداد.\n\n` +
+  `### لماذا تشتري من Quvenza؟\n\n` +
+  `- منتجات أصلية بضمان رسمي\n- أسعار تنافسية بالدينار العراقي\n- توصيل لكل محافظات العراق\n- دعم فني ومتابعة بعد البيع`;
+
+// ── Shared color swatches ────────────────────────────────────────────────────
+const COLORS = {
+  black: '#1C1C1E',
+  white: '#F5F5F7',
+  silver: '#D5D8DC',
+  graphite: '#54524F',
+  gold: '#F4E8CE',
+  blue: '#3B5C92',
+  green: '#3C5A4B',
+  pink: '#F2C4CE',
+  purple: '#6E5A8E',
+  red: '#C1232A',
+  titaniumNatural: '#C2BCB2',
+  titaniumBlue: '#3D4C5C',
+  titaniumDesert: '#BFA48F',
+  spaceGray: '#4A4A4C',
+  midnight: '#1F2430',
+  starlight: '#EDE6D9',
+} as const;
+
+// ── Per-model factory helpers (cut boilerplate) ──────────────────────────────
+function phone(opts: {
+  name: string; nameAr: string; slug: string; rating: number; featured?: boolean;
+  specs: PhoneSpecs; variants: VariantInput[]; comparePrice?: number;
+}): ProductInput {
+  return {
+    name: opts.name, nameAr: opts.nameAr, slug: opts.slug,
+    description: `${opts.name} — هاتف ذكي بمواصفات رائدة وأداء متميز.`,
+    descriptionAr: `${opts.nameAr} هاتف ذكي بأداء رائد، كاميرا احترافية وشاشة مذهلة.`,
+    comparePrice: opts.comparePrice, rating: opts.rating, isFeatured: opts.featured,
+    specs: opts.specs, ...meta(opts.name, opts.nameAr, 'هاتف ذكي'),
+    longDescription: longDesc(opts.name, opts.nameAr),
+    features: phoneFeatures(opts.nameAr), faqs: phoneFaqs(opts.nameAr), variants: opts.variants,
+  };
+}
+
+function laptop(opts: {
+  name: string; nameAr: string; slug: string; rating: number; featured?: boolean;
+  specs: LaptopSpecs; variants: VariantInput[]; comparePrice?: number;
+}): ProductInput {
+  return {
+    name: opts.name, nameAr: opts.nameAr, slug: opts.slug,
+    description: `${opts.name} — لابتوب بأداء قوي وتصميم أنيق للعمل والإبداع.`,
+    descriptionAr: `${opts.nameAr} لابتوب بأداء قوي، شاشة عالية الدقة وبطارية تدوم طويلاً.`,
+    comparePrice: opts.comparePrice, rating: opts.rating, isFeatured: opts.featured,
+    specs: opts.specs, ...meta(opts.name, opts.nameAr, 'لابتوب'),
+    longDescription: longDesc(opts.name, opts.nameAr),
+    features: laptopFeatures(opts.nameAr), faqs: laptopFaqs(opts.nameAr), variants: opts.variants,
+  };
+}
+
+function tablet(opts: {
+  name: string; nameAr: string; slug: string; rating: number; featured?: boolean;
+  specs: TabletSpecs; variants: VariantInput[]; comparePrice?: number;
+}): ProductInput {
+  return {
+    name: opts.name, nameAr: opts.nameAr, slug: opts.slug,
+    description: `${opts.name} — جهاز لوحي بشاشة غامرة ومعالج قوي.`,
+    descriptionAr: `${opts.nameAr} جهاز لوحي بشاشة غامرة، أداء قوي وتصميم خفيف ومحمول.`,
+    comparePrice: opts.comparePrice, rating: opts.rating, isFeatured: opts.featured,
+    specs: opts.specs, ...meta(opts.name, opts.nameAr, 'جهاز لوحي'),
+    longDescription: longDesc(opts.name, opts.nameAr),
+    features: tabletFeatures(opts.nameAr), faqs: tabletFaqs(opts.nameAr), variants: opts.variants,
+  };
+}
+
+function headphone(opts: {
+  name: string; nameAr: string; slug: string; rating: number; featured?: boolean;
+  specs: HeadphoneSpecs; variants: VariantInput[]; comparePrice?: number;
+}): ProductInput {
+  return {
+    name: opts.name, nameAr: opts.nameAr, slug: opts.slug,
+    description: `${opts.name} — سماعة بصوت نقي وإلغاء ضوضاء متقدم.`,
+    descriptionAr: `${opts.nameAr} سماعة بصوت نقي، إلغاء ضوضاء متقدم وبطارية تدوم طويلاً.`,
+    comparePrice: opts.comparePrice, rating: opts.rating, isFeatured: opts.featured,
+    specs: opts.specs, ...meta(opts.name, opts.nameAr, 'سماعة'),
+    longDescription: longDesc(opts.name, opts.nameAr),
+    features: headphoneFeatures(opts.nameAr), faqs: headphoneFaqs(opts.nameAr), variants: opts.variants,
+  };
+}
+
+// variant builders: storage+color (sv), ram+storage (rv), color only (cv)
+const sv = (
+  sku: string, storage: string, color: string, colorHex: string,
+  price: number, stock: number, isDefault = false, comparePrice?: number,
+): VariantInput => ({
+  name: `${storage} · ${color}`, nameAr: `${storage} · ${color}`,
+  sku, storage, color, colorHex, price, comparePrice, stock, isDefault,
+});
+
+const rv = (
+  sku: string, ram: string, storage: string,
+  price: number, stock: number, isDefault = false, comparePrice?: number,
+): VariantInput => ({
+  name: `${ram} · ${storage}`, nameAr: `${ram} · ${storage}`,
+  sku, ram, storage, price, comparePrice, stock, isDefault,
+});
+
+const cv = (
+  sku: string, color: string, colorHex: string,
+  price: number, stock: number, isDefault = false, comparePrice?: number,
+): VariantInput => ({
+  name: color, nameAr: color, sku, color, colorHex, price, comparePrice, stock, isDefault,
+});
+
+// ── Catalog structure ────────────────────────────────────────────────────────
+interface CatalogCategory {
+  name: string; nameAr: string; kind: DeviceKind; icon: string; products: ProductInput[];
+}
+interface CatalogBrand {
+  name: string; nameAr: string; description: string; isFeatured?: boolean; categories: CatalogCategory[];
+}
+
+const CATALOG: CatalogBrand[] = [
+  // ════════════════════════════ APPLE ════════════════════════════
+  {
+    name: 'Apple', nameAr: 'آبل', isFeatured: true,
+    description: 'Apple — أجهزة آيفون وآيباد وماك وإيربودز الأصلية بضمان رسمي في العراق.',
+    categories: [
+      {
+        name: 'Apple iPhones', nameAr: 'آيفون آبل', kind: 'PHONE', icon: 'phone',
+        products: [
+          phone({
+            name: 'iPhone 13', nameAr: 'آيفون 13', slug: 'apple-iphone-13', rating: 4.6,
+            specs: { screen: '6.1" OLED 60Hz', chip: 'A15 Bionic', camera: '12MP Dual', battery: '3240mAh', os: 'iOS 18' },
+            variants: [
+              sv('APL-IP13-128-MID', '128GB', 'Midnight', COLORS.midnight, 549, 18, true),
+              sv('APL-IP13-256-MID', '256GB', 'Midnight', COLORS.midnight, 629, 12),
+              sv('APL-IP13-128-BLU', '128GB', 'Blue', COLORS.blue, 549, 9),
+            ],
+          }),
+          phone({
+            name: 'iPhone 14', nameAr: 'آيفون 14', slug: 'apple-iphone-14', rating: 4.7,
+            specs: { screen: '6.1" OLED 60Hz', chip: 'A15 Bionic', camera: '12MP Dual', battery: '3279mAh', os: 'iOS 18' },
+            variants: [
+              sv('APL-IP14-128-MID', '128GB', 'Midnight', COLORS.midnight, 649, 16, true),
+              sv('APL-IP14-256-PUR', '256GB', 'Purple', COLORS.purple, 729, 10),
+              sv('APL-IP14-128-STR', '128GB', 'Starlight', COLORS.starlight, 649, 11),
+            ],
+          }),
+          phone({
+            name: 'iPhone 15', nameAr: 'آيفون 15', slug: 'apple-iphone-15', rating: 4.8, featured: true,
+            specs: { screen: '6.1" OLED 60Hz', chip: 'A16 Bionic', camera: '48MP Main', battery: '3349mAh', os: 'iOS 18' },
+            variants: [
+              sv('APL-IP15-128-BLK', '128GB', 'Black', COLORS.black, 799, 20, true),
+              sv('APL-IP15-256-PNK', '256GB', 'Pink', COLORS.pink, 899, 14),
+              sv('APL-IP15-256-BLU', '256GB', 'Blue', COLORS.blue, 899, 9),
+            ],
+          }),
+          phone({
+            name: 'iPhone 15 Pro', nameAr: 'آيفون 15 برو', slug: 'apple-iphone-15-pro', rating: 4.9, featured: true, comparePrice: 1099,
+            specs: { screen: '6.1" OLED 120Hz', chip: 'A17 Pro', camera: '48MP Pro', battery: '3274mAh', os: 'iOS 18' },
+            variants: [
+              sv('APL-IP15P-256-NAT', '256GB', 'Natural Titanium', COLORS.titaniumNatural, 999, 15, true, 1099),
+              sv('APL-IP15P-512-BLU', '512GB', 'Blue Titanium', COLORS.titaniumBlue, 1199, 8),
+              sv('APL-IP15P-1TB-BLK', '1TB', 'Black Titanium', COLORS.black, 1399, 5),
+            ],
+          }),
+          phone({
+            name: 'iPhone 16', nameAr: 'آيفون 16', slug: 'apple-iphone-16', rating: 4.8, featured: true,
+            specs: { screen: '6.1" OLED 60Hz', chip: 'A18', camera: '48MP Fusion', battery: '3561mAh', os: 'iOS 18' },
+            variants: [
+              sv('APL-IP16-128-ULT', '128GB', 'Ultramarine', COLORS.blue, 899, 17, true),
+              sv('APL-IP16-256-TEA', '256GB', 'Teal', COLORS.green, 999, 11),
+              sv('APL-IP16-256-BLK', '256GB', 'Black', COLORS.black, 999, 8),
+            ],
+          }),
+          phone({
+            name: 'iPhone 16 Pro', nameAr: 'آيفون 16 برو', slug: 'apple-iphone-16-pro', rating: 4.9, featured: true, comparePrice: 1199,
+            specs: { screen: '6.3" OLED 120Hz', chip: 'A18 Pro', camera: '48MP Pro Fusion', battery: '3582mAh', os: 'iOS 18' },
+            variants: [
+              sv('APL-IP16P-256-DES', '256GB', 'Desert Titanium', COLORS.titaniumDesert, 1099, 13, true, 1199),
+              sv('APL-IP16P-512-NAT', '512GB', 'Natural Titanium', COLORS.titaniumNatural, 1299, 7),
+              sv('APL-IP16P-1TB-BLK', '1TB', 'Black Titanium', COLORS.black, 1499, 4),
+            ],
+          }),
+        ],
+      },
+      {
+        name: 'Apple iPads', nameAr: 'آيباد آبل', kind: 'TABLET', icon: 'tablet',
+        products: [
+          tablet({
+            name: 'iPad 10th Gen', nameAr: 'آيباد الجيل العاشر', slug: 'apple-ipad-10th-gen', rating: 4.6,
+            specs: { screen: '10.9" Liquid Retina', chip: 'A14 Bionic', storage: '64GB–256GB', battery: 'Up to 10h', os: 'iPadOS 18' },
+            variants: [
+              sv('APL-IPAD10-64-BLU', '64GB', 'Blue', COLORS.blue, 349, 14, true),
+              sv('APL-IPAD10-256-SLV', '256GB', 'Silver', COLORS.silver, 499, 9),
+            ],
+          }),
+          tablet({
+            name: 'iPad Air', nameAr: 'آيباد آير', slug: 'apple-ipad-air', rating: 4.8, featured: true,
+            specs: { screen: '11" Liquid Retina', chip: 'M2', storage: '128GB–1TB', battery: 'Up to 10h', os: 'iPadOS 18' },
+            variants: [
+              sv('APL-IPADAIR-128-BLU', '128GB', 'Blue', COLORS.blue, 599, 12, true),
+              sv('APL-IPADAIR-256-PUR', '256GB', 'Purple', COLORS.purple, 699, 8),
+              sv('APL-IPADAIR-512-STR', '512GB', 'Starlight', COLORS.starlight, 899, 5),
+            ],
+          }),
+          tablet({
+            name: 'iPad Pro 11"', nameAr: 'آيباد برو 11', slug: 'apple-ipad-pro-11', rating: 4.9, featured: true,
+            specs: { screen: '11" Ultra Retina XDR', chip: 'M4', storage: '256GB–2TB', battery: 'Up to 10h', os: 'iPadOS 18' },
+            variants: [
+              sv('APL-IPADP11-256-SLV', '256GB', 'Silver', COLORS.silver, 999, 9, true),
+              sv('APL-IPADP11-512-BLK', '512GB', 'Space Black', COLORS.spaceGray, 1199, 6),
+            ],
+          }),
+          tablet({
+            name: 'iPad Pro 13"', nameAr: 'آيباد برو 13', slug: 'apple-ipad-pro-13', rating: 4.9,
+            specs: { screen: '13" Ultra Retina XDR', chip: 'M4', storage: '256GB–2TB', battery: 'Up to 10h', os: 'iPadOS 18' },
+            variants: [
+              sv('APL-IPADP13-256-SLV', '256GB', 'Silver', COLORS.silver, 1299, 7, true),
+              sv('APL-IPADP13-512-BLK', '512GB', 'Space Black', COLORS.spaceGray, 1499, 4),
+            ],
+          }),
+          tablet({
+            name: 'iPad mini', nameAr: 'آيباد ميني', slug: 'apple-ipad-mini', rating: 4.7,
+            specs: { screen: '8.3" Liquid Retina', chip: 'A17 Pro', storage: '128GB–512GB', battery: 'Up to 10h', os: 'iPadOS 18' },
+            variants: [
+              sv('APL-IPADMINI-128-SPC', '128GB', 'Space Gray', COLORS.spaceGray, 499, 11, true),
+              sv('APL-IPADMINI-256-PUR', '256GB', 'Purple', COLORS.purple, 599, 6),
+            ],
+          }),
+        ],
+      },
+      {
+        name: 'Apple MacBooks', nameAr: 'ماك بوك آبل', kind: 'LAPTOP', icon: 'laptop',
+        products: [
+          laptop({
+            name: 'MacBook Air M2', nameAr: 'ماك بوك آير M2', slug: 'apple-macbook-air-m2', rating: 4.8, featured: true,
+            specs: { cpu: 'Apple M2 8-core', ram: '8GB–24GB', storage: '256GB–2TB', screen: '13.6" Liquid Retina', gpu: 'M2 10-core GPU' },
+            variants: [
+              rv('APL-MBA-M2-8-256', '8GB', '256GB SSD', 999, 10, true, 1099),
+              rv('APL-MBA-M2-16-512', '16GB', '512GB SSD', 1299, 6),
+            ],
+          }),
+          laptop({
+            name: 'MacBook Air M3', nameAr: 'ماك بوك آير M3', slug: 'apple-macbook-air-m3', rating: 4.9, featured: true,
+            specs: { cpu: 'Apple M3 8-core', ram: '8GB–24GB', storage: '256GB–2TB', screen: '13.6" Liquid Retina', gpu: 'M3 10-core GPU' },
+            variants: [
+              rv('APL-MBA-M3-8-256', '8GB', '256GB SSD', 1099, 9, true),
+              rv('APL-MBA-M3-16-512', '16GB', '512GB SSD', 1499, 5),
+            ],
+          }),
+          laptop({
+            name: 'MacBook Pro 14" M3', nameAr: 'ماك بوك برو 14 M3', slug: 'apple-macbook-pro-14-m3', rating: 4.9, featured: true,
+            specs: { cpu: 'Apple M3 Pro', ram: '18GB–36GB', storage: '512GB–4TB', screen: '14.2" Liquid Retina XDR', gpu: 'M3 Pro 18-core GPU' },
+            variants: [
+              rv('APL-MBP14-M3-18-512', '18GB', '512GB SSD', 1999, 6, true),
+              rv('APL-MBP14-M3-36-1TB', '36GB', '1TB SSD', 2499, 3),
+            ],
+          }),
+          laptop({
+            name: 'MacBook Pro 16" M3', nameAr: 'ماك بوك برو 16 M3', slug: 'apple-macbook-pro-16-m3', rating: 4.9,
+            specs: { cpu: 'Apple M3 Max', ram: '36GB–128GB', storage: '1TB–8TB', screen: '16.2" Liquid Retina XDR', gpu: 'M3 Max 40-core GPU' },
+            variants: [
+              rv('APL-MBP16-M3-36-1TB', '36GB', '1TB SSD', 3499, 4, true),
+              rv('APL-MBP16-M3-48-1TB', '48GB', '1TB SSD', 3999, 2),
+            ],
+          }),
+          laptop({
+            name: 'MacBook Pro 14" M4', nameAr: 'ماك بوك برو 14 M4', slug: 'apple-macbook-pro-14-m4', rating: 4.9, featured: true,
+            specs: { cpu: 'Apple M4 Pro', ram: '24GB–48GB', storage: '512GB–4TB', screen: '14.2" Liquid Retina XDR', gpu: 'M4 Pro 20-core GPU' },
+            variants: [
+              rv('APL-MBP14-M4-24-512', '24GB', '512GB SSD', 1999, 7, true),
+              rv('APL-MBP14-M4-48-1TB', '48GB', '1TB SSD', 2799, 3),
+            ],
+          }),
+        ],
+      },
+      {
+        name: 'Apple AirPods', nameAr: 'إيربودز آبل', kind: 'HEADPHONE', icon: 'headphones',
+        products: [
+          headphone({
+            name: 'AirPods 3', nameAr: 'إيربودز 3', slug: 'apple-airpods-3', rating: 4.6,
+            specs: { type: 'In-ear (open-fit)', anc: 'No', batteryLife: 'Up to 30h (with case)', connectivity: 'Bluetooth 5.0' },
+            variants: [cv('APL-APODS3-WHT', 'White', COLORS.white, 169, 20, true, 199)],
+          }),
+          headphone({
+            name: 'AirPods 4', nameAr: 'إيربودز 4', slug: 'apple-airpods-4', rating: 4.7, featured: true,
+            specs: { type: 'In-ear (open-fit)', anc: 'Optional ANC model', batteryLife: 'Up to 30h (with case)', connectivity: 'Bluetooth 5.3' },
+            variants: [cv('APL-APODS4-WHT', 'White', COLORS.white, 179, 18, true)],
+          }),
+          headphone({
+            name: 'AirPods Pro 2', nameAr: 'إيربودز برو 2', slug: 'apple-airpods-pro-2', rating: 4.9, featured: true, comparePrice: 279,
+            specs: { type: 'In-ear', anc: 'Active Noise Cancellation', batteryLife: 'Up to 30h (with case)', connectivity: 'Bluetooth 5.3' },
+            variants: [cv('APL-APODSP2-WHT', 'White', COLORS.white, 249, 22, true, 279)],
+          }),
+          headphone({
+            name: 'AirPods Max', nameAr: 'إيربودز ماكس', slug: 'apple-airpods-max', rating: 4.7,
+            specs: { type: 'Over-ear', anc: 'Active Noise Cancellation', batteryLife: 'Up to 20h', connectivity: 'Bluetooth 5.0' },
+            variants: [
+              cv('APL-APODSMAX-SLV', 'Silver', COLORS.silver, 549, 8, true),
+              cv('APL-APODSMAX-MID', 'Midnight', COLORS.midnight, 549, 6),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ SAMSUNG ════════════════════════════
+  {
+    name: 'Samsung', nameAr: 'سامسونج', isFeatured: true,
+    description: 'Samsung — هواتف Galaxy وأجهزة لوحية وسماعات بمواصفات رائدة وضمان رسمي.',
+    categories: [
+      {
+        name: 'Samsung Phones', nameAr: 'هواتف سامسونج', kind: 'PHONE', icon: 'phone',
+        products: [
+          phone({
+            name: 'Galaxy S23', nameAr: 'جالاكسي S23', slug: 'samsung-galaxy-s23', rating: 4.6,
+            specs: { screen: '6.1" AMOLED 120Hz', chip: 'Snapdragon 8 Gen 2', camera: '50MP Triple', battery: '3900mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-S23-128-PHM', '128GB', 'Phantom Black', COLORS.black, 699, 14, true),
+              sv('SAM-S23-256-GRN', '256GB', 'Green', COLORS.green, 759, 9),
+            ],
+          }),
+          phone({
+            name: 'Galaxy S24', nameAr: 'جالاكسي S24', slug: 'samsung-galaxy-s24', rating: 4.7, featured: true,
+            specs: { screen: '6.2" AMOLED 120Hz', chip: 'Snapdragon 8 Gen 3', camera: '50MP Triple', battery: '4000mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-S24-128-ONX', '128GB', 'Onyx Black', COLORS.black, 799, 15, true),
+              sv('SAM-S24-256-MAR', '256GB', 'Marble Gray', COLORS.silver, 859, 10),
+              sv('SAM-S24-256-VIO', '256GB', 'Cobalt Violet', COLORS.purple, 859, 7),
+            ],
+          }),
+          phone({
+            name: 'Galaxy S24 Ultra', nameAr: 'جالاكسي S24 ألترا', slug: 'samsung-galaxy-s24-ultra', rating: 4.9, featured: true, comparePrice: 1399,
+            specs: { screen: '6.8" AMOLED 120Hz', chip: 'Snapdragon 8 Gen 3', camera: '200MP Quad', battery: '5000mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-S24U-256-TBK', '256GB', 'Titanium Black', COLORS.black, 1299, 12, true, 1399),
+              sv('SAM-S24U-512-TGR', '512GB', 'Titanium Gray', COLORS.graphite, 1419, 6),
+              sv('SAM-S24U-1TB-TVI', '1TB', 'Titanium Violet', COLORS.purple, 1659, 3),
+            ],
+          }),
+          phone({
+            name: 'Galaxy S25', nameAr: 'جالاكسي S25', slug: 'samsung-galaxy-s25', rating: 4.8, featured: true,
+            specs: { screen: '6.2" AMOLED 120Hz', chip: 'Snapdragon 8 Elite', camera: '50MP Triple', battery: '4000mAh', os: 'Android 15' },
+            variants: [
+              sv('SAM-S25-128-SLB', '128GB', 'Silver Shadow', COLORS.silver, 849, 13, true),
+              sv('SAM-S25-256-NAV', '256GB', 'Navy', COLORS.blue, 909, 8),
+            ],
+          }),
+          phone({
+            name: 'Galaxy S25 Ultra', nameAr: 'جالاكسي S25 ألترا', slug: 'samsung-galaxy-s25-ultra', rating: 4.9, featured: true, comparePrice: 1499,
+            specs: { screen: '6.9" AMOLED 120Hz', chip: 'Snapdragon 8 Elite', camera: '200MP Quad', battery: '5000mAh', os: 'Android 15' },
+            variants: [
+              sv('SAM-S25U-256-TSB', '256GB', 'Titanium Silverblue', COLORS.titaniumBlue, 1399, 10, true, 1499),
+              sv('SAM-S25U-512-TBK', '512GB', 'Titanium Black', COLORS.black, 1519, 5),
+            ],
+          }),
+          phone({
+            name: 'Galaxy A55', nameAr: 'جالاكسي A55', slug: 'samsung-galaxy-a55', rating: 4.4,
+            specs: { screen: '6.6" AMOLED 120Hz', chip: 'Exynos 1480', camera: '50MP Triple', battery: '5000mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-A55-128-NVY', '128GB', 'Awesome Navy', COLORS.blue, 399, 22, true),
+              sv('SAM-A55-256-ICE', '256GB', 'Awesome Iceblue', COLORS.silver, 449, 14),
+            ],
+          }),
+        ],
+      },
+      {
+        name: 'Samsung Tablets', nameAr: 'أجهزة سامسونج اللوحية', kind: 'TABLET', icon: 'tablet',
+        products: [
+          tablet({
+            name: 'Galaxy Tab S9', nameAr: 'جالاكسي تاب S9', slug: 'samsung-galaxy-tab-s9', rating: 4.7, featured: true,
+            specs: { screen: '11" Dynamic AMOLED 2X', chip: 'Snapdragon 8 Gen 2', storage: '128GB–256GB', battery: '8400mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-TABS9-128-GPH', '128GB', 'Graphite', COLORS.graphite, 799, 9, true),
+              sv('SAM-TABS9-256-BGE', '256GB', 'Beige', COLORS.gold, 899, 5),
+            ],
+          }),
+          tablet({
+            name: 'Galaxy Tab S9 Ultra', nameAr: 'جالاكسي تاب S9 ألترا', slug: 'samsung-galaxy-tab-s9-ultra', rating: 4.8,
+            specs: { screen: '14.6" Dynamic AMOLED 2X', chip: 'Snapdragon 8 Gen 2', storage: '256GB–1TB', battery: '11200mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-TABS9U-256-GPH', '256GB', 'Graphite', COLORS.graphite, 1199, 6, true),
+              sv('SAM-TABS9U-512-BGE', '512GB', 'Beige', COLORS.gold, 1399, 3),
+            ],
+          }),
+          tablet({
+            name: 'Galaxy Tab S10', nameAr: 'جالاكسي تاب S10', slug: 'samsung-galaxy-tab-s10', rating: 4.8, featured: true,
+            specs: { screen: '12.4" Dynamic AMOLED 2X', chip: 'Dimensity 9300+', storage: '256GB–512GB', battery: '10090mAh', os: 'Android 14' },
+            variants: [
+              sv('SAM-TABS10-256-GRY', '256GB', 'Moonstone Gray', COLORS.silver, 999, 7, true),
+              sv('SAM-TABS10-512-SLV', '512GB', 'Platinum Silver', COLORS.silver, 1149, 4),
+            ],
+          }),
+          tablet({
+            name: 'Galaxy Tab A9', nameAr: 'جالاكسي تاب A9', slug: 'samsung-galaxy-tab-a9', rating: 4.3,
+            specs: { screen: '8.7" TFT LCD', chip: 'Helio G99', storage: '64GB–128GB', battery: '5100mAh', os: 'Android 13' },
+            variants: [
+              sv('SAM-TABA9-64-GRY', '64GB', 'Graphite', COLORS.graphite, 149, 24, true),
+              sv('SAM-TABA9-128-SLV', '128GB', 'Silver', COLORS.silver, 189, 16),
+            ],
+          }),
+        ],
+      },
+      {
+        name: 'Samsung Headphones', nameAr: 'سماعات سامسونج', kind: 'HEADPHONE', icon: 'headphones',
+        products: [
+          headphone({
+            name: 'Galaxy Buds2 Pro', nameAr: 'جالاكسي بدز2 برو', slug: 'samsung-galaxy-buds2-pro', rating: 4.6,
+            specs: { type: 'In-ear', anc: 'Intelligent ANC', batteryLife: 'Up to 29h (with case)', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('SAM-BUDS2P-GPH', 'Graphite', COLORS.graphite, 199, 16, true, 229),
+              cv('SAM-BUDS2P-WHT', 'White', COLORS.white, 199, 12),
+            ],
+          }),
+          headphone({
+            name: 'Galaxy Buds3', nameAr: 'جالاكسي بدز3', slug: 'samsung-galaxy-buds3', rating: 4.5,
+            specs: { type: 'In-ear (stem)', anc: 'Active Noise Cancellation', batteryLife: 'Up to 24h (with case)', connectivity: 'Bluetooth 5.4' },
+            variants: [cv('SAM-BUDS3-SLV', 'Silver', COLORS.silver, 179, 14, true)],
+          }),
+          headphone({
+            name: 'Galaxy Buds3 Pro', nameAr: 'جالاكسي بدز3 برو', slug: 'samsung-galaxy-buds3-pro', rating: 4.7, featured: true,
+            specs: { type: 'In-ear (stem)', anc: 'Adaptive ANC', batteryLife: 'Up to 26h (with case)', connectivity: 'Bluetooth 5.4' },
+            variants: [cv('SAM-BUDS3P-SLV', 'Silver', COLORS.silver, 249, 11, true, 279)],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ SONY ════════════════════════════
+  {
+    name: 'Sony', nameAr: 'سوني', isFeatured: true,
+    description: 'Sony — سماعات إلغاء ضوضاء رائدة وهواتف Xperia بجودة تصوير سينمائية.',
+    categories: [
+      {
+        name: 'Sony Headphones', nameAr: 'سماعات سوني', kind: 'HEADPHONE', icon: 'headphones',
+        products: [
+          headphone({
+            name: 'Sony WH-1000XM4', nameAr: 'سوني WH-1000XM4', slug: 'sony-wh-1000xm4', rating: 4.7,
+            specs: { type: 'Over-ear', anc: 'Industry-leading ANC', batteryLife: 'Up to 30h', connectivity: 'Bluetooth 5.0' },
+            variants: [
+              cv('SNY-XM4-BLK', 'Black', COLORS.black, 279, 14, true, 349),
+              cv('SNY-XM4-SLV', 'Silver', COLORS.silver, 279, 9),
+            ],
+          }),
+          headphone({
+            name: 'Sony WH-1000XM5', nameAr: 'سوني WH-1000XM5', slug: 'sony-wh-1000xm5', rating: 4.9, featured: true, comparePrice: 399,
+            specs: { type: 'Over-ear', anc: 'Industry-leading ANC', batteryLife: 'Up to 30h', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SNY-XM5-BLK', 'Black', COLORS.black, 349, 18, true, 399),
+              cv('SNY-XM5-SLV', 'Silver', COLORS.silver, 349, 11),
+              cv('SNY-XM5-MID', 'Midnight Blue', COLORS.blue, 349, 7),
+            ],
+          }),
+          headphone({
+            name: 'Sony WF-1000XM5', nameAr: 'سوني WF-1000XM5', slug: 'sony-wf-1000xm5', rating: 4.8, featured: true,
+            specs: { type: 'In-ear', anc: 'Industry-leading ANC', batteryLife: 'Up to 24h (with case)', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('SNY-WF5-BLK', 'Black', COLORS.black, 279, 13, true),
+              cv('SNY-WF5-SLV', 'Silver', COLORS.silver, 279, 8),
+            ],
+          }),
+          headphone({
+            name: 'Sony WH-CH720N', nameAr: 'سوني WH-CH720N', slug: 'sony-wh-ch720n', rating: 4.4,
+            specs: { type: 'Over-ear', anc: 'Active Noise Cancellation', batteryLife: 'Up to 35h', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SNY-CH720-BLK', 'Black', COLORS.black, 129, 20, true, 149),
+              cv('SNY-CH720-WHT', 'White', COLORS.white, 129, 12),
+            ],
+          }),
+          headphone({
+            name: 'Sony ULT Wear', nameAr: 'سوني ULT وير', slug: 'sony-ult-wear', rating: 4.5,
+            specs: { type: 'Over-ear', anc: 'Active Noise Cancellation', batteryLife: 'Up to 30h', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SNY-ULT-BLK', 'Black', COLORS.black, 179, 15, true),
+              cv('SNY-ULT-FOR', 'Forest Gray', COLORS.graphite, 179, 9),
+            ],
+          }),
+        ],
+      },
+      {
+        name: 'Sony Phones', nameAr: 'هواتف سوني', kind: 'PHONE', icon: 'phone',
+        products: [
+          phone({
+            name: 'Xperia 1 V', nameAr: 'إكسبيريا 1 V', slug: 'sony-xperia-1-v', rating: 4.5,
+            specs: { screen: '6.5" OLED 120Hz 4K', chip: 'Snapdragon 8 Gen 2', camera: '48MP Triple', battery: '5000mAh', os: 'Android 14' },
+            variants: [
+              sv('SNY-XP1V-256-BLK', '256GB', 'Black', COLORS.black, 1099, 6, true),
+              sv('SNY-XP1V-512-PLT', '512GB', 'Platinum Silver', COLORS.silver, 1299, 3),
+            ],
+          }),
+          phone({
+            name: 'Xperia 5 V', nameAr: 'إكسبيريا 5 V', slug: 'sony-xperia-5-v', rating: 4.5,
+            specs: { screen: '6.1" OLED 120Hz', chip: 'Snapdragon 8 Gen 2', camera: '48MP Dual', battery: '5000mAh', os: 'Android 14' },
+            variants: [
+              sv('SNY-XP5V-128-BLU', '128GB', 'Blue', COLORS.blue, 899, 7, true),
+              sv('SNY-XP5V-256-BLK', '256GB', 'Black', COLORS.black, 999, 4),
+            ],
+          }),
+          phone({
+            name: 'Xperia 10 VI', nameAr: 'إكسبيريا 10 VI', slug: 'sony-xperia-10-vi', rating: 4.3,
+            specs: { screen: '6.1" OLED 60Hz', chip: 'Snapdragon 6 Gen 1', camera: '48MP Dual', battery: '5000mAh', os: 'Android 14' },
+            variants: [
+              sv('SNY-XP10VI-128-BLK', '128GB', 'Black', COLORS.black, 449, 12, true),
+              sv('SNY-XP10VI-128-BLU', '128GB', 'Blue', COLORS.blue, 449, 8),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ DELL ════════════════════════════
+  {
+    name: 'Dell', nameAr: 'ديل',
+    description: 'Dell — لابتوبات XPS وInspiron وAlienware للأعمال والألعاب بأداء موثوق.',
+    categories: [
+      {
+        name: 'Dell Laptops', nameAr: 'لابتوبات ديل', kind: 'LAPTOP', icon: 'laptop',
+        products: [
+          laptop({
+            name: 'Dell XPS 13', nameAr: 'ديل XPS 13', slug: 'dell-xps-13', rating: 4.7, featured: true,
+            specs: { cpu: 'Intel Core Ultra 7', ram: '16GB–32GB', storage: '512GB–1TB', screen: '13.4" FHD+', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('DEL-XPS13-16-512', '16GB', '512GB SSD', 1199, 8, true, 1399),
+              rv('DEL-XPS13-32-1TB', '32GB', '1TB SSD', 1599, 4),
+            ],
+          }),
+          laptop({
+            name: 'Dell XPS 15', nameAr: 'ديل XPS 15', slug: 'dell-xps-15', rating: 4.8,
+            specs: { cpu: 'Intel Core Ultra 9', ram: '16GB–64GB', storage: '512GB–2TB', screen: '15.6" OLED 3.5K', gpu: 'NVIDIA RTX 4060' },
+            variants: [
+              rv('DEL-XPS15-16-512', '16GB', '512GB SSD', 1899, 5, true),
+              rv('DEL-XPS15-32-1TB', '32GB', '1TB SSD', 2299, 3),
+            ],
+          }),
+          laptop({
+            name: 'Dell Inspiron 14', nameAr: 'ديل إنسبايرون 14', slug: 'dell-inspiron-14', rating: 4.3,
+            specs: { cpu: 'Intel Core i5-1334U', ram: '8GB–16GB', storage: '512GB SSD', screen: '14" FHD+', gpu: 'Intel Iris Xe' },
+            variants: [
+              rv('DEL-INS14-8-512', '8GB', '512GB SSD', 649, 14, true),
+              rv('DEL-INS14-16-512', '16GB', '512GB SSD', 749, 9),
+            ],
+          }),
+          laptop({
+            name: 'Dell Latitude 7440', nameAr: 'ديل لاتيتيود 7440', slug: 'dell-latitude-7440', rating: 4.5,
+            specs: { cpu: 'Intel Core i7-1365U', ram: '16GB–32GB', storage: '512GB–1TB', screen: '14" FHD+', gpu: 'Intel Iris Xe' },
+            variants: [
+              rv('DEL-LAT7440-16-512', '16GB', '512GB SSD', 1299, 7, true),
+              rv('DEL-LAT7440-32-1TB', '32GB', '1TB SSD', 1599, 4),
+            ],
+          }),
+          laptop({
+            name: 'Dell Alienware m16', nameAr: 'ديل ايلين وير m16', slug: 'dell-alienware-m16', rating: 4.7, featured: true,
+            specs: { cpu: 'Intel Core i9-14900HX', ram: '32GB–64GB', storage: '1TB–2TB', screen: '16" QHD+ 240Hz', gpu: 'NVIDIA RTX 4080' },
+            variants: [
+              rv('DEL-AWM16-32-1TB', '32GB', '1TB SSD', 2599, 5, true),
+              rv('DEL-AWM16-64-2TB', '64GB', '2TB SSD', 3299, 2),
+            ],
+          }),
+          laptop({
+            name: 'Dell G16', nameAr: 'ديل G16', slug: 'dell-g16', rating: 4.4,
+            specs: { cpu: 'Intel Core i7-13650HX', ram: '16GB–32GB', storage: '1TB SSD', screen: '16" QHD+ 165Hz', gpu: 'NVIDIA RTX 4060' },
+            variants: [
+              rv('DEL-G16-16-1TB', '16GB', '1TB SSD', 1399, 9, true),
+              rv('DEL-G16-32-1TB', '32GB', '1TB SSD', 1599, 5),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ HP ════════════════════════════
+  {
+    name: 'HP', nameAr: 'إتش بي',
+    description: 'HP — لابتوبات Spectre وEnvy وOmen للأعمال والإبداع والألعاب.',
+    categories: [
+      {
+        name: 'HP Laptops', nameAr: 'لابتوبات إتش بي', kind: 'LAPTOP', icon: 'laptop',
+        products: [
+          laptop({
+            name: 'HP Spectre x360', nameAr: 'إتش بي سبيكتر x360', slug: 'hp-spectre-x360', rating: 4.7, featured: true,
+            specs: { cpu: 'Intel Core Ultra 7', ram: '16GB–32GB', storage: '512GB–2TB', screen: '14" 2.8K OLED Touch', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('HP-SPCX360-16-512', '16GB', '512GB SSD', 1449, 7, true),
+              rv('HP-SPCX360-32-1TB', '32GB', '1TB SSD', 1799, 4),
+            ],
+          }),
+          laptop({
+            name: 'HP Envy 14', nameAr: 'إتش بي إنفي 14', slug: 'hp-envy-14', rating: 4.5,
+            specs: { cpu: 'Intel Core Ultra 5', ram: '16GB', storage: '512GB–1TB', screen: '14" 2.2K Touch', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('HP-ENVY14-16-512', '16GB', '512GB SSD', 999, 10, true),
+              rv('HP-ENVY14-16-1TB', '16GB', '1TB SSD', 1149, 6),
+            ],
+          }),
+          laptop({
+            name: 'HP Pavilion 15', nameAr: 'إتش بي بافيليون 15', slug: 'hp-pavilion-15', rating: 4.3,
+            specs: { cpu: 'Intel Core i5-1335U', ram: '8GB–16GB', storage: '512GB SSD', screen: '15.6" FHD', gpu: 'Intel Iris Xe' },
+            variants: [
+              rv('HP-PAV15-8-512', '8GB', '512GB SSD', 599, 16, true),
+              rv('HP-PAV15-16-512', '16GB', '512GB SSD', 699, 11),
+            ],
+          }),
+          laptop({
+            name: 'HP Omen 16', nameAr: 'إتش بي أومن 16', slug: 'hp-omen-16', rating: 4.6, featured: true,
+            specs: { cpu: 'AMD Ryzen 7 8845HS', ram: '16GB–32GB', storage: '1TB SSD', screen: '16.1" QHD 240Hz', gpu: 'NVIDIA RTX 4070' },
+            variants: [
+              rv('HP-OMEN16-16-1TB', '16GB', '1TB SSD', 1699, 7, true),
+              rv('HP-OMEN16-32-1TB', '32GB', '1TB SSD', 1949, 4),
+            ],
+          }),
+          laptop({
+            name: 'HP EliteBook 840', nameAr: 'إتش بي إليت بوك 840', slug: 'hp-elitebook-840', rating: 4.5,
+            specs: { cpu: 'Intel Core Ultra 7', ram: '16GB–32GB', storage: '512GB–1TB', screen: '14" WUXGA', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('HP-ELITE840-16-512', '16GB', '512GB SSD', 1349, 8, true),
+              rv('HP-ELITE840-32-1TB', '32GB', '1TB SSD', 1649, 4),
+            ],
+          }),
+          laptop({
+            name: 'HP Victus 15', nameAr: 'إتش بي فيكتوس 15', slug: 'hp-victus-15', rating: 4.3,
+            specs: { cpu: 'AMD Ryzen 5 7535HS', ram: '8GB–16GB', storage: '512GB SSD', screen: '15.6" FHD 144Hz', gpu: 'NVIDIA RTX 4050' },
+            variants: [
+              rv('HP-VIC15-8-512', '8GB', '512GB SSD', 799, 13, true),
+              rv('HP-VIC15-16-512', '16GB', '512GB SSD', 899, 8),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ LENOVO ════════════════════════════
+  {
+    name: 'Lenovo', nameAr: 'لينوفو',
+    description: 'Lenovo — لابتوبات ThinkPad وLegion وYoga بأداء احترافي وموثوقية عالية.',
+    categories: [
+      {
+        name: 'Lenovo Laptops', nameAr: 'لابتوبات لينوفو', kind: 'LAPTOP', icon: 'laptop',
+        products: [
+          laptop({
+            name: 'ThinkPad X1 Carbon', nameAr: 'ثينك باد X1 كاربون', slug: 'lenovo-thinkpad-x1-carbon', rating: 4.8, featured: true,
+            specs: { cpu: 'Intel Core Ultra 7', ram: '16GB–32GB', storage: '512GB–1TB', screen: '14" 2.8K OLED', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('LEN-X1C-16-512', '16GB', '512GB SSD', 1599, 7, true),
+              rv('LEN-X1C-32-1TB', '32GB', '1TB SSD', 1999, 4),
+            ],
+          }),
+          laptop({
+            name: 'ThinkPad T14', nameAr: 'ثينك باد T14', slug: 'lenovo-thinkpad-t14', rating: 4.6,
+            specs: { cpu: 'AMD Ryzen 7 PRO 8840U', ram: '16GB–32GB', storage: '512GB SSD', screen: '14" WUXGA', gpu: 'AMD Radeon 780M' },
+            variants: [
+              rv('LEN-T14-16-512', '16GB', '512GB SSD', 1199, 9, true),
+              rv('LEN-T14-32-512', '32GB', '512GB SSD', 1399, 5),
+            ],
+          }),
+          laptop({
+            name: 'Legion Pro 5', nameAr: 'ليجن برو 5', slug: 'lenovo-legion-pro-5', rating: 4.7, featured: true,
+            specs: { cpu: 'AMD Ryzen 7 7745HX', ram: '16GB–32GB', storage: '1TB SSD', screen: '16" WQXGA 240Hz', gpu: 'NVIDIA RTX 4070' },
+            variants: [
+              rv('LEN-LGP5-16-1TB', '16GB', '1TB SSD', 1649, 8, true),
+              rv('LEN-LGP5-32-1TB', '32GB', '1TB SSD', 1899, 4),
+            ],
+          }),
+          laptop({
+            name: 'IdeaPad Slim 5', nameAr: 'آيديا باد سليم 5', slug: 'lenovo-ideapad-slim-5', rating: 4.3,
+            specs: { cpu: 'AMD Ryzen 5 8645HS', ram: '8GB–16GB', storage: '512GB SSD', screen: '14" WUXGA OLED', gpu: 'AMD Radeon 760M' },
+            variants: [
+              rv('LEN-IPS5-8-512', '8GB', '512GB SSD', 649, 15, true),
+              rv('LEN-IPS5-16-512', '16GB', '512GB SSD', 749, 10),
+            ],
+          }),
+          laptop({
+            name: 'Yoga 9i', nameAr: 'يوغا 9i', slug: 'lenovo-yoga-9i', rating: 4.6,
+            specs: { cpu: 'Intel Core Ultra 7', ram: '16GB–32GB', storage: '512GB–1TB', screen: '14" 4K OLED Touch', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('LEN-YOGA9I-16-512', '16GB', '512GB SSD', 1399, 7, true),
+              rv('LEN-YOGA9I-32-1TB', '32GB', '1TB SSD', 1699, 4),
+            ],
+          }),
+          laptop({
+            name: 'Lenovo LOQ 15', nameAr: 'لينوفو LOQ 15', slug: 'lenovo-loq-15', rating: 4.4,
+            specs: { cpu: 'Intel Core i5-12450HX', ram: '8GB–16GB', storage: '512GB–1TB', screen: '15.6" FHD 144Hz', gpu: 'NVIDIA RTX 4050' },
+            variants: [
+              rv('LEN-LOQ15-8-512', '8GB', '512GB SSD', 749, 14, true),
+              rv('LEN-LOQ15-16-1TB', '16GB', '1TB SSD', 949, 8),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ ASUS ════════════════════════════
+  {
+    name: 'Asus', nameAr: 'أسوس',
+    description: 'Asus — لابتوبات ROG للألعاب وZenBook للإنتاجية وProArt للمبدعين.',
+    categories: [
+      {
+        name: 'Asus Laptops', nameAr: 'لابتوبات أسوس', kind: 'LAPTOP', icon: 'laptop',
+        products: [
+          laptop({
+            name: 'ROG Zephyrus G14', nameAr: 'روج زفيروس G14', slug: 'asus-rog-zephyrus-g14', rating: 4.8, featured: true,
+            specs: { cpu: 'AMD Ryzen 9 8945HS', ram: '16GB–32GB', storage: '1TB SSD', screen: '14" 3K OLED 120Hz', gpu: 'NVIDIA RTX 4070' },
+            variants: [
+              rv('ASU-G14-16-1TB', '16GB', '1TB SSD', 1799, 6, true),
+              rv('ASU-G14-32-1TB', '32GB', '1TB SSD', 2099, 3),
+            ],
+          }),
+          laptop({
+            name: 'ROG Strix G16', nameAr: 'روج ستريكس G16', slug: 'asus-rog-strix-g16', rating: 4.6,
+            specs: { cpu: 'Intel Core i9-14900HX', ram: '16GB–32GB', storage: '1TB SSD', screen: '16" QHD+ 240Hz', gpu: 'NVIDIA RTX 4070' },
+            variants: [
+              rv('ASU-STRIX16-16-1TB', '16GB', '1TB SSD', 1899, 7, true),
+              rv('ASU-STRIX16-32-1TB', '32GB', '1TB SSD', 2199, 4),
+            ],
+          }),
+          laptop({
+            name: 'ZenBook 14', nameAr: 'زن بوك 14', slug: 'asus-zenbook-14', rating: 4.6, featured: true,
+            specs: { cpu: 'Intel Core Ultra 7', ram: '16GB–32GB', storage: '512GB–1TB', screen: '14" 3K OLED', gpu: 'Intel Arc Graphics' },
+            variants: [
+              rv('ASU-ZEN14-16-512', '16GB', '512GB SSD', 1099, 10, true),
+              rv('ASU-ZEN14-32-1TB', '32GB', '1TB SSD', 1399, 5),
+            ],
+          }),
+          laptop({
+            name: 'VivoBook 15', nameAr: 'فيفو بوك 15', slug: 'asus-vivobook-15', rating: 4.2,
+            specs: { cpu: 'Intel Core i5-1334U', ram: '8GB–16GB', storage: '512GB SSD', screen: '15.6" FHD', gpu: 'Intel Iris Xe' },
+            variants: [
+              rv('ASU-VIVO15-8-512', '8GB', '512GB SSD', 549, 18, true),
+              rv('ASU-VIVO15-16-512', '16GB', '512GB SSD', 649, 12),
+            ],
+          }),
+          laptop({
+            name: 'TUF Gaming A15', nameAr: 'تاف جيمنج A15', slug: 'asus-tuf-gaming-a15', rating: 4.4,
+            specs: { cpu: 'AMD Ryzen 7 7735HS', ram: '16GB', storage: '512GB–1TB', screen: '15.6" FHD 144Hz', gpu: 'NVIDIA RTX 4060' },
+            variants: [
+              rv('ASU-TUFA15-16-512', '16GB', '512GB SSD', 1099, 11, true),
+              rv('ASU-TUFA15-16-1TB', '16GB', '1TB SSD', 1249, 6),
+            ],
+          }),
+          laptop({
+            name: 'ProArt P16', nameAr: 'برو آرت P16', slug: 'asus-proart-p16', rating: 4.7,
+            specs: { cpu: 'AMD Ryzen AI 9 HX 370', ram: '32GB–64GB', storage: '1TB–2TB', screen: '16" 4K OLED Touch', gpu: 'NVIDIA RTX 4070' },
+            variants: [
+              rv('ASU-PROART16-32-1TB', '32GB', '1TB SSD', 2299, 5, true),
+              rv('ASU-PROART16-64-2TB', '64GB', '2TB SSD', 2899, 2),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ BOSE ════════════════════════════
+  {
+    name: 'Bose', nameAr: 'بوز',
+    description: 'Bose — سماعات QuietComfort الرائدة بإلغاء ضوضاء وصوت فاخر.',
+    categories: [
+      {
+        name: 'Bose Headphones', nameAr: 'سماعات بوز', kind: 'HEADPHONE', icon: 'headphones',
+        products: [
+          headphone({
+            name: 'Bose QuietComfort Ultra', nameAr: 'بوز كوايت كومفورت ألترا', slug: 'bose-quietcomfort-ultra', rating: 4.8, featured: true, comparePrice: 429,
+            specs: { type: 'Over-ear', anc: 'World-class ANC + Immersive Audio', batteryLife: 'Up to 24h', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('BOS-QCU-BLK', 'Black', COLORS.black, 379, 12, true, 429),
+              cv('BOS-QCU-WHT', 'White Smoke', COLORS.white, 379, 7),
+            ],
+          }),
+          headphone({
+            name: 'Bose QuietComfort 45', nameAr: 'بوز كوايت كومفورت 45', slug: 'bose-quietcomfort-45', rating: 4.7,
+            specs: { type: 'Over-ear', anc: 'Active Noise Cancellation', batteryLife: 'Up to 24h', connectivity: 'Bluetooth 5.1' },
+            variants: [
+              cv('BOS-QC45-BLK', 'Black', COLORS.black, 279, 15, true, 329),
+              cv('BOS-QC45-WHT', 'White Smoke', COLORS.white, 279, 9),
+            ],
+          }),
+          headphone({
+            name: 'Bose QC Ultra Earbuds', nameAr: 'بوز كيو سي ألترا إيربودز', slug: 'bose-qc-ultra-earbuds', rating: 4.7, featured: true,
+            specs: { type: 'In-ear', anc: 'World-class ANC + Immersive Audio', batteryLife: 'Up to 24h (with case)', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('BOS-QCUE-BLK', 'Black', COLORS.black, 299, 11, true),
+              cv('BOS-QCUE-WHT', 'White Smoke', COLORS.white, 299, 6),
+            ],
+          }),
+          headphone({
+            name: 'Bose SoundLink Flex', nameAr: 'بوز ساوند لينك فليكس', slug: 'bose-soundlink-flex', rating: 4.6,
+            specs: { type: 'Portable speaker', anc: 'No', batteryLife: 'Up to 12h', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('BOS-SLF-BLK', 'Black', COLORS.black, 149, 18, true),
+              cv('BOS-SLF-BLU', 'Blue', COLORS.blue, 149, 11),
+            ],
+          }),
+          headphone({
+            name: 'Bose 700', nameAr: 'بوز 700', slug: 'bose-700', rating: 4.6,
+            specs: { type: 'Over-ear', anc: 'Active Noise Cancellation (11 levels)', batteryLife: 'Up to 20h', connectivity: 'Bluetooth 5.0' },
+            variants: [
+              cv('BOS-700-BLK', 'Black', COLORS.black, 299, 10, true, 379),
+              cv('BOS-700-SLV', 'Silver', COLORS.silver, 299, 6),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ JBL ════════════════════════════
+  {
+    name: 'JBL', nameAr: 'جي بي إل',
+    description: 'JBL — سماعات بصوت قوي نابض ومكبرات محمولة لكل المناسبات.',
+    categories: [
+      {
+        name: 'JBL Headphones', nameAr: 'سماعات جي بي إل', kind: 'HEADPHONE', icon: 'headphones',
+        products: [
+          headphone({
+            name: 'JBL Tour One M2', nameAr: 'جي بي إل تور وان M2', slug: 'jbl-tour-one-m2', rating: 4.6, featured: true,
+            specs: { type: 'Over-ear', anc: 'True Adaptive ANC', batteryLife: 'Up to 50h', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('JBL-TOUR1M2-BLK', 'Black', COLORS.black, 249, 12, true, 299),
+              cv('JBL-TOUR1M2-CHM', 'Champagne', COLORS.gold, 249, 7),
+            ],
+          }),
+          headphone({
+            name: 'JBL Live 660NC', nameAr: 'جي بي إل لايف 660NC', slug: 'jbl-live-660nc', rating: 4.4,
+            specs: { type: 'Over-ear', anc: 'Adaptive Noise Cancelling', batteryLife: 'Up to 50h', connectivity: 'Bluetooth 5.0' },
+            variants: [
+              cv('JBL-L660NC-BLK', 'Black', COLORS.black, 149, 16, true),
+              cv('JBL-L660NC-BLU', 'Blue', COLORS.blue, 149, 9),
+            ],
+          }),
+          headphone({
+            name: 'JBL Tune 770NC', nameAr: 'جي بي إل تيون 770NC', slug: 'jbl-tune-770nc', rating: 4.5,
+            specs: { type: 'Over-ear', anc: 'Adaptive Noise Cancelling', batteryLife: 'Up to 70h', connectivity: 'Bluetooth 5.3' },
+            variants: [
+              cv('JBL-T770NC-BLK', 'Black', COLORS.black, 99, 22, true, 129),
+              cv('JBL-T770NC-WHT', 'White', COLORS.white, 99, 14),
+            ],
+          }),
+          headphone({
+            name: 'JBL Quantum 910', nameAr: 'جي بي إل كوانتم 910', slug: 'jbl-quantum-910', rating: 4.5,
+            specs: { type: 'Over-ear (gaming)', anc: 'Active Noise Cancelling', batteryLife: 'Up to 39h', connectivity: 'Wireless 2.4GHz + Bluetooth' },
+            variants: [cv('JBL-Q910-BLK', 'Black', COLORS.black, 199, 10, true, 249)],
+          }),
+          headphone({
+            name: 'JBL Charge 5', nameAr: 'جي بي إل تشارج 5', slug: 'jbl-charge-5', rating: 4.7, featured: true,
+            specs: { type: 'Portable speaker', anc: 'No', batteryLife: 'Up to 20h', connectivity: 'Bluetooth 5.1' },
+            variants: [
+              cv('JBL-CHRG5-BLK', 'Black', COLORS.black, 149, 20, true, 179),
+              cv('JBL-CHRG5-BLU', 'Blue', COLORS.blue, 149, 13),
+              cv('JBL-CHRG5-RED', 'Red', COLORS.red, 149, 9),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+
+  // ════════════════════════════ SENNHEISER ════════════════════════════
+  {
+    name: 'Sennheiser', nameAr: 'سينهايزر',
+    description: 'Sennheiser — سماعات بصوت أوديوفايل فاخر ودقة استثنائية.',
+    categories: [
+      {
+        name: 'Sennheiser Headphones', nameAr: 'سماعات سينهايزر', kind: 'HEADPHONE', icon: 'headphones',
+        products: [
+          headphone({
+            name: 'Momentum 4 Wireless', nameAr: 'مومينتم 4 وايرلس', slug: 'sennheiser-momentum-4-wireless', rating: 4.8, featured: true, comparePrice: 379,
+            specs: { type: 'Over-ear', anc: 'Adaptive Noise Cancellation', batteryLife: 'Up to 60h', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SEN-MOM4-BLK', 'Black', COLORS.black, 299, 12, true, 379),
+              cv('SEN-MOM4-WHT', 'White', COLORS.white, 299, 7),
+            ],
+          }),
+          headphone({
+            name: 'Momentum True Wireless 3', nameAr: 'مومينتم ترو وايرلس 3', slug: 'sennheiser-momentum-true-wireless-3', rating: 4.6,
+            specs: { type: 'In-ear', anc: 'Adaptive Noise Cancellation', batteryLife: 'Up to 28h (with case)', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SEN-MTW3-BLK', 'Black', COLORS.black, 199, 13, true, 249),
+              cv('SEN-MTW3-GRA', 'Graphite', COLORS.graphite, 199, 8),
+            ],
+          }),
+          headphone({
+            name: 'Sennheiser HD 660S2', nameAr: 'سينهايزر HD 660S2', slug: 'sennheiser-hd-660s2', rating: 4.8,
+            specs: { type: 'Over-ear (open-back wired)', anc: 'No', batteryLife: 'Wired (no battery)', connectivity: '3.5mm / 6.35mm / 4.4mm balanced' },
+            variants: [cv('SEN-HD660S2-BLK', 'Black', COLORS.black, 499, 6, true)],
+          }),
+          headphone({
+            name: 'Sennheiser Accentum Plus', nameAr: 'سينهايزر أكسنتم بلس', slug: 'sennheiser-accentum-plus', rating: 4.5,
+            specs: { type: 'Over-ear', anc: 'Hybrid Adaptive ANC', batteryLife: 'Up to 50h', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SEN-ACCP-BLK', 'Black', COLORS.black, 229, 11, true),
+              cv('SEN-ACCP-WHT', 'White', COLORS.white, 229, 6),
+            ],
+          }),
+          headphone({
+            name: 'Sennheiser CX Plus', nameAr: 'سينهايزر CX بلس', slug: 'sennheiser-cx-plus', rating: 4.4,
+            specs: { type: 'In-ear', anc: 'Active Noise Cancellation', batteryLife: 'Up to 24h (with case)', connectivity: 'Bluetooth 5.2' },
+            variants: [
+              cv('SEN-CXP-BLK', 'Black', COLORS.black, 129, 17, true, 159),
+              cv('SEN-CXP-WHT', 'White', COLORS.white, 129, 10),
+            ],
+          }),
+        ],
+      },
+    ],
+  },
+];
+
+// ── Review pool (applied to several featured products) ───────────────────────
+const REVIEW_POOL: Array<{ customerName: string; rating: number; comment: string }> = [
+  { customerName: 'أحمد العبيدي', rating: 5, comment: 'منتج أصلي ووصل بسرعة لبغداد. التغليف ممتاز والجهاز يعمل بشكل رائع. أنصح بالشراء من Quvenza.' },
+  { customerName: 'مريم الجبوري', rating: 5, comment: 'تجربة شراء ممتازة، الجهاز أصلي 100% والسعر منافس. شكراً للفريق على المتابعة.' },
+  { customerName: 'علي الكناني', rating: 4, comment: 'الجهاز ممتاز والأداء قوي. التوصيل تأخر يوم واحد بس بشكل عام راضٍ جداً.' },
+  { customerName: 'زينب الموسوي', rating: 5, comment: 'أفضل سعر لقيته في العراق، والجودة عالية. خدمة العملاء محترمة وسريعة بالرد.' },
+  { customerName: 'حسين الدليمي', rating: 5, comment: 'الجهاز فاق توقعاتي، أصلي وبضمان. دفعت كاش عند الاستلام وكلشي تمام.' },
+  { customerName: 'نور الحسيني', rating: 4, comment: 'منتج رائع وجودة عالية. أتمنى لو يتوفر المزيد من الألوان مستقبلاً.' },
+];
+
+// ── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
-  // ── Cleanup (FK order) ───────────────────────────────────────────
-  await prisma.orderStatusHistory.deleteMany();
-  await prisma.orderItem.deleteMany();
-  await prisma.order.deleteMany();
-  await prisma.cartItem.deleteMany();
-  await prisma.cart.deleteMany();
+  console.log('🌱 Seeding Quvenza electronics store…\n');
+
+  // Cleanup (FK-safe order)
   await prisma.review.deleteMany();
+  await prisma.cartItem.deleteMany();
+  await prisma.orderItem.deleteMany();
+  await prisma.orderStatusHistory.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.variant.deleteMany();
   await prisma.product.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.brand.deleteMany();
+  await prisma.address.deleteMany();
+  await prisma.cart.deleteMany();
   await prisma.user.deleteMany();
+  console.log('🧹 Cleared existing data.\n');
 
-  // ── Users ────────────────────────────────────────────────────────
-  const adminPassword    = await bcrypt.hash('Admin@2026!', 12);
-  const customerPassword = await bcrypt.hash('Customer@2026!', 12);
+  // Users
+  const [adminPassword, customerPassword] = await Promise.all([
+    bcrypt.hash('Admin@2026!', 12),
+    bcrypt.hash('Customer@2026!', 12),
+  ]);
 
   const admin = await prisma.user.create({
-    data: { name: 'Ghaith Admin', email: 'admin@quvenzaiq.com', password: adminPassword, role: 'ADMIN' },
+    data: { name: 'Quvenza Admin', email: 'admin@quvenzaiq.com', password: adminPassword, role: 'ADMIN' },
   });
-
   const customer = await prisma.user.create({
-    data: { name: 'عميل تجريبي', email: 'customer@quvenzaiq.com', password: customerPassword, role: 'USER' },
+    data: { name: 'أحمد العراقي', email: 'customer@quvenzaiq.com', password: customerPassword, role: 'USER' },
   });
-
-  console.log(`✅ Users: ${admin.email}, ${customer.email}`);
-
-  // ── Categories ───────────────────────────────────────────────────
-  const [catAI, catDesign, catEdu, catVideo, catEntertainment, catProductivity, catGaming, catCoins] =
-    await Promise.all([
-      prisma.category.create({ data: { name: 'أدوات الذكاء الاصطناعي', slug: 'ai-tools',        isActive: true } }),
-      prisma.category.create({ data: { name: 'التصميم والإبداع',       slug: 'design',           isActive: true } }),
-      prisma.category.create({ data: { name: 'التعليم والشهادات',       slug: 'education',        isActive: true } }),
-      prisma.category.create({ data: { name: 'المونتاج والفيديو',       slug: 'video-editing',    isActive: true } }),
-      prisma.category.create({ data: { name: 'الترفيه والموسيقى',       slug: 'entertainment',    isActive: true } }),
-      prisma.category.create({ data: { name: 'الإنتاجية والعمل',        slug: 'productivity',     isActive: true } }),
-      prisma.category.create({ data: { name: 'حسابات الألعاب',          slug: 'gaming-accounts',  isActive: true } }),
-      prisma.category.create({ data: { name: 'عملات الألعاب',           slug: 'gaming-coins',     isActive: true } }),
-    ]);
-
-  console.log('✅ Categories: 8');
-
-  // ── Products ─────────────────────────────────────────────────────
-  const products = [
-
-    // ════════════════════════════════════════════════════════════════
-    // AI TOOLS
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'ChatGPT Plus — اشتراك شهرين',
-      slug:           'chatgpt-plus-2months',
-      categoryId:     catAI.id,
-      price:          35,
-      comparePrice:   60000,
-      stock:          999,
-      isFeatured:     true,
-      images:         ['https://placehold.co/600x600/ff6a2b/ffffff?text=ChatGPT+Plus'],
-      imageAlts:      ['اشتراك ChatGPT Plus شهرين في العراق — Quvenza'],
-      description:    'اشتراك ChatGPT Plus لمدة شهرين بسعر خاص. وصول كامل لـ GPT-4o و DALL-E 3 وتحليل الملفات.',
-      metaTitle:      'ChatGPT Plus شهرين — اشتراك في العراق | Quvenza',
-      metaDescription:'اشترِ ChatGPT Plus لشهرين بـ 50,000 د.ع في العراق. GPT-4o + DALL-E 3. تفعيل فوري، دفع زين كاش.',
-      metaKeywords:   'ChatGPT Plus العراق,اشتراك ChatGPT عراق,شراء ChatGPT العراق,ChatGPT Plus Iraq,GPT-4o عراق',
-      longDescription: `## اشتراك ChatGPT Plus لشهرين في العراق
-
-**ChatGPT Plus** هو الاشتراك المدفوع من OpenAI الذي يمنحك وصولاً كاملاً وغير محدود لأقوى نماذج الذكاء الاصطناعي في العالم.
-
-### ما الذي تحصل عليه مع ChatGPT Plus؟
-
-- **GPT-4o** — النموذج الأسرع والأذكى من OpenAI، يفهم العربية بشكل ممتاز
-- **DALL-E 3** — أنشئ صوراً احترافية بمجرد وصف ما تريده بالكلمات
-- **Advanced Voice Mode** — تحدث مع ChatGPT كأنك تتحدث مع إنسان حقيقي
-- **تحليل الملفات** — ارفع PDF أو Excel أو صور وحللها مع ChatGPT
-- **البحث على الويب** — ChatGPT يبحث لك في الإنترنت ويعطيك أحدث المعلومات
-- **أولوية الوصول** — لا انقطاعات حتى في أوقات الذروة
-- **GPT Store** — وصول لآلاف النماذج المخصصة من مجتمع OpenAI
-
-### لماذا ChatGPT Plus يستحق الاشتراك من العراق؟
-
-يستخدم ChatGPT Plus ملايين المهنيين حول العالم: مبرمجون، كتّاب، طلاب، أصحاب أعمال. في العراق، يساعدك على كتابة المحتوى بالعربية، ترجمة المستندات، تحليل البيانات، وكتابة الكود البرمجي.
-
-### كيف تصلك الاشتراك؟
-
-بعد إتمام الدفع، يصل الاشتراك إلى بريدك الإلكتروني خلال **30 دقيقة كحد أقصى**. فريقنا يعمل على مدار الساعة لضمان التسليم الفوري.
-
-### طرق الدفع المتاحة في العراق
-
-- **زين كاش** (ZainCash)
-- **آسيا حوالة** (AsiaHawala)
-- **فاست باي** (FastPay)
-- **كاش عند الاستلام** في بغداد`,
-      features: [
-        { title: 'GPT-4o الأذكى', description: 'أقوى نموذج لغوي في العالم — يفهم العربية ويكتب كالمحترفين', icon: '🧠' },
-        { title: 'DALL-E 3 للصور', description: 'أنشئ صوراً احترافية من نص عربي بجودة عالية', icon: '🎨' },
-        { title: 'تحليل الملفات', description: 'ارفع PDF أو Excel وحللهم في ثوانٍ', icon: '📊' },
-        { title: 'بحث على الويب', description: 'أحدث معلومات من الإنترنت مباشرة في المحادثة', icon: '🌐' },
-        { title: 'تفعيل خلال 30 دقيقة', description: 'بريدك الإلكتروني يستقبل الاشتراك فوراً بعد الدفع', icon: '⚡' },
-        { title: 'ضمان كامل', description: 'إذا لم يعمل الاشتراك نعيد لك المبلغ كاملاً', icon: '🛡️' },
-      ],
-      faqs: [
-        { question: 'هل ChatGPT Plus يعمل في العراق؟', answer: 'نعم، اشتراك ChatGPT Plus من Quvenza يعمل بالكامل في العراق من أي جهاز أو متصفح.' },
-        { question: 'كيف يصلني الاشتراك؟', answer: 'بعد الدفع، يصل الاشتراك إلى بريدك الإلكتروني خلال 30 دقيقة كحد أقصى. فريقنا يعمل 24/7.' },
-        { question: 'ما الفرق بين ChatGPT المجاني وPlus؟', answer: 'النسخة المجانية محدودة وتستخدم GPT-3.5. Plus يمنحك GPT-4o + DALL-E 3 + بحث الويب + تحليل الملفات وأولوية الوصول بدون انقطاع.' },
-        { question: 'هل يمكنني الدفع بالدينار العراقي؟', answer: 'نعم، السعر بالدينار العراقي مباشرة. ندفع بزين كاش أو آسيا حوالة أو فاست باي.' },
-        { question: 'هل الاشتراك يُجدَّد تلقائياً؟', answer: 'لا، الاشتراك لفترة محددة (شهرين) وينتهي تلقائياً دون أي خصم إضافي.' },
-      ],
-    },
-
-    {
-      name:           'ChatGPT Plus — اشتراك 4 أشهر',
-      slug:           'chatgpt-plus-4months',
-      categoryId:     catAI.id,
-      price:          65,
-      comparePrice:   80,
-      stock:          999,
-      isFeatured:     true,
-      images:         ['https://placehold.co/600x600/ff6a2b/ffffff?text=ChatGPT+Plus+4M'],
-      imageAlts:      ['اشتراك ChatGPT Plus 4 أشهر في العراق — Quvenza'],
-      description:    'اشتراك ChatGPT Plus لمدة 4 أشهر. الأكثر مبيعاً في Quvenza — وفر أكثر مع فترة أطول.',
-      metaTitle:      'ChatGPT Plus 4 أشهر — الأكثر مبيعاً | Quvenza العراق',
-      metaDescription:'ChatGPT Plus لـ 4 أشهر بـ 95,000 د.ع. وفر 25,000 د.ع مقارنة بالشراء المنفصل. تفعيل فوري بالعراق.',
-      metaKeywords:   'ChatGPT Plus العراق,اشتراك ChatGPT 4 اشهر,ChatGPT بالدينار العراقي,GPT-4o عراق',
-      longDescription: `## ChatGPT Plus لـ 4 أشهر — الأفضل قيمة في العراق
-
-اشتراك **ChatGPT Plus لأربعة أشهر** هو الخيار الأذكى لمن يريد الاستفادة الكاملة من الذكاء الاصطناعي بأفضل سعر في العراق.
-
-### وفر 25,000 دينار عراقي
-
-بدلاً من شراء شهرين بـ 50,000، احصل على 4 أشهر بـ 95,000 فقط — توفير حقيقي على مدار الأشهر.
-
-### مميزات ChatGPT Plus كاملة
-
-- **GPT-4o** بأقصى إمكانياته — بلا قيود على عدد الرسائل
-- **DALL-E 3** — مئات الصور الاحترافية شهرياً
-- **تحليل الكود** — اكتب وراجع وصحح الأكواد البرمجية
-- **Advanced Voice Mode** — محادثات صوتية طبيعية بالعربية
-- **GPTs المخصصة** — وصول لأكثر من مليون نموذج GPT متخصص
-- **ذاكرة المحادثة** — ChatGPT يتذكر معلوماتك وتفضيلاتك
-
-### مثالي لـ
-
-المستقلون، الطلاب الجامعيون، أصحاب المشاريع الصغيرة، المدونون والمحررون العرب، مطوري البرمجيات في العراق.`,
-      features: [
-        { title: 'وفر 25% على السعر', description: '4 أشهر بسعر أقل من شراء شهرين منفصلين', icon: '💰' },
-        { title: 'رسائل غير محدودة', description: 'استخدم GPT-4o بلا قيود طوال 4 أشهر', icon: '♾️' },
-        { title: 'GPTs متخصصة', description: 'وصول لأكثر من مليون نموذج GPT للمهام المختلفة', icon: '🤖' },
-        { title: 'ذاكرة المحادثة', description: 'ChatGPT يتذكر اسمك وعملك وتفضيلاتك', icon: '🧩' },
-        { title: 'دعم العربية الكامل', description: 'GPT-4o يفهم اللهجة العراقية والعربية الفصحى', icon: '🌍' },
-        { title: 'تسليم فوري', description: 'الاشتراك يصل لبريدك خلال 30 دقيقة من الدفع', icon: '⚡' },
-      ],
-      faqs: [
-        { question: 'ما هو الفرق بين اشتراك شهرين و4 أشهر؟', answer: 'اشتراك 4 أشهر يوفر لك 25,000 دينار عراقي مقارنة بشراء شهرين مرتين. المميزات نفسها تماماً.' },
-        { question: 'هل يمكنني تجديد الاشتراك بعد انتهائه؟', answer: 'نعم، يمكنك الشراء مجدداً من Quvenza عند الانتهاء بنفس الطريقة.' },
-        { question: 'هل ChatGPT Plus يعمل على الهاتف؟', answer: 'نعم، يعمل على iOS و Android عبر تطبيق ChatGPT الرسمي أو المتصفح.' },
-        { question: 'كم رسالة يمكنني إرسالها يومياً؟', answer: 'مع ChatGPT Plus لا يوجد حد صارم للرسائل اليومية مع GPT-4o. الاستخدام غير محدود.' },
-      ],
-    },
-
-    {
-      name:           'ChatGPT Plus — اشتراك سنة كاملة',
-      slug:           'chatgpt-plus-1year',
-      categoryId:     catAI.id,
-      price:          160,
-      comparePrice:   200,
-      stock:          999,
-      isFeatured:     true,
-      images:         ['https://placehold.co/600x600/ff6a2b/ffffff?text=ChatGPT+Plus+1Y'],
-      imageAlts:      ['اشتراك ChatGPT Plus سنة كاملة في العراق — Quvenza'],
-      description:    'اشتراك ChatGPT Plus لسنة كاملة. أفضل سعر في العراق — وفر 60,000 دينار عراقي.',
-      metaTitle:      'ChatGPT Plus سنة كاملة — أفضل سعر في العراق',
-      metaDescription:'ChatGPT Plus سنة كاملة بـ 240,000 د.ع فقط. وفر 60,000 د.ع. GPT-4o + DALL-E. تفعيل فوري.',
-      metaKeywords:   'ChatGPT Plus سنة العراق,اشتراك سنوي ChatGPT,ChatGPT Plus Iraq yearly,GPT-4o سنوي',
-      longDescription: `## ChatGPT Plus للسنة الكاملة — أقوى استثمار رقمي في العراق
-
-الاشتراك السنوي في **ChatGPT Plus** هو الخيار الأذكى لكل من يريد الاستفادة من الذكاء الاصطناعي على مدار العام بأفضل سعر ممكن في العراق.
-
-### وفر 60,000 دينار عراقي
-
-السعر الكامل لـ 12 شهراً بشكل منفصل = 300,000 دينار. مع الاشتراك السنوي من Quvenza تدفع 240,000 فقط.
-
-### 365 يوم من قوة الذكاء الاصطناعي
-
-- كتابة المحتوى العربي الاحترافي
-- برمجة وتطوير تطبيقات
-- تحليل البيانات والتقارير
-- إنشاء الصور بـ DALL-E 3
-- الترجمة الدقيقة بين العربية والإنجليزية
-- البحث والتحليل الأكاديمي
-
-### من يستفيد أكثر من الاشتراك السنوي؟
-
-الشركات الصغيرة والمتوسطة، المستقلون (فريلانسرز)، الطلاب الجامعيون، المدونون والمحتوى العربي، والمبرمجون في العراق.`,
-      features: [
-        { title: 'أفضل سعر في العراق', description: 'وفر 60,000 دينار مقارنة بالشراء الشهري', icon: '🏆' },
-        { title: '365 يوم بلا انقطاع', description: 'اشتراك ثابت لسنة كاملة بدون تجديد', icon: '📅' },
-        { title: 'جميع مميزات Plus', description: 'GPT-4o + DALL-E 3 + Voice + File Analysis كاملة', icon: '✨' },
-        { title: 'أولوية قصوى', description: 'لا انتظار حتى في أوقات الذروة العالمية', icon: '🚀' },
-        { title: 'ضمان استرجاع', description: 'ضمان كامل إذا لم يعمل الاشتراك كما وعدنا', icon: '🛡️' },
-        { title: 'تفعيل فوري', description: 'الاشتراك يصل خلال 30 دقيقة في أي وقت', icon: '⚡' },
-      ],
-      faqs: [
-        { question: 'هل الاشتراك السنوي يُجدَّد تلقائياً؟', answer: 'لا، الاشتراك ينتهي بعد سنة كاملة بدون أي خصم إضافي. تتحكم أنت.' },
-        { question: 'ما هي طرق الدفع للاشتراك السنوي؟', answer: 'زين كاش، آسيا حوالة، فاست باي، أو كاش عند الاستلام في بغداد.' },
-        { question: 'هل يشمل الاشتراك o1 و o3؟', answer: 'نعم، ChatGPT Plus يشمل وصول لجميع نماذج OpenAI المتاحة للمشتركين.' },
-        { question: 'هل يمكن استخدامه مع حساب مؤسسي؟', answer: 'هذا اشتراك شخصي. للاستخدام المؤسسي تواصل معنا عبر واتساب.' },
-        { question: 'ماذا لو لم يعمل الاشتراك؟', answer: 'نعيد لك المبلغ كاملاً أو نحل المشكلة خلال ساعة. ضمان كامل.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // DESIGN
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'Canva Pro — اشتراك سنة كاملة',
-      slug:           'canva-pro-1year',
-      categoryId:     catDesign.id,
-      price:          55,
-      comparePrice:   70,
-      stock:          999,
-      isFeatured:     true,
-      images:         ['https://placehold.co/600x600/8b5cf6/ffffff?text=Canva+Pro'],
-      imageAlts:      ['اشتراك Canva Pro سنة كاملة في العراق — Quvenza'],
-      description:    'Canva Pro لسنة كاملة. مليون+ قالب احترافي، Magic AI، Brand Kit، 1TB تخزين سحابي.',
-      metaTitle:      'Canva Pro سنة — اشتراك في العراق | Quvenza',
-      metaDescription:'اشترِ Canva Pro سنة كاملة بـ 85,000 د.ع في العراق. Magic AI + Brand Kit + 1TB. تفعيل فوري.',
-      metaKeywords:   'Canva Pro العراق,اشتراك Canva عراق,Canva Pro Iraq,Magic AI تصميم,Brand Kit عراق',
-      longDescription: `## Canva Pro للسنة الكاملة في العراق
-
-**Canva Pro** هو أقوى منصة تصميم في العالم للمستخدمين الذين لا يمتلكون خبرة احترافية في التصميم. مع Canva Pro، يمكن لأي شخص في العراق إنشاء تصاميم احترافية بدقائق.
-
-### ما الذي يميز Canva Pro؟
-
-- **مليون+ قالب احترافي** — لكل منصة وكل مناسبة
-- **Magic AI Tools** — Magic Design، Magic Write، Magic Eraser، Magic Expand
-- **Brand Kit** — احفظ ألوان وشعار وخطوط علامتك التجارية
-- **1 تيرابايت تخزين سحابي** — لكل ملفاتك وتصاميمك
-- **إزالة الخلفيات** — بنقرة واحدة بدون Photoshop
-- **تصدير بدون علامة مائية** — PDF عالي الجودة، PNG، MP4
-- **تصاميم فيديو** — أنشئ ريلز وتيك توك ويوتيوب احترافياً
-
-### لمن Canva Pro؟
-
-مدراء التسويق، أصحاب المشاريع على الإنستقرام، صانعو المحتوى، المعلمون، الشركات الصغيرة في العراق.`,
-      features: [
-        { title: 'مليون+ قالب', description: 'قوالب لكل منصة: انستقرام، يوتيوب، تيك توك، فيسبوك', icon: '🎨' },
-        { title: 'Magic AI', description: 'أدوات ذكاء اصطناعي: Magic Design و Magic Write و Magic Eraser', icon: '✨' },
-        { title: 'Brand Kit', description: 'احفظ هوية علامتك التجارية واستخدمها في كل التصاميم', icon: '🏷️' },
-        { title: '1TB تخزين سحابي', description: 'مساحة ضخمة لكل ملفاتك وتصاميمك', icon: '☁️' },
-        { title: 'إزالة الخلفيات', description: 'أزل خلفية أي صورة بنقرة واحدة بدون Photoshop', icon: '🖼️' },
-        { title: 'تصدير احترافي', description: 'PDF أو PNG أو MP4 بأعلى جودة بدون علامة مائية', icon: '📤' },
-      ],
-      faqs: [
-        { question: 'هل Canva Pro يدعم اللغة العربية؟', answer: 'نعم، Canva Pro يدعم العربية الكاملة مع RTL (يمين لليسار) وخطوط عربية احترافية.' },
-        { question: 'هل يمكنني استخدام Canva Pro على جهاز إضافي؟', answer: 'نعم، يمكن تسجيل الدخول من أجهزة متعددة بنفس الحساب.' },
-        { question: 'هل الاشتراك على حسابي الشخصي؟', answer: 'نعم، الاشتراك يُفعَّل على حساب Canva الخاص بك مباشرة.' },
-        { question: 'ماذا يحدث عند انتهاء الاشتراك؟', answer: 'تعود للنسخة المجانية وتحتفظ بكل تصاميمك ولكن تفقد مميزات Pro.' },
-      ],
-    },
-
-    {
-      name:           'Adobe Creative Cloud — اشتراك شهر',
-      slug:           'adobe-cc-1month',
-      categoryId:     catDesign.id,
-      price:          30,
-      comparePrice:   40,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/eb0000/ffffff?text=Adobe+CC'],
-      imageAlts:      ['اشتراك Adobe Creative Cloud شهر في العراق — Quvenza'],
-      description:    'Adobe Creative Cloud لشهر كامل. Photoshop + Illustrator + Premiere + 20+ تطبيق احترافي.',
-      metaTitle:      'Adobe Creative Cloud شهر — اشتراك العراق | Quvenza',
-      metaDescription:'اشترِ Adobe Creative Cloud شهر بـ 45,000 د.ع في العراق. Photoshop + Premiere + 20 تطبيق. تفعيل فوري.',
-      metaKeywords:   'Adobe Creative Cloud العراق,Adobe CC Iraq,Photoshop العراق,Premiere عراق,Illustrator',
-      longDescription: `## Adobe Creative Cloud في العراق
-
-**Adobe Creative Cloud** هو الباقة الاحترافية الأشهر في العالم للتصميم والمونتاج والإنتاج الإبداعي.
-
-### التطبيقات المشمولة
-
-- **Photoshop** — تحرير الصور الاحترافي الأول عالمياً
-- **Illustrator** — تصاميم فيكتور وشعارات احترافية
-- **Premiere Pro** — مونتاج الفيديو الاحترافي
-- **After Effects** — مؤثرات بصرية ورسوم متحركة
-- **Lightroom** — تعديل وتنظيم الصور
-- **InDesign** — تخطيط المجلات والكتب
-- **Audition** — تحرير الصوت والبودكاست
-- **+20 تطبيق** آخر في باقة واحدة
-
-### لمن Adobe CC؟
-
-المصممون الاحترافيون، مصوري الأفراح والمناسبات، مديرو الإنتاج الإبداعي، صانعو اليوتيوب الاحترافيون في العراق.`,
-      features: [
-        { title: '20+ تطبيق Adobe', description: 'Photoshop + Illustrator + Premiere + After Effects وأكثر', icon: '🎭' },
-        { title: '100GB تخزين سحابي', description: 'مزامنة ملفاتك بين أجهزتك المختلفة', icon: '☁️' },
-        { title: 'Adobe Fonts', description: 'آلاف الخطوط الاحترافية بدون رسوم إضافية', icon: '✍️' },
-        { title: 'Adobe Stock محدود', description: 'عينات من ملايين الصور الاحترافية', icon: '🖼️' },
-        { title: 'تحديثات فورية', description: 'دائماً آخر إصدار من كل التطبيقات', icon: '🔄' },
-        { title: 'دعم احترافي', description: 'Adobe تقدم دعماً فنياً على مدار الساعة', icon: '🎧' },
-      ],
-      faqs: [
-        { question: 'هل Adobe CC يعمل في العراق؟', answer: 'نعم، اشتراك Adobe CC من Quvenza يعمل بالكامل في العراق على Windows وMac.' },
-        { question: 'كم جهاز يمكن تفعيله؟', answer: 'يمكن تفعيل Adobe CC على جهازين في نفس الوقت.' },
-        { question: 'هل يشمل اشتراك شهر واحد كل التطبيقات؟', answer: 'نعم، باقة All Apps تشمل كل تطبيقات Adobe Creative Cloud الـ 20+.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // EDUCATION
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'Coursera Plus — اشتراك سنة كاملة',
-      slug:           'coursera-plus-1year',
-      categoryId:     catEdu.id,
-      price:          100,
-      comparePrice:   130,
-      stock:          999,
-      isFeatured:     true,
-      images:         ['https://placehold.co/600x600/0056d2/ffffff?text=Coursera+Plus'],
-      imageAlts:      ['اشتراك Coursera Plus سنة في العراق — Quvenza'],
-      description:    'Coursera Plus لسنة كاملة. 7000+ كورس وشهادة من Yale وStanford وGoogle وMeta وIBM.',
-      metaTitle:      'Coursera Plus سنة — كورسات جامعية في العراق',
-      metaDescription:'Coursera Plus سنة كاملة بـ 150,000 د.ع. 7000+ كورس من Yale وStanford وGoogle. شهادات معتمدة.',
-      metaKeywords:   'Coursera Plus العراق,كورسات جامعية عراق,Coursera Iraq,شهادات Google IBM,تعلم اونلاين عراق',
-      longDescription: `## Coursera Plus في العراق — بوابتك لجامعات العالم
-
-**Coursera Plus** هو الاشتراك الأشمل لمنصة Coursera الذي يمنحك وصولاً غير محدود لأكثر من **7,000 كورس وشهادة مهنية** من أفضل الجامعات والشركات في العالم.
-
-### الجامعات والمؤسسات المشمولة
-
-- **Yale University** — علم النفس، القيادة، البيانات
-- **Stanford University** — الذكاء الاصطناعي، Machine Learning
-- **Imperial College London** — الهندسة والتكنولوجيا
-- **University of Michigan** — علوم الحاسوب
-- **Google** — Professional Certificates: Data Analytics, IT Support, UX Design
-- **Meta (Facebook)** — Front-End و Back-End Development
-- **IBM** — Data Science, AI Engineering, Cybersecurity
-- **DeepLearning.AI** — Deep Learning Specialization
-
-### ما الذي يميز Coursera Plus عن الكورسات المنفردة؟
-
-مع Coursera Plus تحصل على وصول **غير محدود** لكل هذه الكورسات بسعر ثابت بدلاً من دفع كل كورس بشكل منفصل (بعض الكورسات تكلف 300-500 دولار منفردة).
-
-### الشهادات المهنية المطلوبة في سوق العمل
-
-- Google Data Analytics Certificate
-- IBM Data Science Professional Certificate
-- Meta Social Media Marketing Certificate
-- Google Project Management Certificate
-- IBM AI Engineering Professional Certificate`,
-      features: [
-        { title: '7000+ كورس', description: 'وصول غير محدود لكل مكتبة Coursera', icon: '📚' },
-        { title: 'جامعات عالمية', description: 'Yale, Stanford, Imperial College, Michigan وغيرها', icon: '🎓' },
-        { title: 'شهادات Google وIBM', description: 'Professional Certificates معترف بها عالمياً', icon: '📜' },
-        { title: 'تعلم بدوامك', description: 'تعلم بالسرعة التي تناسبك — لا مواعيد ثابتة', icon: '⏰' },
-        { title: 'مشاريع عملية', description: 'كل كورس يشمل تطبيقات حقيقية وليس نظرية فقط', icon: '💼' },
-        { title: 'شهادة رقمية', description: 'شارة LinkedIn قابلة للإضافة لملفك الشخصي', icon: '🏅' },
-      ],
-      faqs: [
-        { question: 'هل Coursera Plus يعمل في العراق؟', answer: 'نعم، بعد التفعيل يمكنك الوصول لكل الكورسات من العراق بدون قيود.' },
-        { question: 'هل الشهادات معترف بها؟', answer: 'نعم، شهادات Coursera من Google وIBM وStanford معترف بها دولياً في سوق العمل.' },
-        { question: 'هل الكورسات بالعربية؟', answer: 'بعض الكورسات لديها ترجمة عربية، لكن معظمها بالإنجليزية مع ترجمات مكتوبة.' },
-        { question: 'كم كورس يمكنني إتمامه في السنة؟', answer: 'لا يوجد حد — يمكنك إتمام عشرات الكورسات طوال السنة.' },
-        { question: 'هل الكورسات محفوظة لي؟', answer: 'نعم، تقدمك في الكورسات محفوظ حتى بعد انتهاء الاشتراك.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // VIDEO EDITING
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'CapCut Pro — اشتراك شهر',
-      slug:           'capcut-pro-1month',
-      categoryId:     catVideo.id,
-      price:          8,
-      comparePrice:   12,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/000000/ffffff?text=CapCut+Pro'],
-      imageAlts:      ['اشتراك CapCut Pro شهر في العراق — Quvenza'],
-      description:    'CapCut Pro لشهر واحد. أزل العلامة المائية، فلاتر حصرية، تصدير 4K. مثالي لتيك توك.',
-      metaTitle:      'CapCut Pro شهر — بدون علامة مائية | العراق',
-      metaDescription:'CapCut Pro شهر بـ 12,000 د.ع. أزل العلامة المائية + تصدير 4K + AI أدوات. تفعيل فوري.',
-      metaKeywords:   'CapCut Pro العراق,CapCut بدون علامة مائية,CapCut Pro Iraq,مونتاج تيك توك عراق',
-      longDescription: `## CapCut Pro في العراق — مونتاج احترافي من هاتفك
-
-**CapCut Pro** هو النسخة المدفوعة من تطبيق CapCut الشهير، ويمنحك قدرات مونتاج احترافية من هاتفك مباشرة.
-
-### لماذا CapCut Pro؟
-
-- **إزالة العلامة المائية** — نشر محتوى نظيف بدون شعار CapCut
-- **تصدير 4K** — جودة سينمائية لكل فيديوهاتك
-- **فلاتر وتأثيرات حصرية** — تميز عن منافسيك
-- **AI Auto Captions** — ترجمة وترتيب تلقائي للكلام
-- **AI Background Remover** — أزل الخلفية من الفيديو بلمسة
-- **Speed Ramping** — تأثيرات الحركة الاحترافية
-
-### مثالي لصناع المحتوى العراقيين
-
-إذا كنت تصنع محتوى لـ TikTok أو Instagram Reels أو YouTube Shorts، CapCut Pro هو أداتك الأفضل.`,
-      features: [
-        { title: 'بدون علامة مائية', description: 'انشر فيديوهات نظيفة بدون شعار CapCut', icon: '🚫' },
-        { title: 'تصدير 4K', description: 'جودة سينمائية لكل فيديوهاتك', icon: '🎬' },
-        { title: 'AI Auto Captions', description: 'ترجمة تلقائية للكلام بالعربية والإنجليزية', icon: '🤖' },
-        { title: 'فلاتر حصرية', description: 'فلاتر وتأثيرات غير متاحة في النسخة المجانية', icon: '✨' },
-        { title: 'إزالة خلفية الفيديو', description: 'أزل خلفية الفيديو بنقرة واحدة بالذكاء الاصطناعي', icon: '🎭' },
-        { title: 'تطبيق خفيف', description: 'يعمل على معظم هواتف الأندرويد والآيفون', icon: '📱' },
-      ],
-      faqs: [
-        { question: 'هل CapCut Pro يعمل في العراق؟', answer: 'نعم، يعمل بالكامل على الأندرويد والآيفون في العراق بعد التفعيل.' },
-        { question: 'هل يمكنني استخدامه على أكثر من جهاز؟', answer: 'الاشتراك مرتبط بحساب TikTok/CapCut الخاص بك ويعمل على كل أجهزتك.' },
-        { question: 'ما الفرق بين المجاني وPro؟', answer: 'Pro يزيل العلامة المائية، يفتح 4K، الفلاتر الحصرية، وأدوات AI المتقدمة.' },
-      ],
-    },
-
-    {
-      name:           'CapCut Pro — اشتراك سنة كاملة',
-      slug:           'capcut-pro-1year',
-      categoryId:     catVideo.id,
-      price:          55,
-      comparePrice:   80,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/000000/ffffff?text=CapCut+Pro+1Y'],
-      imageAlts:      ['اشتراك CapCut Pro سنة في العراق — Quvenza'],
-      description:    'CapCut Pro لسنة كاملة بأفضل سعر. وفر 59,000 دينار مقارنة بالشراء الشهري.',
-      metaTitle:      'CapCut Pro سنة كاملة — أفضل سعر في العراق',
-      metaDescription:'CapCut Pro سنة كاملة بـ 85,000 د.ع. وفر 59,000 د.ع. مونتاج 4K + AI. تسليم فوري في العراق.',
-      metaKeywords:   'CapCut Pro سنوي العراق,CapCut سنة,CapCut Pro Iraq yearly,مونتاج احترافي عراق',
-      longDescription: `## CapCut Pro للسنة الكاملة — قيمة لا تُقاوم
-
-اشتراك **CapCut Pro السنوي** هو الخيار المثالي لصانعي المحتوى الجادين في العراق الذين ينشرون محتوى بانتظام على تيك توك ويوتيوب وانستقرام.
-
-### وفر 59,000 دينار عراقي
-
-12 شهر بالشراء الشهري = 144,000 دينار. مع الاشتراك السنوي تدفع 85,000 فقط.
-
-### كل مميزات CapCut Pro لسنة كاملة
-
-بدون علامة مائية، 4K، AI Caption، إزالة الخلفية، Speed Ramping، وكل التحديثات الجديدة طوال السنة.`,
-      features: [
-        { title: 'وفر 59,000 دينار', description: 'اشتراك سنوي بدل 12 شهر منفصلة', icon: '💰' },
-        { title: '365 يوم بلا توقف', description: 'احصل على Pro لسنة كاملة بدون تجديد', icon: '📅' },
-        { title: 'كل مميزات Pro', description: '4K + AI + فلاتر حصرية + بدون علامة مائية', icon: '⭐' },
-        { title: 'تحديثات مجانية', description: 'كل ميزة جديدة تصلك تلقائياً طوال السنة', icon: '🔄' },
-        { title: 'مناسب للمؤثرين', description: 'مثالي لصانعي المحتوى الذين ينشرون يومياً', icon: '📸' },
-        { title: 'تفعيل فوري', description: 'تفعيل على حسابك خلال 30 دقيقة', icon: '⚡' },
-      ],
-      faqs: [
-        { question: 'كيف يتم تفعيل الاشتراك السنوي؟', answer: 'نرسل لك رابط التفعيل أو بيانات الحساب على بريدك الإلكتروني خلال 30 دقيقة.' },
-        { question: 'هل يشمل كل التحديثات المستقبلية؟', answer: 'نعم، كل تحديثات CapCut Pro خلال السنة تصلك تلقائياً.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // ENTERTAINMENT
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'Spotify Premium — اشتراك سنة كاملة',
-      slug:           'spotify-premium-1year',
-      categoryId:     catEntertainment.id,
-      price:          40,
-      comparePrice:   55,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/1db954/ffffff?text=Spotify+Premium'],
-      imageAlts:      ['اشتراك Spotify Premium سنة في العراق — Quvenza'],
-      description:    'Spotify Premium سنة كاملة. موسيقى بلا إعلانات، تحميل للاستماع بدون إنترنت، جودة عالية.',
-      metaTitle:      'Spotify Premium سنة — استمع بدون إعلانات | العراق',
-      metaDescription:'Spotify Premium سنة كاملة بـ 60,000 د.ع في العراق. بلا إعلانات + تحميل + جودة عالية. تفعيل فوري.',
-      metaKeywords:   'Spotify Premium العراق,Spotify Iraq,اشتراك سبوتيفاي عراق,موسيقى بدون اعلانات',
-      longDescription: `## Spotify Premium في العراق — موسيقى بلا حدود
-
-**Spotify Premium** يمنحك تجربة موسيقية لا مثيل لها: 100 مليون أغنية و5 مليون بودكاست بدون إعلانات.
-
-### مميزات Spotify Premium
-
-- **بدون إعلانات** — استمع بدون مقاطعة
-- **تحميل للاستماع أوفلاين** — استمع بدون إنترنت
-- **جودة صوت عالية** — 320kbps على الأقل
-- **تخطي لا محدود** — تخط أي أغنية بلا قيود
-- **Spotify DJ** — DJ افتراضي بالذكاء الاصطناعي
-- **Blending** — امزج قوائم تشغيل مع أصدقائك`,
-      features: [
-        { title: 'بدون إعلانات', description: 'استمع لساعات بلا انقطاع', icon: '🚫' },
-        { title: 'تحميل أوفلاين', description: 'استمع بدون إنترنت في أي مكان', icon: '⬇️' },
-        { title: 'جودة 320kbps', description: 'أفضل جودة صوت ممكنة في Spotify', icon: '🎵' },
-        { title: '100M+ أغنية', description: 'مكتبة ضخمة بكل الأنواع والفنانين', icon: '🎸' },
-        { title: 'Spotify DJ', description: 'DJ ذكاء اصطناعي يختار لك موسيقى تناسب مزاجك', icon: '🤖' },
-        { title: 'iOS وAndroid', description: 'يعمل على كل الأجهزة وأجهزة الكمبيوتر', icon: '📱' },
-      ],
-      faqs: [
-        { question: 'هل Spotify يعمل في العراق؟', answer: 'نعم، اشتراك Spotify Premium من Quvenza يعمل بالكامل في العراق.' },
-        { question: 'كيف يتم التفعيل؟', answer: 'نفعّل الاشتراك على حسابك الشخصي أو نوفر لك حساباً جاهزاً.' },
-        { question: 'كم جهاز يمكن الاستماع منه؟', answer: 'يمكن تشغيل الموسيقى على جهاز واحد في الوقت نفسه مع إمكانية الاستماع من أجهزة متعددة.' },
-      ],
-    },
-
-    {
-      name:           'YouTube Premium — اشتراك سنة كاملة',
-      slug:           'youtube-premium-1year',
-      categoryId:     catEntertainment.id,
-      price:          36,
-      comparePrice:   50,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/ff0000/ffffff?text=YouTube+Premium'],
-      imageAlts:      ['اشتراك YouTube Premium سنة في العراق — Quvenza'],
-      description:    'YouTube Premium سنة كاملة. بدون إعلانات، تشغيل خلفية، YouTube Music، تحميل فيديو.',
-      metaTitle:      'YouTube Premium سنة — بدون إعلانات | العراق',
-      metaDescription:'YouTube Premium سنة بـ 55,000 د.ع في العراق. بلا إعلانات + خلفية + YouTube Music. تفعيل فوري.',
-      metaKeywords:   'YouTube Premium العراق,يوتيوب بريميوم عراق,YouTube Premium Iraq,يوتيوب بدون اعلانات',
-      longDescription: `## YouTube Premium في العراق — يوتيوب بلا إعلانات للأبد
-
-**YouTube Premium** يحول تجربة يوتيوب كاملاً — بدون إعلانات مزعجة ومع مميزات لا تجدها في النسخة المجانية.
-
-### مميزات YouTube Premium
-
-- **صفر إعلانات** — على كل الفيديوهات بدون استثناء
-- **التشغيل في الخلفية** — استمع لليوتيوب وهاتفك مقفل
-- **YouTube Music Premium** — مشمول مجاناً بنفس الاشتراك
-- **تحميل الفيديوهات** — للمشاهدة بدون إنترنت
-- **YouTube Originals** — محتوى حصري من يوتيوب
-- **جودة 4K بدون قيود** — في كل الفيديوهات`,
-      features: [
-        { title: 'صفر إعلانات', description: 'استمتع بكل فيديو بدون أي إعلان', icon: '🚫' },
-        { title: 'تشغيل خلفية', description: 'استمع لليوتيوب وهاتفك مقفل', icon: '🔒' },
-        { title: 'YouTube Music', description: 'مشمول مجاناً — بديل Spotify القوي', icon: '🎵' },
-        { title: 'تحميل الفيديو', description: 'احفظ فيديوهاتك المفضلة للمشاهدة أوفلاين', icon: '⬇️' },
-        { title: 'جودة 4K', description: 'مشاهدة بأعلى جودة بدون قيود', icon: '📺' },
-        { title: 'الأجهزة المتعددة', description: 'على كل أجهزتك — هاتف وتلفزيون وكمبيوتر', icon: '📱' },
-      ],
-      faqs: [
-        { question: 'هل YouTube Premium يشمل YouTube Music؟', answer: 'نعم، YouTube Premium يشمل YouTube Music Premium تلقائياً بدون رسوم إضافية.' },
-        { question: 'هل يعمل على التلفزيون الذكي؟', answer: 'نعم، يعمل على Smart TV عبر تطبيق YouTube وعلى كل الأجهزة الأخرى.' },
-        { question: 'هل يمكن مشاركته مع العائلة؟', answer: 'الاشتراك الفردي لشخص واحد. تواصل معنا لمعرفة خيارات العائلة.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // PRODUCTIVITY
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'Notion Plus + AI — اشتراك سنة',
-      slug:           'notion-plus-ai-1year',
-      categoryId:     catProductivity.id,
-      price:          45,
-      comparePrice:   60,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/000000/ffffff?text=Notion+Plus+AI'],
-      imageAlts:      ['اشتراك Notion Plus AI سنة في العراق — Quvenza'],
-      description:    'Notion Plus مع AI لسنة كاملة. مساحة غير محدودة + Notion AI لكتابة المحتوى وتلخيص الملفات.',
-      metaTitle:      'Notion Plus AI سنة — إنتاجية ذكية | العراق',
-      metaDescription:'Notion Plus + AI سنة بـ 70,000 د.ع في العراق. مساحة غير محدودة + Notion AI. تفعيل فوري.',
-      metaKeywords:   'Notion Plus العراق,Notion AI عراق,Notion Iraq,تنظيم العمل AI,إنتاجية عراق',
-      longDescription: `## Notion Plus + AI في العراق — أذكى مساحة عمل
-
-**Notion Plus** مع قدرات **Notion AI** هو أفضل أداة لتنظيم حياتك المهنية والشخصية في مكان واحد.
-
-### ما الذي يمنحك إياه Notion Plus + AI؟
-
-- **مساحة عمل غير محدودة** — صفحات وقواعد بيانات بلا حد
-- **Notion AI** — اكتب محتوى، لخص ملفات، ترجم، اشرح بالذكاء الاصطناعي
-- **Synced Databases** — قواعد بيانات متزامنة بين المشاريع
-- **Templates Library** — آلاف القوالب الجاهزة
-- **API Access** — اربط Notion مع أدواتك الأخرى
-- **Guest Collaboration** — شارك مع 100 ضيف
-
-### أمثلة على استخدام Notion AI
-
-- اكتب مقال بالعربية في 30 ثانية
-- لخص اجتماعاً بالكامل بنقرة
-- حول قائمة نقاط إلى نص متكامل
-- ترجم محتوى بين العربية والإنجليزية`,
-      features: [
-        { title: 'Notion AI', description: 'اكتب ولخص وترجم باستخدام الذكاء الاصطناعي', icon: '🤖' },
-        { title: 'مساحة غير محدودة', description: 'صفحات وقواعد بيانات بلا حد للمشتركين', icon: '♾️' },
-        { title: 'تعاون الفريق', description: 'شارك مع 100 ضيف في نفس مساحة العمل', icon: '👥' },
-        { title: 'API كامل', description: 'اربط Notion مع Zapier وMake والأدوات الأخرى', icon: '🔗' },
-        { title: 'iOS وAndroid وWeb', description: 'وصول كامل من كل جهاز', icon: '📱' },
-        { title: 'آلاف القوالب', description: 'قوالب جاهزة للمشاريع والعادات والدراسة', icon: '📋' },
-      ],
-      faqs: [
-        { question: 'هل Notion AI يدعم العربية؟', answer: 'نعم، Notion AI يفهم ويكتب ويترجم بالعربية بشكل ممتاز.' },
-        { question: 'هل يمكن استخدام Notion مع الفريق؟', answer: 'نعم، Plus يسمح بمشاركة مساحة العمل مع حتى 100 ضيف.' },
-        { question: 'هل البيانات محمية وخاصة؟', answer: 'نعم، Notion تستخدم تشفيراً كاملاً لحماية بياناتك.' },
-      ],
-    },
-
-    {
-      name:           'LinkedIn Premium — اشتراك شهرين',
-      slug:           'linkedin-premium-2months',
-      categoryId:     catProductivity.id,
-      price:          52,
-      comparePrice:   65,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/0077b5/ffffff?text=LinkedIn+Premium'],
-      imageAlts:      ['اشتراك LinkedIn Premium شهرين في العراق — Quvenza'],
-      description:    'LinkedIn Premium Career لشهرين. InMail، رؤية من شاهد ملفك، كورسات LinkedIn Learning مجانية.',
-      metaTitle:      'LinkedIn Premium شهرين — اشتراك في العراق',
-      metaDescription:'LinkedIn Premium شهرين بـ 80,000 د.ع في العراق. InMail + رؤية الزوار + LinkedIn Learning. تفعيل فوري.',
-      metaKeywords:   'LinkedIn Premium العراق,لينكدان بريميوم عراق,LinkedIn Iraq,InMail عراق,وظائف عراق',
-      longDescription: `## LinkedIn Premium في العراق — ميزتك في سوق العمل
-
-**LinkedIn Premium Career** يمنحك أدوات لا تقدر بثمن لإيجاد وظيفة أحلامك أو تطوير شبكة علاقاتك المهنية.
-
-### مميزات LinkedIn Premium Career
-
-- **InMail Credits** — تواصل مع أي شخص بدون الانتظار
-- **من شاهد ملفك؟** — رؤية كل من زار ملفك في آخر 90 يوم
-- **AI Resume Assistant** — تحسين سيرتك الذاتية بالذكاء الاصطناعي
-- **LinkedIn Learning** — 16,000+ كورس مجاني مشمول
-- **Job Insights** — معلومات مخفية عن فرص العمل
-- **Open Profile** — يمكن لأي شخص التواصل معك`,
-      features: [
-        { title: 'InMail Credits', description: 'تواصل مع أي مسؤول توظيف أو قائد في العالم', icon: '✉️' },
-        { title: 'من زار ملفك', description: 'رؤية اسم كل شخص زار ملفك في 90 يوم', icon: '👁️' },
-        { title: 'AI Resume', description: 'تحسين سيرتك الذاتية بالذكاء الاصطناعي', icon: '📄' },
-        { title: 'LinkedIn Learning', description: '16,000+ كورس في التقنية والأعمال والإبداع', icon: '📚' },
-        { title: 'Job Insights', description: 'ارتبك بالنسبة للمتقدمين الآخرين ونصائح للنجاح', icon: '💼' },
-        { title: 'Open Profile', description: 'يسمح لكل الناس بالتواصل معك بدون InMail', icon: '🌐' },
-      ],
-      faqs: [
-        { question: 'ما الفرق بين LinkedIn Premium Career وBusiness؟', answer: 'Career مخصص للباحثين عن عمل. Business مخصص لأصحاب الأعمال. نوفر Career هنا.' },
-        { question: 'كم InMail Credits تحصل عليها؟', answer: 'مع Premium Career تحصل على 5 InMail Credits شهرياً.' },
-        { question: 'هل LinkedIn Learning مشمول كاملاً؟', answer: 'نعم، تحصل على وصول كامل لمكتبة LinkedIn Learning التي تحتوي 16,000+ كورس.' },
-      ],
-    },
-
-    {
-      name:           'Grammarly Premium — اشتراك سنة',
-      slug:           'grammarly-premium-1year',
-      categoryId:     catProductivity.id,
-      price:          42,
-      comparePrice:   55,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/15c39a/ffffff?text=Grammarly+Premium'],
-      imageAlts:      ['اشتراك Grammarly Premium سنة في العراق — Quvenza'],
-      description:    'Grammarly Premium سنة كاملة. تصحيح القواعد، الأسلوب، وضوح الكتابة بالذكاء الاصطناعي للإنجليزية.',
-      metaTitle:      'Grammarly Premium سنة — كتابة إنجليزية مثالية | العراق',
-      metaDescription:'Grammarly Premium سنة بـ 65,000 د.ع في العراق. AI كتابة إنجليزية + تصحيح كامل. تفعيل فوري.',
-      metaKeywords:   'Grammarly Premium العراق,Grammarly Iraq,تصحيح الإنجليزية عراق,AI كتابة عراق',
-      longDescription: `## Grammarly Premium في العراق — لا أخطاء إنجليزية بعد الآن
-
-**Grammarly Premium** هو المساعد الذكي الذي يجعل كتابتك بالإنجليزية احترافية ومتقنة في كل الأوقات.
-
-### ما يميز Grammarly Premium؟
-
-- **تصحيح القواعد المتقدم** — يفهم السياق ويصحح المعنى لا الحروف فقط
-- **تحسين الوضوح والأسلوب** — تحويل الجمل المعقدة لأسلوب بسيط ومؤثر
-- **Grammarly AI** — اكتب جمل كاملة أو أعد صياغة فقرات
-- **كشف الانتحال** — تحقق من أصالة النصوص
-- **tone detection** — تعرف على النبرة المناسبة للرسالة
-- **يعمل في كل مكان** — Chrome, Gmail, Word, Google Docs
-
-### مثالي للعراقيين الذين يكتبون بالإنجليزية
-
-طلاب الجامعات، المقدمون للوظائف الأجنبية، المطورون البرمجيون، كتّاب المحتوى الإنجليزي.`,
-      features: [
-        { title: 'تصحيح متقدم', description: 'يصحح القواعد والأسلوب والوضوح بفهم السياق', icon: '✅' },
-        { title: 'Grammarly AI', description: 'اكتب وأعد الصياغة باستخدام الذكاء الاصطناعي', icon: '🤖' },
-        { title: 'كشف الانتحال', description: 'تحقق من أصالة النصوص وتجنب الانتحال', icon: '🔍' },
-        { title: 'كل الأجهزة', description: 'Chrome + Word + Gmail + Google Docs + Mobile', icon: '💻' },
-        { title: 'اقتراحات الأسلوب', description: 'تحسين النبرة والوضوح حسب الجمهور المستهدف', icon: '🎯' },
-        { title: 'تحليل الكتابة', description: 'تقرير أسبوعي عن تقدمك في الكتابة', icon: '📊' },
-      ],
-      faqs: [
-        { question: 'هل Grammarly يعمل مع العربية؟', answer: 'Grammarly متخصص للإنجليزية فقط حالياً. لا يدعم العربية.' },
-        { question: 'هل يعمل مع Word وGmail؟', answer: 'نعم، يعمل كامتداد Chrome وتطبيق Windows/Mac مع كل برامج الكتابة.' },
-        { question: 'هل كشف الانتحال مشمول؟', answer: 'نعم، Grammarly Premium يشمل فحص الانتحال بشكل كامل.' },
-      ],
-    },
-
-    {
-      name:           'Microsoft 365 Personal — اشتراك سنة',
-      slug:           'microsoft-365-personal-1year',
-      categoryId:     catProductivity.id,
-      price:          58,
-      comparePrice:   75,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/d83b01/ffffff?text=Microsoft+365'],
-      imageAlts:      ['اشتراك Microsoft 365 Personal سنة في العراق — Quvenza'],
-      description:    'Microsoft 365 Personal سنة كاملة. Word + Excel + PowerPoint + Outlook + 1TB OneDrive.',
-      metaTitle:      'Microsoft 365 Personal سنة — Office كامل | العراق',
-      metaDescription:'Microsoft 365 سنة بـ 90,000 د.ع في العراق. Word+Excel+PowerPoint+1TB OneDrive. تفعيل فوري.',
-      metaKeywords:   'Microsoft 365 العراق,Office 365 عراق,Word Excel PowerPoint,Microsoft Iraq,OneDrive عراق',
-      longDescription: `## Microsoft 365 Personal في العراق — Office الكامل لسنة
-
-**Microsoft 365 Personal** يمنحك النسخة الكاملة والمحدّثة من Office على كل أجهزتك مع مساحة OneDrive ضخمة.
-
-### ما يشمله Microsoft 365 Personal
-
-- **Word** — معالجة النصوص الأفضل في العالم
-- **Excel** — جداول وتحليل بيانات احترافي
-- **PowerPoint** — عروض تقديمية مؤثرة
-- **Outlook** — إدارة البريد الإلكتروني
-- **OneNote** — ملاحظات ذكية متزامنة
-- **Teams** — اجتماعات واتصالات
-- **1 تيرابايت OneDrive** — تخزين سحابي آمن
-- **Copilot AI** — الذكاء الاصطناعي المدمج في Office
-
-### لماذا Microsoft 365 أفضل من Office المشترى مرة واحدة؟
-
-التحديثات المستمرة، OneDrive 1TB، الوصول من كل الأجهزة، وMicrosoft Copilot AI المدمج.`,
-      features: [
-        { title: 'Office الكامل', description: 'Word + Excel + PowerPoint + Outlook + OneNote + Teams', icon: '💼' },
-        { title: '1TB OneDrive', description: 'تخزين سحابي آمن ومزامنة تلقائية', icon: '☁️' },
-        { title: 'Copilot AI', description: 'ذكاء اصطناعي مدمج في كل تطبيقات Office', icon: '🤖' },
-        { title: '5 أجهزة', description: 'فعّل على PC وMac وiOS وAndroid في وقت واحد', icon: '📱' },
-        { title: 'تحديثات مجانية', description: 'دائماً آخر إصدار بدون رسوم إضافية', icon: '🔄' },
-        { title: 'دعم عربي كامل', description: 'Word وExcel يدعمان RTL والعربية الكاملة', icon: '🌍' },
-      ],
-      faqs: [
-        { question: 'هل Microsoft 365 يعمل في العراق؟', answer: 'نعم، يعمل بالكامل في العراق على Windows وMac وiOS وAndroid.' },
-        { question: 'ما الفرق بين Microsoft 365 وOffice 2024 الدائم؟', answer: '365 يتضمن تحديثات مستمرة + OneDrive 1TB + Copilot AI. Office الدائم لا تحديثات بعد الشراء.' },
-        { question: 'هل يمكن تفعيله على MacBook؟', answer: 'نعم، Microsoft 365 يدعم Mac بالكامل مع تطبيقات مخصصة لـ macOS.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // GAMING ACCOUNTS
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'حساب Steam — باقة مبتدئ',
-      slug:           'steam-starter',
-      categoryId:     catGaming.id,
-      price:          22,
-      comparePrice:   32,
-      stock:          50,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/1b2838/ffffff?text=Steam+Starter'],
-      imageAlts:      ['حساب Steam مبتدئ في العراق — Quvenza'],
-      description:    'حساب Steam جاهز بـ 10 ألعاب شائعة. مثالي للمبتدئين في عالم الألعاب PC بالعراق.',
-      metaTitle:      'حساب Steam مبتدئ — 10 ألعاب PC | العراق',
-      metaDescription:'حساب Steam مبتدئ بـ 35,000 د.ع. 10 ألعاب شائعة جاهزة للتشغيل. تسليم فوري في العراق.',
-      metaKeywords:   'حساب Steam العراق,Steam Iraq,شراء حساب Steam,ألعاب PC العراق,Steam مبتدئ',
-      longDescription: `## حساب Steam مبتدئ في العراق
-
-احصل على حساب **Steam** جاهز مع 10 ألعاب شائعة جاهزة للتشغيل فوراً.
-
-### ما يشمله الحساب
-
-- 10 ألعاب PC شائعة مثبتة مسبقاً
-- حساب Steam بمستوى لائق
-- بريد إلكتروني مرتبط يُسلَّم مع الحساب
-- ضمان عمل الحساب لمدة 30 يوماً
-
-### ملاحظة هامة
-
-هذا حساب جاهز وليس اشتراكاً. تحصل على بيانات دخول كاملة.`,
-      features: [
-        { title: '10 ألعاب شائعة', description: 'ألعاب PC شهيرة جاهزة للتحميل والتشغيل', icon: '🎮' },
-        { title: 'تسليم فوري', description: 'بيانات الحساب تصل لبريدك خلال 30 دقيقة', icon: '⚡' },
-        { title: 'ضمان 30 يوم', description: 'إذا واجهت مشكلة نحلها أو نستبدل الحساب', icon: '🛡️' },
-        { title: 'بريد إلكتروني', description: 'بريد مرتبط بالحساب يُسلَّم معه', icon: '📧' },
-        { title: 'يعمل في العراق', description: 'حساب مفعل ويعمل بالكامل من العراق', icon: '🇮🇶' },
-        { title: 'دعم كامل', description: 'فريقنا يساعدك في أي مشكلة تقنية', icon: '🎧' },
-      ],
-      faqs: [
-        { question: 'هل يمكنني تغيير اسم المستخدم؟', answer: 'يمكنك تغيير الاسم المعروض (Display Name) لكن Username الأساسي لا يتغير.' },
-        { question: 'هل الحسابات آمنة؟', answer: 'نوفر حسابات بضمان 30 يوماً. نصيحتنا: غيّر كلمة المرور فور الاستلام.' },
-        { question: 'ما الألعاب الموجودة في الحساب؟', answer: 'قائمة الألعاب تختلف حسب التوافر. نخبرك بالألعاب الموجودة قبل إتمام الطلب.' },
-      ],
-    },
-
-    {
-      name:           'حساب Steam — باقة بريميوم',
-      slug:           'steam-premium',
-      categoryId:     catGaming.id,
-      price:          42,
-      comparePrice:   60,
-      stock:          30,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/1b2838/c7d5e0?text=Steam+Premium'],
-      imageAlts:      ['حساب Steam بريميوم في العراق — Quvenza'],
-      description:    'حساب Steam بريميوم بـ 25+ لعبة شهيرة. مستوى Steam عالي، ساعات لعب، شارات.',
-      metaTitle:      'حساب Steam بريميوم — 25+ لعبة | العراق',
-      metaDescription:'حساب Steam بريميوم بـ 65,000 د.ع. 25+ لعبة شهيرة + مستوى عالي + شارات. تسليم فوري.',
-      metaKeywords:   'حساب Steam بريميوم العراق,Steam premium Iraq,ألعاب Steam شهيرة عراق,حسابات steam',
-      longDescription: `## حساب Steam بريميوم في العراق
-
-حساب **Steam بريميوم** يمنحك مكتبة ألعاب ضخمة مع تاريخ لعب حقيقي ومستوى Steam مرتفع.
-
-### ما يميز الحساب البريميوم
-
-- **25+ لعبة شهيرة** — ألعاب AAA وإندي مشهورة
-- **مستوى Steam مرتفع** — يعكس تاريخ لعب حقيقي
-- **ساعات لعب** — حساب نشط وموثوق
-- **شارات وإنجازات** — تاريخ لعب حقيقي
-- **ضمان 30 يوماً** — استبدال أو حل المشاكل
-
-### ملاحظة
-
-هذا حساب جاهز. تحصل على بيانات الدخول الكاملة.`,
-      features: [
-        { title: '25+ لعبة شهيرة', description: 'مكتبة ضخمة من ألعاب AAA والإندي', icon: '🎮' },
-        { title: 'مستوى Steam عالي', description: 'حساب بتاريخ لعب حقيقي وشارات', icon: '⭐' },
-        { title: 'ساعات لعب حقيقية', description: 'تاريخ لعب يعكس نشاطاً حقيقياً', icon: '⏱️' },
-        { title: 'ضمان 30 يوم', description: 'نضمن عمل الحساب لمدة 30 يوماً', icon: '🛡️' },
-        { title: 'تسليم فوري', description: 'بيانات الدخول خلال 30 دقيقة من الدفع', icon: '⚡' },
-        { title: 'دعم تقني', description: 'مساعدة في أي مشكلة تقنية', icon: '🎧' },
-      ],
-      faqs: [
-        { question: 'هل يمكنني إضافة ألعاب جديدة للحساب؟', answer: 'نعم، يمكنك شراء ألعاب جديدة وإضافتها للحساب بشكل طبيعي.' },
-        { question: 'هل ساعات اللعب حقيقية؟', answer: 'نعم، جميع ساعات اللعب حقيقية ومكتسبة بشكل طبيعي.' },
-        { question: 'هل الألعاب مرتبطة بمنطقة معينة؟', answer: 'معظم الألعاب تعمل من العراق بدون قيود. نخبرك إذا كان هناك قيد على لعبة معينة.' },
-      ],
-    },
-
-    // ════════════════════════════════════════════════════════════════
-    // GAMING COINS
-    // ════════════════════════════════════════════════════════════════
-    {
-      name:           'EA FC 26 — نسخة Standard',
-      slug:           'ea-fc-26-standard',
-      categoryId:     catGaming.id,
-      price:          49,
-      comparePrice:   65,
-      stock:          100,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/ff6a2b/000000?text=EA+FC+26'],
-      imageAlts:      ['EA FC 26 Standard في العراق — Quvenza'],
-      description:    'EA FC 26 نسخة Standard للـ PC أو PlayStation أو Xbox. أحدث لعبة كرة قدم من EA Sports.',
-      metaTitle:      'EA FC 26 Standard — شراء في العراق | Quvenza',
-      metaDescription:'EA FC 26 Standard بـ 75,000 د.ع في العراق. PC/PS/Xbox. تسليم الكود فورياً بعد الدفع.',
-      metaKeywords:   'EA FC 26 العراق,FIFA 26 Iraq,شراء EA FC عراق,كرة قدم PS5 عراق,FC 26 Iraq',
-      longDescription: `## EA FC 26 في العراق — أحدث لعبة كرة قدم
-
-**EA FC 26** (المعروفة سابقاً بـ FIFA) هي أحدث لعبة كرة قدم من EA Sports تجمع كل الدوريات والأندية العالمية.
-
-### ما يشمله EA FC 26 Standard
-
-- وصول كامل لكل أوضاع اللعبة
-- Ultimate Team (FUT) ابدأ بناء فريق الأحلام
-- Career Mode — قد ناديك للبطولة
-- Pro Clubs — العب مع أصدقائك
-- Volta Football — كرة قدم شارع
-- محدّث بأحدث التشكيلات والإحصائيات
-
-### المنصات المتاحة
-
-PC (EA App/Steam) — PlayStation 4/5 — Xbox One/Series X|S`,
-      features: [
-        { title: 'كل أوضاع اللعبة', description: 'FUT + Career Mode + Pro Clubs + Volta Football', icon: '⚽' },
-        { title: 'كل الدوريات', description: 'Premier League + La Liga + Serie A + Saudi Pro League', icon: '🏆' },
-        { title: 'Ultimate Team', description: 'ابنِ فريق أحلامك من أفضل اللاعبين', icon: '⭐' },
-        { title: 'PC وPlayStation وXbox', description: 'متاح لكل المنصات الرئيسية', icon: '🎮' },
-        { title: 'تحديثات موسمية', description: 'تحديثات مستمرة طوال الموسم', icon: '🔄' },
-        { title: 'تسليم كود فوري', description: 'كود التفعيل يصل لبريدك خلال 30 دقيقة', icon: '⚡' },
-      ],
-      faqs: [
-        { question: 'هل EA FC 26 يعمل في العراق؟', answer: 'نعم، اللعبة تعمل بالكامل في العراق على كل المنصات.' },
-        { question: 'ما المنصات المتاحة؟', answer: 'PC (EA App) + PS4/PS5 + Xbox One/Series X|S. حدد منصتك عند الطلب.' },
-        { question: 'كيف يصلني الكود؟', answer: 'كود التفعيل يُرسل لبريدك الإلكتروني خلال 30 دقيقة من إتمام الدفع.' },
-        { question: 'هل يشمل Ultimate Team Points؟', answer: 'النسخة Standard لا تشمل FUT Points. للعروض المتضمنة للنقاط تواصل معنا.' },
-      ],
-    },
-
-    {
-      name:           'EA FC 26 — عملات Ultimate Team 500K',
-      slug:           'ea-fc-26-coins-500k',
-      categoryId:     catCoins.id,
-      price:          16,
-      comparePrice:   22,
-      stock:          999,
-      isFeatured:     false,
-      images:         ['https://placehold.co/600x600/ffd700/000000?text=FUT+Coins+500K'],
-      imageAlts:      ['عملات EA FC 26 Ultimate Team 500K في العراق — Quvenza'],
-      description:    'عملات EA FC Ultimate Team 500,000. ابنِ فريق أحلامك بسرعة. تسليم آمن خلال 30 دقيقة.',
-      metaTitle:      'عملات EA FC 26 Ultimate Team 500K | العراق',
-      metaDescription:'عملات EA FC 26 FUT 500K بـ 25,000 د.ع في العراق. تسليم آمن وسريع خلال 30 دقيقة.',
-      metaKeywords:   'عملات EA FC 26 عراق,FUT Coins Iraq,FIFA Coins عراق,Ultimate Team عملات,FC 26 Coins',
-      longDescription: `## عملات EA FC 26 Ultimate Team في العراق
-
-احصل على **500,000 عملة FUT** لبناء فريق Ultimate Team من أفضل اللاعبين في العالم.
-
-### طريقة التسليم الآمنة
-
-نستخدم طريقة التسليم الأكثر أماناً لحماية حسابك:
-1. تتواصل معنا عبر الواتساب بعد الدفع
-2. نرشدك خطوة بخطوة لاستلام العملات بأمان
-3. العملات تصل لحسابك خلال 30 دقيقة
-
-### لماذا تشتري عملات FUT؟
-
-بدلاً من إنفاق أسابيع في تجميع العملات، احصل عليها فوراً وابنِ الفريق الذي تحلم به.`,
-      features: [
-        { title: '500,000 عملة FUT', description: 'كافية لشراء لاعبين نجوم عالميين', icon: '💰' },
-        { title: 'تسليم آمن', description: 'طريقة تسليم مضمونة لحماية حسابك', icon: '🛡️' },
-        { title: 'خلال 30 دقيقة', description: 'العملات تصل سريعاً بعد التواصل معنا', icon: '⚡' },
-        { title: 'PC وPS وXbox', description: 'متاح لكل المنصات', icon: '🎮' },
-        { title: 'دعم واتساب', description: 'نرشدك خطوة بخطوة أثناء التسليم', icon: '📱' },
-        { title: 'ضمان الاستلام', description: 'إذا لم تصل العملات نعيد لك المبلغ', icon: '✅' },
-      ],
-      faqs: [
-        { question: 'هل شراء العملات آمن؟', answer: 'نستخدم طريقة تسليم آمنة تحمي حسابك. اتبع تعليماتنا بالضبط وستكون بأمان.' },
-        { question: 'ما المنصة المتاحة؟', answer: 'متاح لـ PC وPlayStation وXbox. حدد منصتك عند الطلب.' },
-        { question: 'كيف تصلني العملات؟', answer: 'بعد الدفع، تواصل معنا على الواتساب وسنرشدك خلال عملية التسليم الآمنة.' },
-        { question: 'هل هناك ضمان؟', answer: 'نعم، إذا لم تصل العملات كاملة لأي سبب نعيد لك المبلغ بالكامل.' },
-      ],
-    },
-
-  ]; // end products array
-
-  for (const p of products) {
-    await prisma.product.create({
+  console.log(`✅ Users: ${admin.email} / ${customer.email}`);
+
+  // Brands → Categories → Products → Variants
+  let brandCount = 0;
+  let categoryCount = 0;
+  let productCount = 0;
+  let variantCount = 0;
+
+  for (const b of CATALOG) {
+    const brand = await prisma.brand.create({
       data: {
-        name:           p.name,
-        slug:           p.slug,
-        description:    p.description,
-        price:          p.price,
-        comparePrice:   p.comparePrice ?? null,
-        stock:          p.stock,
-        images:         p.images,
-        imageAlts:      p.imageAlts,
-        isActive:       true,
-        isFeatured:     p.isFeatured,
-        categoryId:     p.categoryId,
-        metaTitle:      p.metaTitle,
-        metaDescription:p.metaDescription,
-        metaKeywords:   p.metaKeywords,
-        longDescription:p.longDescription,
-        features:       p.features,
-        faqs:           p.faqs,
-        viewCount:      Math.floor(Math.random() * 500),
-        salesCount:     Math.floor(Math.random() * 100),
+        name: b.name,
+        nameAr: b.nameAr,
+        slug: kebab(b.name),
+        description: b.description,
+        isActive: true,
+        isFeatured: b.isFeatured ?? false,
+        logo: img(`${b.name} logo`),
       },
     });
-    process.stdout.write(`   ✓ ${p.name}\n`);
-  }
+    brandCount++;
 
-  // ── Sample order ─────────────────────────────────────────────────
-  const chatgpt = await prisma.product.findUnique({ where: { slug: 'chatgpt-plus-4months' } });
-  if (chatgpt) {
-    await prisma.order.create({
+    for (const c of b.categories) {
+      const category = await prisma.category.create({
+        data: {
+          name: c.name,
+          nameAr: c.nameAr,
+          slug: kebab(c.name),
+          kind: c.kind,
+          icon: c.icon,
+          image: img(c.name),
+          isActive: true,
+          brandId: brand.id,
+        },
+      });
+      categoryCount++;
+
+      for (const p of c.products) {
+        await prisma.product.create({ data: buildProduct(p, brand.id, category.id) });
+        productCount++;
+        variantCount += p.variants.length;
+      }
+    }
+  }
+  console.log(`✅ Brands: ${brandCount}`);
+  console.log(`✅ Categories: ${categoryCount}`);
+  console.log(`✅ Products: ${productCount}`);
+  console.log(`✅ Variants: ${variantCount}`);
+
+  // Reviews — attach 2 each to a selection of featured products
+  const featured = await prisma.product.findMany({
+    where: { isFeatured: true },
+    select: { id: true },
+    take: 12,
+  });
+
+  let reviewCount = 0;
+  for (let i = 0; i < featured.length; i++) {
+    const r1 = REVIEW_POOL[i % REVIEW_POOL.length];
+    const r2 = REVIEW_POOL[(i + 3) % REVIEW_POOL.length];
+    await prisma.review.createMany({
+      data: [
+        { productId: featured[i].id, customerName: r1.customerName, rating: r1.rating, comment: r1.comment, isVerified: true, isApproved: true },
+        { productId: featured[i].id, customerName: r2.customerName, rating: r2.rating, comment: r2.comment, isVerified: true, isApproved: true },
+      ],
+    });
+    reviewCount += 2;
+  }
+  console.log(`✅ Reviews: ${reviewCount}`);
+
+  // Sample DELIVERED order with a real product + variant
+  const sampleProduct = await prisma.product.findUnique({
+    where: { slug: 'apple-iphone-15-pro' },
+    include: { variants: true },
+  });
+
+  if (sampleProduct) {
+    const chosenVariant =
+      sampleProduct.variants.find((v) => v.isDefault) ?? sampleProduct.variants[0];
+    const unitPrice = Number(chosenVariant?.price ?? sampleProduct.price);
+    const quantity = 1;
+
+    const order = await prisma.order.create({
       data: {
-        userId:        customer.id,
-        status:        'DELIVERED',
-        total:         65,
-        paymentMethod: 'zaincash',
+        userId: customer.id,
+        status: 'DELIVERED',
+        total: unitPrice * quantity,
+        paymentMethod: 'CASH_ON_DELIVERY',
         paymentStatus: 'PAID',
         shippingAddress: {
-          fullName: 'عميل تجريبي',
-          phone:    '+964 770 000 0000',
-          city:     'بغداد',
-          address:  'شارع المتنبي، بغداد',
-          country:  'Iraq',
+          fullName: 'أحمد العراقي',
+          phone: '07701234567',
+          governorate: 'Baghdad',
+          city: 'Karrada',
+          address: 'شارع الكرادة الداخلية، قرب ساحة كهرمانة، بناية 12',
+          country: 'Iraq',
         },
         items: {
-          create: [{ productId: chatgpt.id, quantity: 1, price: 95000 }],
+          create: [
+            {
+              productId: sampleProduct.id,
+              variantId: chosenVariant?.id,
+              variantName: chosenVariant?.name,
+              quantity,
+              price: unitPrice,
+            },
+          ],
+        },
+        statusHistory: {
+          create: [
+            { fromStatus: null, toStatus: 'PENDING', note: 'تم إنشاء الطلب', changedBy: 'system' },
+            { fromStatus: 'PENDING', toStatus: 'PROCESSING', note: 'قيد التجهيز', changedBy: admin.id },
+            { fromStatus: 'PROCESSING', toStatus: 'SHIPPED', note: 'تم الشحن', changedBy: admin.id },
+            { fromStatus: 'SHIPPED', toStatus: 'DELIVERED', note: 'تم التسليم بنجاح', changedBy: admin.id },
+          ],
         },
       },
     });
+    console.log(`✅ Sample order: ${order.id} (DELIVERED, ${chosenVariant?.name})`);
   }
 
-  console.log('\n✅ Seed complete:');
-  console.log('   Admin    → admin@quvenzaiq.com / Admin@2026!');
-  console.log('   Customer → customer@quvenzaiq.com / Customer@2026!');
-  console.log('   Categories: 8');
-  console.log(`   Products:   ${products.length}`);
-  console.log('   Orders:     1');
+  // Summary
+  console.log('\n────────────────────────────────────────');
+  console.log('🎉 Seed complete — Quvenza electronics store');
+  console.log('────────────────────────────────────────');
+  console.log(`   Brands:     ${brandCount}`);
+  console.log(`   Categories: ${categoryCount}`);
+  console.log(`   Products:   ${productCount}`);
+  console.log(`   Variants:   ${variantCount}`);
+  console.log(`   Reviews:    ${reviewCount}`);
+  console.log('   Users:      2 (admin + customer)');
+  console.log('   Orders:     1 (sample DELIVERED)');
+  console.log('────────────────────────────────────────');
+  console.log('   Admin:    admin@quvenzaiq.com / Admin@2026!');
+  console.log('   Customer: customer@quvenzaiq.com / Customer@2026!');
+  console.log('────────────────────────────────────────\n');
 }
 
 main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
+  .catch((e) => {
+    console.error('❌ Seed failed:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
