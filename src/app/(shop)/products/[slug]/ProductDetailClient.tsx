@@ -14,6 +14,7 @@ import { useLang } from '@/hooks/useLang';
 import { useCurrency } from '@/hooks/useCurrency';
 import { localizedName } from '@/lib/i18n';
 import ProductCard from '@/components/product/ProductCard';
+import ProductImage from '@/components/product/ProductImage';
 
 interface ReviewLite {
   id: string;
@@ -62,6 +63,12 @@ export default function ProductDetailClient({ product, related = [] }: Props) {
   const { formatPrice } = useCurrency();
 
   const variants = useMemo<Variant[]>(() => product.variants ?? [], [product.variants]);
+  // Real (uploaded/Cloudinary) images only; seed placehold.co URLs fall back to
+  // the Cobalt ProductImage placeholder instead of showing gray boxes.
+  const realImages = useMemo(
+    () => (product.images ?? []).filter((i) => !i.includes('placehold.co')),
+    [product.images]
+  );
   const defaultVariant = useMemo(
     () => variants.find((v) => v.isDefault) ?? variants[0],
     [variants]
@@ -151,24 +158,24 @@ export default function ProductDetailClient({ product, related = [] }: Props) {
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-10 lg:items-start">
           {/* Image gallery */}
           <div className="flex flex-col gap-3 lg:sticky lg:top-24">
-            <div className="aspect-square bg-bg-surface rounded-2xl overflow-hidden border border-border shadow-sm flex items-center justify-center">
-              {product.images?.[selectedImage] ? (
+            <div className="relative aspect-square bg-bg-surface rounded-2xl overflow-hidden border border-border shadow-sm flex items-center justify-center">
+              {realImages.length > 0 ? (
                 <Image
-                  src={product.images[selectedImage]}
+                  src={realImages[selectedImage]}
                   alt={`${name} — ${selectedImage + 1}`}
                   width={800}
                   height={800}
                   priority={selectedImage === 0}
                   className="w-full h-full object-contain p-6 hover:scale-[1.03] transition-transform duration-500"
-                  unoptimized={product.images[selectedImage].startsWith('http://localhost') || product.images[selectedImage].includes('placehold.co')}
+                  unoptimized={realImages[selectedImage].startsWith('http://localhost')}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-6xl font-bold text-text-muted">{name[0]}</div>
+                <ProductImage product={product} name={name} priority sizes="(max-width: 1024px) 100vw, 50vw" />
               )}
             </div>
-            {product.images && product.images.length > 1 && (
+            {realImages.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-1">
-                {product.images.map((img, i) => (
+                {realImages.map((img, i) => (
                   <button
                     key={img}
                     onClick={() => setSelectedImage(i)}

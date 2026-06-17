@@ -1,7 +1,7 @@
 'use client';
 import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import ProductImage from './ProductImage';
 import { Icon } from '@/components/ui/Icon';
 import type { Product, Variant } from '@/types';
 import { useCartStore } from '@/store/cart.store';
@@ -76,13 +76,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const rating = Number(product.rating ?? 0);
   const hasRating = rating > 0;
 
-  // Tone hue for placeholder (cycle based on id chars)
-  const hues = [18, 220, 280, 140, 40, 320];
-  const hue = hues[(product.id?.charCodeAt(product.id.length - 1) ?? 0) % hues.length];
-  const placeholderBg = `
-    radial-gradient(circle at 30% 25%, oklch(0.45 0.12 ${hue} / 0.5), transparent 60%),
-    linear-gradient(160deg, #FFFFFF, #F7F8FA)
-  `;
+  const displayName = localizedName(product.name, product.nameAr, lang);
 
   return (
     <Link
@@ -95,29 +89,8 @@ export default function ProductCard({ product }: { product: Product }) {
       }}
     >
       {/* Image area */}
-      <div style={{ position: 'relative', aspectRatio: '1/1', background: 'var(--color-bg-elevated)', overflow: 'hidden' }}>
-        {product.images?.[0] ? (
-          <Image
-            src={product.images[0]}
-            alt={localizedName(product.name, product.nameAr, lang)}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-            sizes="(max-width: 768px) 50vw, 25vw"
-            unoptimized={product.images[0].startsWith('http://localhost') || product.images[0].includes('placehold.co')}
-          />
-        ) : (
-          <div style={{ position: 'absolute', inset: 0, background: placeholderBg }}>
-            <span
-              className="mono"
-              style={{
-                position: 'absolute', bottom: 12, insetInlineStart: 12,
-                fontSize: 10, color: 'rgba(17,24,39,0.45)',
-              }}
-            >
-              {brandLabel}
-            </span>
-          </div>
-        )}
+      <div style={{ position: 'relative', aspectRatio: '1/1', background: 'var(--color-bg-surface)', overflow: 'hidden' }}>
+        <ProductImage product={product} name={displayName} />
 
         {/* Discount chip */}
         {hasDiscount && (

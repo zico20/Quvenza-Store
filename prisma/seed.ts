@@ -100,7 +100,10 @@ function buildProduct(p: ProductInput, brandId: string, categoryId: string) {
     price: minPrice,
     comparePrice: p.comparePrice,
     stock: totalStock,
-    images: images(p.name),
+    // Start image-less: the storefront shows a clean Cobalt placeholder
+    // (brand mark + device icon + model) until real images are uploaded
+    // via the admin → Cloudinary. Drop a real image and it appears automatically.
+    images: [],
     imageAlts: imageAlts(p.name, p.nameAr),
     isActive: true,
     isFeatured: p.isFeatured ?? false,
@@ -126,7 +129,7 @@ function buildProduct(p: ProductInput, brandId: string, categoryId: string) {
         price: v.price,
         comparePrice: v.comparePrice,
         stock: v.stock,
-        image: img(`${p.name} ${v.color ?? v.storage ?? v.ram ?? ''}`.trim()),
+        image: null, // no per-variant image until uploaded (storefront uses placeholder)
         isDefault: v.sku === defaultSku,
       })),
     },
