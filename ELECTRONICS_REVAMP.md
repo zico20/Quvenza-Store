@@ -56,8 +56,55 @@ sitemap, all labels + content bilingual.
 type-check + lint + build + browser smoke.
 
 ## Run
-```
-npm run prisma:migrate   # apply migrations (dev)
-npm run prisma:seed      # seed electronics catalog
+
+### Local (Node)
+```bash
+npm install
+npm run prisma:migrate   # apply migrations (creates Brand/Variant/DeviceKind, etc.)
+npm run prisma:seed      # wipe + seed electronics catalog (10 brands, 80 models, 164 variants)
 npm run dev              # http://localhost:3000
 ```
+> The seed is idempotent and clears prior data FK-safely before reseeding.
+> If migrating an existing DB non-interactively, run
+> `npx prisma migrate reset --force --skip-seed` first, then `prisma migrate dev`.
+
+### Docker
+```bash
+docker compose up -d --build app   # rebuilds app to pick up new code
+# postgres + app come up; app on http://localhost:3000
+# (re-seed inside the running stack if needed:)
+docker compose exec app npm run prisma:seed
+```
+
+### Seeded test accounts
+| Role     | Email                    | Password         |
+|----------|--------------------------|------------------|
+| Admin    | admin@quvenzaiq.com      | Admin@2026!      |
+| Customer | customer@quvenzaiq.com   | Customer@2026!   |
+
+---
+
+## Status — ✅ COMPLETE (all 9 phases)
+
+| Phase | Delivered | Verified |
+|-------|-----------|----------|
+| 1 Data model | Brand, DeviceKind enum, Variant (storage/color/RAM/SKU/price/stock), bilingual + specs Json; cart/orders variant-aware; **real Prisma migration** | tsc, migration applied |
+| 2 Seed | 10 brands · 16 categories · 80 real models · 164 variants · 24 reviews, bilingual | queried live DB |
+| 3 Services/API | brand/category/product services + filters (brand, kind, price, sort); brand.service; brands API route | tsc clean |
+| 4 Browse | `/brands`, `/brands/[slug]`, `/products` (device-kind tabs + brand/price filters + sort), product detail (variant selectors w/ live price+stock, specs table, real reviews, related) | build passes |
+| 5 Compare | `/compare` side-by-side spec table + global add-to-compare bar (max 4) | build passes |
+| 6 Navbar | brands + device-type mega-menu (both browse modes), device chips, brand drawer | build passes |
+| 7 Cart/Checkout | variant-aware cart store, CartItem/Drawer/cart page, checkout payload + variant stock decrement/restore + price snapshot | build passes |
+| 8 Home/SEO | electronics home (device hero, featured brands, device tiles), JSON-LD/sitemap/404/metadata purged of digital content | build passes |
+| 9 Verify | `tsc` clean · `next build` 68 pages · digital-content sweep clean · Docker rebuild + 11-route browser smoke (all 200, electronics data renders) | ✅ |
+
+**Quality gates:** `npx tsc --noEmit` → 0 errors. `next build` → success (68 static pages).
+New code adds **0 new lint errors** (remaining ESLint errors are a pre-existing,
+codebase-wide `set-state-in-effect`/`component-in-render` pattern the build does not enforce).
+
+**Key new files:** `services/brands/brand.service.ts`, `app/api/v1/brands/route.ts`,
+`store/compare.store.ts`, `app/(shop)/brands/{page,[slug]/page}.tsx`,
+`app/(shop)/compare/page.tsx`, `components/compare/CompareBar.tsx`.
+
+**Iraqi context preserved:** USD+IQD, 18-governorate addresses, ZainCash/AsiaHawala/FastPay/COD,
+WhatsApp/contact numbers unchanged.
