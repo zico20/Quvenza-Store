@@ -31,7 +31,7 @@ export default function NotFound() {
         {/* Popular searches */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
           <span className="text-xs text-text-muted">الأكثر بحثاً:</span>
-          {['ChatGPT Plus', 'Canva Pro', 'Coursera', 'CapCut Pro'].map((q) => (
+          {['iPhone', 'MacBook', 'Galaxy', 'AirPods'].map((q) => (
             <Link
               key={q}
               href={`/search?q=${encodeURIComponent(q)}`}

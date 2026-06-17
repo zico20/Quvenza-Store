@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { storeConfig } from '@/config/store.config';
-import { getServerLang, t } from '@/lib/i18n';
+import { getServerLang, t, deviceKindLabel } from '@/lib/i18n';
 
 function ColTitle({ text, isRTL }: { text: string; isRTL: boolean }) {
   return (
@@ -33,11 +33,11 @@ export default async function Footer() {
   const isRTL = lang === 'ar';
 
   const SHOP_LINKS = [
-    { label: t('footer.links.laptops', lang),   href: '/products?category=laptops' },
-    { label: t('footer.links.phones', lang),    href: '/products?category=phones' },
-    { label: t('footer.links.audio', lang),     href: '/products?category=audio' },
-    { label: t('footer.links.wearables', lang), href: '/products?category=wearables' },
-    { label: t('footer.links.gaming', lang),    href: '/products?category=gaming' },
+    { label: deviceKindLabel('PHONE', lang),     href: '/products?kind=PHONE' },
+    { label: deviceKindLabel('LAPTOP', lang),    href: '/products?kind=LAPTOP' },
+    { label: deviceKindLabel('TABLET', lang),    href: '/products?kind=TABLET' },
+    { label: deviceKindLabel('HEADPHONE', lang), href: '/products?kind=HEADPHONE' },
+    { label: t('brand.allBrands', lang),         href: '/brands' },
   ];
 
   const SUPPORT_LINKS = [

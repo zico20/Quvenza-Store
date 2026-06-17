@@ -11,6 +11,7 @@ export interface ProductSchemaInput {
   stock: number;
   category?: { name: string; slug: string } | null;
   rating?: { value: number; count: number } | null;
+  brandName?: string;
 }
 
 export interface FAQItem { question: string; answer: string }
@@ -32,7 +33,7 @@ export function organizationSchema() {
       height: 512,
     },
     image: `${BASE}/og-image.svg`,
-    description: 'متجر عراقي متخصص ببيع الاشتراكات الرقمية الأصلية في العراق — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus. تأسس في بغداد عام 2026.',
+    description: 'متجر عراقي متخصص ببيع الإلكترونيات الأصلية في العراق — هواتف، لابتوبات، أجهزة لوحية وسماعات من أشهر الماركات العالمية. تأسس في بغداد عام 2026.',
     foundingDate: '2026',
     founder: {
       '@type': 'Organization',
@@ -112,13 +113,12 @@ export function organizationSchema() {
     ],
     // E-E-A-T & knowledge graph hints
     knowsAbout: [
-      'ChatGPT Plus subscriptions', 'ChatGPT Pro subscriptions', 'GPT-5',
-      'Canva Pro subscriptions', 'DALL-E 3', 'Magic AI Canva',
-      'CapCut Pro subscriptions', 'Coursera Plus subscriptions',
-      'Digital subscriptions in Iraq', 'AI tools for Iraqi users',
-      'Online learning platforms', 'Video editing software', 'Graphic design tools',
+      'Smartphones in Iraq', 'Apple iPhone Iraq', 'Samsung Galaxy Iraq',
+      'Laptops Iraq', 'MacBook Iraq', 'Gaming laptops Iraq',
+      'Wireless headphones Iraq', 'AirPods Iraq', 'Tablets iPad Iraq',
+      'Consumer electronics Baghdad', 'Original electronics warranty Iraq',
       'ZainCash payments', 'AsiaHawala payments', 'FastPay Iraq',
-      'Cash on delivery digital products', 'Iraqi Dinar pricing', 'Iraq e-commerce',
+      'Cash on delivery', 'Iraqi Dinar pricing', 'Iraq e-commerce',
       'Baghdad online shopping',
     ],
     audience: {
@@ -134,7 +134,7 @@ export function organizationSchema() {
       { '@type': 'AdministrativeArea', name: 'Mosul Governorate' },
       { '@type': 'AdministrativeArea', name: 'Najaf Governorate' },
     ],
-    brand: { '@type': 'Brand', name: 'Quvenza', slogan: 'اشتراكات رقمية أصلية بأسعار عراقية' },
+    brand: { '@type': 'Brand', name: 'Quvenza', slogan: 'إلكترونيات أصلية بأسعار عراقية' },
     paymentAccepted: ['Cash on Delivery', 'ZainCash', 'AsiaHawala', 'FastPay'],
     currenciesAccepted: 'IQD',
     priceRange: '$$',
@@ -149,7 +149,7 @@ export function websiteSchema() {
     '@id': `${BASE}/#website`,
     url: BASE,
     name: 'Quvenza',
-    description: 'متجر الاشتراكات الرقمية في العراق',
+    description: 'متجر الإلكترونيات في العراق',
     inLanguage: 'ar-IQ',
     publisher: { '@id': ORG_ID },
     potentialAction: {
@@ -173,7 +173,7 @@ export function productSchema(p: ProductSchemaInput) {
     image: p.images.map(img => img.startsWith('http') ? img : `${BASE}${img}`),
     sku: p.slug,
     url: `${BASE}/products/${p.slug}`,
-    brand: { '@type': 'Brand', name: 'Quvenza' },
+    brand: { '@type': 'Brand', name: p.brandName || 'Quvenza' },
     ...(p.category && { category: p.category.name }),
     offers: {
       '@type': 'Offer',
@@ -271,7 +271,7 @@ export function localBusinessSchema() {
     '@id': `${BASE}/#localbusiness`,
     name: 'Quvenza',
     alternateName: 'كوفينزا',
-    description: 'متجر عراقي متخصص ببيع الاشتراكات الرقمية الأصلية — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus.',
+    description: 'متجر عراقي متخصص ببيع الإلكترونيات الأصلية — هواتف، لابتوبات، أجهزة لوحية وسماعات من أشهر الماركات.',
     url: BASE,
     logo: `${BASE}/logo.png`,
     image: `${BASE}/og-image.svg`,
@@ -388,31 +388,31 @@ export function getDefaultFAQs(productName: string): FAQItem[] {
   return [
     {
       question: `هل ${productName} أصلي 100%؟`,
-      answer: `نعم، جميع اشتراكاتنا في Quvenza أصلية 100% ومباشرة من الشركة المطورة مع ضمان كامل طوال فترة الاشتراك.`,
+      answer: `نعم، ${productName} أصلي 100% ومستورد من الوكيل الرسمي مع ضمان رسمي معتمد. جميع منتجات Quvenza جديدة وأصلية وليست مقلدة.`,
     },
     {
-      question: `كم وقت يستغرق تفعيل ${productName}؟`,
-      answer: `التفعيل فوري — خلال 30 دقيقة من إتمام عملية الدفع. في حالات نادرة قد يمتد لساعة واحدة كحد أقصى.`,
+      question: `كم يستغرق توصيل ${productName}؟`,
+      answer: `توصيل سريع لكل المحافظات العراقية — عادةً خلال 1 إلى 3 أيام عمل. التوصيل داخل بغداد قد يتم في نفس اليوم أو اليوم التالي.`,
     },
     {
       question: 'هل أحتاج فيزا أو بطاقة ائتمانية؟',
-      answer: 'لا. نقبل الدفع بالدينار العراقي عبر زين كاش، آسيا حوالة، فاست باي، أو كاش عند الاستلام في بغداد.',
+      answer: 'لا. نقبل الدفع بالدينار العراقي عبر زين كاش، آسيا حوالة، فاست باي، أو كاش عند الاستلام (الدفع عند الاستلام) في كل المحافظات.',
     },
     {
-      question: 'هل الاشتراك يعمل في العراق؟',
-      answer: 'نعم، يعمل بالكامل في العراق وجميع المحافظات. لا توجد قيود إضافية.',
+      question: `هل يأتي ${productName} مع ضمان رسمي؟`,
+      answer: 'نعم، المنتج مشمول بضمان رسمي معتمد يغطي عيوب التصنيع. يتم تفعيل الضمان عند الاستلام، ويمكنك مراجعتنا في أي وقت خلال فترة الضمان.',
     },
     {
-      question: 'ماذا أفعل لو حدثت مشكلة في الحساب؟',
-      answer: 'فريق دعمنا متاح 24/7 عبر واتساب وتيليجرام لحل أي مشكلة خلال ساعة واحدة مع ضمان الاستبدال أو الاسترجاع.',
+      question: 'هل يمكنني الإرجاع أو الاستبدال إذا واجهت مشكلة؟',
+      answer: 'نعم، يمكنك الإرجاع أو الاستبدال خلال 7 أيام من الاستلام إذا كان المنتج بحالته الأصلية أو في حال وجود عيب مصنعي، مع استرجاع المبلغ أو استبدال المنتج.',
     },
     {
-      question: 'هل يمكنني الإلغاء في أي وقت؟',
-      answer: 'نعم، يمكنك الإلغاء في أي وقت. مع ضمان استرداد المبلغ خلال 7 أيام من الشراء إذا لم يكن الاشتراك قد فُعّل.',
+      question: `هل ${productName} جديد ومغلق بالكرتون الأصلي؟`,
+      answer: 'نعم، المنتج جديد تماماً ومغلق بالكرتون الأصلي (Sealed) ولم يُفتح من قبل، ويأتي بكامل ملحقاته الأصلية من الشركة المصنّعة.',
     },
     {
-      question: 'هل يعمل على هاتفي وكمبيوتري معاً؟',
-      answer: 'نعم، الاشتراك يعمل على جميع أجهزتك — هاتف، تابلت، وكمبيوتر — في وقت واحد.',
+      question: 'هل يوجد دعم وخدمة ما بعد البيع؟',
+      answer: 'نعم، فريق دعمنا متاح عبر واتساب وتيليجرام لمساعدتك في الإعداد والاستخدام وأي استفسار بعد البيع، بالإضافة إلى متابعة طلبات الضمان والصيانة.',
     },
   ];
 }

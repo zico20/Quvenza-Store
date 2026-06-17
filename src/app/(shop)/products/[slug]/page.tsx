@@ -122,6 +122,8 @@ export default async function ProductPage(
         images: product.images ?? [],
         stock: product.stock,
         category: product.category ?? null,
+        brandName: product.brand?.name,
+        rating: product.rating ? { value: product.rating, count: (product as any).reviews?.length ?? 0 } : null,
       })} />
       <JsonLd data={breadcrumbs} />
       <ProductDetailClient product={product} related={related} />

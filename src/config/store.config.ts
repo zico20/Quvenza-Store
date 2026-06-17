@@ -9,7 +9,7 @@ export const storeConfig = {
     ogImage: '/og-image.svg',
     organizationLogo: '/logo.png',
     defaultDescription:
-      'أكبر متجر اشتراكات رقمية أصلية في العراق. اشترك في ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus بأسعار بالدينار العراقي — تفعيل فوري، ضمان كامل.',
+      'متجر إلكترونيات أصلية في العراق — هواتف، لابتوبات، أجهزة لوحية وسماعات من Apple وSamsung وSony وDell والمزيد. أسعار بالدينار العراقي، توصيل سريع، ضمان رسمي.',
   },
 
   // ── Business ─────────────────────────────────────────────────────

@@ -17,13 +17,22 @@ async function fetchCategories(): Promise<{ slug: string }[]> {
   } catch { return []; }
 }
 
+async function fetchBrands(): Promise<{ slug: string }[]> {
+  try {
+    const { getBrands } = await import('@/services/brands/brand.service');
+    return await getBrands();
+  } catch { return []; }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [products, categories] = await Promise.all([fetchProducts(), fetchCategories()]);
+  const [products, categories, brands] = await Promise.all([fetchProducts(), fetchCategories(), fetchBrands()]);
 
   const now = new Date();
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE,                          lastModified: now,                    changeFrequency: 'daily',   priority: 1.0 },
     { url: `${BASE}/products`,            lastModified: now,                    changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${BASE}/brands`,              lastModified: now,                    changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE}/compare`,             lastModified: now,                    changeFrequency: 'monthly', priority: 0.4 },
     { url: `${BASE}/faq`,                 lastModified: now,                    changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${BASE}/about`,               lastModified: new Date('2026-04-27'), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/contact`,             lastModified: new Date('2026-04-27'), changeFrequency: 'monthly', priority: 0.6 },
@@ -48,5 +57,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticPages, ...productPages, ...categoryPages];
+  const brandPages: MetadataRoute.Sitemap = brands.map((b) => ({
+    url: `${BASE}/brands/${b.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...productPages, ...categoryPages, ...brandPages];
 }
