@@ -5,12 +5,12 @@ import { breadcrumbSchema, howToSchema } from '@/lib/schema';
 const BASE = 'https://quvenzaiq.com';
 
 export const metadata: Metadata = {
-  title: 'كيف يعمل المتجر — خطوات بسيطة للحصول على اشتراكك',
-  description: 'احصل على اشتراكك الرقمي في 4 خطوات بسيطة: اختر → ادفع → أرسل ايميلك → استخدم خلال 30 دقيقة. Quvenza — أسهل طريقة للحصول على ChatGPT Plus وCanva Pro في العراق.',
+  title: 'كيف يعمل المتجر — خطوات بسيطة لشراء جهازك',
+  description: 'اشترِ جهازك الإلكتروني الأصلي في 4 خطوات بسيطة: اختر الجهاز → أضفه للسلة وأدخل عنوانك → ادفع → توصيل سريع مع ضمان رسمي. Quvenza — أسهل طريقة لشراء iPhone 15 Pro وMacBook Air في العراق.',
   alternates: { canonical: `${BASE}/how-it-works` },
   openGraph: {
     title: 'كيف يعمل Quvenza',
-    description: '4 خطوات بسيطة للحصول على ChatGPT Plus، Canva Pro وأكثر في العراق.',
+    description: '4 خطوات بسيطة لشراء iPhone 15 Pro، MacBook Air، Galaxy S24 وأكثر في العراق.',
     url: `${BASE}/how-it-works`,
     images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza' }],
   },
@@ -20,42 +20,42 @@ const STEPS = [
   {
     num: '01',
     icon: '🛍️',
-    title: 'اختر اشتراكك',
-    desc: 'تصفّح متجرنا واختر الاشتراك المناسب — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus أو غيرها. كل الأسعار بالدينار العراقي وواضحة بدون تعقيد.',
+    title: 'اختر جهازك',
+    desc: 'تصفّح متجرنا واختر الجهاز المناسب وموديله ولونه وسعته — iPhone 15 Pro، MacBook Air، Galaxy S24، AirPods Pro، Sony WH-1000XM5، Dell XPS وغيرها. كل الأسعار بالدينار العراقي وواضحة، مع مواصفات كاملة لكل منتج.',
   },
   {
     num: '02',
-    icon: '💳',
-    title: 'ادفع بطريقتك',
-    desc: 'اختر طريقة الدفع الأنسب لك: زين كاش، آسيا حوالة، فاست باي، أو كاش عند الاستلام في بغداد. لا حاجة لبطاقة فيزا أو حساب دولي.',
+    icon: '🛒',
+    title: 'أضفه للسلة وأدخل عنوانك',
+    desc: 'أضِف الجهاز إلى السلة، ثم أكمل الطلب بإدخال عنوان الشحن ورقم هاتفك. نوصّل لكل المحافظات الـ 18، مع توصيل سريع داخل بغداد خلال 24 ساعة.',
   },
   {
     num: '03',
-    icon: '📧',
-    title: 'أرسل ايميلك',
-    desc: 'بعد الدفع، أرسل لنا ايميلك الشخصي عبر واتساب. هذا هو الايميل الذي سيفعّل عليه الاشتراك. تأكد أنه ايميل Google (Gmail) أو أي بريد إلكتروني.',
+    icon: '💳',
+    title: 'ادفع بطريقتك',
+    desc: 'اختر طريقة الدفع الأنسب لك: كاش عند الاستلام في بغداد، زين كاش، آسيا حوالة، أو فاست باي. كل الأسعار بالدينار العراقي بدون رسوم خفية ولا حاجة لبطاقة فيزا.',
   },
   {
     num: '04',
-    icon: '🚀',
-    title: 'استخدم فوراً',
-    desc: 'خلال 30 دقيقة، تستلم رسالة تأكيد وتجد اشتراكك مفعّلاً. ادخل للمنصة (مثل ChatGPT.com أو Canva.com) وابدأ الاستخدام فوراً.',
+    icon: '🚚',
+    title: 'استلم جهازك مع الضمان',
+    desc: 'نجهّز جهازك الأصلي المختوم ونشحنه إليك. افحصه عند الاستلام، ادفع (إن كان كاش عند الاستلام)، وابدأ استخدامه فوراً — مع ضمان رسمي وحق الإرجاع أو الاستبدال خلال 7 أيام.',
   },
 ];
 
 export default function HowItWorksPage() {
   const howTo = howToSchema({
-    name: 'كيف تشتري اشتراك رقمي من Quvenza في العراق',
-    description: 'دليل خطوة بخطوة للحصول على اشتراك ChatGPT Plus، Canva Pro، CapCut Pro أو أي اشتراك رقمي من متجر Quvenza في العراق.',
-    totalTime: 'PT30M',
+    name: 'كيف تشتري جهازاً إلكترونياً من Quvenza في العراق',
+    description: 'دليل خطوة بخطوة لشراء جهاز إلكتروني أصلي — iPhone 15 Pro، MacBook Air، Galaxy S24، AirPods Pro أو غيرها — من متجر Quvenza في العراق مع توصيل سريع وضمان رسمي.',
+    totalTime: 'P1D',
     estimatedCost: { value: 8000, currency: 'IQD' },
-    supply: ['ايميل شخصي', 'هاتف للتواصل عبر واتساب'],
-    tool: ['زين كاش أو آسيا حوالة أو فاست باي أو كاش'],
+    supply: ['عنوان شحن', 'هاتف للتواصل عبر واتساب'],
+    tool: ['زين كاش أو آسيا حوالة أو فاست باي أو كاش عند الاستلام'],
     steps: [
-      { name: 'اختر الاشتراك المناسب',  text: 'تصفح الموقع واختر الاشتراك الذي تريده — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus أو غيرها. لكل منتج صفحة تحتوي على كل التفاصيل والأسعار بالدينار العراقي.', url: `${BASE}/products` },
+      { name: 'اختر الجهاز المناسب',  text: 'تصفح الموقع واختر الجهاز الذي تريده وموديله ولونه وسعته — iPhone 15 Pro، MacBook Air، Galaxy S24، AirPods Pro، Sony WH-1000XM5، Dell XPS أو غيرها. لكل منتج صفحة تحتوي على المواصفات الكاملة والأسعار بالدينار العراقي.', url: `${BASE}/products` },
+      { name: 'أضف الجهاز للسلة وأدخل عنوانك', text: 'أضف الجهاز إلى السلة ثم أكمل الطلب بإدخال عنوان الشحن ورقم هاتفك. نوصّل لكل المحافظات الـ 18 في العراق مع توصيل سريع داخل بغداد خلال 24 ساعة.' },
       { name: 'ادفع بالطريقة المناسبة', text: 'اختر طريقة الدفع: كاش عند الاستلام (في بغداد)، زين كاش، آسيا حوالة، أو فاست باي. كل الأسعار بالدينار العراقي بدون رسوم خفية.', url: `${BASE}/payment-methods` },
-      { name: 'أرسل ايميلك على واتساب', text: 'بعد تأكيد الدفع، أرسل لنا ايميلك الشخصي على واتساب. هذا الايميل سيتم تفعيل الاشتراك عليه ويبقى ملكك بالكامل.' },
-      { name: 'استلم اشتراكك خلال 30 دقيقة', text: 'سنفعّل الاشتراك على ايميلك خلال 30 دقيقة كحد أقصى. ستستلم رسالة تأكيد على واتساب، ويمكنك الدخول مباشرة على المنصة (مثل ChatGPT.com) واستخدام الاشتراك.' },
+      { name: 'استلم جهازك مع الضمان الرسمي', text: 'نجهّز جهازك الأصلي المختوم ونشحنه إليك بسرعة. افحصه عند الاستلام، وابدأ استخدامه فوراً مع ضمان رسمي وحق الإرجاع أو الاستبدال خلال 7 أيام.' },
     ],
   });
 
@@ -70,7 +70,7 @@ export default function HowItWorksPage() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px' }}>
         <h1 style={{ fontSize: 40, fontWeight: 700, color: '#111827', marginBottom: 12, letterSpacing: '-0.02em' }}>كيف يعمل المتجر؟</h1>
         <p style={{ color: '#4B5563', fontSize: 18, lineHeight: 1.7, marginBottom: 56 }}>
-          احصل على اشتراكك الرقمي في 4 خطوات بسيطة. بدون تعقيد، بدون انتظار.
+          اشترِ جهازك الإلكتروني الأصلي في 4 خطوات بسيطة. توصيل سريع، ضمان رسمي، وبدون تعقيد.
         </p>
 
         <div style={{ position: 'relative' }}>
@@ -98,10 +98,10 @@ export default function HowItWorksPage() {
 
         {/* Time indicator */}
         <div style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 8, padding: 24, marginTop: 48, display: 'flex', alignItems: 'center', gap: 20 }}>
-          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(52,211,153,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>⏱️</div>
+          <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(52,211,153,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>🚚</div>
           <div>
-            <div style={{ fontWeight: 700, color: '#16A34A', fontSize: 18 }}>إجمالي الوقت: أقل من 30 دقيقة</div>
-            <div style={{ color: '#4B5563', fontSize: 14, marginTop: 4 }}>من لحظة الدفع حتى بدء الاستخدام — أسرع من طلب بيتزا</div>
+            <div style={{ fontWeight: 700, color: '#16A34A', fontSize: 18 }}>توصيل سريع: خلال 24 ساعة في بغداد</div>
+            <div style={{ color: '#4B5563', fontSize: 14, marginTop: 4 }}>ولكل المحافظات خلال 2–4 أيام عمل — جهاز أصلي مختوم مع ضمان رسمي</div>
           </div>
         </div>
 

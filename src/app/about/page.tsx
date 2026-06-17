@@ -5,12 +5,12 @@ import { breadcrumbSchema } from '@/lib/schema';
 const BASE = 'https://quvenzaiq.com';
 
 export const metadata: Metadata = {
-  title: 'من نحن — متجر اشتراكات رقمية موثوق في العراق',
-  description: 'Quvenza متجر عراقي متخصص ببيع الاشتراكات الرقمية الأصلية في العراق. تعرف على قصتنا ورؤيتنا ولماذا اختارنا أكثر من 500 عميل من كل محافظات العراق.',
+  title: 'من نحن — متجر إلكترونيات أصلية موثوق في العراق',
+  description: 'Quvenza متجر عراقي متخصص ببيع الإلكترونيات الأصلية في العراق — هواتف، لابتوبات، أجهزة لوحية، وسماعات من أفضل العلامات العالمية. تعرف على قصتنا ورؤيتنا ولماذا اختارنا أكثر من 500 عميل من كل محافظات العراق.',
   alternates: { canonical: `${BASE}/about` },
   openGraph: {
     title: 'من نحن — Quvenza',
-    description: 'متجر عراقي للاشتراكات الرقمية الأصلية — ChatGPT Plus، Canva Pro، CapCut، Coursera.',
+    description: 'متجر عراقي للإلكترونيات الأصلية — iPhone، MacBook، Samsung Galaxy، AirPods، سماعات Sony.',
     url: `${BASE}/about`,
     images: [{ url: `${BASE}/og-image.svg`, width: 1200, height: 630, alt: 'Quvenza' }],
   },
@@ -30,13 +30,13 @@ export default function AboutPage() {
         </h1>
 
         <p style={{ fontSize: 18, color: '#4B5563', lineHeight: 1.8, marginBottom: 32 }}>
-          <strong style={{ color: '#111827' }}>Quvenza</strong> هو متجر عراقي 100% متخصص في بيع الاشتراكات الرقمية الأصلية للسوق العراقي.
-          تأسسنا في بغداد عام 2026 بهدف واضح: إيصال أفضل الأدوات الرقمية العالمية للمستخدم العراقي بأسعار محلية وبدون أي تعقيدات.
+          <strong style={{ color: '#111827' }}>Quvenza</strong> هو متجر عراقي 100% متخصص في بيع الإلكترونيات الأصلية للسوق العراقي.
+          تأسسنا في بغداد عام 2026 بهدف واضح: إيصال أفضل الأجهزة العالمية للمستخدم العراقي — هواتف، لابتوبات، أجهزة لوحية، وسماعات — بأسعار محلية، بضمان رسمي، وبدون أي تعقيدات.
         </p>
 
         <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>رؤيتنا</h2>
         <p style={{ color: '#4B5563', lineHeight: 1.8, marginBottom: 32 }}>
-          نؤمن أن المستخدم العراقي يستحق الوصول لنفس الأدوات التي يستخدمها أقرانه في العالم — ChatGPT Plus، Canva Pro، CapCut Pro، Coursera Plus وأكثر — بنفس السهولة والثقة.
+          نؤمن أن المستخدم العراقي يستحق امتلاك نفس الأجهزة التي يستخدمها أقرانه في العالم — iPhone، MacBook، Samsung Galaxy، AirPods، سماعات Sony، ولابتوبات Dell و HP وأكثر — أصلية 100%، بضمان رسمي، وبنفس السهولة والثقة.
         </p>
 
         {/* ── Statistics ── */}
@@ -45,7 +45,7 @@ export default function AboutPage() {
           {[
             { value: '+500',      label: 'عميل راضٍ' },
             { value: '18',        label: 'محافظة عراقية' },
-            { value: '30 دقيقة', label: 'متوسط التفعيل' },
+            { value: 'ضمان رسمي', label: 'على كل جهاز' },
             { value: '24/7',      label: 'دعم فني' },
           ].map((stat) => (
             <div key={stat.label} style={{ background: '#FFFFFF', border: '1px solid #EAECEF', borderRadius: 8, padding: '24px 16px', textAlign: 'center' }}>
@@ -58,10 +58,10 @@ export default function AboutPage() {
         <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>لماذا Quvenza؟</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16, marginBottom: 32 }}>
           {[
-            { icon: '✅', text: 'متجر عراقي مرخص في بغداد' },
+            { icon: '✅', text: 'أجهزة أصلية 100% من علامات عالمية' },
             { icon: '💵', text: 'دفع بالدينار العراقي' },
-            { icon: '⚡', text: 'تفعيل خلال 30 دقيقة' },
-            { icon: '🛡️', text: 'ضمان كامل طوال فترة الاشتراك' },
+            { icon: '🚚', text: 'توصيل سريع لكل المحافظات' },
+            { icon: '🛡️', text: 'ضمان رسمي على كل جهاز' },
             { icon: '💬', text: 'دعم عربي عراقي 24/7 على واتساب' },
             { icon: '👥', text: '+500 عميل راضٍ في كل المحافظات' },
           ].map((item) => (
@@ -74,10 +74,10 @@ export default function AboutPage() {
 
         <h2 style={{ fontSize: 28, fontWeight: 600, color: '#111827', margin: '48px 0 16px', letterSpacing: '-0.01em' }}>قصتنا</h2>
         <p style={{ color: '#4B5563', lineHeight: 1.8, marginBottom: 16 }}>
-          بدأت الفكرة عندما لاحظنا أن العراقي يدفع أسعاراً أعلى مما يدفعه نظراؤه في الدول المجاورة، أو يضطر للتعامل مع وسطاء غير موثوقين على Facebook وTelegram، أو يتنازل عن استخدام أدوات الذكاء الاصطناعي والتصميم لأنها "غير متوفرة في العراق". قررنا أن نغيّر ذلك.
+          بدأت الفكرة عندما لاحظنا أن العراقي يدفع أسعاراً أعلى مما يدفعه نظراؤه في الدول المجاورة عند شراء جهاز جديد، أو يضطر للتعامل مع باعة غير موثوقين على Facebook وTelegram، أو يخاطر بشراء أجهزة مقلّدة أو بلا ضمان. قررنا أن نغيّر ذلك ونقدّم إلكترونيات أصلية بضمان رسمي.
         </p>
         <p style={{ color: '#4B5563', lineHeight: 1.8, marginBottom: 48 }}>
-          اليوم، Quvenza هو الخيار الأول للطلاب، صناع المحتوى، أصحاب الأعمال الصغيرة، والمصممين العراقيين الذين يريدون أدوات احترافية بثقة محلية.
+          اليوم، Quvenza هو الخيار الأول للطلاب، أصحاب الأعمال، صنّاع المحتوى، والعائلات العراقية الذين يريدون هواتف ولابتوبات وسماعات أصلية من أفضل العلامات العالمية، بثقة محلية وسعر بالدينار العراقي.
         </p>
 
         <div style={{ background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.25)', borderRadius: 8, padding: 32, textAlign: 'center' }}>

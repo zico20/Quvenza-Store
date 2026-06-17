@@ -9,8 +9,8 @@ export async function GET() {
       paymentMethod: 'ZainCash (اختبار)',
       itemsCount: 2,
       items: [
-        { name: 'ChatGPT Plus - شهرين', quantity: 1, price: 50000 },
-        { name: 'Canva Pro - سنة كاملة', quantity: 1, price: 25000 },
+        { name: 'iPhone 15 Pro - 256GB', quantity: 1, price: 50000 },
+        { name: 'AirPods Pro 2', quantity: 1, price: 25000 },
       ],
       customerName: 'عميل تجريبي',
       customerPhone: '+9647712345678',
