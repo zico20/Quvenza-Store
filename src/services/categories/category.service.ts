@@ -9,13 +9,26 @@ export async function getCategories() {
     where: { isActive: true },
     orderBy: { name: 'asc' },
     include: {
+      brand: true,
       _count: { select: { products: { where: { isActive: true } } } },
     },
   });
 }
 
+/** Categories for a single brand (its device types), e.g. Apple → iPhones, iPads, … */
+export async function getCategoriesByBrand(brandSlug: string) {
+  return prisma.category.findMany({
+    where: { isActive: true, brand: { slug: brandSlug } },
+    orderBy: { kind: 'asc' },
+    include: { _count: { select: { products: { where: { isActive: true } } } } },
+  });
+}
+
 export async function getCategoryBySlug(slug: string) {
-  const category = await prisma.category.findUnique({ where: { slug } });
+  const category = await prisma.category.findUnique({
+    where: { slug },
+    include: { brand: true },
+  });
   if (!category || !category.isActive) throw new AppError('Category not found.', 404);
   return category;
 }
